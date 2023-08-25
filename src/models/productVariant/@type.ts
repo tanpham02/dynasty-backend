@@ -1,6 +1,99 @@
 import { Status } from '@app/constants';
 import { Schema, Document } from 'mongoose';
 
+// SCHEMAS DESCRIPTION
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ProductVariant:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *       properties:
+ *         productId:
+ *           type: string
+ *         status:
+ *           type: string
+ *           enum:
+ *              - ACTIVE
+ *              - IN_ACTIVE
+ *         variants:
+ *             type: array
+ *             item:
+ *                schema:
+ *                    $ref: '#/components/schema/ProductVariantChildren'
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ProductVariantChildren:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *       properties:
+ *         types:
+ *           type: object
+ *         properties:
+ *            sizeMap:
+ *                $ref: '#/components/schema/VariantSizeMap'
+ *            baseMap:
+ *               type: array
+ *               item:
+ *                 schema:
+ *                    $ref: '#/components/schema/VariantBaseMap'
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     VariantSizeMap:
+ *       type: object
+ *       properties:
+ *          types:
+ *             type: object
+ *             properties:
+ *                sizePriceVariant:
+ *                  type: number
+ *                size:
+ *                  type: string
+ *                  enum:
+ *                     - SMALL
+ *                     - MEDIUM
+ *                     - LARGE
+ *                  default: 'SMALL'
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     VariantBaseMap:
+ *       type: object
+ *       properties:
+ *          typeSizes:
+ *             type: object
+ *             properties:
+ *               basePriceVariant:
+ *                   type: number
+ *               base:
+ *                   type: string
+ *                   enum:
+ *                      - PAN
+ *                      - CRISPY_THIN
+ *                      - EXTREME_CHEESE
+ *                      - EXTREME_SAUSAGE_CHEESE
+ *                   default: 'PAN'
+ *
+ *
+ */
+
 enum ProductVariantSizeType {
   SMALL = 'SMALL',
   MEDIUM = 'MEDIUM',
@@ -14,22 +107,34 @@ enum ProductVariantBaseType {
   EXTREME_SAUSAGE_CHEESE = 'EXTREME_SAUSAGE_CHEESE',
 }
 
-interface ProductVariantSize {
+interface VariantBaseMap extends Document {
+  base?: ProductVariantBaseType;
+  basePriceVariant?: number;
+}
+interface VariantSizeMap extends Document {
   size?: ProductVariantSizeType;
-  priceVariant?: number;
+  sizePriceVariant?: number;
 }
 
-interface ProductVariantBase {
-  base?: ProductVariantBaseType;
-  priceVariant?: number;
+interface ProductVariant extends Document {
+  types?: {
+    sizeMap?: VariantSizeMap[];
+    baseMap?: VariantBaseMap[];
+  };
 }
 
 interface ProductVariants extends Document {
   _id?: Schema.Types.ObjectId;
   productId?: Schema.Types.ObjectId;
-  sizeVariant?: ProductVariantSize[];
-  baseVariant?: ProductVariantBase[];
+  variants: ProductVariant[];
   status?: Status;
 }
 
-export { ProductVariants, ProductVariantBaseType, ProductVariantSizeType };
+export {
+  ProductVariants,
+  ProductVariantBaseType,
+  ProductVariantSizeType,
+  VariantBaseMap,
+  VariantSizeMap,
+  ProductVariant,
+};

@@ -6,11 +6,11 @@ const CartSchema = new Schema<Cart, Model<Cart>>(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: 'CustomerModel',
+      ref: 'Customer',
     },
     productId: {
       type: Schema.Types.ObjectId,
-      ref: 'ProductModel',
+      ref: 'Product',
     },
     quantity: {
       type: Number,

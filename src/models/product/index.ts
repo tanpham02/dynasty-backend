@@ -1,27 +1,44 @@
 import { Schema, model } from 'mongoose';
 import { Product, ProductType } from './@type';
 import { Status } from '@app/constants';
-import ProductVariantsModel from '../productVariant';
+import { ProductVariantsSchema } from '../productVariant';
 
+// RESPONSE  DESCRIPTION
 /**
  * @swagger
  * components:
- *  schema:
- *    Product:
- *      type: object
- *      required:
- *        - name
- *        - timestamps
- *      properties:
- *        name:
- *          type: string
- *          default: ""
- *        status:
- *          type: string
- *          default: ""
- *          enum:
- *             - ACTIVE
- *             - IN_ACTIVE
+ *   schema:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *       properties:
+ *         name:
+ *           type: string
+ *         categoryId:
+ *           type: string
+ *         description:
+ *           type: string
+ *         information:
+ *           type: string
+ *         image:
+ *           type: string
+ *         orderQuantity:
+ *           type: number
+ *         status:
+ *           type: string
+ *           enum:
+ *              - ACTIVE
+ *              - IN_ACTIVE
+ *         types:
+ *           type: string
+ *           enum:
+ *              - NORMAL
+ *              - NEW
+ *              - BEST_SELLER
+ *         productVariant:
+ *           type: string
  */
 
 const ProductSchema = new Schema<Product>(
@@ -43,14 +60,15 @@ const ProductSchema = new Schema<Product>(
     oldPrice: {
       type: Number,
     },
+    categoryId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+    },
     importPrice: {
       type: Number,
     },
     image: {
       type: String,
-    },
-    images: {
-      type: [String],
     },
     status: {
       type: String,
@@ -65,9 +83,9 @@ const ProductSchema = new Schema<Product>(
     orderQuantity: {
       type: Number,
     },
-    productVariantsId: {
+    productVariant: {
       type: Schema.Types.ObjectId,
-      ref: 'ProductVariantsModel',
+      ref: 'ProductVariant',
     },
   },
   {
@@ -75,12 +93,6 @@ const ProductSchema = new Schema<Product>(
     timestamps: true,
   },
 );
-
-ProductSchema.add({
-  productVariantsResponse: {
-    type: [ProductVariantsModel],
-  },
-});
 
 const ProductModel = model('Product', ProductSchema);
 

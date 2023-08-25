@@ -6,11 +6,11 @@ const OrderSchema = new Schema<Order>(
   {
     customerId: {
       type: Schema.Types.ObjectId,
-      ref: 'CustomerModel',
+      ref: 'Customer',
     },
     productId: {
       type: Schema.Types.ObjectId,
-      ref: 'ProductModel',
+      ref: 'Product',
     },
     shipFee: {
       type: Number,

@@ -2,8 +2,8 @@ import express, { Application } from 'express';
 import 'module-alias/register';
 import { configApp, configServer, configSwagger } from '@app/configs';
 import connection from '@app/connection';
-import { categoryRouter } from '@app/routes';
-import { CATEGORY_ROUTES } from './services/apiUrl';
+import { categoryRouter, productRouter, productVariantRouter } from '@app/routes';
+import { CATEGORY_ROUTES, PRODUCT_ROUTES, PRODUCT_VARIANT_ROUTES } from './services/apiUrl';
 
 const app: Application = express();
 
@@ -19,7 +19,14 @@ configServer(app);
 configSwagger(app);
 
 // Routes
+// CATEGORY
 app.use(`${CATEGORY_ROUTES}`, categoryRouter);
+
+// PRODUCT
+app.use(`${PRODUCT_ROUTES}`, productRouter);
+
+// PRODUCT VARIANT
+app.use(`${PRODUCT_VARIANT_ROUTES}`, productVariantRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

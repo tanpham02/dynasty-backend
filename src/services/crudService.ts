@@ -13,26 +13,24 @@ class CRUDService<T extends Document> {
   // SEARCH PAGINATION
   async getPagination(params: Params) {
     try {
-      const { pageIndex, pageSize } = params;
+      const { pageIndex, pageSize, name } = params;
+      const searchPatter = name ? new RegExp(name, 'i') : new RegExp('', 'i');
       const data = await this.model
-        .find()
+        .find({ name: searchPatter })
         .limit(pageSize)
         .skip(pageSize * pageIndex);
-      const getAllCategories = await this.model.find();
-      const totalElement = getAllCategories.length;
-      const firstObjectId = data[data.length - 1]._id;
-      const lastObjectId = getAllCategories[totalElement - 1]._id;
-      const isLastPage = new Object(firstObjectId).valueOf() === new Object(lastObjectId).valueOf();
+      const totalElement = await this.model.count();
       const result = {
         data,
         totalElement,
         pageIndex,
         pageSize,
-        isLastPage,
         totalPage: Math.ceil(totalElement / pageSize),
+        isLastPage: pageIndex === totalElement,
       };
       return result;
     } catch (error) {
+      console.log(error);
       throw new Error(`Occur error when fetching ${this.nameService} with ${error}`);
     }
   }
@@ -43,26 +41,30 @@ class CRUDService<T extends Document> {
       const create = new this.model(req.body);
       return await create.save();
     } catch (error) {
+      console.log(error);
       throw new Error(`Occur error when create ${this.nameService} with ${error}`);
     }
   }
 
   // GET BY ID
-  async getById(id: string) {
+  async getById(id: string, populateName?: string | string[]) {
     try {
-      const category = await this.model.findOne({ _id: id });
+      const category = await this.model.findById(id).populate(populateName || '');
       return category;
     } catch (error) {
+      console.log(error);
       throw new Error(`Occur error when find by id ${this.nameService} with ${error}`);
     }
   }
 
   // UPDATE
   async update(id: string, req: Request) {
+    console.log('🚀  id:', id);
     try {
       const category = await this.model.findByIdAndUpdate(id, req.body, { new: true });
       return category;
     } catch (error) {
+      console.log(error);
       throw new Error(`Occur error when update ${this.nameService} with ${error}`);
     }
   }
@@ -79,6 +81,7 @@ class CRUDService<T extends Document> {
 
       return { message: `Delete ${this.nameService} success` };
     } catch (error) {
+      console.log(error);
       throw new Error(`Occur error when update ${this.nameService} with ${error}`);
     }
   }

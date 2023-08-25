@@ -1,13 +1,12 @@
-import categoryController from '@app/controllers/category';
+import productController from '@app/controllers/product';
 import express from 'express';
-
 const router = express.Router();
 
 /**
  * @swagger
- * '/api/category/search':
+ * '/api/product/search':
  *  get:
- *     tags: [Category]
+ *     tags: [Product]
  *     summary: Search pagination
  *     parameters:
  *      - name: name
@@ -28,42 +27,44 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schema/Product'
  */
 
-// SEARCH PAGINATION CATEGORY
-router.get('/search', categoryController.search);
+//SEARCH PAGINATION PRODUCT
+router.get('/search', productController.search);
 
 /**
  * @swagger
- * '/api/category/create':
+ * '/api/product/create':
  *  post:
- *     tags: [Category]
- *     summary: Create category
+ *     tags: [Product]
+ *     summary: Create product
  *     requestBody:
  *       required: true
+ *         - name
+ *         - price
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Category'
+ *             $ref: '#/components/schema/Product'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schema/Product'
  */
 
-// CREATE CATEGORY
-router.post('/create', categoryController.createCategory);
+// CREATE PRODUCT
+router.post('/create', productController.create);
 
 /**
  * @swagger
- * '/api/category/{id}':
+ * '/api/product/{id}':
  *  patch:
- *     tags: [Category]
- *     summary: Update category
+ *     tags: [Product]
+ *     summary: Update product
  *     parameters:
  *       - in: path
  *         name: id
@@ -76,7 +77,7 @@ router.post('/create', categoryController.createCategory);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Category'
+ *             $ref: '#/components/schema/Product'
  *
  *     responses:
  *       200:
@@ -84,17 +85,17 @@ router.post('/create', categoryController.createCategory);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schema/Product'
  */
 
-// UPDATE CATEGORY
-router.patch('/:id', categoryController.updateCategory);
+// UPDATE PRODUCT
+router.patch('/:id', productController.update);
 
 /**
  * @swagger
- * '/api/category/{id}':
+ * '/api/product/{id}':
  *  get:
- *     tags: [Category]
+ *     tags: [Product]
  *     summary: Find by id
  *     parameters:
  *       - in: path
@@ -109,43 +110,18 @@ router.patch('/:id', categoryController.updateCategory);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schema/Product'
  */
 
-// GET BY ID CATEGORY
-router.get('/:id', categoryController.getCategoryById);
+// GET PRODUCT BY ID
+router.get('/:id', productController.getById);
 
 /**
  * @swagger
- * '/api/category/child/{id}':
- *  get:
- *     tags: [Category]
- *     summary: Find category children by id
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Category'
- */
-
-// GET BY ID CATEGORY
-router.get('/child/:id', categoryController.getChildrenCategoryById);
-
-/**
- * @swagger
- * '/api/category/':
+ * '/api/product/':
  *  delete:
- *     tags: [Category]
- *     summary: Delete category
+ *     tags: [Product]
+ *     summary: Delete product variant
  *     parameters:
  *       - in: query
  *         name: ids
@@ -160,9 +136,9 @@ router.get('/child/:id', categoryController.getChildrenCategoryById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schema/Product'
  */
-// DELETE CATEGORY
-router.delete('/', categoryController.deleteCategory);
+// DELETE PRODUCT
+router.delete('/', productController.delete);
 
 export default router;

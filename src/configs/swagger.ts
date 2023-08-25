@@ -43,7 +43,7 @@ const configSwagger = (app: Application) => {
         },
       },
     },
-    apis: ['src/routes/*.ts', 'src/routes/**.ts', 'src/models/*.ts', 'src/models/**.ts'],
+    apis: ['src/routes/*.ts', 'src/routes/**.ts', 'src/models/*/*.ts', 'src/models/*/**.ts'],
   };
 
   const specs = swaggerJsdoc(options);

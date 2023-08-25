@@ -2,6 +2,7 @@ import { Schema, model } from 'mongoose';
 import { Category } from './@type';
 import { Status } from '@app/constants';
 
+// RESPONSE DESCRIPTION
 /**
  * @swagger
  * components:
@@ -10,7 +11,6 @@ import { Status } from '@app/constants';
  *      type: object
  *      required:
  *        - name
- *        - timestamps
  *      properties:
  *        name:
  *          type: string
@@ -22,9 +22,14 @@ import { Status } from '@app/constants';
  *             - ACTIVE
  *             - IN_ACTIVE
  *        productId:
- *          type: string
- *          default: ""
- *          $ref: '#/components/schemas/Product'
+ *          type: array
+ *          item: string
+ *
+ *        childCategory:
+ *          type: array
+ *          item:
+ *            schema:
+ *               $ref: '#/components/schema/Category'
  */
 
 const CategorySchema = new Schema<Category>(
@@ -38,10 +43,12 @@ const CategorySchema = new Schema<Category>(
       enum: Status,
       default: Status.ACTIVE,
     },
-    productId: {
-      type: Schema.Types.ObjectId,
-      ref: 'ProductModel',
-    },
+    productId: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
   },
   {
     versionKey: false,
