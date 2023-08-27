@@ -24,7 +24,7 @@ const productVariantController = {
   // CREATE PRODUCT VARIANT
   create: async (req: Request, res: Response) => {
     try {
-      const newProductVariant = await productVariantService.create(req);
+      const newProductVariant = await productVariantService.createOverriding(req);
       res.status(200).json(newProductVariant);
     } catch (error) {
       res.status(500).json(error);
@@ -35,7 +35,7 @@ const productVariantController = {
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const productVariant = await productVariantService.update(id.toString(), req);
+      const productVariant = await productVariantService.update(id, req);
       res.status(200).json(productVariant);
     } catch (error) {
       res.status(500).json(error);
@@ -46,7 +46,7 @@ const productVariantController = {
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const productVariant = await productVariantService.getById(id);
+      const productVariant = await productVariantService.getById(id, 'productIds');
       if (!productVariant) {
         return res.status(404).json({ message: 'Product variant not found.' });
       }
@@ -60,7 +60,7 @@ const productVariantController = {
   delete: async (req: Request, res: Response) => {
     const { ids } = req.query;
     try {
-      const { message } = await productVariantService.delete(ids);
+      const { message } = await productVariantService.deleteOverriding(ids);
       res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);

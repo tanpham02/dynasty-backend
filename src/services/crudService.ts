@@ -49,7 +49,7 @@ class CRUDService<T extends Document> {
   // GET BY ID
   async getById(id: string, populateName?: string | string[]) {
     try {
-      const category = await this.model.findById(id).populate(populateName || '');
+      const category = await this.model.findById(id);
       return category;
     } catch (error) {
       console.log(error);
@@ -58,8 +58,7 @@ class CRUDService<T extends Document> {
   }
 
   // UPDATE
-  async update(id: string, req: Request) {
-    console.log('🚀  id:', id);
+  async update(id: string | any, req: Request) {
     try {
       const category = await this.model.findByIdAndUpdate(id, req.body, { new: true });
       return category;

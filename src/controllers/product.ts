@@ -25,7 +25,7 @@ const productController = {
   //CREATE PRODUCT
   create: async (req: Request, res: Response) => {
     try {
-      const product = await productService.create(req);
+      const product = await productService.createOverriding(req);
       res.status(200).json(product);
     } catch (error) {
       res.status(500).json(error);
@@ -47,7 +47,7 @@ const productController = {
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const product = await productService.getById(id, 'productVariant');
+      const product = await productService.getById(id, ['productVariantId', 'categoryId']);
       if (!product) {
         return res.status(404).json({ message: 'Product not found.' });
       }
@@ -61,7 +61,7 @@ const productController = {
   delete: async (req: Request, res: Response) => {
     const { ids } = req.query;
     try {
-      const { message } = await productService.delete(ids);
+      const { message } = await productService.deleteOverriding(ids);
       res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);

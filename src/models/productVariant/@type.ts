@@ -13,8 +13,10 @@ import { Schema, Document } from 'mongoose';
  *         - name
  *         - price
  *       properties:
- *         productId:
- *           type: string
+ *         productIds:
+ *           type: array
+ *           item:
+ *              $ref: '#/components/schema/Product'
  *         status:
  *           type: string
  *           enum:
@@ -125,7 +127,7 @@ interface ProductVariant extends Document {
 
 interface ProductVariants extends Document {
   _id?: Schema.Types.ObjectId;
-  productId?: Schema.Types.ObjectId;
+  productIds?: Schema.Types.ObjectId[];
   variants: ProductVariant[];
   status?: Status;
 }

@@ -18,6 +18,10 @@ import { ProductVariantsSchema } from '../productVariant';
  *           type: string
  *         categoryId:
  *           type: string
+ *         price:
+ *           type: number
+ *         oldPrice:
+ *           type: number
  *         description:
  *           type: string
  *         information:
@@ -37,7 +41,7 @@ import { ProductVariantsSchema } from '../productVariant';
  *              - NORMAL
  *              - NEW
  *              - BEST_SELLER
- *         productVariant:
+ *         productVariantId:
  *           type: string
  */
 
@@ -83,7 +87,7 @@ const ProductSchema = new Schema<Product>(
     orderQuantity: {
       type: Number,
     },
-    productVariant: {
+    productVariantId: {
       type: Schema.Types.ObjectId,
       ref: 'ProductVariant',
     },

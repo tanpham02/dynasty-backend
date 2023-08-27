@@ -40,7 +40,7 @@ import { ProductVariants } from '../productVariant/@type';
  *              - NORMAL
  *              - NEW
  *              - BEST_SELLER
- *         productVariant:
+ *         productVariantId:
  *           type: string
  */
 
@@ -63,7 +63,7 @@ interface Product extends Document {
   status?: Status;
   types?: ProductType;
   orderQuantity?: number;
-  productVariant?: Schema.Types.ObjectId;
+  productVariantId?: Schema.Types.ObjectId;
 }
 
 export { Product, ProductType };

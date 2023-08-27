@@ -21,15 +21,15 @@ import { Status } from '@app/constants';
  *          enum:
  *             - ACTIVE
  *             - IN_ACTIVE
- *        productId:
+ *        productsDTO:
  *          type: array
- *          item: string
+ *          item:
+ *             $ref: '#/components/schema/Product'
  *
  *        childCategory:
  *          type: array
  *          item:
- *            schema:
- *               $ref: '#/components/schema/Category'
+ *             $ref: '#/components/schema/Category'
  */
 
 const CategorySchema = new Schema<Category>(
@@ -43,7 +43,7 @@ const CategorySchema = new Schema<Category>(
       enum: Status,
       default: Status.ACTIVE,
     },
-    productId: [
+    productsDTO: [
       {
         type: Schema.Types.ObjectId,
         ref: 'Product',

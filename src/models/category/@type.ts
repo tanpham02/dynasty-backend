@@ -5,28 +5,30 @@ import { Schema, Document } from 'mongoose';
 /**
  * @swagger
  * components:
- *   schemas:
- *     Category:
- *       type: object
- *       required:
- *         - name
- *       properties:
- *         name:
- *           type: string
- *         status:
- *           type: string
- *           enum:
- *              - ACTIVE
- *              - IN_ACTIVE
- *           description: The status category
- *         productId:
- *           type: array
- *           item: string
- *         childCategory:
- *           type: array
- *           item:
- *             schema:
- *                $ref: '#/components/schema/Category'
+ *  schemas:
+ *    Category:
+ *      type: object
+ *      required:
+ *        - name
+ *      properties:
+ *        name:
+ *          type: string
+ *          default: ""
+ *        status:
+ *          type: string
+ *          default: ""
+ *          enum:
+ *             - ACTIVE
+ *             - IN_ACTIVE
+ *        productsDTO:
+ *          type: array
+ *          item:
+ *             $ref: '#/components/schema/Product'
+ *
+ *        childCategory:
+ *          type: array
+ *          item:
+ *             $ref: '#/components/schema/Category'
  */
 
 interface Category extends Document {
@@ -34,7 +36,7 @@ interface Category extends Document {
   name: string;
   status?: Status;
   childCategory?: Category[];
-  productId?: [Schema.Types.ObjectId];
+  productsDTO?: Schema.Types.ObjectId[];
 }
 
 export { Category };

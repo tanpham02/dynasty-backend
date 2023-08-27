@@ -27,7 +27,7 @@ const categoryController = {
   getCategoryById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const category = await categoryService.getById(id, ['productId', 'categoryId']);
+      const category = await categoryService.getById(id, ['productsDTO']);
       if (!category) {
         return res.status(404).json({ message: 'Category not found.' });
       }
@@ -39,10 +39,11 @@ const categoryController = {
 
   // GET CHILDREN CATEGORY BY ID
   getChildrenCategoryById: async (req: Request, res: Response) => {
-    const { id } = req.params;
-
+    const { childCategoryId } = req.params;
     try {
-      const childrenCategory = await categoryService.getChildrenCategoryById(id);
+      const childrenCategory = await categoryService.getChildrenCategoryById(childCategoryId, [
+        'productsDTO',
+      ]);
 
       if (!childrenCategory) {
         return res.status(404).json({ message: 'Children category not found.' });
@@ -54,10 +55,50 @@ const categoryController = {
     }
   },
 
+  // UPDATE CHILDREN CATEGORY
+  updateChildrenCategory: async (req: Request, res: Response) => {
+    const { childCategoryId } = req.params;
+
+    const childCategory = await categoryService.updateChildrenCategory(childCategoryId, req);
+    try {
+      res.status(200).json(childCategory);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
+  // DELETE CHILDREN CATEGORY
+  deleteChildrenCategory: async (req: Request, res: Response) => {
+    const { parentCategoryId } = req.params;
+    const { childCategoryId } = req.query;
+
+    const { message } = await categoryService.deleteChildCategoryOverriding(
+      parentCategoryId,
+      childCategoryId,
+    );
+    try {
+      res.status(200).json(message);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
+  // ADD CHILDREN CATEGORY
+  addChildrenCategory: async (req: Request, res: Response) => {
+    const { parentCategoryId } = req.params;
+
+    const { message } = await categoryService.addChildrenCategory(parentCategoryId, req);
+    try {
+      res.status(200).json(message);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
   // CREATE CATEGORY
   createCategory: async (req: Request, res: Response) => {
     try {
-      const category = await categoryService.create(req);
+      const category = await categoryService.createOverriding(req);
       res.status(200).json(category);
     } catch (error) {
       res.status(500).json(error);
@@ -79,7 +120,7 @@ const categoryController = {
   deleteCategory: async (req: Request, res: Response) => {
     const { ids } = req.query;
     try {
-      const { message } = await categoryService.delete(ids);
+      const { message } = await categoryService.deleteOverriding(ids);
       res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);

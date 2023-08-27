@@ -21,8 +21,10 @@ import { Status } from '@app/constants';
  *         - name
  *         - price
  *       properties:
- *         productId:
- *           type: string
+ *         productIds:
+ *           type: array
+ *           item:
+ *              $ref: '#/components/schema/Product'
  *         status:
  *           type: string
  *           enum:
@@ -150,10 +152,12 @@ const ProductVariantSchema = new Schema<ProductVariant>(
 
 const ProductVariantsSchema = new Schema<ProductVariants>(
   {
-    productId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Product',
-    },
+    productIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
     status: {
       type: String,
       enum: Status,

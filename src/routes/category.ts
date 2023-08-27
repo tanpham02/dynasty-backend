@@ -1,5 +1,5 @@
 import categoryController from '@app/controllers/category';
-import express from 'express';
+import express, { Request, Response } from 'express';
 
 const router = express.Router();
 
@@ -117,13 +117,13 @@ router.get('/:id', categoryController.getCategoryById);
 
 /**
  * @swagger
- * '/api/category/child/{id}':
+ * '/api/category/child/{childCategoryId}':
  *  get:
  *     tags: [Category]
  *     summary: Find category children by id
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: childCategoryId
  *         schema:
  *           type: string
  *         required: true
@@ -137,8 +137,38 @@ router.get('/:id', categoryController.getCategoryById);
  *                 $ref: '#/components/schema/Category'
  */
 
-// GET BY ID CATEGORY
-router.get('/child/:id', categoryController.getChildrenCategoryById);
+// GET CATEGORY CHILDREN BY ID
+router.get('/child/:childCategoryId', categoryController.getChildrenCategoryById);
+
+/**
+ * @swagger
+ * '/api/category/child/{childCategoryId}':
+ *  patch:
+ *     tags: [Category]
+ *     summary: Update child category
+ *     parameters:
+ *       - in: path
+ *         name: childCategoryId
+ *         required: true
+ *
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schema/Category'
+ *
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Category'
+ */
+
+// UPDATE CATEGORY CHILDREN
+router.patch('/child/:childCategoryId', categoryController.updateChildrenCategory);
 
 /**
  * @swagger
@@ -164,5 +194,63 @@ router.get('/child/:id', categoryController.getChildrenCategoryById);
  */
 // DELETE CATEGORY
 router.delete('/', categoryController.deleteCategory);
+
+/**
+ * @swagger
+ * '/api/category/child/{parentCategoryId}':
+ *  delete:
+ *     tags: [Category]
+ *     summary: Delete child category
+ *     parameters:
+ *       - in: path
+ *         name: parentCategoryId
+ *         type: string
+ *         required: true
+ *       - in: query
+ *         name: childCategoryId
+ *         schema:
+ *           type: array
+ *           item: string
+ *         required: true
+
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Category'
+ */
+// DELETE CATEGORY
+router.delete('/child/:parentCategoryId', categoryController.deleteChildrenCategory);
+
+/**
+ * @swagger
+ * '/api/category/child/{parentCategoryId}':
+ *  post:
+ *     tags: [Category]
+ *     summary: Add child category
+ *     parameters:
+ *       - in: path
+ *         name: parentCategoryId
+ *         type: string
+ *         required: true
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schema/Category'
+
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Category'
+ */
+// DELETE CATEGORY
+router.post('/child/:parentCategoryId', categoryController.addChildrenCategory);
 
 export default router;
