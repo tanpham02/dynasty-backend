@@ -23,11 +23,13 @@ const categoryController = {
     }
   },
 
+
+
   // GET BY ID CATEGORY
   getCategoryById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const category = await categoryService.getById(id, ['productsDTO']);
+      const category = await categoryService.getCategoryById(id);
       if (!category) {
         return res.status(404).json({ message: 'Category not found.' });
       }
@@ -109,7 +111,7 @@ const categoryController = {
   updateCategory: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const category = await categoryService.update(id, req);
+      const category = await categoryService.updateOverriding(id, req);
       res.status(200).json(category);
     } catch (error) {
       res.status(500).json(error);

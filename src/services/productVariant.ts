@@ -37,7 +37,7 @@ class ProductVariantService extends CRUDService<ProductVariants> {
     try {
       const newProductVariant = new this.model(req.body);
       const listProductId = newProductVariant.productIds;
-      if (listProductId) {
+      if (listProductId?.length) {
         await ProductModel.updateMany(
           {
             _id: { $in: listProductId },

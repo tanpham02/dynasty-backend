@@ -240,7 +240,7 @@ router.delete('/child/:parentCategoryId', categoryController.deleteChildrenCateg
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Category'
+ *             $ref: '#/components/schema/ChildrenCategory'
 
  *     responses:
  *       200:
@@ -248,7 +248,7 @@ router.delete('/child/:parentCategoryId', categoryController.deleteChildrenCateg
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schema/ChildrenCategory'
  */
 // DELETE CATEGORY
 router.post('/child/:parentCategoryId', categoryController.addChildrenCategory);

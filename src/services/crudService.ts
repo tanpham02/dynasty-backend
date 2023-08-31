@@ -1,10 +1,12 @@
 import { Params } from '@app/types';
-import { Document, Error, Model, ObjectId } from 'mongoose';
+import { Document, Error, Model } from 'mongoose';
 import { Request } from 'express';
 
+
+
 class CRUDService<T extends Document> {
-  model: Model<T>;
-  nameService: String;
+  protected model: Model<T>;
+  protected nameService: String;
   constructor(model: Model<T>, nameService: String) {
     this.model = model;
     this.nameService = nameService;
@@ -20,13 +22,15 @@ class CRUDService<T extends Document> {
         .limit(pageSize)
         .skip(pageSize * pageIndex);
       const totalElement = await this.model.count();
+      const totalPages = Math.ceil(totalElement / pageSize);
+      const isLastPage = pageIndex + 1 >= totalPages;
       const result = {
         data,
         totalElement,
         pageIndex,
         pageSize,
-        totalPage: Math.ceil(totalElement / pageSize),
-        isLastPage: pageIndex === totalElement,
+        totalPage: totalPages,
+        isLastPage: isLastPage,
       };
       return result;
     } catch (error) {

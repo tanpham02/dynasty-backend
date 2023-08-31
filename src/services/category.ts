@@ -1,6 +1,6 @@
 import CRUDService from '@app/services/crudService';
 import { Model } from 'mongoose';
-import { Category } from '@app/models/category/@type';
+import { Category, ChildCategory } from '@app/models/category/@type';
 import ProductModel from '@app/models/product';
 import { Request } from 'express';
 
@@ -14,21 +14,7 @@ class CategoryService extends CRUDService<Category> {
     try {
       const newCategory = new this.model(req.body);
       const listProductId = newCategory.productsDTO;
-      const childListProductId = newCategory.childCategory;
-      if (childListProductId?.length) {
-        for (let i = 0; i < childListProductId.length; i++) {
-          const element = childListProductId[i];
-          const handleUpdateCategoryIdFromProductDTO = async () => {
-            await ProductModel.updateMany(
-              {
-                _id: { $in: element.productsDTO },
-              },
-              { $set: { categoryId: element._id } },
-            );
-          };
-          handleUpdateCategoryIdFromProductDTO();
-        }
-      }
+      const childrenCategory = newCategory.childCategory;
       if (listProductId?.length) {
         await ProductModel.updateMany(
           {
@@ -37,11 +23,38 @@ class CategoryService extends CRUDService<Category> {
           { $set: { categoryId: newCategory._id } },
         );
       }
-      await newCategory.save();
-      return newCategory;
+      if (childrenCategory) {
+        for (let i = 0; i < childrenCategory.length; i++) {
+          const element = childrenCategory[i];
+          element.parentId = newCategory._id;
+        }
+      }
+      return newCategory.save();
     } catch (error) {
       console.log(error);
       throw new Error(`Occur error when delete ${this.nameService} with ${error}`);
+    }
+  }
+
+  // CREATE CATEGORY
+  async updateOverriding(id: string, req: Request) {
+    try {
+      const childrenCategory = req.body.childCategory;
+      if (childrenCategory) {
+        for (let i = 0; i < childrenCategory.length; i++) {
+          const element = childrenCategory[i];
+          element.parentId = id;
+        }
+      }
+
+      return await this.model.findByIdAndUpdate(
+        id,
+        { ...req.body, childrenCategory },
+        { new: true },
+      );
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Occur error when update ${this.nameService} with ${error}`);
     }
   }
 
@@ -69,9 +82,22 @@ class CategoryService extends CRUDService<Category> {
         childCategory: { $elemMatch: { _id: childCategoryId } },
       });
       const result = childrenCategory?.childCategory?.find(
-        (child) => String(child._id) === childCategoryId,
+        (child: { _id: any }) => String(child._id) === childCategoryId,
       );
       return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Occur error when find by id ${this.nameService} with ${error}`);
+    }
+  }
+
+  // GET CATEGORY BY ID
+  async getCategoryById(id: string | any) {
+    try {
+      const category = await this.model.findOne({
+        $or: [{ _id: id }, { 'childCategory._id': id }],
+      });
+      return category;
     } catch (error) {
       console.log(error);
       throw new Error(`Occur error when find by id ${this.nameService} with ${error}`);
@@ -84,52 +110,55 @@ class CategoryService extends CRUDService<Category> {
     childCategoryId: string | string[] | any,
   ) {
     try {
-      const category = await this.model.findById(parentCategoryId);
-      await category?.updateOne({ $pull: { childCategory: { _id: childCategoryId } } });
+      await this.model.updateOne(
+        { _id: parentCategoryId },
+        { $pull: { childCategory: { _id: { $in: childCategoryId } } } },
+      );
+
       await ProductModel.updateMany(
         {
           categoryId: childCategoryId,
         },
         { $set: { categoryId: null } },
       );
-      return { message: `Delete ${this.nameService} success` };
+      return { message: `Delete children category success` };
     } catch (error) {
       console.log(error);
-      throw new Error(`Occur error when delete ${this.nameService} with ${error}`);
+      throw new Error(`Occur error when delete children category with ${error}`);
     }
   }
 
   // UPDATE CHILDREN CATEGORY
   async updateChildrenCategory(childCategoryId: string | any, req: Request) {
     try {
-      const filter = {
-        'childCategory._id': childCategoryId,
-      };
-
-      const update: any = { $set: {} };
-      for (const field in req.body) {
-        update.$set[`childCategory.$.${field}`] = req.body[field];
-      }
-
-      const result = await this.model.updateOne(filter, update);
-      return result;
+      const category = await this.model.findOne({ 'childCategory._id': childCategoryId });
+      const childCategory = category?.childCategory?.find(
+        (child: { _id: any }) => String(child._id) === childCategoryId,
+      );
+      await childCategory?.set(req.body).save();
+      return category?.save();
     } catch (error) {
       console.log(error);
-      throw new Error(`Occur error when find by id ${this.nameService} with ${error}`);
+      throw new Error(`Occur error when update children ${this.nameService} with ${error}`);
     }
   }
 
   // ADD CHILDREN CATEGORY
   async addChildrenCategory(parentCategoryId: string | any, req: Request) {
     try {
-      await this.model.findByIdAndUpdate(
-        { _id: parentCategoryId },
-        {
-          $push: { childCategory: req.body },
+      console.log('body', req.body);
+
+      const category = await this.model.findById({ _id: parentCategoryId });
+
+      const data = {
+        children: {
+          ...req?.body?.children,
         },
-        { new: true },
-      );
-      const category = await this.model.findById(parentCategoryId);
+        parentId: parentCategoryId,
+      };
+
+      await category?.childCategory?.push(data);
+      await category?.save();
 
       const categoryId = category?.childCategory?.[category?.childCategory.length - 1]._id;
       const productListId = req.body.productsDTO;
@@ -145,10 +174,10 @@ class CategoryService extends CRUDService<Category> {
           },
         );
       }
-      return { message: `Add ${this.nameService} success` };
+      return { message: `Add children category success` };
     } catch (error) {
       console.log(error);
-      throw new Error(`Occur error when delete ${this.nameService} with ${error}`);
+      throw new Error(`Occur error when add children category with ${error}`);
     }
   }
 }
