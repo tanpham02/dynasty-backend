@@ -13,7 +13,11 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
- *      - name: address
+ *      - name: city
+ *        in: query
+ *        schema:
+ *          type: string
+ *      - name: district
  *        in: query
  *        schema:
  *          type: string

@@ -10,18 +10,13 @@ class ShopSystemClass extends CRUDService<ShopSystem> {
 
   async searchPagination(params: Params) {
     try {
-      const { pageIndex, pageSize, name, address } = params;
+      const { pageIndex, pageSize, name } = params;
 
       const filter: Filter = {};
 
       if (name) {
         const patternWithName = { $regex: new RegExp(name, 'gi') };
         filter.name = patternWithName;
-      }
-
-      if (address) {
-        const patternWithAddress = { $regex: new RegExp(address, 'gi') };
-        filter.address = patternWithAddress;
       }
 
       const data = await this.model
