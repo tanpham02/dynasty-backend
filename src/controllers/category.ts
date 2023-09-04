@@ -23,13 +23,11 @@ const categoryController = {
     }
   },
 
-
-
   // GET BY ID CATEGORY
   getCategoryById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const category = await categoryService.getCategoryById(id);
+      const category = await categoryService.getCategoryById(id, 'productsDTO');
       if (!category) {
         return res.status(404).json({ message: 'Category not found.' });
       }
@@ -43,9 +41,7 @@ const categoryController = {
   getChildrenCategoryById: async (req: Request, res: Response) => {
     const { childCategoryId } = req.params;
     try {
-      const childrenCategory = await categoryService.getChildrenCategoryById(childCategoryId, [
-        'productsDTO',
-      ]);
+      const childrenCategory = await categoryService.getChildrenCategoryById(childCategoryId);
 
       if (!childrenCategory) {
         return res.status(404).json({ message: 'Children category not found.' });
@@ -60,9 +56,8 @@ const categoryController = {
   // UPDATE CHILDREN CATEGORY
   updateChildrenCategory: async (req: Request, res: Response) => {
     const { childCategoryId } = req.params;
-
-    const childCategory = await categoryService.updateChildrenCategory(childCategoryId, req);
     try {
+      const childCategory = await categoryService.updateChildrenCategory(childCategoryId, req);
       res.status(200).json(childCategory);
     } catch (error) {
       res.status(500).json(error);

@@ -53,6 +53,17 @@ import { Status } from '@app/constants';
  *             $ref: '#/components/schema/ChildrenCategory'
  */
 
+/**
+ * @swagger
+ * components:
+ *  schema:
+ *    ChildCategory:
+ *      type: object
+ *      properties:
+ *        children:
+ *              $ref: '#/components/schema/Category'
+ */
+
 const CategorySchema = new Schema<Category>(
   {
     name: {
@@ -76,8 +87,6 @@ const CategorySchema = new Schema<Category>(
     timestamps: true,
   },
 );
-
-
 
 const ChildCategorySchema = new Schema<ChildCategory>({
   parentId: {

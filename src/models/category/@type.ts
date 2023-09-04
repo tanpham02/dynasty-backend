@@ -31,7 +31,6 @@ import { Schema, Document } from 'mongoose';
  *             $ref: '#/components/schema/Category'
  */
 
-
 /**
  * @swagger
  * components:
@@ -65,4 +64,4 @@ interface ChildCategory extends Document {
   parentId?: Schema.Types.ObjectId;
   children?: Category;
 }
-export { Category,  ChildCategory};
+export { Category, ChildCategory };

@@ -8,14 +8,15 @@ const productService = new ProductService(ProductModel, 'product');
 const productController = {
   //SEARCH PAGINATION PRODUCT
   search: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, name } = req.query;
+    const { pageIndex, pageSize, name, categoryId } = req.query;
     try {
       const params: Params = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
         name: name?.toString(),
+        categoryId: categoryId?.toString(),
       };
-      const product = await productService.getPagination(params);
+      const product = await productService.getPaginationOverriding(params);
       res.status(200).json(product);
     } catch (error) {
       res.status(500).json(error);
@@ -36,8 +37,8 @@ const productController = {
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const product = await productService.update(id, req);
-      res.status(200).json(product);
+      const { message } = await productService.updateOverriding(id, req);
+      res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -47,7 +48,7 @@ const productController = {
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const product = await productService.getById(id, ['productVariantId']);
+      const product = await productService.getByIdOverridingHavePopulate(id, ['productVariantId']);
       if (!product) {
         return res.status(404).json({ message: 'Product not found.' });
       }

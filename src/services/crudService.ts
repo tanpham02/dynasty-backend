@@ -1,8 +1,6 @@
-import { Params } from '@app/types';
+import { Filter, Params } from '@app/types';
 import { Document, Error, Model } from 'mongoose';
 import { Request } from 'express';
-
-
 
 class CRUDService<T extends Document> {
   protected model: Model<T>;
@@ -16,9 +14,16 @@ class CRUDService<T extends Document> {
   async getPagination(params: Params) {
     try {
       const { pageIndex, pageSize, name } = params;
-      const searchPatter = name ? new RegExp(name, 'i') : new RegExp('', 'i');
+
+      const filter: Filter = {};
+
+      if (name) {
+        const patternWithName = { $regex: new RegExp(name, 'gi') };
+        filter.name = patternWithName;
+      }
+
       const data = await this.model
-        .find({ name: searchPatter })
+        .find(filter)
         .limit(pageSize)
         .skip(pageSize * pageIndex);
       const totalElement = await this.model.count();
@@ -51,7 +56,7 @@ class CRUDService<T extends Document> {
   }
 
   // GET BY ID
-  async getById(id: string, populateName?: string | string[]) {
+  async getById(id: string) {
     try {
       const category = await this.model.findById(id);
       return category;

@@ -4,16 +4,49 @@ import { Model } from 'mongoose';
 import ProductVariantsModel from '@app/models/productVariant';
 import CategoryModel from '@app/models/category';
 import { Request } from 'express';
-import CategoryService from './category';
+import { Filter, Params } from '@app/types';
 
-interface ArrayString {
-  productDTO: string[];
-}
-
-const categoryService = new CategoryService(CategoryModel, 'category');
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
     super(model, nameService);
+  }
+
+  async getPaginationOverriding(params: Params) {
+    try {
+      const { pageIndex, pageSize, name, categoryId } = params;
+
+      const filter: Filter = {};
+
+      if (name) {
+        const patternWithName = { $regex: new RegExp(name, 'gi') };
+        filter.name = patternWithName;
+      }
+
+      if (categoryId) {
+        filter.categoryId = categoryId;
+      }
+
+      let data = await this.model
+        .find(filter)
+        .limit(pageSize)
+        .skip(pageSize * pageIndex);
+      const totalElement = await this.model.count();
+      const totalPages = Math.ceil(totalElement / pageSize);
+      const isLastPage = pageIndex + 1 >= totalPages;
+
+      const result = {
+        data: data,
+        totalElement,
+        pageIndex,
+        pageSize,
+        totalPage: totalPages,
+        isLastPage: isLastPage,
+      };
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Occur error when fetching ${this.nameService} with ${error}`);
+    }
   }
 
   async deleteOverriding(ids?: string[] | string | any) {
@@ -31,6 +64,20 @@ class ProductService extends CRUDService<Product> {
           productsDTO: { $in: ids },
         },
         { $pull: { productsDTO: { $in: ids } } },
+      );
+
+      await CategoryModel.updateMany(
+        {
+          'childCategory.children.productsDTO': { $in: ids },
+        },
+        {
+          $pull: {
+            'childCategory.$.children.productsDTO': { $in: ids },
+          },
+        },
+        {
+          new: true,
+        },
       );
 
       return { message: `Delete ${this.nameService} success` };
@@ -82,62 +129,80 @@ class ProductService extends CRUDService<Product> {
   }
 
   async updateOverriding(id: string, req: Request) {
-    const productRequest: Product = req.body;
     try {
+      const productRequest: Product = req.body;
       const product = await this.model.findById(id);
-      const productUpdate = await product?.updateOne(productRequest, { new: true });
+      await product?.updateOne(productRequest, { new: true });
 
-      const productVariantId = productRequest.productVariantId;
+      const productVariantId = productRequest?.productVariantId;
 
-      console.log('====================',new Object(product?.productVariantId).valueOf() !== productVariantId)
-
-      const categoryId = productRequest.categoryId;
+      const categoryId = productRequest?.categoryId;
       const categoryChild = await CategoryModel.findOne({ 'childCategory._id': categoryId });
-
-      //   if (categoryId && convertCategoryId !== categoryId) {
-      //     const categoryBefore = await CategoryModel.findById(productUpdate?.categoryId);
-      //     await categoryBefore?.updateOne({ $pull: { productsDTO: productUpdate?._id } });
-
-      //     const productVariantAfter = await CategoryModel.findById(categoryId);
-      //     await productVariantAfter?.updateOne({ $push: { productsDTO: productUpdate?._id } });
-      //   }
 
       if (
         productVariantId &&
         new Object(product?.productVariantId).valueOf() !== productVariantId
       ) {
-        await ProductVariantsModel.findByIdAndUpdate(
-          product?.productVariantId,
-          {
-            $pull: { productIds: product?._id },
-          },
-          { new: true },
-        );
+        try {
+          await ProductVariantsModel.findByIdAndUpdate(
+            { _id: product?.productVariantId },
+            {
+              $pull: { productIds: product?._id },
+            },
+            { new: true },
+          );
 
-        await ProductVariantsModel.findByIdAndUpdate(
-          productVariantId,
-          {
-            $push: { productIds: productUpdate?._id },
-          },
-          { new: true },
-        );
+          await ProductVariantsModel.findByIdAndUpdate(
+            { _id: productVariantId },
+            {
+              $push: { productIds: product?._id },
+            },
+            { new: true },
+          );
+        } catch (error) {
+          console.log(error);
+        }
       }
-      if (categoryId) {
-        if (new Object(product?.categoryId).valueOf() !== categoryId) {
-          const categoryBefore = await CategoryModel.findById(product?.categoryId);
-          await categoryBefore?.updateOne({ $pull: { productsDTO: product?._id } }, { new: true });
+
+      if (categoryId && new Object(product?.categoryId).valueOf() !== categoryId) {
+        console.log('category id');
+        try {
+          await CategoryModel.findByIdAndUpdate(
+            { _id: product?.categoryId },
+            {
+              $pull: { productsDTO: product?._id },
+            },
+            { new: true },
+          );
 
           await CategoryModel.findByIdAndUpdate(
             categoryId,
             {
-              $push: { productsDTO: productUpdate?._id },
+              $push: { productsDTO: product?._id },
             },
             { new: true },
           );
+
+          await CategoryModel.findOneAndUpdate(
+            {
+              'childCategory._id': product?.categoryId,
+            },
+            {
+              $pull: {
+                'childCategory.$.children.productsDTO': product?._id,
+              },
+            },
+            {
+              new: true,
+            },
+          );
+        } catch (error) {
+          console.log(error);
         }
       }
-      if (categoryChild) {
-        if (new Object(product?.categoryId).valueOf() !== categoryChild)
+
+      if (categoryChild && new Object(product?.categoryId).valueOf() !== categoryChild) {
+        try {
           await CategoryModel.findOneAndUpdate(
             {
               'childCategory._id': product?.categoryId,
@@ -152,23 +217,55 @@ class ProductService extends CRUDService<Product> {
             },
           );
 
-        await CategoryModel.findOneAndUpdate(
-          {
-            'childCategory._id': categoryId,
-          },
-          {
-            $push: {
-              'childCategory.$.children.productsDTO': productUpdate?._id,
+          await CategoryModel.findOneAndUpdate(
+            {
+              'childCategory._id': categoryId,
             },
-          },
-          {
-            new: true,
-          },
-        );
+            {
+              $push: {
+                'childCategory.$.children.productsDTO': product?._id,
+              },
+            },
+            {
+              new: true,
+            },
+          );
+
+          await CategoryModel.findByIdAndUpdate(
+            { _id: product?.categoryId },
+            {
+              $pull: { productsDTO: product?._id },
+            },
+            { new: true },
+          );
+        } catch (error) {
+          console.log(error);
+        }
       }
+      return { message: `Update ${this.nameService} success` };
     } catch (error) {
       console.log(error);
       throw new Error(`Occur error when delete ${this.nameService} with ${error}`);
+    }
+  }
+
+  // GET BY ID
+  async getByIdOverridingHavePopulate(id: string, populateName?: string | string[]) {
+    try {
+      let category;
+      if (populateName) {
+        if (Array.isArray(populateName)) {
+          category = await this.model.findById(id).populate(populateName);
+        } else {
+          category = await this.model.findById(id).populate(populateName);
+        }
+      } else {
+        category = await this.model.findById(id);
+      }
+      return category;
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Occur error when find by id ${this.nameService} with ${error}`);
     }
   }
 }

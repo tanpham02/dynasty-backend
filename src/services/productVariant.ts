@@ -18,18 +18,43 @@ class ProductVariantService extends CRUDService<ProductVariants> {
         .limit(pageSize)
         .skip(pageSize * pageIndex);
       const totalElement = await this.model.count();
+      const totalPages = Math.ceil(totalElement / pageSize);
+      const isLastPage = pageIndex + 1 >= totalPages;
+
       const result = {
-        data,
+        data: data,
         totalElement,
         pageIndex,
         pageSize,
-        totalPage: Math.ceil(totalElement / pageSize),
-        isLastPage: pageIndex === totalElement,
+        totalPage: totalPages,
+        isLastPage: isLastPage,
       };
-      console.log('result', result);
       return result;
     } catch (error) {
       throw new Error(`Occur error when fetching ${this.nameService} with ${error}`);
+    }
+  }
+
+  // GET BY ID
+  async getByIdOverridingHavePopulate(id: string, populateName?: string | string[]) {
+    try {
+      let category;
+      if (populateName) {
+        if (Array.isArray(populateName)) {
+          category = await this.model
+            .findById(id)
+            .populate(populateName[0])
+            .populate(populateName[1]);
+        } else {
+          category = await this.model.findById(id).populate(populateName);
+        }
+      } else {
+        category = await this.model.findById(id);
+      }
+      return category;
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Occur error when find by id ${this.nameService} with ${error}`);
     }
   }
 

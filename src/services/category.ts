@@ -1,6 +1,6 @@
 import CRUDService from '@app/services/crudService';
 import { Model } from 'mongoose';
-import { Category, ChildCategory } from '@app/models/category/@type';
+import { Category } from '@app/models/category/@type';
 import ProductModel from '@app/models/product';
 import { Request } from 'express';
 
@@ -48,7 +48,7 @@ class CategoryService extends CRUDService<Category> {
       }
 
       return await this.model.findByIdAndUpdate(
-        id,
+        { _id: id },
         { ...req.body, childrenCategory },
         { new: true },
       );
@@ -76,11 +76,14 @@ class CategoryService extends CRUDService<Category> {
   }
 
   // GET CHILDREN CATEGORY BY ID
-  async getChildrenCategoryById(childCategoryId: string | any, populateName?: string | string[]) {
+  async getChildrenCategoryById(childCategoryId: string | any) {
     try {
-      const childrenCategory = await this.model.findOne({
-        childCategory: { $elemMatch: { _id: childCategoryId } },
-      });
+      const childrenCategory = await this.model
+        .findOne({
+          childCategory: { $elemMatch: { _id: childCategoryId } },
+        })
+        .populate('childCategory.children.productsDTO');
+
       const result = childrenCategory?.childCategory?.find(
         (child: { _id: any }) => String(child._id) === childCategoryId,
       );
@@ -92,11 +95,13 @@ class CategoryService extends CRUDService<Category> {
   }
 
   // GET CATEGORY BY ID
-  async getCategoryById(id: string | any) {
+  async getCategoryById(id: string | any, populateName: string | string[]) {
     try {
-      const category = await this.model.findOne({
-        $or: [{ _id: id }, { 'childCategory._id': id }],
-      });
+      const category = await this.model
+        .findOne({
+          $or: [{ _id: id }, { 'childCategory._id': id }],
+        })
+        .populate(populateName);
       return category;
     } catch (error) {
       console.log(error);
@@ -131,12 +136,19 @@ class CategoryService extends CRUDService<Category> {
   // UPDATE CHILDREN CATEGORY
   async updateChildrenCategory(childCategoryId: string | any, req: Request) {
     try {
-      const category = await this.model.findOne({ 'childCategory._id': childCategoryId });
-      const childCategory = category?.childCategory?.find(
-        (child: { _id: any }) => String(child._id) === childCategoryId,
+      return await this.model.findOneAndUpdate(
+        {
+          'childCategory._id': childCategoryId,
+        },
+        {
+          $set: {
+            'childCategory.$.children': req.body.children,
+          },
+        },
+        {
+          new: true,
+        },
       );
-      await childCategory?.set(req.body).save();
-      return category?.save();
     } catch (error) {
       console.log(error);
       throw new Error(`Occur error when update children ${this.nameService} with ${error}`);

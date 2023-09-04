@@ -156,7 +156,7 @@ router.get('/child/:childCategoryId', categoryController.getChildrenCategoryById
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Category'
+ *             $ref: '#/components/schema/ChildCategory'
  *
  *     responses:
  *       200:
@@ -164,7 +164,7 @@ router.get('/child/:childCategoryId', categoryController.getChildrenCategoryById
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schema/ChildCategory'
  */
 
 // UPDATE CATEGORY CHILDREN

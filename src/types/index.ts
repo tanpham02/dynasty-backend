@@ -1,7 +1,15 @@
 interface Params {
   pageIndex: number;
   pageSize: number;
-  name?: string;
+  name?: string | any;
+  categoryId?: string;
+  address?: string | any;
 }
 
-export { Params };
+interface Filter {
+  name?: string | any;
+  categoryId?: string | any;
+  address?: string | any;
+}
+
+export { Params, Filter };

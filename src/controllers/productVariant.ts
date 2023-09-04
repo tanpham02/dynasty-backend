@@ -46,7 +46,10 @@ const productVariantController = {
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const productVariant = await productVariantService.getById(id, 'productIds');
+      const productVariant = await productVariantService.getByIdOverridingHavePopulate(
+        id,
+        'productIds',
+      );
       if (!productVariant) {
         return res.status(404).json({ message: 'Product variant not found.' });
       }

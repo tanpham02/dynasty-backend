@@ -1,19 +1,19 @@
-import productController from '@app/controllers/product';
+import shopSystemController from '@app/controllers/shopSystem';
 import express from 'express';
 const router = express.Router();
 
 /**
  * @swagger
- * '/api/product/search':
+ * '/api/shop-system/search':
  *  get:
- *     tags: [Product]
+ *     tags: [Shop System]
  *     summary: Search pagination
  *     parameters:
  *      - name: name
  *        in: query
  *        schema:
  *          type: string
- *      - name: categoryId
+ *      - name: address
  *        in: query
  *        schema:
  *          type: string
@@ -31,101 +31,96 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/Shop System'
  */
 
-//SEARCH PAGINATION PRODUCT
-router.get('/search', productController.search);
+//SEARCH PAGINATION SHOP SYSTEM
+router.get('/search', shopSystemController.search);
 
 /**
  * @swagger
- * '/api/product/create':
+ * '/api/shop-system/create':
  *  post:
- *     tags: [Product]
- *     summary: Create product
+ *     tags: [Shop System]
+ *     summary: Create shop system
  *     requestBody:
  *       required: true
- *         - name
- *         - price
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Product'
+ *             $ref: '#/components/schema/Shop System'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/Shop System'
  */
 
-// CREATE PRODUCT
-router.post('/create', productController.create);
+// CREATE SHOP SYSTEM
+router.post('/create', shopSystemController.create);
 
 /**
  * @swagger
- * '/api/product/{id}':
+ * '/api/shop-system/{id}':
  *  patch:
- *     tags: [Product]
- *     summary: Update product
+ *     tags: [Shop System]
+ *     summary: Update shop system
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Product'
- *
+ *             $ref: '#/components/schema/Shop System'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/Shop System'
  */
 
-// UPDATE PRODUCT
-router.patch('/:id', productController.update);
+// UPDATE SHOP SYSTEM
+router.patch('/:id', shopSystemController.update);
 
 /**
  * @swagger
- * '/api/product/{id}':
+ * '/api/shop-system/{id}':
  *  get:
- *     tags: [Product]
- *     summary: Find by id
+ *     tags: [Shop System]
+ *     summary: Get by id
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/Shop System'
  */
 
-// GET PRODUCT BY ID
-router.get('/:id', productController.getById);
+// GET SHOP SYSTEM BY ID
+router.get('/:id', shopSystemController.getById);
 
 /**
  * @swagger
- * '/api/product/':
+ * '/api/shop-system/':
  *  delete:
- *     tags: [Product]
- *     summary: Delete product variant
+ *     tags: [Shop System]
+ *     summary: Delete shop system
  *     parameters:
  *       - in: query
  *         name: ids
@@ -140,9 +135,10 @@ router.get('/:id', productController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/Shop System'
  */
-// DELETE PRODUCT
-router.delete('/', productController.delete);
+
+// DELETE SHOP SYSTEM
+router.delete('/', shopSystemController.delete);
 
 export default router;
