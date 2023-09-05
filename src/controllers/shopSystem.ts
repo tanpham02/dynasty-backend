@@ -7,13 +7,15 @@ import { Request, Response } from 'express';
 const shopSystemController = {
   //SEARCH PAGINATION SYSTEM STORE
   search: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, name, categoryId } = req.query;
+    const { pageIndex, pageSize, name, cityId, districtId, wardId } = req.query;
     try {
       const params: Params = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
         name: name?.toString(),
-        categoryId: categoryId?.toString(),
+        cityId: Number(cityId),
+        districtId: Number(districtId),
+        wardId: Number(wardId),
       };
       const shopSystem = await ShopSystemService.searchPagination(params);
       res.status(200).json(shopSystem);

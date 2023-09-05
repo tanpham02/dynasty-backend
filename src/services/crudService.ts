@@ -26,7 +26,7 @@ class CRUDService<T extends Document> {
         .find(filter)
         .limit(pageSize)
         .skip(pageSize * pageIndex);
-      const totalElement = await this.model.count();
+      const totalElement = await this.model.find(filter).count();
       const totalPages = Math.ceil(totalElement / pageSize);
       const isLastPage = pageIndex + 1 >= totalPages;
       const result = {

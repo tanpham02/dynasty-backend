@@ -17,6 +17,14 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
+ *      - name: types
+ *        in: query
+ *        schema:
+ *           type: array
+ *           items:
+ *              type: string
+ *              enum: [NORMAL, NEW, BEST_SELLER, DELICIOUS_MUST_TRY, VEGETARIAN, SPICY, UNIQUE]
+ *        explode: false
  *      - name: pageIndex
  *        in: query
  *        schema:

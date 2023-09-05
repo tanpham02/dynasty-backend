@@ -27,15 +27,15 @@ import ShopSystem from './@type';
  *         phone:
  *             type: string
  *         cityId:
- *           type: string
+ *           type: number
  *         city:
  *             type: string
  *         districtId:
- *           type: string
+ *           type: number
  *         district:
  *             type: string
  *         wardId:
- *           type: string
+ *           type: number
  *         ward:
  *             type: string
  */
@@ -56,7 +56,7 @@ const ShopSystemSchema = new Schema<ShopSystem>(
       required: true,
     },
     cityId: {
-      type: String,
+      type: Number,
       required: true,
     },
     city: {
@@ -64,7 +64,7 @@ const ShopSystemSchema = new Schema<ShopSystem>(
       required: true,
     },
     districtId: {
-      type: String,
+      type: Number,
       required: true,
     },
     district: {
@@ -77,7 +77,7 @@ const ShopSystemSchema = new Schema<ShopSystem>(
     },
     wardId: {
       required: true,
-      type: String,
+      type: Number,
     },
   },
   { timestamps: true, versionKey: false },

@@ -26,15 +26,15 @@ import { Document } from 'mongoose';
  *         phone:
  *             type: string
  *         cityId:
- *           type: string
+ *           type: number
  *         city:
  *             type: string
  *         districtId:
- *           type: string
+ *           type: number
  *         district:
  *             type: string
  *         wardId:
- *           type: string
+ *           type: number
  *         ward:
  *             type: string
  */
@@ -43,11 +43,11 @@ interface ShopSystem extends Document {
   name: string;
   address: string;
   phone: string;
-  cityId: string;
+  cityId: number;
   city: string;
-  districtId: string;
+  districtId: number;
   district: string;
-  wardId: string;
+  wardId: number;
   ward: string;
 }
 

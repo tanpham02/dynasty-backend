@@ -40,14 +40,22 @@ import { ProductVariants } from '../productVariant/@type';
  *              - NORMAL
  *              - NEW
  *              - BEST_SELLER
+ *              - DELICIOUS_MUST_TRY
+ *              - VEGETARIAN
+ *              - SPICY
+ *              - UNIQUE
  *         productVariantId:
  *           type: string
  */
 
 enum ProductType {
-  NORMAL = 'NORMAL',
-  NEW = 'NEW',
-  BEST_SELLER = 'BEST_SELLER',
+  NORMAL = 'NORMAL', // bình thường
+  NEW = 'NEW', // mới
+  BEST_SELLER = 'BEST_SELLER', // bán chạy
+  DELICIOUS_MUST_TRY = 'DELICIOUS_MUST_TRY', // ngon phải thử
+  VEGETARIAN = 'VEGETARIAN', // chay
+  SPICY = 'SPICY', // cay
+  UNIQUE = 'UNIQUE', // dộc đáo
 }
 
 interface Product extends Document {
@@ -61,7 +69,7 @@ interface Product extends Document {
   importPrice?: number;
   image?: string;
   status?: Status;
-  types?: ProductType;
+  types?: ProductType[];
   orderQuantity?: number;
   productVariantId?: Schema.Types.ObjectId;
 }

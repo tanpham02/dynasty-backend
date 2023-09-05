@@ -1,4 +1,5 @@
 import ProductModel from '@app/models/product';
+import { ProductType } from '@app/models/product/@type';
 import ProductService from '@app/services/product';
 import { Params } from '@app/types';
 import { Request, Response } from 'express';
@@ -8,13 +9,14 @@ const productService = new ProductService(ProductModel, 'product');
 const productController = {
   //SEARCH PAGINATION PRODUCT
   search: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, name, categoryId } = req.query;
+    const { pageIndex, pageSize, name, categoryId, types } = req.query;
     try {
       const params: Params = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
         name: name?.toString(),
         categoryId: categoryId?.toString(),
+        types: types as ProductType,
       };
       const product = await productService.getPaginationOverriding(params);
       res.status(200).json(product);

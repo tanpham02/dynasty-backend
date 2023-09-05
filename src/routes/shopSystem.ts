@@ -13,14 +13,18 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
- *      - name: city
+ *      - name: cityId
  *        in: query
  *        schema:
- *          type: string
- *      - name: district
+ *          type: integer($int32)
+ *      - name: districtId
  *        in: query
  *        schema:
- *          type: string
+ *          type: integer($int32)
+ *      - name: wardId
+ *        in: query
+ *        schema:
+ *          type: integer($int32)
  *      - name: pageIndex
  *        in: query
  *        schema:

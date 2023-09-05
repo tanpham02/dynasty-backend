@@ -9,31 +9,6 @@ class ProductVariantService extends CRUDService<ProductVariants> {
   constructor(model: Model<ProductVariants>, nameService: string) {
     super(model, nameService);
   }
-  // SEARCH PAGINATION - Overriding
-  async getPagination(params: Params) {
-    try {
-      const { pageIndex, pageSize } = params;
-      const data = await this.model
-        .find()
-        .limit(pageSize)
-        .skip(pageSize * pageIndex);
-      const totalElement = await this.model.count();
-      const totalPages = Math.ceil(totalElement / pageSize);
-      const isLastPage = pageIndex + 1 >= totalPages;
-
-      const result = {
-        data: data,
-        totalElement,
-        pageIndex,
-        pageSize,
-        totalPage: totalPages,
-        isLastPage: isLastPage,
-      };
-      return result;
-    } catch (error) {
-      throw new Error(`Occur error when fetching ${this.nameService} with ${error}`);
-    }
-  }
 
   // GET BY ID
   async getByIdOverridingHavePopulate(id: string, populateName?: string | string[]) {

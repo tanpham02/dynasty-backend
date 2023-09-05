@@ -36,11 +36,14 @@ import { ProductVariantsSchema } from '../productVariant';
  *              - ACTIVE
  *              - IN_ACTIVE
  *         types:
- *           type: string
+ *           type: array
  *           enum:
  *              - NORMAL
  *              - NEW
  *              - BEST_SELLER
+ *              - DELICIOUS_MUST_TRY
+ *              - VEGETARIAN
+ *              - SPICY
  *         productVariantId:
  *           type: string
  */
@@ -80,9 +83,17 @@ const ProductSchema = new Schema<Product>(
       default: Status.ACTIVE,
     },
     types: {
-      type: String,
-      enum: ProductType,
-      default: ProductType.NORMAL,
+      type: [String],
+      enum: [
+        ProductType.NORMAL,
+        ProductType.NEW,
+        ProductType.BEST_SELLER,
+        ProductType.DELICIOUS_MUST_TRY,
+        ProductType.VEGETARIAN,
+        ProductType.SPICY,
+        ProductType.UNIQUE,
+      ],
+      default: [ProductType.NORMAL],
     },
     orderQuantity: {
       type: Number,

@@ -13,7 +13,7 @@ class ProductService extends CRUDService<Product> {
 
   async getPaginationOverriding(params: Params) {
     try {
-      const { pageIndex, pageSize, name, categoryId } = params;
+      const { pageIndex, pageSize, name, categoryId, types } = params;
 
       const filter: Filter = {};
 
@@ -26,11 +26,15 @@ class ProductService extends CRUDService<Product> {
         filter.categoryId = categoryId;
       }
 
+      if (types) {
+        filter.types = { $all: types?.split(',') };
+      }
+
       let data = await this.model
         .find(filter)
         .limit(pageSize)
         .skip(pageSize * pageIndex);
-      const totalElement = await this.model.count();
+      const totalElement = await this.model.find(filter).count();
       const totalPages = Math.ceil(totalElement / pageSize);
       const isLastPage = pageIndex + 1 >= totalPages;
 

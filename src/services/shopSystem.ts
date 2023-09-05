@@ -10,7 +10,7 @@ class ShopSystemClass extends CRUDService<ShopSystem> {
 
   async searchPagination(params: Params) {
     try {
-      const { pageIndex, pageSize, name } = params;
+      const { pageIndex, pageSize, name, cityId, districtId, wardId } = params;
 
       const filter: Filter = {};
 
@@ -18,12 +18,21 @@ class ShopSystemClass extends CRUDService<ShopSystem> {
         const patternWithName = { $regex: new RegExp(name, 'gi') };
         filter.name = patternWithName;
       }
+      if (cityId) {
+        filter.cityId = cityId;
+      }
+      if (districtId) {
+        filter.districtId = districtId;
+      }
+      if (wardId) {
+        filter.wardId = wardId;
+      }
 
       const data = await this.model
         .find(filter)
         .limit(pageSize)
         .skip(pageSize * pageIndex);
-      const totalElement = await this.model.count();
+      const totalElement = await this.model.find(filter).count();
       const totalPages = Math.ceil(totalElement / pageSize);
       const isLastPage = pageIndex + 1 >= totalPages;
       const result = {
