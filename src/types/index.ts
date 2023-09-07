@@ -9,6 +9,7 @@ interface Params {
   districtId?: number;
   wardId?: number;
   types?: ProductType;
+  comboPromotionsId?: string;
 }
 
 interface Filter {
@@ -18,6 +19,7 @@ interface Filter {
   districtId?: number;
   wardId?: number;
   types?: ProductType | any;
+  comboPromotionsId?: string;
 }
 
 export { Params, Filter };

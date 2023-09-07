@@ -8,14 +8,16 @@ const categoryService = new CategoryService(CategoryModel, 'category');
 const categoryController = {
   // SEARCH PAGINATION CATEGORY
   search: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, name } = req.query;
+    const { pageIndex, pageSize, name, comboPromotionsId } = req.query;
     const params: Params = {
       pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
       pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
       name: name?.toString(),
+      comboPromotionsId: comboPromotionsId?.toString(),
     };
+
     try {
-      const category = await categoryService.getPagination(params);
+      const category = await categoryService.searchPaginationOverriding(params);
       res.status(200).json(category);
     } catch (error) {
       console.log(error);

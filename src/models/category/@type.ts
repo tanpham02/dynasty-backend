@@ -25,6 +25,10 @@ import { Schema, Document } from 'mongoose';
  *          item:
  *             $ref: '#/components/schema/Product'
  *
+ *        comboPromotionsId:
+ *             type: array
+ *             item:
+ *               $ref: '#/components/schema/ComboPromotions'
  *        childCategory:
  *          type: array
  *          item:
@@ -58,6 +62,7 @@ interface Category extends Document {
   status?: Status;
   childCategory?: ChildCategory[] | any;
   productsDTO?: Schema.Types.ObjectId[];
+  comboPromotionsId?: Schema.Types.ObjectId[];
 }
 
 interface ChildCategory extends Document {

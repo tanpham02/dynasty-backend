@@ -26,6 +26,11 @@ import { Status } from '@app/constants';
  *          item:
  *             $ref: '#/components/schema/Product'
  *
+ *        comboPromotionsId:
+ *             type: array
+ *             item:
+ *                 $ref: '#/components/schema/ComboPromotions'
+ *
  *        childCategory:
  *          type: array
  *          item:
@@ -75,6 +80,12 @@ const CategorySchema = new Schema<Category>(
       enum: Status,
       default: Status.ACTIVE,
     },
+    comboPromotionsId: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'ComboPromotions',
+      },
+    ],
     productsDTO: [
       {
         type: Schema.Types.ObjectId,

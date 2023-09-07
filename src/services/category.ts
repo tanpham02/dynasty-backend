@@ -3,10 +3,51 @@ import { Model } from 'mongoose';
 import { Category } from '@app/models/category/@type';
 import ProductModel from '@app/models/product';
 import { Request } from 'express';
+import { Filter, Params } from '@app/types';
+import ComboPromotionsModel from '@app/models/comboPromotions';
 
 class CategoryService extends CRUDService<Category> {
   constructor(model: Model<Category>, nameService: String) {
     super(model, nameService);
+  }
+
+  // SEARCH PAGINATION
+  async searchPaginationOverriding(params: Params) {
+    try {
+      const { pageIndex, pageSize, name, comboPromotionsId } = params;
+
+      const filter: Filter = {};
+
+      if (name) {
+        const patternWithName = { $regex: new RegExp(name, 'gi') };
+        filter.name = patternWithName;
+      }
+
+      if (comboPromotionsId) {
+        filter.comboPromotionsId = comboPromotionsId;
+      }
+
+      let data = await this.model
+        .find(filter)
+        .limit(pageSize)
+        .skip(pageSize * pageIndex);
+      const totalElement = await this.model.find(filter).count();
+      const totalPages = Math.ceil(totalElement / pageSize);
+      const isLastPage = pageIndex + 1 >= totalPages;
+
+      const result = {
+        data: data,
+        totalElement,
+        pageIndex,
+        pageSize,
+        totalPage: totalPages,
+        isLastPage: isLastPage,
+      };
+      return result;
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Occur error when fetching ${this.nameService} with ${error}`);
+    }
   }
 
   // CREATE CATEGORY
@@ -67,6 +108,14 @@ class CategoryService extends CRUDService<Category> {
           categoryId: { $in: ids },
         },
         { $set: { categoryId: null } },
+      );
+      await ComboPromotionsModel.updateMany(
+        {
+          categoryId: { $in: ids },
+        },
+        {
+          $set: { categoryId: null },
+        },
       );
       return { message: `Delete ${this.nameService} success` };
     } catch (error) {

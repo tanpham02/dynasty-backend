@@ -1,15 +1,13 @@
-import productController from '@app/controllers/product';
-import express from 'express';
-const router = express.Router();
+import comboPromotionsController from '@app/controllers/comboPromotions';
+import { Router } from 'express';
 
-
-
+const router = Router();
 
 /**
  * @swagger
- * '/api/product/search':
+ * '/api/combo-promotions/search':
  *  get:
- *     tags: [Product]
+ *     tags: [Combo Promotions]
  *     summary: Search pagination
  *     parameters:
  *      - name: name
@@ -20,14 +18,6 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
- *      - name: types
- *        in: query
- *        schema:
- *           type: array
- *           items:
- *              type: string
- *              enum: [NORMAL, NEW, BEST_SELLER, DELICIOUS_MUST_TRY, VEGETARIAN, SPICY, UNIQUE]
- *        explode: false
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -42,44 +32,39 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/ComboPromotions'
  */
 
-//SEARCH PAGINATION PRODUCT
-router.get('/search', productController.search);
+router.get('/search', comboPromotionsController.search);
 
 /**
  * @swagger
- * '/api/product/create':
+ * '/api/combo-promotions/create':
  *  post:
- *     tags: [Product]
- *     summary: Create product
+ *     tags: [Combo Promotions]
+ *     summary: Create combo promotions
  *     requestBody:
  *       required: true
- *         - name
- *         - price
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Product'
+ *             $ref: '#/components/schema/ComboPromotions'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/ComboPromotions'
  */
-
-// CREATE PRODUCT
-router.post('/create', productController.create);
+router.post('/create', comboPromotionsController.create);
 
 /**
  * @swagger
- * '/api/product/{id}':
+ * '/api/combo-promotions/{id}':
  *  patch:
- *     tags: [Product]
- *     summary: Update product
+ *     tags: [Combo Promotions]
+ *     summary: Update combo promotions
  *     parameters:
  *       - in: path
  *         name: id
@@ -92,68 +77,59 @@ router.post('/create', productController.create);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Product'
- *
+ *             $ref: '#/components/schema/ComboPromotions'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/ComboPromotions'
  */
-
-// UPDATE PRODUCT
-router.patch('/:id', productController.update);
+router.patch('/:id', comboPromotionsController.update);
 
 /**
  * @swagger
- * '/api/product/{id}':
+ * '/api/combo-promotions/{id}':
  *  get:
- *     tags: [Product]
- *     summary: Find by id
+ *     tags: [Combo Promotions]
+ *     summary: Get by id
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/ComboPromotions'
  */
-
-// GET PRODUCT BY ID
-router.get('/:id', productController.getById);
+router.get('/:id', comboPromotionsController.getById);
 
 /**
  * @swagger
- * '/api/product/':
+ * '/api/combo-promotions/':
  *  delete:
- *     tags: [Product]
- *     summary: Delete product variant
+ *     tags: [Combo Promotions]
+ *     summary: Delete combo promotion
  *     parameters:
  *       - in: query
  *         name: ids
  *         schema:
  *           type: array
- *           item: string
  *         required: true
-
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/ComboPromotions'
  */
-// DELETE PRODUCT
-router.delete('/', productController.delete);
+router.delete('/', comboPromotionsController.delete);
 
 export default router;

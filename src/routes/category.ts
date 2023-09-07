@@ -14,6 +14,10 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
+ *      - name: comboPromotionsId
+ *        in: query
+ *        schema:
+ *          type: string
  *      - name: pageIndex
  *        in: query
  *        schema:
