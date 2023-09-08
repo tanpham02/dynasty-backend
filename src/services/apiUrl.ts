@@ -12,3 +12,9 @@ export const SHOP_SYSTEM_URL = '/api/shop-system';
 
 // COMBO PROMOTIONS
 export const COMBO_PROMOTIONS_URL = '/api/combo-promotions';
+
+//  PROMOTIONS
+export const PROMOTIONS_URL = '/api/promotions';
+
+// CONFIG STORE
+export const CONFIG_STORE_URL = '/api/config-store';
