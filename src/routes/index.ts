@@ -5,6 +5,7 @@ import shopSystemRouter from './shopSystem';
 import comboPromotionsRouter from './comboPromotions';
 import promotionsRouter from './promotions';
 import configStoreRouter from './configStore';
+import voucherRouter from './voucher'
 
 export {
   categoryRouter,
@@ -14,4 +15,5 @@ export {
   comboPromotionsRouter,
   promotionsRouter,
   configStoreRouter,
+  voucherRouter
 };

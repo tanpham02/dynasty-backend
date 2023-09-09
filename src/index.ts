@@ -9,7 +9,8 @@ import {
   productVariantRouter,
   promotionsRouter,
   shopSystemRouter,
-  configStoreRouter
+  configStoreRouter,
+  voucherRouter,
 } from '@app/routes';
 import {
   CATEGORY_URL,
@@ -19,6 +20,7 @@ import {
   PRODUCT_VARIANT_URL,
   PROMOTIONS_URL,
   SHOP_SYSTEM_URL,
+  VOUCHER_URL,
 } from './services/apiUrl';
 
 const app: Application = express();
@@ -53,8 +55,11 @@ app.use(`${COMBO_PROMOTIONS_URL}`, comboPromotionsRouter);
 // PROMOTIONS
 app.use(`${PROMOTIONS_URL}`, promotionsRouter);
 
-
+// CONFIG STORE
 app.use(`${CONFIG_STORE_URL}`, configStoreRouter);
+
+// VOUCHER
+app.use(`${VOUCHER_URL}`, voucherRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

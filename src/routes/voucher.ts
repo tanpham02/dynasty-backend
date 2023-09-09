@@ -1,16 +1,15 @@
-import productVariantController from '@app/controllers/productVariant';
-import express from 'express';
-
-const router = express.Router();
+import voucherController from '@app/controllers/voucher';
+import { Router } from 'express';
+const router = Router();
 
 /**
  * @swagger
- * '/api/product-variant/search':
+ * '/api/voucher/search':
  *  get:
- *     tags: [Product Variant]
+ *     tags: [Voucher]
  *     summary: Search pagination
  *     parameters:
- *      - name: productId
+ *      - name: name
  *        in: query
  *        schema:
  *          type: string
@@ -28,99 +27,96 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductVariant'
+ *                 $ref: '#/components/schema/Voucher'
  */
 
-// SEARCH PAGINATION
-router.get('/search', productVariantController.search);
+// SEARCH PAGINATION VOUCHER
+router.get('/search', voucherController.search);
 
 /**
  * @swagger
- * '/api/product-variant/create':
+ * '/api/voucher/create':
  *  post:
- *     tags: [Product Variant]
- *     summary: Create product variant
+ *     tags: [Voucher]
+ *     summary: Create voucher
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/ProductVariant'
+ *             $ref: '#/components/schema/Voucher'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductVariant'
+ *                 $ref: '#/components/schema/Voucher'
  */
 
-// CREATE PRODUCT VARIANT
-router.post('/create', productVariantController.create);
+// CREATE VOUCHER
+router.post('/create', voucherController.create);
 
 /**
  * @swagger
- * '/api/product-variant/{id}':
+ * '/api/voucher/{id}':
  *  patch:
- *     tags: [Product Variant]
- *     summary: Update product variant
+ *     tags: [Voucher]
+ *     summary: Update voucher
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/ProductVariant'
- *
+ *             $ref: '#/components/schema/Voucher'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductVariant'
+ *                 $ref: '#/components/schema/Voucher'
  */
 
-// UPDATE PRODUCT VARIANT
-router.patch('/:id', productVariantController.update);
+// UPDATE VOUCHER
+router.patch('/:id', voucherController.update);
 
 /**
  * @swagger
- * '/api/product-variant/{id}':
+ * '/api/voucher/{id}':
  *  get:
- *     tags: [Product Variant]
- *     summary: Find by id
+ *     tags: [Voucher]
+ *     summary: Get voucher by id
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductVariant'
+ *                 $ref: '#/components/schema/Voucher'
  */
 
-// GET PRODUCT VARIANT BY ID
-router.get('/:id', productVariantController.getById);
+// GET VOUCHER BY ID
+router.get('/:id', voucherController.getById);
 
 /**
  * @swagger
- * '/api/product-variant/':
+ * '/api/voucher':
  *  delete:
- *     tags: [Product Variant]
- *     summary: Delete product variant
+ *     tags: [Voucher]
+ *     summary: Delete voucher
  *     parameters:
  *       - in: query
  *         name: ids
@@ -128,16 +124,16 @@ router.get('/:id', productVariantController.getById);
  *           type: array
  *           item: string
  *         required: true
-
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductVariant'
+ *                 $ref: '#/components/schema/Voucher'
  */
-// DELETE PRODUCT VARIANT
-router.delete('/', productVariantController.delete);
+
+// GET VOUCHER BY ID
+router.delete('/', voucherController.delete);
 
 export default router;

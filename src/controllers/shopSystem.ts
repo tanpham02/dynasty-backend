@@ -17,7 +17,7 @@ const shopSystemController = {
         districtId: Number(districtId),
         wardId: Number(wardId),
       };
-      const shopSystem = await ShopSystemService.searchPagination(params);
+      const shopSystem = await ShopSystemService.getPagination(params);
       res.status(200).json(shopSystem);
     } catch (error) {
       res.status(500).json(error);

@@ -1,33 +1,30 @@
 import { Schema, Model, model } from 'mongoose';
-import { Cart } from './@type';
+import { Cart, CartProduct } from './@type';
 import { Status } from '@app/constants';
 
-const CartSchema = new Schema<Cart, Model<Cart>>(
+const CartProductSchema = new Schema<CartProduct>(
   {
-    userId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Customer',
-    },
     productId: {
       type: Schema.Types.ObjectId,
       ref: 'Product',
     },
-    quantity: {
-      type: Number,
-    },
+
     note: {
       type: String,
     },
-    status: {
-      type: String,
-      enum: Status,
-      default: Status.ACTIVE,
+  },
+  { versionKey: false, timestamps: true },
+);
+
+const CartSchema = new Schema<Cart>(
+  {
+    customerId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Customer',
     },
-    cartTotal: {
+    products: [CartProductSchema],
+    quantity: {
       type: Number,
-    },
-    productDetail: {
-      type: String,
     },
   },
   { versionKey: false, timestamps: true },

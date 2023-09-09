@@ -1,6 +1,5 @@
 import { Schema, Types, Model, model } from 'mongoose';
 import { Order } from './@type';
-import { Status } from '@app/constants';
 
 const OrderSchema = new Schema<Order>(
   {
@@ -8,25 +7,22 @@ const OrderSchema = new Schema<Order>(
       type: Schema.Types.ObjectId,
       ref: 'Customer',
     },
-    productId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Product',
-    },
+    productIdList: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
     shipFee: {
       type: Number,
     },
     quantity: {
       type: Number,
     },
-    status: {
-      type: String,
-      enum: Status,
-      default: Status.ACTIVE,
-    },
-    totalOrder: {
+    totalOrderAmount: {
       type: Number,
     },
-    totalBeforeUseDiscount: {
+    totalOrderAmountBeforeUseDiscount: {
       type: Number,
     },
     totalMoneyDiscount: {

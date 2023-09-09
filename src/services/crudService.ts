@@ -13,13 +13,50 @@ class CRUDService<T extends Document> {
   // SEARCH PAGINATION
   async getPagination(params: Params) {
     try {
-      const { pageIndex, pageSize, name } = params;
+      const {
+        pageIndex,
+        pageSize,
+        name,
+        productId,
+        comboPromotionsId,
+        categoryId,
+        types,
+        cityId,
+        districtId,
+        wardId,
+      } = params;
 
       const filter: Filter = {};
 
       if (name) {
         const patternWithName = { $regex: new RegExp(name, 'gi') };
         filter.name = patternWithName;
+      }
+
+      if (productId) {
+        filter.productIds = productId;
+      }
+
+      if (comboPromotionsId) {
+        filter.comboPromotionsId = comboPromotionsId;
+      }
+
+      if (categoryId) {
+        filter.categoryId = categoryId;
+      }
+
+      if (types) {
+        filter.types = { $all: types?.split(',') };
+      }
+
+      if (cityId) {
+        filter.cityId = cityId;
+      }
+      if (districtId) {
+        filter.districtId = districtId;
+      }
+      if (wardId) {
+        filter.wardId = wardId;
       }
 
       const data = await this.model

@@ -6,9 +6,9 @@ import { Request, Response } from 'express';
 const cfStoreService = new ConfigStoreService(ConfigStoreModel, 'config store');
 
 const configStoreController = {
-  search: async (req: Request, res: Response) => {
+  search: async (res: Response) => {
     try {
-      const result = await cfStoreService.search();
+      const result = await ConfigStoreModel.find();
       res.status(200).json(result);
     } catch (error) {
       res.status(500).json(error);

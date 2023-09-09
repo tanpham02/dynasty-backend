@@ -10,43 +10,6 @@ class comboPromotionsService extends CRUDService<ComboPromotions> {
     super(model, nameService);
   }
 
-  async searchPagination(params: Params) {
-    try {
-      const { pageIndex, pageSize, name, categoryId } = params;
-
-      const filter: Filter = {};
-
-      if (name) {
-        const patternWithName = { $regex: new RegExp(name, 'gi') };
-        filter.name = patternWithName;
-      }
-
-      if (categoryId) {
-        filter.categoryId = categoryId;
-      }
-
-      const data = await this.model
-        .find(filter)
-        .limit(pageSize)
-        .skip(pageSize * pageIndex);
-      const totalElement = await this.model.find(filter).count();
-      const totalPages = Math.ceil(totalElement / pageSize);
-      const isLastPage = pageIndex + 1 >= totalPages;
-      const result = {
-        data,
-        totalElement,
-        pageIndex,
-        pageSize,
-        totalPage: totalPages,
-        isLastPage: isLastPage,
-      };
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error(`Error occur when fetching ${this.nameService} with error ${error}`);
-    }
-  }
-
   async createOverriding(req: Request) {
     try {
       const data: ComboPromotions = req.body;

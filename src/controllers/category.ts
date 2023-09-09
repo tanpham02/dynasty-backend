@@ -17,7 +17,7 @@ const categoryController = {
     };
 
     try {
-      const category = await categoryService.searchPaginationOverriding(params);
+      const category = await categoryService.getPagination(params);
       res.status(200).json(category);
     } catch (error) {
       console.log(error);

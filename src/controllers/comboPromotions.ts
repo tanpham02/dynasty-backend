@@ -16,7 +16,7 @@ const comboPromotionsController = {
         name: name,
         categoryId: categoryId?.toString(),
       };
-      const comboPromotions = await comboService.searchPagination(params);
+      const comboPromotions = await comboService.getPagination(params);
       res.status(200).json(comboPromotions);
     } catch (error) {
       res.status(500).json(error);

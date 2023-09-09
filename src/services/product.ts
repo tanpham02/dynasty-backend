@@ -11,48 +11,6 @@ class ProductService extends CRUDService<Product> {
     super(model, nameService);
   }
 
-  async getPaginationOverriding(params: Params) {
-    try {
-      const { pageIndex, pageSize, name, categoryId, types } = params;
-
-      const filter: Filter = {};
-
-      if (name) {
-        const patternWithName = { $regex: new RegExp(name, 'gi') };
-        filter.name = patternWithName;
-      }
-
-      if (categoryId) {
-        filter.categoryId = categoryId;
-      }
-
-      if (types) {
-        filter.types = { $all: types?.split(',') };
-      }
-
-      let data = await this.model
-        .find(filter)
-        .limit(pageSize)
-        .skip(pageSize * pageIndex);
-      const totalElement = await this.model.find(filter).count();
-      const totalPages = Math.ceil(totalElement / pageSize);
-      const isLastPage = pageIndex + 1 >= totalPages;
-
-      const result = {
-        data: data,
-        totalElement,
-        pageIndex,
-        pageSize,
-        totalPage: totalPages,
-        isLastPage: isLastPage,
-      };
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error(`Occur error when fetching ${this.nameService} with ${error}`);
-    }
-  }
-
   async deleteOverriding(ids?: string[] | string | any) {
     try {
       await this.model.deleteMany({ _id: { $in: ids } });

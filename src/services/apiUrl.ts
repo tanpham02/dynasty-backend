@@ -18,3 +18,6 @@ export const PROMOTIONS_URL = '/api/promotions';
 
 // CONFIG STORE
 export const CONFIG_STORE_URL = '/api/config-store';
+
+// VOUCHER
+export const VOUCHER_URL = '/api/voucher';

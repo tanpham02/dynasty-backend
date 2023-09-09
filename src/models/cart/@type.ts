@@ -1,17 +1,14 @@
 import { Schema, Document } from 'mongoose';
-import { Status } from '@app/constants';
 
-interface Cart extends Document {
-  _id?: Schema.Types.ObjectId;
-  userId: Schema.Types.ObjectId;
-  quantity: number;
-  productId: Schema.Types.ObjectId;
-  size?: string;
-  base?: string;
+interface CartProduct extends Document {
+  productId?: Schema.Types.ObjectId;
   note?: string;
-  status?: Status;
-  cartTotal: number;
-  productDetail?: string;
+}
+interface Cart extends Document {
+  customerId: Schema.Types.ObjectId;
+  products?: CartProduct[];
+  quantity: number;
+  
 }
 
-export { Cart };
+export { Cart, CartProduct };
