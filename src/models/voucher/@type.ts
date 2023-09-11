@@ -85,6 +85,7 @@ interface Voucher extends Document {
   minimumOrderValue?: number;
   listProductUsedVoucher?: Schema.Types.ObjectId[];
   status?: Status;
+  customerId?: Schema.Types.ObjectId;
 }
 
 export default Voucher;

@@ -11,6 +11,7 @@ import {
   shopSystemRouter,
   configStoreRouter,
   voucherRouter,
+  userRouter,
 } from '@app/routes';
 import {
   CATEGORY_URL,
@@ -20,6 +21,7 @@ import {
   PRODUCT_VARIANT_URL,
   PROMOTIONS_URL,
   SHOP_SYSTEM_URL,
+  USER_URL,
   VOUCHER_URL,
 } from './services/apiUrl';
 
@@ -60,6 +62,9 @@ app.use(`${CONFIG_STORE_URL}`, configStoreRouter);
 
 // VOUCHER
 app.use(`${VOUCHER_URL}`, voucherRouter);
+
+// USER
+app.use(`${USER_URL}`, userRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

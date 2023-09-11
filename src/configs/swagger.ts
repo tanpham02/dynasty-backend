@@ -9,10 +9,10 @@ const configSwagger = (app: Application) => {
     definition: {
       openapi: '3.1.0',
       info: {
-        title: 'The Pizza Company Express API with Swagger',
+        title: 'The Pizza Company API with Swagger',
         version: '1.0.0',
         description:
-          'This is a simple API application made with Express and documented with Swagger',
+          'This is a simple API application made with NodeJS + Express and documented with Swagger',
         license: {
           name: 'MIT',
           url: 'https://spdx.org/licenses/MIT.html',

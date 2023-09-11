@@ -7,7 +7,7 @@ import { Status } from '@app/constants';
 /**
  * @swagger
  * components:
- *   schema:
+ *   schemas:
  *     Voucher:
  *       type: object
  *       required:
@@ -107,6 +107,11 @@ const voucherSchema = new Schema<Voucher>(
       type: String,
       enum: Status,
       default: Status.ACTIVE,
+    },
+
+    customerId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Customer',
     },
   },
   { timestamps: true, versionKey: false },
