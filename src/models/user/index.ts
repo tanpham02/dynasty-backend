@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import User, { Role } from './@type';
+import { Status } from '@app/constants';
 
 // SCHEMAS RESPONSE
 
@@ -10,10 +11,10 @@ import User, { Role } from './@type';
  *     User:
  *       type: object
  *       required:
- *         - userName
+ *         - username
  *         - password
  *       properties:
- *         userName:
+ *         username:
  *           type: string
  *         birthday:
  *           type: string
@@ -30,11 +31,14 @@ import User, { Role } from './@type';
  *         role:
  *           type: string
  *           enum: [ADMIN, USER]
+ *         status:
+ *           type: string
+ *           enum: [ACTIVE, IN_ACTIVE]
  */
 
 const UserSchema = new Schema<User>(
   {
-    userName: {
+    username: {
       type: String,
       require: true,
       min: 4,
@@ -55,6 +59,24 @@ const UserSchema = new Schema<User>(
     address: {
       type: String,
     },
+    city: {
+      type: String,
+    },
+    cityId: {
+      type: Number,
+    },
+    district: {
+      type: String,
+    },
+    districtId: {
+      type: Number,
+    },
+    ward: {
+      type: String,
+    },
+    wardId: {
+      type: Number,
+    },
     password: {
       type: String,
       require: true,
@@ -63,6 +85,11 @@ const UserSchema = new Schema<User>(
       type: String,
       enum: Role,
       default: Role.USER,
+    },
+    status: {
+      type: String,
+      enum: Status,
+      default: Status.ACTIVE,
     },
   },
   { timestamps: true, versionKey: false },

@@ -1,5 +1,10 @@
 import { Schema, Document } from 'mongoose';
-import { Status } from '@app/constants';
+
+enum StatusOrder {
+  PENDING = 'PENDING',
+  DELIVERING = 'DELIVERING',
+  SUCCESS = 'SUCCESS',
+}
 
 interface Order extends Document {
   totalOrderAmount?: number;
@@ -9,6 +14,7 @@ interface Order extends Document {
   customerId?: Schema.Types.ObjectId;
   productIdList?: Schema.Types.ObjectId[];
   quantity?: number;
+  statusOrder?: StatusOrder;
 }
 
 export { Order };

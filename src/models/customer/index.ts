@@ -2,8 +2,44 @@ import { Schema, model } from 'mongoose';
 import { Customer } from './@type';
 import { Status } from '@app/constants';
 
+// SCHEMAS DESCRIPTION
+
+/**
+ * @swagger
+ * components:
+ *   schema:
+ *     Customer:
+ *       type: object
+ *       properties:
+ *         phoneNumber:
+ *             type: string
+ *         fullName:
+ *             type: string
+ *         email:
+ *             type: string
+ *         password:
+ *             type: string
+ *         birthday:
+ *             type: string
+ *             description: 2023-05-25
+ *         customerAddressId:
+ *             type: string
+ *         orderIds:
+ *             type: array
+ *             item: string
+ *         status:
+ *          type: string
+ *          default: "ACTIVE"
+ *          enum:
+ *             - ACTIVE
+ *             - IN_ACTIVE
+ */
+
 const CustomerSchema = new Schema<Customer>(
   {
+    phoneNumber: {
+      type: String,
+    },
     fullName: {
       type: String,
       required: true,
@@ -18,33 +54,19 @@ const CustomerSchema = new Schema<Customer>(
       minlength: 6,
       required: true,
     },
-    phoneNumber: {
-      type: String,
-    },
-    address: {
-      type: String,
-    },
     birthday: {
-      type: String,
+      type: Date,
     },
-    city: {
-      type: String,
+    customerAddressId: {
+      type: Schema.Types.ObjectId,
+      ref: 'CustomerAddress',
     },
-    cityId: {
-      type: Number,
-    },
-    district: {
-      type: String,
-    },
-    districtId: {
-      type: Number,
-    },
-    ward: {
-      type: String,
-    },
-    wardId: {
-      type: Number,
-    },
+    orderIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Order',
+      },
+    ],
     status: {
       type: String,
       enum: Status,

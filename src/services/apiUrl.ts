@@ -24,3 +24,6 @@ export const VOUCHER_URL = '/api/voucher';
 
 // USER
 export const USER_URL = '/api/user';
+
+// CUSTOMER
+export const CUSTOMER_URL = '/api/customer';

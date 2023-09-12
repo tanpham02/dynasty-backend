@@ -1,19 +1,19 @@
+import customerController from '@app/controllers/customer';
 import { Router } from 'express';
-import userController from '@app/controllers/user';
 
 const router = Router();
 
 /**
  * @swagger
- * '/api/user/search':
+ * '/api/customer/search':
  *  get:
- *     tags: [User]
+ *     tags: [Customer]
  *     summary: Search pagination
  *     parameters:
  *      - name: fullName
  *        in: query
  *        schema:
- *          type: string
+ *          type: integer($int32)
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -22,116 +22,123 @@ const router = Router();
  *        in: query
  *        schema:
  *          type: integer($int32)
+ *
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/User'
+ *                 $ref: '#/components/schema/Customer'
  */
 
 // SEARCH PAGINATION
-router.get('/search', userController.search);
+router.get('/search', customerController.search);
 
 /**
  * @swagger
- * '/api/user/create':
- *  post:
- *     tags: [User]
- *     summary: Create user
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/User'
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/User'
- */
-
-// CREATE
-router.post('/create', userController.create);
-
-/**
- * @swagger
- * '/api/user/{id}':
- *  patch:
- *     tags: [User]
- *     summary: Update user
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/User'
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/User'
- */
-// UPDATE
-router.patch('/:id', userController.update);
-
-/**
- * @swagger
- * '/api/user/{id}':
+ * '/api/customer/{id}':
  *  get:
- *     tags: [User]
- *     summary: Get user by id
+ *     tags: [Customer]
+ *     summary: Find by id
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
+ *
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/User'
+ *                 $ref: '#/components/schema/Customer'
  */
 
 // GET BY ID
-router.get('/:id', userController.getById);
+router.get('/:id', customerController.getById);
 
 /**
  * @swagger
- * '/api/user':
+ * '/api/customer/create':
+ *  post:
+ *     tags: [Customer]
+ *     summary: Create customer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schema/Customer'
+ *
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Customer'
+ */
+
+// CREATE CUSTOMER
+router.post('/create', customerController.create);
+
+/**
+ * @swagger
+ * '/api/customer/{id}':
+ *  patch:
+ *     tags: [Customer]
+ *     summary: User customer
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schema/Customer'
+
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Customer'
+ */
+
+// UPDATE
+router.patch('/:id', customerController.update);
+
+/**
+ * @swagger
+ * '/api/customer':
  *  delete:
- *     tags: [User]
- *     summary: Delete user
+ *     tags: [Customer]
+ *     summary: Delete customer
  *     parameters:
  *       - in: query
  *         name: ids
  *         schema:
  *           type: array
- *           item: string
  *         required: true
+ *
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/User'
+ *                 $ref: '#/components/schema/Customer'
  */
-router.delete('/', userController.delete);
+
+// DELETE CUSTOMER
+router.delete('/', customerController.delete);
 
 export default router;

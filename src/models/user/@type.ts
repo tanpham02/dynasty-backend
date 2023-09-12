@@ -1,3 +1,4 @@
+import { Status } from '@app/constants';
 import { Document } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -9,10 +10,10 @@ import { Document } from 'mongoose';
  *     User:
  *       type: object
  *       required:
- *         - userName
+ *         - username
  *         - password
  *       properties:
- *         userName:
+ *         username:
  *           type: string
  *         birthday:
  *           type: string
@@ -30,6 +31,9 @@ import { Document } from 'mongoose';
  *         role:
  *           type: string
  *           enum: [ADMIN, USER]
+ *         status:
+ *           type: string
+ *           enum: [ACTIVE, IN_ACTIVE]
  */
 
 export enum Role {
@@ -38,14 +42,21 @@ export enum Role {
 }
 
 interface User extends Document {
-  userName?: string;
+  username?: string;
   birthday?: string | Date;
   fullName?: string;
   phoneNumber?: string;
   email?: string;
   address?: string;
+  city: string;
+  cityId: number;
+  district: string;
+  districtId: number;
+  ward: string;
+  wardId: number;
   password?: string;
   role?: Role;
+  status: Status;
 }
 
 export default User;

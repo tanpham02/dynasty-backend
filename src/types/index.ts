@@ -11,6 +11,7 @@ interface Params {
   types?: ProductType;
   comboPromotionsId?: string;
   productId?: string;
+  fullName?: string;
 }
 
 interface Filter {
@@ -22,6 +23,7 @@ interface Filter {
   types?: ProductType | any;
   comboPromotionsId?: string;
   productIds?: string;
+  fullName?: string | any;
 }
 
 export { Params, Filter };

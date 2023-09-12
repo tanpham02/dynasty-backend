@@ -24,6 +24,7 @@ class CRUDService<T extends Document> {
         cityId,
         districtId,
         wardId,
+        fullName,
       } = params;
 
       const filter: Filter = {};
@@ -57,6 +58,11 @@ class CRUDService<T extends Document> {
       }
       if (wardId) {
         filter.wardId = wardId;
+      }
+
+      if (fullName) {
+        const patternWithFullName = { $regex: new RegExp(fullName, 'gi') };
+        filter.fullName = patternWithFullName;
       }
 
       const data = await this.model

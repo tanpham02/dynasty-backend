@@ -81,11 +81,10 @@ interface Voucher extends Document {
   discountPercent?: number;
   maximumReducedAmountMoney?: number;
   totalQuantityVoucher?: number;
-  maxQuantityUseInUser?: number;
   minimumOrderValue?: number;
   listProductUsedVoucher?: Schema.Types.ObjectId[];
   status?: Status;
-  customerId?: Schema.Types.ObjectId;
+  customerId?: Schema.Types.ObjectId[];
 }
 
 export default Voucher;

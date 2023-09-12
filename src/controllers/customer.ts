@@ -1,65 +1,59 @@
-import UserModel from '@app/models/user';
-import UserService from '@app/services/user';
+import CustomerModel from '@app/models/customer';
+import CustomerService from '@app/services/customer';
 import { Params } from '@app/types';
 import { Request, Response } from 'express';
 
-const userService = new UserService(UserModel, 'user');
+const customerService = new CustomerService(CustomerModel, 'customer');
 
-const userController = {
-  // SEARCH PAGINATION
+const customerController = {
   search: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, fullName } = req.query;
-
     try {
+      const { pageIndex, pageSize, fullName } = req.params;
       const params: Params = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
-        fullName: fullName?.toString(),
+        fullName: fullName,
       };
-      const voucher = await userService.getPagination(params);
-      res.status(200).json(voucher);
-    } catch (error) {
-      res.status(500).json(error);
+      const result = await customerService.getPagination(params);
+
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(500).json(err);
     }
   },
-
-  // CREATE USER
   create: async (req: Request, res: Response) => {
     try {
-      const voucher = await userService.createOverriding(req);
-      res.status(200).json(voucher);
+      const promotionsNew = await customerService.createOverriding(req);
+      res.status(200).json(promotionsNew);
     } catch (error) {
       res.status(500).json(error);
     }
   },
 
-  // UPDATE USER
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const { message } = await userService.updateOverriding(id, req);
-      res.status(200).json(message);
+      const promotions = await customerService.update(id, req);
+      res.status(200).json(promotions);
     } catch (error) {
       res.status(500).json(error);
     }
   },
 
-  // GET USER BY ID
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const user = await userService.getById(id);
-      res.status(200).json(user);
+      const promotions = await customerService.getById(id);
+      res.status(200).json(promotions);
     } catch (error) {
       res.status(500).json(error);
     }
   },
 
-  // GET USER BY ID
   delete: async (req: Request, res: Response) => {
     const { ids } = req.query;
     try {
-      const { message } = await userService.delete(ids);
+      const { message } = await customerService.delete(ids);
       res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);
@@ -67,4 +61,4 @@ const userController = {
   },
 };
 
-export default userController;
+export default customerController;

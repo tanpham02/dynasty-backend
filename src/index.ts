@@ -12,6 +12,8 @@ import {
   configStoreRouter,
   voucherRouter,
   userRouter,
+  customerAddressRouter,
+  customerRouter,
 } from '@app/routes';
 import {
   CATEGORY_URL,
@@ -23,6 +25,7 @@ import {
   SHOP_SYSTEM_URL,
   USER_URL,
   VOUCHER_URL,
+  CUSTOMER_URL,
 } from './services/apiUrl';
 
 const app: Application = express();
@@ -65,6 +68,10 @@ app.use(`${VOUCHER_URL}`, voucherRouter);
 
 // USER
 app.use(`${USER_URL}`, userRouter);
+
+// CUSTOMER
+app.use(`${CUSTOMER_URL}`, customerAddressRouter);
+app.use(`${CUSTOMER_URL}`, customerRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
