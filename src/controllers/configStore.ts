@@ -1,6 +1,5 @@
 import ConfigStoreModel from '@app/models/configStore';
 import ConfigStoreService from '@app/services/configStore';
-import { Params } from '@app/types';
 import { Request, Response } from 'express';
 
 const cfStoreService = new ConfigStoreService(ConfigStoreModel, 'config store');

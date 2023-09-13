@@ -870,6 +870,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+iter-ops@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/iter-ops/-/iter-ops-3.1.1.tgz#87c226a8cd6fd417e6477b5e8e14d1aad53e24cf"
+  integrity sha512-PelZCVYx+R7MEY6DykEXBANPT2I+Hrdz/Xk9G1vQvZlf+ORdoakNUrSbnvdQGx6AlxojziOnFHRrNEU7QllxAQ==
+
 js-yaml@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.0.tgz#c1fb65f8f5017901cdd2c951864ba18458a10602"

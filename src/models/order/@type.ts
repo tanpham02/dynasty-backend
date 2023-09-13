@@ -15,6 +15,10 @@ interface Order extends Document {
   productIdList?: Schema.Types.ObjectId[];
   quantity?: number;
   statusOrder?: StatusOrder;
+  phoneNumber?: string;
+  fullName?: string;
+  address?: string;
+  totalOrder?: number;
 }
 
 export { Order };

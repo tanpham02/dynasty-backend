@@ -5,10 +5,10 @@ const router = Router();
 
 /**
  * @swagger
- * '/api/config-store/search':
+ * '/api/config-store/find':
  *  get:
  *     tags: [Config Store]
- *     summary: Search
+ *     summary: Find all
  *     responses:
  *       200:
  *         description: OK
@@ -19,7 +19,7 @@ const router = Router();
  */
 
 // SEARCH
-router.get('/search', configStoreController.search);
+router.get('/find', configStoreController.search);
 
 /**
  * @swagger

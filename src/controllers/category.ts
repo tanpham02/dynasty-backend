@@ -125,6 +125,23 @@ const categoryController = {
       res.status(500).json(error);
     }
   },
+
+  // SEARCH PAGINATION TO SHOW (PRODUCT)
+  searchPaginationShowClient: async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const { pageIndex, pageSize } = req.query;
+      const resFromServer = await categoryService.searchPaginationToShowProduct(
+        id,
+        pageIndex ? Number(pageIndex) : 0,
+        pageSize ? Number(pageSize) : 4,
+      );
+
+      res.status(200).json(resFromServer);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
 };
 
 export default categoryController;

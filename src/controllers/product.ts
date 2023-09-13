@@ -50,7 +50,7 @@ const productController = {
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const product = await productService.getByIdOverridingHavePopulate(id, ['productVariantId']);
+      const product = await productService.getByIdOverridingHavePopulate(id, 'productVariantId');
       if (!product) {
         return res.status(404).json({ message: 'Product not found.' });
       }

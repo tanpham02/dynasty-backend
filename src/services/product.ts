@@ -212,17 +212,13 @@ class ProductService extends CRUDService<Product> {
   }
 
   // GET BY ID
-  async getByIdOverridingHavePopulate(id: string, populateName?: string | string[]) {
+  async getByIdOverridingHavePopulate(id: string, populateName?: string) {
     try {
       let category;
       if (populateName) {
-        if (Array.isArray(populateName)) {
-          category = await this.model.findById(id).populate(populateName);
-        } else {
-          category = await this.model.findById(id).populate(populateName);
-        }
-      } else {
-        category = await this.model.findById(id);
+        category = await this.model
+          .findById(id)
+          .populate({ path: populateName, select: 'variants' });
       }
       return category;
     } catch (error) {

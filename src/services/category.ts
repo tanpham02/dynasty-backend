@@ -1,10 +1,11 @@
 import CRUDService from '@app/services/crudService';
 import { Model } from 'mongoose';
-import { Category } from '@app/models/category/@type';
+import { Category, ChildCategory } from '@app/models/category/@type';
 import ProductModel from '@app/models/product';
 import { Request } from 'express';
-import { Filter, Params } from '@app/types';
 import ComboPromotionsModel from '@app/models/comboPromotions';
+import { Product } from '@app/models/product/@type';
+import { pipe, skip, page } from 'iter-ops';
 
 class CategoryService extends CRUDService<Category> {
   constructor(model: Model<Category>, nameService: String) {
@@ -200,6 +201,53 @@ class CategoryService extends CRUDService<Category> {
     } catch (error) {
       console.log(error);
       throw new Error(`Occur error when add children category with ${error}`);
+    }
+  }
+
+  // SEARCH PAGINATION TO SHOW (PRODUCT)
+  async searchPaginationToShowProduct(id: string, pageIndex: number, pageSize: number) {
+    try {
+      const category = await this.model.findById(id);
+
+      const childCategory: ChildCategory[] = category?.childCategory;
+      const listProduct: Product[] = [];
+      let newMapListProductId: any[] = [];
+
+      if (!category?.productsDTO?.length && childCategory.length) {
+        newMapListProductId = childCategory
+          .map((item) => {
+            if (item?.children?.productsDTO?.length) {
+              return [...item?.children?.productsDTO];
+            }
+          })
+          ?.flatMap((item) => item);
+      }
+      if (category?.productsDTO?.length && !childCategory.length) {
+        newMapListProductId = category?.productsDTO;
+      }
+
+      for (let i = 0; i < newMapListProductId.length; i++) {
+        const element = newMapListProductId[i];
+        const product = await ProductModel.findById(element);
+        listProduct.push(product as Product);
+      }
+      const result = pipe(
+        listProduct?.sort((a, b) => a.price + b.price),
+        skip(pageSize * pageIndex),
+        page(pageSize),
+      ).first;
+
+      const totalPage = Math.ceil(newMapListProductId.length / pageSize);
+      return {
+        data: result,
+        pageIndex,
+        pageSize,
+        totalPage,
+        totalElement: newMapListProductId.length,
+        isLastPage: pageIndex + 1 >= totalPage,
+      };
+    } catch (error) {
+      throw new Error(`Occur error when retries ${this.nameService}`);
     }
   }
 }

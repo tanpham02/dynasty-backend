@@ -257,4 +257,32 @@ router.delete('/child/:parentCategoryId', categoryController.deleteChildrenCateg
 // DELETE CATEGORY
 router.post('/child/:parentCategoryId', categoryController.addChildrenCategory);
 
+/**
+ * @swagger
+ * '/api/category/search-product/{id}':
+ *  get:
+ *     tags: [Category]
+ *     summary: Search to show product
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         type: string
+ *         required: true
+ *       - in: query
+ *         name: pageIndex
+ *         type: string
+ *       - in: query
+ *         name: pageSize
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Category'
+ */
+// SEARCH PRODUCT SHOW CLIENT
+router.get('/search-product/:id', categoryController.searchPaginationShowClient);
+
 export default router;

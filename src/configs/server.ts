@@ -5,11 +5,7 @@ import dotenv from 'dotenv';
 
 const configServer = (app: Application) => {
   dotenv.config({ path: '.env.development' });
-  app.use(
-    cors({
-      origin: [`${process.env.FRONTEND_URL}`],
-    }),
-  );
+  app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan('dev'));
