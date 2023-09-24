@@ -14,6 +14,8 @@ import {
   userRouter,
   customerAddressRouter,
   customerRouter,
+  cartRouter,
+  authenRouter,
 } from '@app/routes';
 import {
   CATEGORY_URL,
@@ -26,6 +28,7 @@ import {
   USER_URL,
   VOUCHER_URL,
   CUSTOMER_URL,
+  CART_URL,
 } from './services/apiUrl';
 
 const app: Application = express();
@@ -68,10 +71,14 @@ app.use(`${VOUCHER_URL}`, voucherRouter);
 
 // USER
 app.use(`${USER_URL}`, userRouter);
+app.use(`${USER_URL}`, authenRouter);
 
 // CUSTOMER
 app.use(`${CUSTOMER_URL}`, customerAddressRouter);
 app.use(`${CUSTOMER_URL}`, customerRouter);
+
+// CART
+app.use(`${CART_URL}`, cartRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

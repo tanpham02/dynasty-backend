@@ -8,7 +8,9 @@ import configStoreRouter from './configStore';
 import voucherRouter from './voucher';
 import userRouter from './user';
 import customerAddressRouter from './customerAddress';
-import customerRouter from './customer'
+import customerRouter from './customer';
+import cartRouter from './cart';
+import authenRouter from './authen';
 
 export {
   categoryRouter,
@@ -21,5 +23,7 @@ export {
   voucherRouter,
   userRouter,
   customerAddressRouter,
-  customerRouter
+  customerRouter,
+  cartRouter,
+  authenRouter,
 };

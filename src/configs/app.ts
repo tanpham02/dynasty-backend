@@ -5,6 +5,8 @@ import { MODE } from '@app/constants';
 interface Config {
   port: number;
   MONGO_URL: string;
+  jwtAccessKey?: string;
+  jwtRefreshKey?: string;
 }
 
 const configApp = () => {
@@ -22,6 +24,9 @@ const configApp = () => {
       MONGO_URL: process.env.MONGO_URL || '',
     };
   }
+  resultConfig.jwtAccessKey = process.env.JWT_ACCESS_KEY;
+  resultConfig.jwtRefreshKey = process.env.JWT_REFRESH_KEY;
+
   return resultConfig;
 };
 

@@ -1,3 +1,5 @@
+
+
 // CATEGORY
 export const CATEGORY_URL = '/api/category';
 
@@ -27,3 +29,6 @@ export const USER_URL = '/api/user';
 
 // CUSTOMER
 export const CUSTOMER_URL = '/api/customer';
+
+// CART
+export const CART_URL = '/api/cart';

@@ -71,9 +71,6 @@ const ProductSchema = new Schema<Product>(
       type: Schema.Types.ObjectId,
       ref: 'Category',
     },
-    importPrice: {
-      type: Number,
-    },
     image: {
       type: String,
     },

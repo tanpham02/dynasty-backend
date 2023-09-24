@@ -10,4 +10,6 @@ enum Status {
   IN_COMING = 'IN_COMING',
 }
 
-export { MODE, Status };
+const SALT: number = 10;
+
+export { MODE, Status, SALT };

@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userController from '@app/controllers/user';
+import { verifyToken, verifyTokenAndAuthenRole } from '@app/middlewares/verifyToken';
 
 const router = Router();
 
@@ -56,7 +57,7 @@ router.get('/search', userController.search);
  */
 
 // CREATE
-router.post('/create', userController.create);
+router.post('/create', verifyToken, userController.create);
 
 /**
  * @swagger
@@ -132,6 +133,6 @@ router.get('/:id', userController.getById);
  *              schema:
  *                 $ref: '#/components/schema/User'
  */
-router.delete('/', userController.delete);
+router.delete('/', verifyTokenAndAuthenRole, userController.delete);
 
 export default router;

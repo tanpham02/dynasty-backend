@@ -3,7 +3,7 @@ import CRUDService from './crudService';
 import { Model } from 'mongoose';
 import { Request } from 'express';
 import { genSalt, hash } from 'bcrypt';
-const SALT: number = 10;
+import { SALT } from '@app/constants';
 
 class UserService extends CRUDService<User> {
   constructor(model: Model<User>, nameService: string) {
@@ -18,9 +18,13 @@ class UserService extends CRUDService<User> {
         const salt = await genSalt(SALT);
         const passwordAfterHash = await hash(password, salt);
         const newUser = new this.model({ ...user, password: passwordAfterHash });
-        return await newUser.save();
+        await newUser.save();
+
+        return newUser;
       }
     } catch (error) {
+      console.log('error', error);
+
       throw new Error(`Occur when create ${this.nameService}`);
     }
   }

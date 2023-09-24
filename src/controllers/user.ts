@@ -26,8 +26,14 @@ const userController = {
   // CREATE USER
   create: async (req: Request, res: Response) => {
     try {
-      const voucher = await userService.createOverriding(req);
-      res.status(200).json(voucher);
+      const userExist = await UserModel.findOne({ phoneNumber: req.body.phoneNumber });
+
+      if (userExist) {
+        return res.status(404).json({ message: 'Phone number was existed' });
+      }
+
+      const newUser = await userService.createOverriding(req);
+      res.status(200).json(newUser);
     } catch (error) {
       res.status(500).json(error);
     }

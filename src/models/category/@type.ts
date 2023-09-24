@@ -58,8 +58,8 @@ import { Schema, Document } from 'mongoose';
 
 interface Category extends Document {
   _id?: Schema.Types.ObjectId;
-  name: string;
   status?: Status;
+  name: string;
   childCategory?: ChildCategory[] | any;
   productsDTO?: Schema.Types.ObjectId[];
   comboPromotionsId?: Schema.Types.ObjectId[];

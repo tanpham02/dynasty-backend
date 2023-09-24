@@ -66,7 +66,6 @@ interface Product extends Document {
   categoryId?: Schema.Types.ObjectId;
   price: number;
   oldPrice?: number;
-  importPrice?: number;
   image?: string;
   status?: Status;
   types?: ProductType[];

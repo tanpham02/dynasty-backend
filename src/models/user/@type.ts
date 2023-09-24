@@ -10,11 +10,10 @@ import { Document } from 'mongoose';
  *     User:
  *       type: object
  *       required:
- *         - username
+ *         - phoneNumber
  *         - password
+ *         - email
  *       properties:
- *         username:
- *           type: string
  *         birthday:
  *           type: string
  *           description: VD 2023-09-09
@@ -42,7 +41,6 @@ export enum Role {
 }
 
 interface User extends Document {
-  username?: string;
   birthday?: string | Date;
   fullName?: string;
   phoneNumber?: string;
