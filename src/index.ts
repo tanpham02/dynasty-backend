@@ -15,7 +15,7 @@ import {
   customerAddressRouter,
   customerRouter,
   cartRouter,
-  authenRouter,
+  authRouter,
 } from '@app/routes';
 import {
   CATEGORY_URL,
@@ -29,6 +29,7 @@ import {
   VOUCHER_URL,
   CUSTOMER_URL,
   CART_URL,
+  AUTH_URL,
 } from './services/apiUrl';
 
 const app: Application = express();
@@ -45,6 +46,9 @@ configServer(app);
 configSwagger(app);
 
 // Routes
+// CATEGORY
+app.use(`${AUTH_URL}`, authRouter);
+
 // CATEGORY
 app.use(`${CATEGORY_URL}`, categoryRouter);
 
@@ -71,7 +75,6 @@ app.use(`${VOUCHER_URL}`, voucherRouter);
 
 // USER
 app.use(`${USER_URL}`, userRouter);
-app.use(`${USER_URL}`, authenRouter);
 
 // CUSTOMER
 app.use(`${CUSTOMER_URL}`, customerAddressRouter);

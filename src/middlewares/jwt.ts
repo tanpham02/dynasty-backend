@@ -1,36 +1,41 @@
-import User from '@app/models/user/@type';
+import { Role } from '@app/models/user/@type';
 import { sign } from 'jsonwebtoken';
 import { configApp } from '@app/configs';
 const { jwtAccessKey, jwtRefreshKey } = configApp();
 
-const jwt = {
+export interface TokenI {
+  _id?: string;
+  role?: Role;
+}
+
+class JWT<T> {
   // GENERATE ACCESS TOKEN
-  generateAccessToken: (user: User) => {
+  generateAccessToken(objectRes: T & TokenI) {
     return sign(
       {
-        id: user._id,
-        role: user.role,
+        id: objectRes._id,
+        role: objectRes.role,
       },
       jwtAccessKey ?? '',
       {
-        expiresIn: '20s',
+        expiresIn: '1d',
       },
     );
-  },
+  }
 
   // GENERATE REFRESH TOKEN
-  generateRefreshToken: (user: User) => {
+  generateRefreshToken(objectRes: T & TokenI) {
     return sign(
       {
-        id: user._id,
-        role: user.role,
+        id: objectRes._id,
+        role: objectRes.role,
       },
       jwtRefreshKey ?? '',
       {
         expiresIn: '7d',
       },
     );
-  },
-};
+  }
+}
 
-export default jwt;
+export default JWT;

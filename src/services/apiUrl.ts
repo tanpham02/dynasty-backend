@@ -1,4 +1,5 @@
-
+// AUTH
+export const AUTH_URL = '/api/auth';
 
 // CATEGORY
 export const CATEGORY_URL = '/api/category';

@@ -10,7 +10,7 @@ import userRouter from './user';
 import customerAddressRouter from './customerAddress';
 import customerRouter from './customer';
 import cartRouter from './cart';
-import authenRouter from './authen';
+import authRouter from './auth';
 
 export {
   categoryRouter,
@@ -25,5 +25,5 @@ export {
   customerAddressRouter,
   customerRouter,
   cartRouter,
-  authenRouter,
+  authRouter,
 };

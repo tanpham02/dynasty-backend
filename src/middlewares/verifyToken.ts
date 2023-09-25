@@ -35,4 +35,4 @@ const verifyTokenAndAuthenRole = (req: UserRequest, res: Response, next: NextFun
   });
 };
 
-export { verifyToken, verifyTokenAndAuthenRole};
+export { verifyToken, verifyTokenAndAuthenRole };

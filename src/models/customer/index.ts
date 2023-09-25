@@ -39,6 +39,8 @@ const CustomerSchema = new Schema<Customer>(
   {
     phoneNumber: {
       type: String,
+      unique: true,
+      required: true,
     },
     fullName: {
       type: String,

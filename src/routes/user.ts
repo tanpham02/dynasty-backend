@@ -57,7 +57,7 @@ router.get('/search', userController.search);
  */
 
 // CREATE
-router.post('/create', verifyToken, userController.create);
+router.post('/create', userController.create);
 
 /**
  * @swagger
