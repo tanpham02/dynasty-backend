@@ -55,7 +55,6 @@ interface User extends Document {
   password?: string;
   role?: Role;
   status: Status;
-  
 }
 
 export default User;

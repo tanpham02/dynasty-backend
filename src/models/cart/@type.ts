@@ -19,15 +19,8 @@ import { Schema, Document } from 'mongoose';
  *           items:
  *              type: object
  *              properties:
- *                  productVariant:
- *                     type: object
- *                     properties:
- *                          size:
- *                             type: string
- *                          base:
- *                             type: string
  *                  productId:
- *                     $ref: '#/components/schema/Product'
+ *                     type: string
  *                  note:
  *                     type: string
  *                  quantityProducts:
@@ -57,12 +50,28 @@ import { Schema, Document } from 'mongoose';
  *             type: number
  */
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CartRequest:
+ *       type: object
+ *       properties:
+ *         products:
+ *          type: array
+ *          items:
+ *            type: object
+ *            properties:
+ *              note:
+ *                type: string
+ *              productId:
+ *                type: string
+ *              quantityProducts:
+ *                type: number
+ */
+
 interface CartProduct extends Document {
   productId?: Schema.Types.ObjectId;
-  productVariant?: {
-    size?: string;
-    base?: string;
-  };
   note?: string;
   quantityProducts: number;
 }
@@ -72,4 +81,10 @@ interface Cart extends Document {
   quantity: number;
 }
 
-export { Cart, CartProduct };
+enum ActionType {
+  ADD = 'ADD',
+  UPDATE = 'UPDATE',
+  DELETE = 'DELETE',
+}
+
+export { Cart, CartProduct, ActionType };

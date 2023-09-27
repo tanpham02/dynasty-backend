@@ -11,6 +11,8 @@ import CustomerModel from '@app/models/customer';
 import { Customer } from '@app/models/customer/@type';
 import JWT from '@app/middlewares/jwt';
 import User from '@app/models/user/@type';
+import { wait } from 'iter-ops';
+import CartModel from '@app/models/cart';
 
 interface ErrorMessage {
   phoneNumber?: string;
@@ -75,10 +77,13 @@ const authService = {
         const newCustomer = new CustomerModel({ ...customerBody, password: passwordAfterHash });
         await newCustomer.save();
 
+        const newCart = new CartModel({ customerId: newCustomer._id });
+
         response = {
           status: 200,
           customer: newCustomer,
         };
+        await newCart.save();
       }
 
       return response;

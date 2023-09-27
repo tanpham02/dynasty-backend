@@ -1,5 +1,5 @@
 import { Schema, Model, model } from 'mongoose';
-import { Cart, CartProduct } from './@type';
+import { ActionType, Cart, CartProduct } from './@type';
 
 // SCHEMAS RESPONSE
 
@@ -20,21 +20,33 @@ import { Cart, CartProduct } from './@type';
  *           items:
  *              type: object
  *              properties:
- *                  productVariant:
- *                     type: object
- *                     properties:
- *                          size:
- *                             type: string
- *                          base:
- *                             type: string
  *                  productId:
- *                     $ref: '#/components/schema/Product'
+ *                     type: string
  *                  note:
  *                     type: string
  *                  quantityProducts:
  *                     type: number
  *         quantity:
  *           type: number
+ */
+/**
+ * @swagger
+ * components:
+ *   schema:
+ *     CartRequest:
+ *       type: object
+ *       properties:
+ *         products:
+ *          type: array
+ *          items:
+ *            type: object
+ *            properties:
+ *              note:
+ *                type: string
+ *              productId:
+ *                type: string
+ *              quantityProducts:
+ *                type: number
  */
 
 const CartProductSchema = new Schema<CartProduct>(
@@ -43,9 +55,11 @@ const CartProductSchema = new Schema<CartProduct>(
       type: Schema.Types.ObjectId,
       ref: 'Product',
     },
-
     note: {
       type: String,
+    },
+    quantityProducts: {
+      type: Number,
     },
   },
   { versionKey: false, timestamps: true },

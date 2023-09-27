@@ -5,16 +5,22 @@ import { Router } from 'express';
 const router = Router();
 /**
  * @swagger
- * '/api/cart/add-cart':
+ * '/api/cart/add-cart/{customerId}':
  *  patch:
  *     tags: [Cart]
  *     summary: Add cart
+ *     parameters:
+ *       - in: path
+ *         name: customerId
+ *         schema:
+ *           type: string
+ *         required: true
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/Cart'
+ *             $ref: '#/components/schema/CartRequest'
  *     responses:
  *       200:
  *         description: OK
@@ -25,7 +31,7 @@ const router = Router();
  */
 
 // SEARCH PAGINATION
-router.patch('/add-cart', cartController.addCart);
+router.patch('/add-cart/:customerId', cartController.addCart);
 
 /**
  * @swagger
