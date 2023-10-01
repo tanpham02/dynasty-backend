@@ -2,13 +2,14 @@ import { Model } from 'mongoose';
 import CRUDService from './crudService';
 import { ActionType, Cart, CartProduct } from '@app/models/cart/@type';
 import { Request } from 'express';
+import { Product } from '@app/models/product/@type';
 
 class CartService extends CRUDService<Cart> {
   constructor(model: Model<Cart>, nameService: string) {
     super(model, nameService);
   }
 
-  async addCart(customerId: string, req: Request) {
+  async updateCart(customerId: string, req: Request) {
     let messageRes: {
       message: string;
     } = { message: '' };
@@ -47,7 +48,15 @@ class CartService extends CRUDService<Cart> {
             (await cartAfterFindByCustomerId?.updateOne(
               {
                 $set: {
-                  products: [...cartAfterFindByCustomerId?.products, ...[productItemFromBody]],
+                  products: [
+                    ...cartAfterFindByCustomerId?.products,
+                    ...[
+                      {
+                        ...productItemFromBody,
+                        quantityProducts: productItemFromBody?.quantityProducts || 1,
+                      },
+                    ],
+                  ],
                 },
               },
               { new: true },
@@ -87,12 +96,21 @@ class CartService extends CRUDService<Cart> {
 
   async getCartByCustomerId(customerId: string) {
     try {
+      let total = 0;
       const cart = await this.model
         .findOne({ customerId: customerId })
         .populate('products.productId');
-      return cart;
+
+      if (cart?.products) {
+        const totalCart = cart?.products.reduce((prev, next) => {
+          const productItem = next?.productId as unknown as Product;
+          return prev + productItem.price * next.quantityProducts;
+        }, 0);
+        return { ...JSON.parse(JSON.stringify({ ...cart }))._doc, totalCart };
+      }
     } catch (error) {
-      throw new Error(`Occur error when add to cart`);
+      console.log('error', error);
+      throw new Error(`Occur error when get cart`);
     }
   }
 }

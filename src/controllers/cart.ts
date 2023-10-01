@@ -7,11 +7,11 @@ const cartService = new CartService(CartModel, 'cart');
 
 const cartController = {
   // ADD CART
-  addCart: async (req: Request, res: Response) => {
+  updateCart: async (req: Request, res: Response) => {
     const { customerId } = req.params;
 
     try {
-      const { message } = await cartService.addCart(customerId, req);
+      const { message } = await cartService.updateCart(customerId, req);
       res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);

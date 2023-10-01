@@ -48,6 +48,8 @@ import { Schema, Document } from 'mongoose';
  *                  $ref: '#/components/schema/CartProduct'
  *         quantity:
  *             type: number
+ *         totalCart:
+ *           type: number
  */
 
 /**
@@ -68,6 +70,12 @@ import { Schema, Document } from 'mongoose';
  *                type: string
  *              quantityProducts:
  *                type: number
+ *              actionType:
+ *                type: string
+ *                enum:
+ *                   - ADD
+ *                   - UPDATE
+ *                   - DELETE
  */
 
 interface CartProduct extends Document {
@@ -79,6 +87,7 @@ interface Cart extends Document {
   customerId: Schema.Types.ObjectId;
   products?: CartProduct[];
   quantity: number;
+  totalCart: number;
 }
 
 enum ActionType {

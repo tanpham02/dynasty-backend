@@ -1,32 +1,158 @@
 import { Schema, Types, Model, model } from 'mongoose';
-import { Order } from './@type';
+import { Order, StatusOrder, TimeOrder, TypeOrder } from './@type';
+import { CartSchema } from '../cart';
 
+// SCHEMAS RESPONSE
+
+/**
+ * @swagger
+ * components:
+ *   schema:
+ *     Order:
+ *       type: object
+ *       required:
+ *         - customerId
+ *         - productIdList
+ *         - shipFee
+ *         - quantity
+ *         - totalOrderAmountBeforeUseDiscount
+ *         - statusOrder
+ *         - fullName
+ *         - phoneNumber
+ *         - address
+ *         - city
+ *         - cityId
+ *         - district
+ *         - districtId
+ *         - ward
+ *         - wardId
+ *         - totalOrder
+ *         - typeOrder
+ *         - timeOrder
+ *         - voucherId
+ *       properties:
+ *          customerId:
+ *              $ref: '#/components/schema/Customer'
+ *          productFromCart:
+ *                 $ref: '#/components/schema/Cart'
+ *          shipFee:
+ *              type: number
+ *          totalOrderAmountBeforeUseDiscount:
+ *              type: number
+ *          statusOrder:
+ *              type: string
+ *              enum:
+ *                 - PENDING
+ *                 - DELIVERING
+ *                 - SUCCESS
+ *              default: 'PENDING'
+ *          fullName:
+ *              type: string
+ *          phoneNumber:
+ *              type: string
+ *          address:
+ *              type: string
+ *          city:
+ *              type: string
+ *          cityId:
+ *              type: number
+ *          district:
+ *              type: string
+ *          districtId:
+ *              type: number
+ *          ward:
+ *              type: string
+ *          wardId:
+ *              type: number
+ *          totalOrder:
+ *              type: number
+ *          typeOrder:
+ *              type: string
+ *              enum:
+ *                 - ORDER_TO_PICK_UP
+ *                 - ORDER_DELIVERING
+ *              default: 'ORDER_DELIVERING'
+ *          timeOrder:
+ *              type: string
+ *              enum:
+ *                 - NOW
+ *                 - SELECT_DATE_TIME
+ *              default: 'NOW'
+ *          voucherId:
+ *              $ref: '#/components/schema/Voucher'
+ *          systemStoreId:
+ *              $ref: '#/components/schema/Shop System'
+ */
 const OrderSchema = new Schema<Order>(
   {
     customerId: {
       type: Schema.Types.ObjectId,
       ref: 'Customer',
     },
-    productIdList: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Product',
-      },
-    ],
+    productFromCart: {
+      type: CartSchema,
+    },
+
     shipFee: {
-      type: Number,
-    },
-    quantity: {
-      type: Number,
-    },
-    totalOrderAmount: {
       type: Number,
     },
     totalOrderAmountBeforeUseDiscount: {
       type: Number,
     },
-    totalMoneyDiscount: {
+    statusOrder: {
+      type: String,
+      enum: StatusOrder,
+      default: StatusOrder.PENDING,
+    },
+    fullName: {
+      type: String,
+    },
+    phoneNumber: {
+      type: String,
+    },
+    address: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    cityId: {
       type: Number,
+    },
+    district: {
+      type: String,
+    },
+    districtId: {
+      type: Number,
+    },
+    ward: {
+      type: String,
+    },
+    wardId: {
+      type: Number,
+    },
+    totalOrder: {
+      type: Number,
+    },
+    typeOrder: {
+      type: String,
+      enum: TypeOrder,
+    },
+    timeOrder: {
+      type: String,
+      enum: TimeOrder,
+    },
+    dateSelect: {
+      type: Date,
+    },
+    timeSelect: {
+      type: Date,
+    },
+    voucherId: {
+      type: String,
+    },
+    systemStoreId: {
+      type: String,
     },
   },
   {

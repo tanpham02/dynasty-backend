@@ -12,6 +12,7 @@ interface Params {
   comboPromotionsId?: string;
   productId?: string;
   fullName?: string;
+  sortByField?: string;
 }
 
 interface Filter {

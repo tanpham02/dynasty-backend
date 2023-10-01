@@ -38,10 +38,14 @@ import { Document, Schema } from 'mongoose';
  *           description: VD 2023-09-09T22:25:17
  *         saleScope:
  *           type: string
- *           enum: [ALL, BY_PRODUCT]
+ *           enum:
+ *               - ALL
+ *               - BY_PRODUCT
  *         promotionType:
  *             type: string
- *             enum: [DISCOUNT_BY_MONEY, DISCOUNT_BY_PERCENT]
+ *             enum:
+ *                 - DISCOUNT_BY_MONEY
+ *                 - DISCOUNT_BY_PERCENT
  *         discount:
  *           type: number
  *         discountPercent:
@@ -56,7 +60,7 @@ import { Document, Schema } from 'mongoose';
  *           type: string
  *         listProductUsedVoucher:
  *           type: array
- *           item:
+ *           items:
  *              $ref: '#/components/schema/Product'
  */
 
@@ -83,8 +87,8 @@ interface Voucher extends Document {
   totalQuantityVoucher?: number;
   minimumOrderValue?: number;
   listProductUsedVoucher?: Schema.Types.ObjectId[];
+  customerIdsUsedVoucher?: Schema.Types.ObjectId[];
   status?: Status;
-  customerId?: Schema.Types.ObjectId[];
 }
 
 export default Voucher;

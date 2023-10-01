@@ -42,8 +42,12 @@ import { Document, Schema } from 'mongoose';
 
 interface CustomerAddressList extends Document {
   city?: string;
+  cityId?: number;
   district?: string;
+  districtId?: number;
   ward?: string;
+  wardId?: number;
+  fullName?: string;
   address?: string;
   phoneNumber?: string;
   isDefault?: boolean;

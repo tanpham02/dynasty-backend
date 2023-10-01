@@ -52,10 +52,22 @@ const CustomerAddressSchema = new Schema<CustomerAddress>(
         city: {
           type: String,
         },
+        cityId: {
+          type: Number,
+        },
         district: {
           type: String,
         },
+        districtId: {
+          type: Number,
+        },
         ward: {
+          type: String,
+        },
+        wardId: {
+          type: Number,
+        },
+        fullName: {
           type: String,
         },
         address: {

@@ -33,3 +33,6 @@ export const CUSTOMER_URL = '/api/customer';
 
 // CART
 export const CART_URL = '/api/cart';
+
+// ORDER
+export const ORDER_URL = '/api/order';

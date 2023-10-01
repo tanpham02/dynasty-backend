@@ -5,10 +5,10 @@ import { Router } from 'express';
 const router = Router();
 /**
  * @swagger
- * '/api/cart/add-cart/{customerId}':
+ * '/api/cart/update-cart/{customerId}':
  *  patch:
  *     tags: [Cart]
- *     summary: Add cart
+ *     summary: Update cart
  *     parameters:
  *       - in: path
  *         name: customerId
@@ -30,8 +30,8 @@ const router = Router();
  *                 $ref: '#/components/schema/Cart'
  */
 
-// SEARCH PAGINATION
-router.patch('/add-cart/:customerId', cartController.addCart);
+// UPDATE CART
+router.patch('/update-cart/:customerId', cartController.updateCart);
 
 /**
  * @swagger
@@ -54,6 +54,6 @@ router.patch('/add-cart/:customerId', cartController.addCart);
  *                 $ref: '#/components/schema/Cart'
  */
 
-// SEARCH PAGINATION
+// GET CART BY ID
 router.get('/get-cart/:customerId', cartController.getCartById);
 export default router;

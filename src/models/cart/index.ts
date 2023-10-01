@@ -28,6 +28,8 @@ import { ActionType, Cart, CartProduct } from './@type';
  *                     type: number
  *         quantity:
  *           type: number
+ *         totalCart:
+ *           type: number
  */
 /**
  * @swagger
@@ -47,6 +49,12 @@ import { ActionType, Cart, CartProduct } from './@type';
  *                type: string
  *              quantityProducts:
  *                type: number
+ *              actionType:
+ *                type: string
+ *                enum:
+ *                   - ADD
+ *                   - UPDATE
+ *                   - DELETE
  */
 
 const CartProductSchema = new Schema<CartProduct>(
@@ -75,6 +83,9 @@ const CartSchema = new Schema<Cart>(
     quantity: {
       type: Number,
     },
+    totalCart: {
+      type: Number,
+    },
   },
   { versionKey: false, timestamps: true },
 );
@@ -82,3 +93,4 @@ const CartSchema = new Schema<Cart>(
 const CartModel = model('Cart', CartSchema);
 
 export default CartModel;
+export { CartSchema };
