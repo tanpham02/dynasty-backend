@@ -9,26 +9,6 @@ import { Cart } from '../cart/@type';
  *   schemas:
  *     Order:
  *       type: object
- *       required:
- *         - customerId
- *         - productIdList
- *         - shipFee
- *         - quantity
- *         - totalOrderAmountBeforeUseDiscount
- *         - statusOrder
- *         - fullName
- *         - phoneNumber
- *         - address
- *         - city
- *         - cityId
- *         - district
- *         - districtId
- *         - ward
- *         - wardId
- *         - totalOrder
- *         - typeOrder
- *         - timeOrder
- *         - voucherId
  *       properties:
  *          customerId:
  *              $ref: '#/components/schema/Customer'
@@ -44,6 +24,7 @@ import { Cart } from '../cart/@type';
  *                 - PENDING
  *                 - DELIVERING
  *                 - SUCCESS
+ *                 - FAIL
  *              default: 'PENDING'
  *          fullName:
  *              type: string
@@ -119,6 +100,8 @@ interface Order extends Document {
   timeSelect?: Date | string;
   voucherId?: string;
   systemStoreId?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
 }
 
 export { Order, StatusOrder, TypeOrder, TimeOrder };

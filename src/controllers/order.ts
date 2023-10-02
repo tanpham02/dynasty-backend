@@ -10,11 +10,10 @@ const orderService = new OrderService(OrderModel, 'order');
 const orderController = {
   // SEARCH PAGINATION
   searchPagination: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, sortByField } = req.query;
+    const { pageIndex, pageSize } = req.query;
     const params: Params = {
       pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
       pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
-      sortByField: sortByField ? sortByField?.toString() : '',
     };
 
     try {

@@ -10,26 +10,6 @@ import { CartSchema } from '../cart';
  *   schema:
  *     Order:
  *       type: object
- *       required:
- *         - customerId
- *         - productIdList
- *         - shipFee
- *         - quantity
- *         - totalOrderAmountBeforeUseDiscount
- *         - statusOrder
- *         - fullName
- *         - phoneNumber
- *         - address
- *         - city
- *         - cityId
- *         - district
- *         - districtId
- *         - ward
- *         - wardId
- *         - totalOrder
- *         - typeOrder
- *         - timeOrder
- *         - voucherId
  *       properties:
  *          customerId:
  *              $ref: '#/components/schema/Customer'
@@ -45,6 +25,7 @@ import { CartSchema } from '../cart';
  *                 - PENDING
  *                 - DELIVERING
  *                 - SUCCESS
+ *                 - FAIL
  *              default: 'PENDING'
  *          fullName:
  *              type: string
@@ -154,10 +135,11 @@ const OrderSchema = new Schema<Order>(
     systemStoreId: {
       type: String,
     },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
   },
   {
     versionKey: false,
-    timestamps: true,
   },
 );
 

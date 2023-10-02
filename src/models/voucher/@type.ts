@@ -58,6 +58,10 @@ import { Document, Schema } from 'mongoose';
  *           type: number
  *         minimumOrderValue:
  *           type: string
+ *         customerIdsUsedVoucher:
+ *           type: array
+ *           items:
+ *              type: string
  *         listProductUsedVoucher:
  *           type: array
  *           items:
@@ -87,7 +91,7 @@ interface Voucher extends Document {
   totalQuantityVoucher?: number;
   minimumOrderValue?: number;
   listProductUsedVoucher?: Schema.Types.ObjectId[];
-  customerIdsUsedVoucher?: Schema.Types.ObjectId[];
+  customerIdsUsedVoucher?: string[];
   status?: Status;
 }
 

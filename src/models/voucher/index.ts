@@ -59,6 +59,10 @@ import { Status } from '@app/constants';
  *           type: number
  *         minimumOrderValue:
  *           type: string
+ *         customerIdsUsedVoucher:
+ *           type: array
+ *           items:
+ *              type: string
  *         listProductUsedVoucher:
  *           type: array
  *           items:
@@ -126,8 +130,7 @@ const voucherSchema = new Schema<Voucher>(
 
     customerIdsUsedVoucher: [
       {
-        type: Schema.Types.ObjectId,
-        ref: 'Customer',
+        type: [String],
       },
     ],
   },

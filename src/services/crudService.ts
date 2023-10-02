@@ -10,6 +10,17 @@ class CRUDService<T extends Document> {
     this.nameService = nameService;
   }
 
+  // FIND ALL
+  async findAll() {
+    try {
+      const getAll = await this.model.find();
+      return getAll;
+    } catch (error) {
+      console.log(error);
+      throw new Error(`Occur error when create ${this.nameService} with ${error}`);
+    }
+  }
+
   // SEARCH PAGINATION
   async getPagination(params: Params) {
     try {

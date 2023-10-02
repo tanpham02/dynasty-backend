@@ -10,10 +10,6 @@ const router = Router();
  *     tags: [Order]
  *     summary: Search pagination
  *     parameters:
- *      - name: sortByField
- *        in: query
- *        schema:
- *          type: string
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -59,8 +55,8 @@ router.get('/search', orderController.searchPagination);
  *                 $ref: '#/components/schema/Order'
  */
 
-// VERIFY INFORMATION ORDER
-router.post('/:id', orderController.getById);
+// GET BY ID
+router.get('/:id', orderController.getById);
 
 /**
  * @swagger

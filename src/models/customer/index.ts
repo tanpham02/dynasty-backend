@@ -26,7 +26,8 @@ import { Status } from '@app/constants';
  *             type: string
  *         orderIds:
  *             type: array
- *             item: string
+ *             items:
+ *                type: string
  *         status:
  *          type: string
  *          default: "ACTIVE"
@@ -65,8 +66,7 @@ const CustomerSchema = new Schema<Customer>(
     },
     orderIds: [
       {
-        type: Schema.Types.ObjectId,
-        ref: 'Order',
+        type: [String],
       },
     ],
     status: {

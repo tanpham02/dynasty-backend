@@ -18,8 +18,8 @@ const router = Router();
  *                 $ref: '#/components/schema/ConfigStore'
  */
 
-// SEARCH
-router.get('/find', configStoreController.search);
+// GET ALL
+router.get('/find', configStoreController.getAll);
 
 /**
  * @swagger
@@ -48,7 +48,7 @@ router.get('/find', configStoreController.search);
  *                 $ref: '#/components/schema/ConfigStore'
  */
 
-// CREATE
+// UPDATE
 router.patch('/:id', configStoreController.updateOverriding);
 
 export default router;

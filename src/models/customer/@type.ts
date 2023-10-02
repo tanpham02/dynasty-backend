@@ -25,7 +25,8 @@ import { Document, Schema } from 'mongoose';
  *             type: string
  *         orderIds:
  *             type: array
- *             item: string
+ *             items:
+ *                type: string
  *         status:
  *          type: string
  *          default: "ACTIVE"
@@ -41,7 +42,7 @@ interface Customer extends Document {
   password?: string;
   birthday?: string | Date;
   customerAddressId: Schema.Types.ObjectId;
-  orderIds: Schema.Types.ObjectId[];
+  orderIds: string[];
   status: Status;
 }
 
