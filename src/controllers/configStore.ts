@@ -5,13 +5,13 @@ import { Request, Response } from 'express';
 const cfStoreService = new ConfigStoreService(ConfigStoreModel, 'config store');
 
 const configStoreController = {
-  getAll: async (res: Response) => {
+  getAll: async (req: Request, res: Response) => {
+    const result = await cfStoreService.findAll();
+    res.status(200).json(result);
     try {
-      const result = await cfStoreService.findAll();
-      res.status(200).json(result);
     } catch (error) {
       console.log('error', error);
-      //   res.status(500).json(error);
+      res.status(500).json(error);
     }
   },
 

@@ -17,7 +17,7 @@ class CRUDService<T extends Document> {
       return getAll;
     } catch (error) {
       console.log(error);
-      throw new Error(`Occur error when create ${this.nameService} with ${error}`);
+      throw new Error(`Occur error when find all ${this.nameService} with ${error}`);
     }
   }
 

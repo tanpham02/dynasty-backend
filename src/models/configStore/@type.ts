@@ -17,6 +17,12 @@ import { Document } from 'mongoose';
  *             type: string
  *         termAndCondition:
  *             type: string
+ *         feeShip:
+ *             type: string
+ *         reasonOrderCancel:
+ *             type: array
+ *             items:
+ *               type: string
  */
 
 interface ConfigStore extends Document {
@@ -24,6 +30,8 @@ interface ConfigStore extends Document {
   deliveryPolicy?: string;
   privatePolicy?: string;
   termAndCondition?: string;
+  feeShip?: number;
+  reasonOrderCancel?: string[];
 }
 
 export default ConfigStore;

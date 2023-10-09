@@ -25,13 +25,27 @@ const orderController = {
     }
   },
 
+  // QUICK BUY
+  quickBuy: async (req: Request, res: Response) => {
+    try {
+      const orderWhenQuickBuy = await orderService.quickBuy(req);
+      res.status(200).json(orderWhenQuickBuy);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
   // GET ORDER BY ID
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const user = await orderService.getById(id);
-      res.status(200).json(user);
+      const cart = await orderService.getOrderById(id);
+      if (!cart) {
+        return res.status(404).json('Not found order with this id');
+      }
+      return res.status(200).json(cart);
     } catch (error) {
+      console.log('error', error);
       res.status(500).json(error);
     }
   },
@@ -46,6 +60,35 @@ const orderController = {
     }
   },
 
+  // UPDATE TOTAL ORDER WHEN USE VOUCHER
+  updateTotalOrderWhenUseVoucher: async (req: Request, res: Response) => {
+    try {
+      const { voucherId, customerId, orderId } = req.params;
+      const updateTotalOrderWhenUseVoucher = await orderService.updateTotalOrderWhenUseVoucher(
+        voucherId,
+        customerId,
+        orderId,
+      );
+
+      res.status(200).json(updateTotalOrderWhenUseVoucher);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
+  // RE-ORDER
+  reorder: async (req: Request, res: Response) => {
+    const { orderId } = req.params;
+    const { customerId } = req.query;
+
+    try {
+      await orderService.reorder(orderId, customerId ? customerId.toString() : '', req);
+      res.status(200).json('Add product in reorder to cart success');
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
   // UPDATE STATUS ORDER
   updateStatusOrder: async (req: Request, res: Response) => {
     const { orderId, statusOrderRequest } = req.query;
@@ -55,6 +98,20 @@ const orderController = {
         orderId?.toString() ?? '',
       );
       res.status(statusCode).json(message);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
+  // CANCEL ORDER
+  requestCancelOrder: async (req: Request, res: Response) => {
+    const { orderId, reason } = req.query;
+    try {
+      const { message } = await orderService.cancelOrder(
+        orderId?.toString() || '',
+        reason?.toString() || '',
+      );
+      res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);
     }

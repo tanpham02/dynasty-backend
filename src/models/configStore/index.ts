@@ -15,6 +15,12 @@ import ConfigStore from './@type';
  *             type: string
  *         termAndCondition:
  *             type: string
+ *         feeShip:
+ *             type: string
+ *         reasonOrderCancel:
+ *             type: array
+ *             items:
+ *               type: string
  */
 
 const ConfigStoreSchema = new Schema<ConfigStore>(
@@ -30,6 +36,12 @@ const ConfigStoreSchema = new Schema<ConfigStore>(
     },
     termAndCondition: {
       type: String,
+    },
+    feeShip: {
+      type: Number,
+    },
+    reasonOrderCancel: {
+      type: [String],
     },
   },
   { timestamps: true, versionKey: false },

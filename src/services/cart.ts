@@ -71,11 +71,6 @@ class CartService extends CRUDService<Cart> {
           new Object(productItemFromDatabase.customerId).valueOf() === customerId &&
           productItemFromBody.actionType === ActionType.DELETE
         ) {
-          console.log(
-            'customerId',
-            new Object(productItemFromDatabase.customerId).valueOf(),
-            customerId,
-          );
           await productItemFromDatabase.updateOne(
             {
               $pull: {

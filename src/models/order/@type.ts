@@ -25,6 +25,7 @@ import { Cart } from '../cart/@type';
  *                 - DELIVERING
  *                 - SUCCESS
  *                 - FAIL
+ *                 - QUICK_BUY
  *              default: 'PENDING'
  *          fullName:
  *              type: string
@@ -46,6 +47,8 @@ import { Cart } from '../cart/@type';
  *              type: number
  *          totalOrder:
  *              type: number
+ *          reasonCancelOrder:
+ *              type: string
  *          typeOrder:
  *              type: string
  *              enum:
@@ -63,6 +66,7 @@ import { Cart } from '../cart/@type';
  */
 
 enum StatusOrder {
+  QUICK_BUY = 'QUICK_BUY',
   PENDING = 'PENDING',
   DELIVERING = 'DELIVERING',
   FAIL = 'FAIL',
@@ -102,6 +106,7 @@ interface Order extends Document {
   systemStoreId?: string;
   createdAt?: string | Date;
   updatedAt?: string | Date;
+  reasonCancelOrder?: string;
 }
 
 export { Order, StatusOrder, TypeOrder, TimeOrder };

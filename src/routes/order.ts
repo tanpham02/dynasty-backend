@@ -41,11 +41,6 @@ router.get('/search', orderController.searchPagination);
  *        in: path
  *        schema:
  *          type: string
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Order'
  *     responses:
  *       200:
  *         description: OK
@@ -83,6 +78,86 @@ router.post('/checkout', orderController.checkout);
 
 /**
  * @swagger
+ * '/api/order/quick-buy':
+ *  post:
+ *     tags: [Order]
+ *     summary: Quick buy
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schema/Order'
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Order'
+ */
+
+// QUICK BUY
+router.post('/quick-buy', orderController.quickBuy);
+
+/**
+ * @swagger
+ * '/api/order/when-use-voucher':
+ *  post:
+ *     tags: [Order]
+ *     summary: Update total order when use voucher
+ *     parameters:
+ *      - name: voucherId
+ *        in: query
+ *        schema:
+ *          type: string
+ *      - name: customerId
+ *        in: query
+ *        schema:
+ *          type: string
+ *      - name: orderId
+ *        in: query
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Order'
+ */
+// UPDATE TOTAL ORDER WHEN USE VOUCHER
+router.post('/when-use-voucher/:voucherId', orderController.updateTotalOrderWhenUseVoucher);
+
+/**
+ * @swagger
+ * '/api/order/re-order/{orderId}':
+ *  post:
+ *     tags: [Order]
+ *     summary: Re-order
+ *     parameters:
+ *      - name: orderId
+ *        in: path
+ *        schema:
+ *          type: string
+ *      - name: customerId
+ *        in: query
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Order'
+ */
+
+// RE-ORDER
+router.post('/re-order/:orderId', orderController.reorder);
+
+/**
+ * @swagger
  * '/api/order/update-status-order':
  *  patch:
  *     tags: [Order]
@@ -107,5 +182,32 @@ router.post('/checkout', orderController.checkout);
 
 // UPDATE STATUS ORDER
 router.patch('/update-status-order', orderController.updateStatusOrder);
+
+/**
+ * @swagger
+ * '/api/order/cancel-order':
+ *  patch:
+ *     tags: [Order]
+ *     summary: Request
+ *     parameters:
+ *      - name: orderId
+ *        in: query
+ *        schema:
+ *          type: string
+ *      - name: reason
+ *        in: query
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Order'
+ */
+
+// CANCEL ORDER
+router.patch('/cancel-order', orderController.requestCancelOrder);
 
 export default router;

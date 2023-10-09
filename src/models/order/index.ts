@@ -26,6 +26,7 @@ import { CartSchema } from '../cart';
  *                 - DELIVERING
  *                 - SUCCESS
  *                 - FAIL
+ *                 - QUICK_BUY
  *              default: 'PENDING'
  *          fullName:
  *              type: string
@@ -47,6 +48,8 @@ import { CartSchema } from '../cart';
  *              type: number
  *          totalOrder:
  *              type: number
+ *          reasonCancelOrder:
+ *              type: string
  *          typeOrder:
  *              type: string
  *              enum:
@@ -137,6 +140,9 @@ const OrderSchema = new Schema<Order>(
     },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
+    reasonCancelOrder: {
+      type: String,
+    },
   },
   {
     versionKey: false,
