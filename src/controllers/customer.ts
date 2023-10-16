@@ -23,8 +23,8 @@ const customerController = {
   },
   create: async (req: Request, res: Response) => {
     try {
-      const promotionsNew = await customerService.createOverriding(req);
-      res.status(200).json(promotionsNew);
+      const { message } = await customerService.createOverriding(req);
+      res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -33,8 +33,8 @@ const customerController = {
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const promotions = await customerService.update(id, req);
-      res.status(200).json(promotions);
+      const updateCustomer = await customerService.update(id, req);
+      res.status(200).json(updateCustomer);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -43,8 +43,8 @@ const customerController = {
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const promotions = await customerService.getById(id);
-      res.status(200).json(promotions);
+      const customerById = await customerService.getById(id);
+      res.status(200).json(customerById);
     } catch (error) {
       res.status(500).json(error);
     }

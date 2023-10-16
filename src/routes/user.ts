@@ -6,7 +6,7 @@ const router = Router();
 
 /**
  * @swagger
- * '/api/user/search':
+ * '/api/users/search':
  *  get:
  *     tags: [User]
  *     summary: Search pagination
@@ -15,6 +15,13 @@ const router = Router();
  *        in: query
  *        schema:
  *          type: string
+ *      - name: role
+ *        in: query
+ *        schema:
+ *          type: string
+ *          enum:
+ *             - ADMIN
+ *             - USER
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -37,7 +44,7 @@ router.get('/search', userController.search);
 
 /**
  * @swagger
- * '/api/user/create':
+ * '/api/users/create':
  *  post:
  *     tags: [User]
  *     summary: Create user
@@ -61,7 +68,7 @@ router.post('/create', userController.create);
 
 /**
  * @swagger
- * '/api/user/{id}':
+ * '/api/users/{id}':
  *  patch:
  *     tags: [User]
  *     summary: Update user
@@ -90,7 +97,7 @@ router.patch('/:id', userController.update);
 
 /**
  * @swagger
- * '/api/user/{id}':
+ * '/api/users/{id}':
  *  get:
  *     tags: [User]
  *     summary: Get user by id
@@ -114,7 +121,7 @@ router.get('/:id', userController.getById);
 
 /**
  * @swagger
- * '/api/user':
+ * '/api/users':
  *  delete:
  *     tags: [User]
  *     summary: Delete user

@@ -12,6 +12,7 @@ import customerRouter from './customer';
 import cartRouter from './cart';
 import authRouter from './auth';
 import orderRouter from './order';
+import materialRouter from './material'
 
 export {
   categoryRouter,
@@ -28,4 +29,5 @@ export {
   cartRouter,
   authRouter,
   orderRouter,
+  materialRouter
 };

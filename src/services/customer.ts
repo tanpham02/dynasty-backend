@@ -20,7 +20,7 @@ class CustomerService extends CRUDService<Customer> {
       await customerAddress.save();
       customer.$set('customerAddressId', customerAddress._id);
       await customer.save();
-      return customer;
+      return { message: 'Đăng ký thành công' };
     } catch (error) {
       console.log(error);
       throw new Error(`Occur error when create ${this.nameService} with ${error}`);

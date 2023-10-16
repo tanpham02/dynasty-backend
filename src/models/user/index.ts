@@ -48,6 +48,9 @@ const UserSchema = new Schema<User>(
       unique: true,
       required: true,
     },
+    image: {
+      type: String,
+    },
     email: {
       type: String,
       unique: true,

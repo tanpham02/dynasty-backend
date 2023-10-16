@@ -19,6 +19,8 @@ import { Document } from 'mongoose';
  *           description: VD 2023-09-09
  *         fullName:
  *             type: string
+ *         image:
+ *           type: string
  *         phoneNumber:
  *           type: string
  *         email:
@@ -55,6 +57,7 @@ interface User extends Document {
   password?: string;
   role?: Role;
   status: Status;
+  image?: string;
 }
 
 export default User;

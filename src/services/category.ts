@@ -112,7 +112,7 @@ class CategoryService extends CRUDService<Category> {
         .findOne({
           $or: [{ _id: id }, { 'childCategory._id': id }],
         })
-        .populate(populateName);
+        .populate(['productsDTO', 'childCategory.children.productsDTO']);
       return category;
     } catch (error) {
       console.log(error);

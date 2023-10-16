@@ -121,7 +121,7 @@ class OrderService extends CRUDService<Order> {
     }
   }
 
-  // UPDATE TOTAL ORDER WHEN USE VOUCHER // !!!!!
+  // UPDATE TOTAL ORDER WHEN USE VOUCHER
   async updateTotalOrderWhenUseVoucher(voucherId: string, customerId: string, orderId: string) {
     try {
       if (voucherId) {
@@ -131,12 +131,13 @@ class OrderService extends CRUDService<Order> {
             $push: { customerIdsUsedVoucher: customerId },
           });
         }
-        const order = await this.getOrderById(orderId);
-
-        // newData = {
-        //   ...newData,
-        //   totalOrder: newData.totalOrder - (voucher?.discount ?? 0),
-        // };
+        const order = await this.model.findOne({ _id: orderId });
+        if (order && order?.totalOrder && voucher && voucher?.discount) {
+          order?.updateOne(
+            { $set: { totalOrder: order.totalOrder - voucher?.discount } },
+            { new: true },
+          );
+        }
       }
     } catch (error) {
       throw new Error('Occur error when update total order when use voucher');

@@ -1,4 +1,5 @@
 import { ProductType } from '@app/models/product/@type';
+import { Role } from '@app/models/user/@type';
 
 interface Params {
   pageIndex: number;
@@ -13,6 +14,9 @@ interface Params {
   productId?: string;
   fullName?: string;
   sortByField?: string;
+  from?: Date | string;
+  to?: Date | string;
+  role?: Role | string;
 }
 
 interface Filter {
@@ -25,6 +29,7 @@ interface Filter {
   comboPromotionsId?: string;
   productIds?: string;
   fullName?: string | any;
+  role?: Role | string;
 }
 
 export { Params, Filter };

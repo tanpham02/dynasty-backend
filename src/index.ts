@@ -17,6 +17,7 @@ import {
   cartRouter,
   authRouter,
   orderRouter,
+  materialRouter,
 } from '@app/routes';
 import {
   CATEGORY_URL,
@@ -32,6 +33,7 @@ import {
   CART_URL,
   AUTH_URL,
   ORDER_URL,
+  MATERIAL_URL,
 } from './services/apiUrl';
 
 const app: Application = express();
@@ -87,6 +89,9 @@ app.use(`${CART_URL}`, cartRouter);
 
 // ORDER
 app.use(`${ORDER_URL}`, orderRouter);
+
+// MATERIAL
+app.use(`${MATERIAL_URL}`, materialRouter);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

@@ -8,13 +8,14 @@ const userService = new UserService(UserModel, 'user');
 const userController = {
   // SEARCH PAGINATION
   search: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, fullName } = req.query;
+    const { pageIndex, pageSize, fullName, role } = req.query;
 
     try {
       const params: Params = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
         fullName: fullName?.toString(),
+        role: role?.toString(),
       };
       const voucher = await userService.getPagination(params);
       res.status(200).json(voucher);

@@ -26,7 +26,7 @@ export const CONFIG_STORE_URL = '/api/config-store';
 export const VOUCHER_URL = '/api/voucher';
 
 // USER
-export const USER_URL = '/api/user';
+export const USER_URL = '/api/users';
 
 // CUSTOMER
 export const CUSTOMER_URL = '/api/customer';
@@ -36,3 +36,6 @@ export const CART_URL = '/api/cart';
 
 // ORDER
 export const ORDER_URL = '/api/order';
+
+// MATERIAL
+export const MATERIAL_URL = '/api/material';
