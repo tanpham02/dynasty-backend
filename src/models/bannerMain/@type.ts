@@ -1,9 +1,9 @@
 import { Document } from 'mongoose';
 
 interface BannerMain extends Document {
-  banners?: string[];
+  name?: string;
+  banner?: string;
   redirect?: string;
 }
 
-
-export default BannerMain
+export default BannerMain;

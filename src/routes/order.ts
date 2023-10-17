@@ -10,6 +10,10 @@ const router = Router();
  *     tags: [Order]
  *     summary: Search pagination
  *     parameters:
+ *      - name: customerId
+ *        in: query
+ *        schema:
+ *          type: string
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -127,7 +131,7 @@ router.post('/quick-buy', orderController.quickBuy);
  *                 $ref: '#/components/schema/Order'
  */
 // UPDATE TOTAL ORDER WHEN USE VOUCHER
-router.post('/when-use-voucher/:voucherId', orderController.updateTotalOrderWhenUseVoucher);
+router.post('/when-use-voucher', orderController.updateTotalOrderWhenUseVoucher);
 
 /**
  * @swagger

@@ -5,11 +5,11 @@ const authController = {
   // SIGNUP CUSTOMER
   signup: async (req: Request, res: Response) => {
     try {
-      const { status, customer, errors } = await authService.signup(req, res);
+      const { status, message, errors } = await authService.signup(req, res);
       if (status > 200) {
         return res.status(status).json(errors);
       }
-      return res.status(status).json(customer);
+      return res.status(status).json(message);
     } catch (error) {
       res.status(500).json(error);
     }

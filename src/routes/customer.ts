@@ -62,31 +62,6 @@ router.get('/:id', customerController.getById);
 
 /**
  * @swagger
- * '/api/customer/create':
- *  post:
- *     tags: [Customer]
- *     summary: Create customer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Customer'
- *
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Customer'
- */
-
-// CREATE CUSTOMER
-router.post('/create', customerController.create);
-
-/**
- * @swagger
  * '/api/customer/{id}':
  *  patch:
  *     tags: [Customer]

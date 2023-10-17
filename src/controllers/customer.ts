@@ -21,14 +21,6 @@ const customerController = {
       res.status(500).json(err);
     }
   },
-  create: async (req: Request, res: Response) => {
-    try {
-      const { message } = await customerService.createOverriding(req);
-      res.status(200).json(message);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  },
 
   update: async (req: Request, res: Response) => {
     const { id } = req.params;

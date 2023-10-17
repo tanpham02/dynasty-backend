@@ -17,10 +17,12 @@ interface Params {
   from?: Date | string;
   to?: Date | string;
   role?: Role | string;
+  customerId?: string;
 }
 
 interface Filter {
   name?: string | any;
+  customerId?: string;
   categoryId?: string | any;
   cityId?: number;
   districtId?: number;

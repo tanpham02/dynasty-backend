@@ -31,9 +31,12 @@ class OrderService extends CRUDService<Order> {
   // SEARCH PAGINATION
   async getPaginationOverriding(params: Params) {
     try {
-      const { pageIndex, pageSize } = params;
+      const { pageIndex, pageSize, customerId } = params;
 
       const filter: Filter = {};
+      if (customerId) {
+        filter.customerId = customerId;
+      }
       const data = await this.model
         .find(filter)
         .limit(pageSize)
@@ -61,7 +64,6 @@ class OrderService extends CRUDService<Order> {
   // CHECKOUT
   async checkout(req: Request) {
     const customerId = req?.body?.customerId;
-    const voucherId = req?.body?.voucherId;
     let newData = { ...req.body };
     try {
       if (customerId) {
@@ -77,7 +79,6 @@ class OrderService extends CRUDService<Order> {
             totalOrder: remainingProductCartQuery.totalCart + shipFee,
             shipFee: shipFee,
           };
-          return;
         }
       }
 
@@ -86,7 +87,8 @@ class OrderService extends CRUDService<Order> {
       if (customer) {
         await customer?.updateOne({ $push: { orderIds: newOrder._id } });
       }
-      return await newOrder.save();
+      await newOrder.save();
+      return newOrder;
     } catch (error) {
       throw new Error(`Occur error when checkout ${this.nameService}`);
     }
@@ -132,9 +134,10 @@ class OrderService extends CRUDService<Order> {
           });
         }
         const order = await this.model.findOne({ _id: orderId });
+
         if (order && order?.totalOrder && voucher && voucher?.discount) {
-          order?.updateOne(
-            { $set: { totalOrder: order.totalOrder - voucher?.discount } },
+          await order?.updateOne(
+            { $set: { totalOrder: order.totalOrder - voucher?.discount, voucherId: voucherId } },
             { new: true },
           );
         }
@@ -266,7 +269,7 @@ class OrderService extends CRUDService<Order> {
           _id: orderId,
         },
         {
-          $set: { reasonCancelOrder: reason },
+          $set: { reasonCancelOrder: reason, statusOrder: 'CANCELED' },
         },
         { new: true },
       );

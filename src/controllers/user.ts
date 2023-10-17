@@ -17,7 +17,7 @@ const userController = {
         fullName: fullName?.toString(),
         role: role?.toString(),
       };
-      const voucher = await userService.getPagination(params);
+      const voucher = await userService.getPaginationOverriding(params);
       res.status(200).json(voucher);
     } catch (error) {
       res.status(500).json(error);
@@ -27,10 +27,12 @@ const userController = {
   // CREATE USER
   create: async (req: Request, res: Response) => {
     try {
-      const userExist = await UserModel.findOne({ phoneNumber: req.body.phoneNumber });
+      const userExist = await UserModel.findOne({
+        $or: [{ username: req.body.username }, { phoneNumber: req.body.phoneNumber }],
+      });
 
       if (userExist) {
-        return res.status(404).json({ message: 'Phone number was existed' });
+        return res.status(404).json({ message: 'Username or phoneNumber was existed' });
       }
 
       const newUser = await userService.createOverriding(req);
@@ -55,7 +57,9 @@ const userController = {
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const user = await userService.getById(id);
+      const user = await userService.getByIdOverriding(id);
+
+      console.log('user', user);
       res.status(200).json(user);
     } catch (error) {
       res.status(500).json(error);

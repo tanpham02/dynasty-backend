@@ -2,12 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "dist",
+  "main": "build",
   "scripts": {
-    "dev": "env-cmd -f .env.development concurrently \"npx tsc --watch\" \"nodemon -q dist\"",
-    "dist": "npm run tsc",
-    "build": "env-cmd -f .env.production node dist",
-    "tsc": "tsc -p tsconfig.json"
+    "dev": "env-cmd -f .env.development concurrently \"npx tsc --watch\" \"nodemon -q build\"",
+    "build": "npm run start && env-cmd -f .env.production node ./build/index.js",
+    "start": "tsc -p tsconfig.json"
   },
   "license": "MIT",
   "dependencies": {
@@ -39,7 +38,7 @@
     "typescript": "^5.1.6"
   },
   "_moduleAliases": {
-    "@app": "dist"
+    "@app": "build"
   },
   "author": {
     "name": "TanPham Dev",

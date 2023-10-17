@@ -27,6 +27,7 @@ import { CartSchema } from '../cart';
  *                 - SUCCESS
  *                 - FAIL
  *                 - QUICK_BUY
+ *                 - CANCELED
  *              default: 'PENDING'
  *          fullName:
  *              type: string

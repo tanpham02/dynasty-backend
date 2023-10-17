@@ -1,19 +1,39 @@
+// {
+//   "compilerOptions": {
+//     "target": "ES5",
+//     "module": "CommonJS",
+//     "outDir": "build",
+//     "rootDir": "src",
+//     "lib": ["es6"],
+//     "allowJs": true,
+//     "sourceMap": false,
+//     "allowSyntheticDefaultImports": true,
+//     "esModuleInterop": true,
+//     "strict": true,
+//     "paths": {
+//       "@app/*":["./src/*"],
+//     }
+
+//   },
+//   "include": ["src/**/*.ts", "src/upload/**/*"],
+//   "exclude": ["node_modules"],
+// }
+
 {
-  "compilerOptions": {
-    "target": "ES5",
-    "module": "commonjs",
-    "outDir": "dist",
-    "rootDir": "src",
-    "sourceMap": false,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "paths": {
-      "@app/*":["./src/*"]
-    }
-   
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"],
-}
+    "compilerOptions": {
+      "target": "ES5",
+      "module": "CommonJS",
+      "outDir": "build",
+      "rootDir": "src",
+      "sourceMap": false,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "strict": true,
+      "paths": {
+        "@app/*":["./src/*"],
+      }
+    },
+    "include": ["src/**/*", "upload/**/*"],
+    "exclude": ["node_modules"],
+  }
 

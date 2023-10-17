@@ -14,6 +14,7 @@ import User from '@app/models/user/@type';
 import { wait } from 'iter-ops';
 import CartModel from '@app/models/cart';
 
+
 interface ErrorMessage {
   phoneNumber?: string;
   email?: string;
@@ -22,7 +23,7 @@ interface ErrorMessage {
 interface ResponseI {
   status: number;
   errors?: ErrorMessage;
-  customer?: Customer;
+  message?: string;
 }
 
 const { jwtRefreshKey } = configApp();
@@ -81,7 +82,7 @@ const authService = {
 
         response = {
           status: 200,
-          customer: newCustomer,
+          message: 'Đăng ký thành công',
         };
         await newCart.save();
       }
@@ -94,15 +95,15 @@ const authService = {
 
   // LOGIN FOR USER
   loginUser: async (req: Request, res: Response) => {
-    const { phoneNumber, password }: User = req.body;
+    const { username, password }: User = req.body;
 
     try {
-      const user = await UserModel.findOne({ phoneNumber: phoneNumber });
+      const user = await UserModel.findOne({ username: username });
 
       if (!user) {
         return {
           status: 404,
-          message: 'Not found user with this phone number',
+          message: 'Not found user',
         };
       }
       if (password && user?.password) {
@@ -126,6 +127,7 @@ const authService = {
             data: {
               user: remainingUser,
               accessToken,
+              refreshToken, // run on environment development
             },
           };
         }
@@ -169,6 +171,7 @@ const authService = {
             data: {
               customer: remainingCustomer,
               accessToken,
+              refreshToken, // run on environment development
             },
           };
         }

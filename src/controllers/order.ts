@@ -10,10 +10,11 @@ const orderService = new OrderService(OrderModel, 'order');
 const orderController = {
   // SEARCH PAGINATION
   searchPagination: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize } = req.query;
+    const { pageIndex, pageSize, customerId } = req.query;
     const params: Params = {
       pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
       pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
+      customerId: customerId?.toString(),
     };
 
     try {
@@ -60,14 +61,14 @@ const orderController = {
     }
   },
 
-  // UPDATE TOTAL ORDER WHEN USE VOUCHER
+  // UPDATE TOTAL ORDER WHEN USE VOUCHER 
   updateTotalOrderWhenUseVoucher: async (req: Request, res: Response) => {
     try {
-      const { voucherId, customerId, orderId } = req.params;
+      const { voucherId, customerId, orderId } = req.query;
       const updateTotalOrderWhenUseVoucher = await orderService.updateTotalOrderWhenUseVoucher(
-        voucherId,
-        customerId,
-        orderId,
+        voucherId?.toString() || '',
+        customerId?.toString() || '',
+        orderId?.toString() || '',
       );
 
       res.status(200).json(updateTotalOrderWhenUseVoucher);

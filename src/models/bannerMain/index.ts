@@ -3,7 +3,12 @@ import { Schema, model } from 'mongoose';
 
 const BannerMainSchema = new Schema<BannerMain>(
   {
-    banners: [String],
+    name: {
+      type: String,
+    },
+    banner: {
+      type: String,
+    },
     redirect: {
       type: String,
     },

@@ -13,8 +13,11 @@ import { Status } from '@app/constants';
  *       required:
  *         - phoneNumber
  *         - password
+ *         - username
  *         - email
  *       properties:
+ *         username:
+ *           type: string
  *         birthday:
  *           type: string
  *         fullName:
@@ -37,6 +40,11 @@ import { Status } from '@app/constants';
 
 const UserSchema = new Schema<User>(
   {
+    username: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     birthday: {
       type: Date,
     },

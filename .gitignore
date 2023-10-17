@@ -7,13 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+.gitignore
 node_modules
 dist
 dist-ssr
-upload
 *.local
+.env
 .env.development
 .env.production
+upload
 
 # Editor directories and files
 .vscode/*

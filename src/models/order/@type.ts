@@ -26,6 +26,7 @@ import { Cart } from '../cart/@type';
  *                 - SUCCESS
  *                 - FAIL
  *                 - QUICK_BUY
+ *                 - CANCELED
  *              default: 'PENDING'
  *          fullName:
  *              type: string
@@ -66,10 +67,10 @@ import { Cart } from '../cart/@type';
  */
 
 enum StatusOrder {
-  QUICK_BUY = 'QUICK_BUY',
   PENDING = 'PENDING',
   DELIVERING = 'DELIVERING',
   FAIL = 'FAIL',
+  CANCELED = 'CANCELED',
   SUCCESS = 'SUCCESS',
 }
 enum TypeOrder {

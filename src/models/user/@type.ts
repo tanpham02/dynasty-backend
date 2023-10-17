@@ -43,6 +43,7 @@ export enum Role {
 }
 
 interface User extends Document {
+  username?: string;
   birthday?: string | Date;
   fullName?: string;
   phoneNumber?: string;
