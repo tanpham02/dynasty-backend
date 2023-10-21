@@ -1,9 +1,9 @@
 import productController from '@app/controllers/product';
+import { uploadFileProduct } from '@app/services/upload';
+
 import express from 'express';
+import multer from 'multer';
 const router = express.Router();
-
-
-
 
 /**
  * @swagger
@@ -56,12 +56,18 @@ router.get('/search', productController.search);
  *     summary: Create product
  *     requestBody:
  *       required: true
- *         - name
- *         - price
+ *         - productInfo
+ *         - files
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Product'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   productInfo:
+ *                         $ref: '#/components/schema/Product'
+ *                   files:
+ *                        type: string
+ *                        format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -72,7 +78,7 @@ router.get('/search', productController.search);
  */
 
 // CREATE PRODUCT
-router.post('/create', productController.create);
+router.post('/create', uploadFileProduct, productController.create);
 
 /**
  * @swagger
@@ -90,10 +96,15 @@ router.post('/create', productController.create);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Product'
- *
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   productInfo:
+ *                         $ref: '#/components/schema/Product'
+ *                   files:
+ *                        type: string
+ *                        format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -104,7 +115,7 @@ router.post('/create', productController.create);
  */
 
 // UPDATE PRODUCT
-router.patch('/:id', productController.update);
+router.patch('/:id', uploadFileProduct, productController.update);
 
 /**
  * @swagger

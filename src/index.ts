@@ -2,6 +2,8 @@ import express, { Application } from 'express';
 import 'module-alias/register';
 import { configApp, configServer, configSwagger } from '@app/configs';
 import connection from '@app/connection';
+const path = require('path');
+
 import {
   categoryRouter,
   comboPromotionsRouter,
@@ -38,7 +40,7 @@ import {
 
 const app: Application = express();
 
-const { port } = configApp();
+const { APP_URL, port } = configApp();
 
 // Connect DB
 connection();
@@ -94,5 +96,5 @@ app.use(`${ORDER_URL}`, orderRouter);
 app.use(`${MATERIAL_URL}`, materialRouter);
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  console.log(`Server is running at ${APP_URL}`);
 });

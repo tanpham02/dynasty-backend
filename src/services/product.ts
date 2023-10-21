@@ -5,12 +5,18 @@ import ProductVariantsModel from '@app/models/productVariant';
 import CategoryModel from '@app/models/category';
 import { Request } from 'express';
 import { Filter, Params } from '@app/types';
+import { configApp } from '@app/configs';
 
+import multer from 'multer';
+import JWT from '@app/middlewares/jwt';
+
+const { APP_URL } = configApp();
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
     super(model, nameService);
   }
 
+  // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
     try {
       await this.model.deleteMany({ _id: { $in: ids } });
@@ -49,10 +55,16 @@ class ProductService extends CRUDService<Product> {
     }
   }
 
+  // CREATE
   async createOverriding(req: Request) {
-    const product: Product = req.body;
+    const product: Product = JSON.parse(req.body.productInfo);
+    const filename = req.file?.filename;
+    const destination = req.file?.destination;
     try {
-      const newProduct = new this.model(req.body);
+      const newProduct = new this.model({
+        ...product,
+        image: `${APP_URL}/${destination}/${filename}`,
+      });
       const productVariantId = product.productVariantId;
       const categoryId = product.categoryId;
       if (productVariantId) {
@@ -62,7 +74,6 @@ class ProductService extends CRUDService<Product> {
       if (categoryId) {
         const category = await CategoryModel.findById(categoryId);
         const categoryChild = await CategoryModel.findOne({ 'childCategory._id': categoryId });
-
         if (category) {
           await category?.updateOne({ $push: { productsDTO: newProduct._id } });
         }
@@ -82,7 +93,6 @@ class ProductService extends CRUDService<Product> {
           );
         }
       }
-
       return await newProduct.save();
     } catch (error) {
       console.log(error);
@@ -90,15 +100,32 @@ class ProductService extends CRUDService<Product> {
     }
   }
 
+  // UPDATE
   async updateOverriding(id: string, req: Request) {
+    const productRequest: Product = req?.body?.productInfo
+      ? JSON.parse(req?.body?.productInfo)
+      : {};
+    const filename = req?.file?.filename;
+    const destination = req?.file?.destination;
+    let dataUpdate: any = {};
+
+    if (filename && destination) {
+      dataUpdate.image = `${APP_URL}/${destination}/${filename}`;
+    }
+    if (Object.keys(productRequest).length > 0) {
+      dataUpdate = {
+        ...dataUpdate,
+        ...productRequest,
+      };
+    }
     try {
-      const productRequest: Product = req.body;
       const product = await this.model.findById(id);
-      await product?.updateOne(productRequest, { new: true });
 
-      const productVariantId = productRequest?.productVariantId;
+      await product?.updateOne(dataUpdate, { new: true });
 
-      const categoryId = productRequest?.categoryId;
+      const productVariantId = dataUpdate?.productVariantId;
+
+      const categoryId = dataUpdate?.categoryId;
       const categoryChild = await CategoryModel.findOne({ 'childCategory._id': categoryId });
 
       if (
@@ -222,7 +249,7 @@ class ProductService extends CRUDService<Product> {
       }
       return category;
     } catch (error) {
-      console.log(error);
+      //   console.log(error);
       throw new Error(`Occur error when find by id ${this.nameService} with ${error}`);
     }
   }

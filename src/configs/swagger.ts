@@ -4,12 +4,12 @@ import swaggerUi from 'swagger-ui-express';
 import { configApp } from '@app/configs';
 
 const configSwagger = (app: Application) => {
-  const { port } = configApp();
+  const { APP_URL } = configApp();
   const options = {
     definition: {
       openapi: '3.1.0',
       info: {
-        title: 'The Pizza Company API with Swagger',
+        title: 'The Pizza Company API',
         version: '1.0.0',
         description:
           'This is a simple API application made with NodeJS + Express and documented with Swagger',
@@ -24,7 +24,7 @@ const configSwagger = (app: Application) => {
       },
       servers: [
         {
-          url: `http://localhost:${port}`,
+          url: `${APP_URL}`,
         },
       ],
       components: {
@@ -47,7 +47,7 @@ const configSwagger = (app: Application) => {
   };
 
   const specs = swaggerJsdoc(options);
-  app.use('/the-pizza-company/api-docs-swagger', swaggerUi.serve, swaggerUi.setup(specs));
+  app.use('/the-pizza-company/documentation', swaggerUi.serve, swaggerUi.setup(specs));
 };
 
 export default configSwagger;

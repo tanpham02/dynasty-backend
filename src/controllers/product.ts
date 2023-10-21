@@ -39,8 +39,8 @@ const productController = {
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const { message } = await productService.updateOverriding(id, req);
-      res.status(200).json(message);
+      const response = await productService.updateOverriding(id, req);
+      res.status(200).json(response.message);
     } catch (error) {
       res.status(500).json(error);
     }

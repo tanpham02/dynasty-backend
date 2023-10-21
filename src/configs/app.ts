@@ -7,6 +7,7 @@ interface Config {
   MONGO_URL: string;
   jwtAccessKey?: string;
   jwtRefreshKey?: string;
+  APP_URL?: string;
 }
 
 const configApp = () => {
@@ -15,6 +16,7 @@ const configApp = () => {
   let resultConfig: Config = {
     port: process.env.PORT ? Number(process.env.PORT) : 8081,
     MONGO_URL: process.env.MONGO_URL || '',
+    APP_URL: `${process.env.BASE_URL}:${process.env.PORT}`,
   };
 
   if (process.env.NODE_ENV === MODE.PRODUCTION) {
@@ -22,6 +24,7 @@ const configApp = () => {
     resultConfig = {
       port: process.env.PORT ? Number(process.env.PORT) : 8081,
       MONGO_URL: process.env.MONGO_URL || '',
+      APP_URL: `${process.env.BASE_URL}:${process.env.PORT}`,
     };
   }
   resultConfig.jwtAccessKey = process.env.JWT_ACCESS_KEY;

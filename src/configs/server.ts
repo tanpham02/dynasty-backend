@@ -9,6 +9,13 @@ const configServer = (app: Application) => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan('dev'));
+
+  // GET IMAGE FROM URL
+  //         URL                      folder contain image
+  app.use('/upload/img', express.static('upload/img'));
+
+  // app.use('/static', express.static(path.join(__dirname, 'public'))) => Đi từ thư mục src vào
+  // app.use('/upload/img', express.static('upload/img'));  => Đi từ thu mục cha vao
 };
 
 export default configServer;
