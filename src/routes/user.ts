@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import userController from '@app/controllers/user';
 import { verifyToken, verifyTokenAndAuthenRole } from '@app/middlewares/verifyToken';
+import { uploadFileUser } from '@app/services/upload';
 
 const router = Router();
 
@@ -51,9 +52,15 @@ router.get('/search', userController.search);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/User'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   userInfo:
+ *                        $ref: '#/components/schema/User'
+ *                   files:
+ *                        type: string
+ *                        format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -64,7 +71,7 @@ router.get('/search', userController.search);
  */
 
 // CREATE
-router.post('/create', userController.create);
+router.post('/create', uploadFileUser, userController.create);
 
 /**
  * @swagger
@@ -81,9 +88,15 @@ router.post('/create', userController.create);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/User'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   userInfo:
+ *                        $ref: '#/components/schema/User'
+ *                   files:
+ *                        type: string
+ *                        format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -93,7 +106,7 @@ router.post('/create', userController.create);
  *                 $ref: '#/components/schema/User'
  */
 // UPDATE
-router.patch('/:id', userController.update);
+router.patch('/:id', uploadFileUser, userController.update);
 
 /**
  * @swagger

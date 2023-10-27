@@ -47,7 +47,9 @@ const voucherController = {
   getById: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const voucher = await voucherService.getById(id);
+      const voucher = await voucherService
+        .getById(id)
+        .then((res) => res?.populate('listProductUsedVoucher'));
       res.status(200).json(voucher);
     } catch (error) {
       res.status(500).json(error);

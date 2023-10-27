@@ -38,6 +38,7 @@ const userController = {
       const newUser = await userService.createOverriding(req);
       res.status(200).json(newUser);
     } catch (error) {
+      console.log("🚀 ~error:", error)
       res.status(500).json(error);
     }
   },

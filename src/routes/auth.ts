@@ -14,10 +14,10 @@ router.post('/user/login', authController.loginUser);
 router.post('/customer/login', authController.loginCustomer);
 
 // REQUEST REFRESH TOKEN FOR USER
-router.post('/user/refresh', authController.requestRefreshTokenForUser);
+router.post('/user/refresh-token', authController.requestRefreshTokenForUser);
 
 // REQUEST REFRESH TOKEN FOR CUSTOMER
-router.post('/customer/refresh', authController.requestRefreshTokenForCustomer);
+router.post('/customer/refresh-token', authController.requestRefreshTokenForCustomer);
 
 // LOGOUT
 router.post('/logout', verifyToken, authController.logout);

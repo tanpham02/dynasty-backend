@@ -26,6 +26,7 @@ exports.TimeOrder = exports.TypeOrder = exports.StatusOrder = void 0;
  *                 - FAIL
  *                 - QUICK_BUY
  *                 - CANCELED
+ *                 - WAITING_FOR_DELIVERING
  *              default: 'PENDING'
  *          fullName:
  *              type: string
@@ -71,6 +72,7 @@ var StatusOrder;
     StatusOrder["FAIL"] = "FAIL";
     StatusOrder["CANCELED"] = "CANCELED";
     StatusOrder["SUCCESS"] = "SUCCESS";
+    StatusOrder["WAITING_FOR_DELIVERING"] = "WAITING_FOR_DELIVERING";
 })(StatusOrder || (exports.StatusOrder = StatusOrder = {}));
 var TypeOrder;
 (function (TypeOrder) {

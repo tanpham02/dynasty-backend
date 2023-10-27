@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @swagger
- * '/api/customer/search':
+ * '/api/customers/search':
  *  get:
  *     tags: [Customer]
  *     summary: Search pagination
@@ -37,7 +37,7 @@ router.get('/search', customerController.search);
 
 /**
  * @swagger
- * '/api/customer/{id}':
+ * '/api/customers/{id}':
  *  get:
  *     tags: [Customer]
  *     summary: Find by id
@@ -62,7 +62,7 @@ router.get('/:id', customerController.getById);
 
 /**
  * @swagger
- * '/api/customer/{id}':
+ * '/api/customers/{id}':
  *  patch:
  *     tags: [Customer]
  *     summary: User customer
@@ -93,7 +93,7 @@ router.patch('/:id', customerController.update);
 
 /**
  * @swagger
- * '/api/customer':
+ * '/api/customers':
  *  delete:
  *     tags: [Customer]
  *     summary: Delete customer

@@ -7,7 +7,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * '/api/product/search':
+ * '/api/products/search':
  *  get:
  *     tags: [Product]
  *     summary: Search pagination
@@ -50,7 +50,7 @@ router.get('/search', productController.search);
 
 /**
  * @swagger
- * '/api/product/create':
+ * '/api/products/create':
  *  post:
  *     tags: [Product]
  *     summary: Create product
@@ -82,7 +82,7 @@ router.post('/create', uploadFileProduct, productController.create);
 
 /**
  * @swagger
- * '/api/product/{id}':
+ * '/api/products/{id}':
  *  patch:
  *     tags: [Product]
  *     summary: Update product
@@ -119,7 +119,7 @@ router.patch('/:id', uploadFileProduct, productController.update);
 
 /**
  * @swagger
- * '/api/product/{id}':
+ * '/api/products/{id}':
  *  get:
  *     tags: [Product]
  *     summary: Find by id
@@ -144,7 +144,7 @@ router.get('/:id', productController.getById);
 
 /**
  * @swagger
- * '/api/product/':
+ * '/api/products/':
  *  delete:
  *     tags: [Product]
  *     summary: Delete product variant

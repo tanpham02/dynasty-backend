@@ -9,7 +9,7 @@ var express_1 = __importDefault(require("express"));
 var router = express_1.default.Router();
 /**
  * @swagger
- * '/api/product/search':
+ * '/api/products/search':
  *  get:
  *     tags: [Product]
  *     summary: Search pagination
@@ -50,7 +50,7 @@ var router = express_1.default.Router();
 router.get('/search', product_1.default.search);
 /**
  * @swagger
- * '/api/product/create':
+ * '/api/products/create':
  *  post:
  *     tags: [Product]
  *     summary: Create product
@@ -80,7 +80,7 @@ router.get('/search', product_1.default.search);
 router.post('/create', upload_1.uploadFileProduct, product_1.default.create);
 /**
  * @swagger
- * '/api/product/{id}':
+ * '/api/products/{id}':
  *  patch:
  *     tags: [Product]
  *     summary: Update product
@@ -115,7 +115,7 @@ router.post('/create', upload_1.uploadFileProduct, product_1.default.create);
 router.patch('/:id', upload_1.uploadFileProduct, product_1.default.update);
 /**
  * @swagger
- * '/api/product/{id}':
+ * '/api/products/{id}':
  *  get:
  *     tags: [Product]
  *     summary: Find by id
@@ -138,7 +138,7 @@ router.patch('/:id', upload_1.uploadFileProduct, product_1.default.update);
 router.get('/:id', product_1.default.getById);
 /**
  * @swagger
- * '/api/product/':
+ * '/api/products/':
  *  delete:
  *     tags: [Product]
  *     summary: Delete product variant

@@ -49,13 +49,13 @@ var customerController = {
             switch (_b.label) {
                 case 0:
                     _b.trys.push([0, 2, , 3]);
-                    _a = req.params, pageIndex = _a.pageIndex, pageSize = _a.pageSize, fullName = _a.fullName;
+                    _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, fullName = _a.fullName;
                     params = {
                         pageIndex: pageIndex ? Number(pageIndex) : 0,
                         pageSize: pageSize ? Number(pageSize) : 10,
-                        fullName: fullName,
+                        fullName: fullName === null || fullName === void 0 ? void 0 : fullName.toString(),
                     };
-                    return [4 /*yield*/, customerService.getPagination(params)];
+                    return [4 /*yield*/, customerService.getPaginationOverriding(params)];
                 case 1:
                     result = _b.sent();
                     res.status(200).json(result);

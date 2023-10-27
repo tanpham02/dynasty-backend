@@ -70,13 +70,14 @@ var bcrypt_2 = require("bcrypt");
 var customer_1 = __importDefault(require("@app/models/customer"));
 var jwt_1 = __importDefault(require("@app/middlewares/jwt"));
 var cart_1 = __importDefault(require("@app/models/cart"));
+var customerAddress_1 = __importDefault(require("@app/models/customerAddress"));
 var jwtRefreshKey = (0, configs_1.configApp)().jwtRefreshKey;
 var jwtUser = new jwt_1.default();
 var jwtCustomer = new jwt_1.default();
 var authService = {
     // SIGNUP CUSTOMER
     signup: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, password, customerBody, errors, response, customerExists, salt, passwordAfterHash, newCustomer, newCart, error_1;
+        var _a, password, customerBody, errors, response, customerExists, salt, passwordAfterHash, newCustomer, newCart, newCustomerAddress, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -87,7 +88,7 @@ var authService = {
                     };
                     _b.label = 1;
                 case 1:
-                    _b.trys.push([1, 8, , 9]);
+                    _b.trys.push([1, 9, , 10]);
                     return [4 /*yield*/, customer_1.default.findOne({
                             $or: [
                                 {
@@ -113,7 +114,7 @@ var authService = {
                         };
                         return [2 /*return*/, response];
                     }
-                    if (!password) return [3 /*break*/, 7];
+                    if (!password) return [3 /*break*/, 8];
                     return [4 /*yield*/, (0, bcrypt_2.genSalt)(constants_1.SALT)];
                 case 3:
                     salt = _b.sent();
@@ -129,15 +130,19 @@ var authService = {
                         status: 200,
                         message: 'Đăng ký thành công',
                     };
-                    return [4 /*yield*/, newCart.save()];
+                    newCustomerAddress = new customerAddress_1.default({ customerId: newCustomer._id });
+                    return [4 /*yield*/, newCustomerAddress.save()];
                 case 6:
                     _b.sent();
-                    _b.label = 7;
-                case 7: return [2 /*return*/, response];
-                case 8:
+                    return [4 /*yield*/, newCart.save()];
+                case 7:
+                    _b.sent();
+                    _b.label = 8;
+                case 8: return [2 /*return*/, response];
+                case 9:
                     error_1 = _b.sent();
                     throw new Error("".concat(error_1));
-                case 9: return [2 /*return*/];
+                case 10: return [2 /*return*/];
             }
         });
     }); },

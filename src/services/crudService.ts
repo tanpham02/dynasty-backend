@@ -83,6 +83,10 @@ class CRUDService<T extends Document> {
         filter.role = role;
       }
 
+      if (from && to) {
+        filter.createdAt = { $gte: from, $lte: to };
+      }
+
       const data = await this.model
         .find(filter)
         .limit(pageSize)

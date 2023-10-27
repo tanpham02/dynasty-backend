@@ -17,6 +17,26 @@ var router = (0, express_1.Router)();
  *        in: query
  *        schema:
  *          type: string
+ *      - name: from
+ *        in: query
+ *        schema:
+ *          type: string
+ *        description: VD 2023-10-05
+ *      - name: to
+ *        in: query
+ *        schema:
+ *          type: string
+ *        description: VD 2023-10-05
+ *      - name: statusOrder
+ *        in: query
+ *        schema:
+ *          type: string
+ *          enum:
+ *              - PENDING
+ *              - DELIVERING
+ *              - FAIL
+ *              - CANCELED
+ *              - SUCCESS
  *      - name: pageIndex
  *        in: query
  *        schema:

@@ -79,6 +79,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var crudService_1 = __importDefault(require("./crudService"));
 var bcrypt_1 = require("bcrypt");
 var constants_1 = require("@app/constants");
+var configs_1 = require("@app/configs");
+var APP_URL = (0, configs_1.configApp)().APP_URL;
 var UserService = /** @class */ (function (_super) {
     __extends(UserService, _super);
     function UserService(model, nameService) {
@@ -87,12 +89,12 @@ var UserService = /** @class */ (function (_super) {
     // SEARCH PAGINATION
     UserService.prototype.getPaginationOverriding = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var pageIndex, pageSize, name_1, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, from, to, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result, error_1;
+            var pageIndex, pageSize, name_1, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        pageIndex = params.pageIndex, pageSize = params.pageSize, name_1 = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, from = params.from, to = params.to, role = params.role;
+                        pageIndex = params.pageIndex, pageSize = params.pageSize, name_1 = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, role = params.role;
                         filter = {};
                         if (name_1) {
                             patternWithName = { $regex: new RegExp(name_1, 'gi') };
@@ -160,31 +162,37 @@ var UserService = /** @class */ (function (_super) {
     };
     // CREATE
     UserService.prototype.createOverriding = function (req) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var _a, password, user, salt, passwordAfterHash, newUser, _b, pw, restUser, error_2;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
+            var _c, password, user, filename, destination, salt, passwordAfterHash, newUser, _d, pw, restUser, error_2;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
                     case 0:
-                        _a = req.body, password = _a.password, user = __rest(_a, ["password"]);
-                        _c.label = 1;
+                        _c = JSON.parse(req.body.userInfo), password = _c.password, user = __rest(_c, ["password"]);
+                        filename = (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename;
+                        destination = (_b = req.file) === null || _b === void 0 ? void 0 : _b.destination;
+                        if (filename && destination) {
+                            user.image = "".concat(APP_URL, "/").concat(destination, "/").concat(filename);
+                        }
+                        _e.label = 1;
                     case 1:
-                        _c.trys.push([1, 6, , 7]);
+                        _e.trys.push([1, 6, , 7]);
                         if (!password) return [3 /*break*/, 5];
                         return [4 /*yield*/, (0, bcrypt_1.genSalt)(constants_1.SALT)];
                     case 2:
-                        salt = _c.sent();
+                        salt = _e.sent();
                         return [4 /*yield*/, (0, bcrypt_1.hash)(password, salt)];
                     case 3:
-                        passwordAfterHash = _c.sent();
+                        passwordAfterHash = _e.sent();
                         newUser = new this.model(__assign(__assign({}, user), { password: passwordAfterHash }));
                         return [4 /*yield*/, newUser.save()];
                     case 4:
-                        _c.sent();
-                        _b = newUser.toObject(), pw = _b.password, restUser = __rest(_b, ["password"]);
+                        _e.sent();
+                        _d = newUser.toObject(), pw = _d.password, restUser = __rest(_d, ["password"]);
                         return [2 /*return*/, restUser];
                     case 5: return [3 /*break*/, 7];
                     case 6:
-                        error_2 = _c.sent();
+                        error_2 = _e.sent();
                         console.log('error', error_2);
                         throw new Error("Occur when create ".concat(this.nameService));
                     case 7: return [2 /*return*/];
@@ -194,31 +202,40 @@ var UserService = /** @class */ (function (_super) {
     };
     // UPDATE
     UserService.prototype.updateOverriding = function (id, req) {
+        var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function () {
-            var dataUpdate, password, salt, passwordAfterHash, error_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var dataUpdate, filename, destination, newDataUpdate, salt, passwordAfterHash, error_3;
+            return __generator(this, function (_e) {
+                switch (_e.label) {
                     case 0:
-                        dataUpdate = req.body;
-                        password = dataUpdate.password;
-                        _a.label = 1;
+                        dataUpdate = ((_a = req.body) === null || _a === void 0 ? void 0 : _a.userInfo) ? JSON.parse((_b = req.body) === null || _b === void 0 ? void 0 : _b.userInfo) : {};
+                        filename = (_c = req === null || req === void 0 ? void 0 : req.file) === null || _c === void 0 ? void 0 : _c.filename;
+                        destination = (_d = req === null || req === void 0 ? void 0 : req.file) === null || _d === void 0 ? void 0 : _d.destination;
+                        newDataUpdate = {};
+                        if (Object.keys(dataUpdate).length) {
+                            newDataUpdate = __assign({}, dataUpdate);
+                        }
+                        if (filename && destination) {
+                            newDataUpdate.image = "".concat(APP_URL, "/").concat(destination, "/").concat(filename);
+                        }
+                        _e.label = 1;
                     case 1:
-                        _a.trys.push([1, 6, , 7]);
-                        if (!password) return [3 /*break*/, 4];
+                        _e.trys.push([1, 6, , 7]);
+                        if (!(newDataUpdate === null || newDataUpdate === void 0 ? void 0 : newDataUpdate.password)) return [3 /*break*/, 4];
                         return [4 /*yield*/, (0, bcrypt_1.genSalt)(constants_1.SALT)];
                     case 2:
-                        salt = _a.sent();
-                        return [4 /*yield*/, (0, bcrypt_1.hash)(password, salt)];
+                        salt = _e.sent();
+                        return [4 /*yield*/, (0, bcrypt_1.hash)(newDataUpdate === null || newDataUpdate === void 0 ? void 0 : newDataUpdate.password, salt)];
                     case 3:
-                        passwordAfterHash = _a.sent();
-                        dataUpdate.password = passwordAfterHash;
-                        _a.label = 4;
-                    case 4: return [4 /*yield*/, this.model.findByIdAndUpdate(id, dataUpdate, { new: true })];
+                        passwordAfterHash = _e.sent();
+                        newDataUpdate.password = passwordAfterHash;
+                        _e.label = 4;
+                    case 4: return [4 /*yield*/, this.model.findByIdAndUpdate(id, newDataUpdate, { new: true })];
                     case 5:
-                        _a.sent();
+                        _e.sent();
                         return [2 /*return*/, { message: "Update ".concat(this.nameService, " success") }];
                     case 6:
-                        error_3 = _a.sent();
+                        error_3 = _e.sent();
                         throw new Error("Occur when create ".concat(this.nameService));
                     case 7: return [2 /*return*/];
                 }

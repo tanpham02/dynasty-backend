@@ -60,10 +60,13 @@ class ProductService extends CRUDService<Product> {
     const product: Product = JSON.parse(req.body.productInfo);
     const filename = req.file?.filename;
     const destination = req.file?.destination;
+
+    if (filename && destination) {
+      product.image = `${APP_URL}/${destination}/${filename}`;
+    }
     try {
       const newProduct = new this.model({
         ...product,
-        image: `${APP_URL}/${destination}/${filename}`,
       });
       const productVariantId = product.productVariantId;
       const categoryId = product.categoryId;
@@ -109,9 +112,6 @@ class ProductService extends CRUDService<Product> {
     const destination = req?.file?.destination;
     let dataUpdate: any = {};
 
-    if (filename && destination) {
-      dataUpdate.image = `${APP_URL}/${destination}/${filename}`;
-    }
     if (Object.keys(productRequest).length > 0) {
       dataUpdate = {
         ...dataUpdate,
@@ -119,9 +119,10 @@ class ProductService extends CRUDService<Product> {
       };
     }
     try {
-      const product = await this.model.findById(id);
-
-      await product?.updateOne(dataUpdate, { new: true });
+      if (filename && destination) {
+        dataUpdate.image = `${APP_URL}/${destination}/${filename}`;
+      }
+      const product = await this.model.findOneAndUpdate({ _id: id }, dataUpdate, { new: true });
 
       const productVariantId = dataUpdate?.productVariantId;
 

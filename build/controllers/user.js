@@ -94,6 +94,7 @@ var userController = {
                     return [3 /*break*/, 4];
                 case 3:
                     error_2 = _a.sent();
+                    console.log("🚀 ~error:", error_2);
                     res.status(500).json(error_2);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];

@@ -71,11 +71,85 @@ var MaterialService = /** @class */ (function (_super) {
     function MaterialService(model, nameService) {
         return _super.call(this, model, nameService) || this;
     }
+    // SEARCH PAGINATION
+    MaterialService.prototype.getPaginationOverriding = function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            var pageIndex, pageSize, name_1, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, from, to, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result, error_1;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        pageIndex = params.pageIndex, pageSize = params.pageSize, name_1 = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, from = params.from, to = params.to, role = params.role;
+                        filter = {};
+                        if (name_1) {
+                            patternWithName = { $regex: new RegExp(name_1, 'gi') };
+                            filter.name = patternWithName;
+                        }
+                        if (productId) {
+                            filter.productIds = productId;
+                        }
+                        if (comboPromotionsId) {
+                            filter.comboPromotionsId = comboPromotionsId;
+                        }
+                        if (categoryId) {
+                            filter.categoryId = categoryId;
+                        }
+                        if (types) {
+                            filter.types = { $all: types === null || types === void 0 ? void 0 : types.split(',') };
+                        }
+                        if (cityId) {
+                            filter.cityId = cityId;
+                        }
+                        if (districtId) {
+                            filter.districtId = districtId;
+                        }
+                        if (wardId) {
+                            filter.wardId = wardId;
+                        }
+                        if (fullName) {
+                            patternWithFullName = { $regex: new RegExp(fullName, 'gi') };
+                            filter.fullName = patternWithFullName;
+                        }
+                        if (role) {
+                            filter.role = role;
+                        }
+                        if (from && to) {
+                            filter.importDate = { $gte: from, $lte: to };
+                        }
+                        return [4 /*yield*/, this.model
+                                .find(filter)
+                                .limit(pageSize)
+                                .skip(pageSize * pageIndex)];
+                    case 1:
+                        data = _a.sent();
+                        return [4 /*yield*/, this.model.find(filter).count()];
+                    case 2:
+                        totalElement = _a.sent();
+                        totalPages = Math.ceil(totalElement / pageSize);
+                        isLastPage = pageIndex + 1 >= totalPages;
+                        result = {
+                            data: data,
+                            totalElement: totalElement,
+                            pageIndex: pageIndex,
+                            pageSize: pageSize,
+                            totalPage: totalPages,
+                            isLastPage: isLastPage,
+                        };
+                        return [2 /*return*/, result];
+                    case 3:
+                        error_1 = _a.sent();
+                        console.log(error_1);
+                        throw new Error("Occur error when fetching ".concat(this.nameService, " with ").concat(error_1));
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
     // CREATE MATERIAL
     MaterialService.prototype.createOverriding = function (req) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var bodyRequest, totalPrice, newMaterial, error_1;
+            var bodyRequest, totalPrice, newMaterial, error_2;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -100,8 +174,8 @@ var MaterialService = /** @class */ (function (_super) {
                         _b.sent();
                         return [2 /*return*/, newMaterial];
                     case 3:
-                        error_1 = _b.sent();
-                        throw new Error("".concat(error_1));
+                        error_2 = _b.sent();
+                        throw new Error("".concat(error_2));
                     case 4: return [2 /*return*/];
                 }
             });
@@ -110,7 +184,7 @@ var MaterialService = /** @class */ (function (_super) {
     // DELETE MATERIAL
     MaterialService.prototype.deleteOverriding = function (materialId) {
         return __awaiter(this, void 0, void 0, function () {
-            var material, materialIdFromDb, error_2;
+            var material, materialIdFromDb, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -129,8 +203,8 @@ var MaterialService = /** @class */ (function (_super) {
                         }, { new: true })];
                     case 4: return [2 /*return*/, _a.sent()];
                     case 5:
-                        error_2 = _a.sent();
-                        throw new Error("".concat(error_2));
+                        error_3 = _a.sent();
+                        throw new Error("".concat(error_3));
                     case 6: return [2 /*return*/];
                 }
             });

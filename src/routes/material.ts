@@ -76,6 +76,36 @@ router.post('/create', materialController.createMaterial);
  *         schema:
  *           type: string
  *         required: true
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schema/Material'
+ *
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Material'
+ */
+
+// GET BY ID
+router.patch('/:id', materialController.updateMaterial);
+
+/**
+ * @swagger
+ * '/api/material/{id}':
+ *  get:
+ *     tags: [Material]
+ *     summary: Find by id
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
  *
  *     responses:
  *       200:

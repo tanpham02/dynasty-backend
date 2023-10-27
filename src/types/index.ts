@@ -18,6 +18,7 @@ interface Params {
   to?: Date | string;
   role?: Role | string;
   customerId?: string;
+  statusOrder?: string;
 }
 
 interface Filter {
@@ -32,6 +33,9 @@ interface Filter {
   productIds?: string;
   fullName?: string | any;
   role?: Role | string;
+  createdAt?: any;
+  statusOrder?: string;
+  importDate?: any;
 }
 
 export { Params, Filter };

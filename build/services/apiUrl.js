@@ -6,7 +6,7 @@ exports.AUTH_URL = '/api/auth';
 // CATEGORY
 exports.CATEGORY_URL = '/api/category';
 // PRODUCT
-exports.PRODUCT_URL = '/api/product';
+exports.PRODUCT_URL = '/api/products';
 // PRODUCT VARIANT
 exports.PRODUCT_VARIANT_URL = '/api/product-variant';
 // SHOP SYSTEM
@@ -22,7 +22,7 @@ exports.VOUCHER_URL = '/api/voucher';
 // USER
 exports.USER_URL = '/api/users';
 // CUSTOMER
-exports.CUSTOMER_URL = '/api/customer';
+exports.CUSTOMER_URL = '/api/customers';
 // CART
 exports.CART_URL = '/api/cart';
 // ORDER

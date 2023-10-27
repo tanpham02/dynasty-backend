@@ -104,13 +104,16 @@ var CustomerAddressService = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
+                        console.log('req.body', req.body);
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
                         return [4 /*yield*/, this.model.findOneAndUpdate({ customerId: customerId }, { $push: { addressList: req.body } }, { new: true })];
-                    case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
+                    case 2: return [2 /*return*/, _a.sent()];
+                    case 3:
                         error_3 = _a.sent();
                         throw new Error("Occur error when get ".concat(this.nameService));
-                    case 3: return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         });

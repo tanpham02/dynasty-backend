@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { CustomerAddress } from './@type';
+import { CustomerAddressList } from './@type';
 
 // SCHEMAS RESPONSE
 
@@ -7,16 +7,24 @@ import { CustomerAddress } from './@type';
  * @swagger
  * components:
  *   schema:
- *     CustomerAddressList:
+ *     CustomerAddressItem:
  *       type: object
  *       properties:
  *         city:
  *             type: string
+ *         cityId:
+ *             type: number
  *         district:
  *             type: string
+ *         districtId:
+ *             type: number
  *         ward:
  *             type: string
+ *         wardId:
+ *             type: number
  *         address:
+ *             type: string
+ *         fullName:
  *             type: string
  *         phoneNumber:
  *             type: string
@@ -29,19 +37,19 @@ import { CustomerAddress } from './@type';
  * @swagger
  * components:
  *   schema:
- *     CustomerAddress:
+ *     CustomerAddressList:
  *       type: object
  *       properties:
  *         customerId:
  *            type: string
  *         addressList:
  *          type: array
- *          item:
+ *          items:
  *             schema:
- *                $ref: '#/components/schema/CustomerAddressList'
+ *                $ref: '#/components/schema/CustomerAddressItem'
  */
 
-const CustomerAddressSchema = new Schema<CustomerAddress>(
+const CustomerAddressSchema = new Schema<CustomerAddressList>(
   {
     customerId: {
       type: Schema.Types.ObjectId,

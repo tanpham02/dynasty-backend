@@ -6,16 +6,24 @@ import { Document, Schema } from 'mongoose';
  * @swagger
  * components:
  *   schemas:
- *     CustomerAddressList:
+ *     CustomerAddressItem:
  *       type: object
  *       properties:
  *         city:
  *             type: string
+ *         cityId:
+ *             type: number
  *         district:
  *             type: string
+ *         districtId:
+ *             type: number
  *         ward:
  *             type: string
+ *         wardId:
+ *             type: number
  *         address:
+ *             type: string
+ *         fullName:
  *             type: string
  *         phoneNumber:
  *             type: string
@@ -28,19 +36,19 @@ import { Document, Schema } from 'mongoose';
  * @swagger
  * components:
  *   schemas:
- *     CustomerAddress:
+ *     CustomerAddressList:
  *       type: object
  *       properties:
  *         customerId:
  *            type: string
  *         addressList:
  *          type: array
- *          item:
+ *          items:
  *             schema:
- *                $ref: '#/components/schema/CustomerAddressList'
+ *                $ref: '#/components/schema/CustomerAddressItem'
  */
 
-interface CustomerAddressList extends Document {
+interface CustomerAddressItem extends Document {
   city?: string;
   cityId?: number;
   district?: string;
@@ -53,9 +61,9 @@ interface CustomerAddressList extends Document {
   isDefault?: boolean;
 }
 
-interface CustomerAddress extends Document {
+interface CustomerAddressList extends Document {
   customerId?: Schema.Types.ObjectId;
-  addressList: CustomerAddressList[];
+  addressList: CustomerAddressItem[];
 }
 
-export { CustomerAddress, CustomerAddressList };
+export { CustomerAddressItem, CustomerAddressList };

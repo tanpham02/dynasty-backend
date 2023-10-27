@@ -45,15 +45,18 @@ var orderService = new order_2.default(order_1.default, 'order');
 var orderController = {
     // SEARCH PAGINATION
     searchPagination: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, pageIndex, pageSize, customerId, params, order, error_1;
+        var _a, pageIndex, pageSize, customerId, from, to, statusOrder, params, order, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, customerId = _a.customerId;
+                    _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, customerId = _a.customerId, from = _a.from, to = _a.to, statusOrder = _a.statusOrder;
                     params = {
                         pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
                         pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
                         customerId: customerId === null || customerId === void 0 ? void 0 : customerId.toString(),
+                        from: from === null || from === void 0 ? void 0 : from.toString(),
+                        to: to === null || to === void 0 ? void 0 : to.toString(),
+                        statusOrder: statusOrder === null || statusOrder === void 0 ? void 0 : statusOrder.toString(),
                     };
                     _b.label = 1;
                 case 1:
@@ -138,7 +141,7 @@ var orderController = {
             }
         });
     }); },
-    // UPDATE TOTAL ORDER WHEN USE VOUCHER 
+    // UPDATE TOTAL ORDER WHEN USE VOUCHER
     updateTotalOrderWhenUseVoucher: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, voucherId, customerId, orderId, updateTotalOrderWhenUseVoucher, error_5;
         return __generator(this, function (_b) {

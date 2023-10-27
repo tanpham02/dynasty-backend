@@ -33,6 +33,7 @@ class VoucherService extends CRUDService<Voucher> {
 
       return await newVoucher.save();
     } catch (error) {
+      console.log("🚀 createOverriding ~ error:", error)
       throw new Error(`Occur error when create ${this.nameService}`);
     }
   }

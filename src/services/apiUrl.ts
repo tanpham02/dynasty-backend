@@ -5,7 +5,7 @@ export const AUTH_URL = '/api/auth';
 export const CATEGORY_URL = '/api/category';
 
 // PRODUCT
-export const PRODUCT_URL = '/api/product';
+export const PRODUCT_URL = '/api/products';
 
 // PRODUCT VARIANT
 export const PRODUCT_VARIANT_URL = '/api/product-variant';
@@ -29,7 +29,7 @@ export const VOUCHER_URL = '/api/voucher';
 export const USER_URL = '/api/users';
 
 // CUSTOMER
-export const CUSTOMER_URL = '/api/customer';
+export const CUSTOMER_URL = '/api/customers';
 
 // CART
 export const CART_URL = '/api/cart';

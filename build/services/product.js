@@ -128,10 +128,13 @@ var ProductService = /** @class */ (function (_super) {
                         product = JSON.parse(req.body.productInfo);
                         filename = (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename;
                         destination = (_b = req.file) === null || _b === void 0 ? void 0 : _b.destination;
+                        if (filename && destination) {
+                            product.image = "".concat(APP_URL, "/").concat(destination, "/").concat(filename);
+                        }
                         _c.label = 1;
                     case 1:
                         _c.trys.push([1, 12, , 13]);
-                        newProduct = new this.model(__assign(__assign({}, product), { image: "".concat(APP_URL, "/").concat(destination, "/").concat(filename) }));
+                        newProduct = new this.model(__assign({}, product));
                         productVariantId = product.productVariantId;
                         categoryId = product.categoryId;
                         if (!productVariantId) return [3 /*break*/, 4];
@@ -194,83 +197,80 @@ var ProductService = /** @class */ (function (_super) {
                         filename = (_c = req === null || req === void 0 ? void 0 : req.file) === null || _c === void 0 ? void 0 : _c.filename;
                         destination = (_d = req === null || req === void 0 ? void 0 : req.file) === null || _d === void 0 ? void 0 : _d.destination;
                         dataUpdate = {};
-                        if (filename && destination) {
-                            dataUpdate.image = "".concat(APP_URL, "/").concat(destination, "/").concat(filename);
-                        }
                         if (Object.keys(productRequest).length > 0) {
                             dataUpdate = __assign(__assign({}, dataUpdate), productRequest);
                         }
                         _e.label = 1;
                     case 1:
-                        _e.trys.push([1, 22, , 23]);
-                        return [4 /*yield*/, this.model.findById(id)];
+                        _e.trys.push([1, 21, , 22]);
+                        if (filename && destination) {
+                            dataUpdate.image = "".concat(APP_URL, "/").concat(destination, "/").concat(filename);
+                        }
+                        return [4 /*yield*/, this.model.findOneAndUpdate({ _id: id }, dataUpdate, { new: true })];
                     case 2:
                         product = _e.sent();
-                        return [4 /*yield*/, (product === null || product === void 0 ? void 0 : product.updateOne(dataUpdate, { new: true }))];
-                    case 3:
-                        _e.sent();
                         productVariantId = dataUpdate === null || dataUpdate === void 0 ? void 0 : dataUpdate.productVariantId;
                         categoryId = dataUpdate === null || dataUpdate === void 0 ? void 0 : dataUpdate.categoryId;
                         return [4 /*yield*/, category_1.default.findOne({ 'childCategory._id': categoryId })];
-                    case 4:
+                    case 3:
                         categoryChild = _e.sent();
                         if (!(productVariantId &&
-                            new Object(product === null || product === void 0 ? void 0 : product.productVariantId).valueOf() !== productVariantId)) return [3 /*break*/, 9];
-                        _e.label = 5;
-                    case 5:
-                        _e.trys.push([5, 8, , 9]);
+                            new Object(product === null || product === void 0 ? void 0 : product.productVariantId).valueOf() !== productVariantId)) return [3 /*break*/, 8];
+                        _e.label = 4;
+                    case 4:
+                        _e.trys.push([4, 7, , 8]);
                         return [4 /*yield*/, productVariant_1.default.findByIdAndUpdate({ _id: product === null || product === void 0 ? void 0 : product.productVariantId }, {
                                 $pull: { productIds: product === null || product === void 0 ? void 0 : product._id },
                             }, { new: true })];
-                    case 6:
+                    case 5:
                         _e.sent();
                         return [4 /*yield*/, productVariant_1.default.findByIdAndUpdate({ _id: productVariantId }, {
                                 $push: { productIds: product === null || product === void 0 ? void 0 : product._id },
                             }, { new: true })];
-                    case 7:
+                    case 6:
                         _e.sent();
-                        return [3 /*break*/, 9];
-                    case 8:
+                        return [3 /*break*/, 8];
+                    case 7:
                         error_3 = _e.sent();
                         console.log(error_3);
-                        return [3 /*break*/, 9];
-                    case 9:
-                        if (!(categoryId && new Object(product === null || product === void 0 ? void 0 : product.categoryId).valueOf() !== categoryId)) return [3 /*break*/, 15];
+                        return [3 /*break*/, 8];
+                    case 8:
+                        if (!(categoryId && new Object(product === null || product === void 0 ? void 0 : product.categoryId).valueOf() !== categoryId)) return [3 /*break*/, 14];
                         console.log('category id');
-                        _e.label = 10;
-                    case 10:
-                        _e.trys.push([10, 14, , 15]);
+                        _e.label = 9;
+                    case 9:
+                        _e.trys.push([9, 13, , 14]);
                         return [4 /*yield*/, category_1.default.findByIdAndUpdate({ _id: product === null || product === void 0 ? void 0 : product.categoryId }, {
                                 $pull: { productsDTO: product === null || product === void 0 ? void 0 : product._id },
                             }, { new: true })];
-                    case 11:
+                    case 10:
                         _e.sent();
                         return [4 /*yield*/, category_1.default.findByIdAndUpdate(categoryId, {
                                 $push: { productsDTO: product === null || product === void 0 ? void 0 : product._id },
                             }, { new: true })];
+                    case 11:
+                        _e.sent();
+                        return [4 /*yield*/, category_1.default.findOneAndUpdate({
+                                'childCategory._id': product === null || product === void 0 ? void 0 : product.categoryId,
+                            }, {
+                                $pull: {
+                                    'childCategory.$.children.productsDTO': product === null || product === void 0 ? void 0 : product._id,
+                                },
+                            }, {
+                                new: true,
+                            })];
                     case 12:
                         _e.sent();
-                        return [4 /*yield*/, category_1.default.findOneAndUpdate({
-                                'childCategory._id': product === null || product === void 0 ? void 0 : product.categoryId,
-                            }, {
-                                $pull: {
-                                    'childCategory.$.children.productsDTO': product === null || product === void 0 ? void 0 : product._id,
-                                },
-                            }, {
-                                new: true,
-                            })];
+                        return [3 /*break*/, 14];
                     case 13:
-                        _e.sent();
-                        return [3 /*break*/, 15];
-                    case 14:
                         error_4 = _e.sent();
                         console.log(error_4);
-                        return [3 /*break*/, 15];
+                        return [3 /*break*/, 14];
+                    case 14:
+                        if (!(categoryChild && new Object(product === null || product === void 0 ? void 0 : product.categoryId).valueOf() !== categoryChild)) return [3 /*break*/, 20];
+                        _e.label = 15;
                     case 15:
-                        if (!(categoryChild && new Object(product === null || product === void 0 ? void 0 : product.categoryId).valueOf() !== categoryChild)) return [3 /*break*/, 21];
-                        _e.label = 16;
-                    case 16:
-                        _e.trys.push([16, 20, , 21]);
+                        _e.trys.push([15, 19, , 20]);
                         return [4 /*yield*/, category_1.default.findOneAndUpdate({
                                 'childCategory._id': product === null || product === void 0 ? void 0 : product.categoryId,
                             }, {
@@ -280,7 +280,7 @@ var ProductService = /** @class */ (function (_super) {
                             }, {
                                 new: true,
                             })];
-                    case 17:
+                    case 16:
                         _e.sent();
                         return [4 /*yield*/, category_1.default.findOneAndUpdate({
                                 'childCategory._id': categoryId,
@@ -291,24 +291,24 @@ var ProductService = /** @class */ (function (_super) {
                             }, {
                                 new: true,
                             })];
-                    case 18:
+                    case 17:
                         _e.sent();
                         return [4 /*yield*/, category_1.default.findByIdAndUpdate({ _id: product === null || product === void 0 ? void 0 : product.categoryId }, {
                                 $pull: { productsDTO: product === null || product === void 0 ? void 0 : product._id },
                             }, { new: true })];
-                    case 19:
+                    case 18:
                         _e.sent();
-                        return [3 /*break*/, 21];
-                    case 20:
+                        return [3 /*break*/, 20];
+                    case 19:
                         error_5 = _e.sent();
                         console.log(error_5);
-                        return [3 /*break*/, 21];
-                    case 21: return [2 /*return*/, { message: "Update ".concat(this.nameService, " success") }];
-                    case 22:
+                        return [3 /*break*/, 20];
+                    case 20: return [2 /*return*/, { message: "Update ".concat(this.nameService, " success") }];
+                    case 21:
                         error_6 = _e.sent();
                         console.log(error_6);
                         throw new Error("Occur error when delete ".concat(this.nameService, " with ").concat(error_6));
-                    case 23: return [2 /*return*/];
+                    case 22: return [2 /*return*/];
                 }
             });
         });

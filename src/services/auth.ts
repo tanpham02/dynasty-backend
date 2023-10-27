@@ -13,7 +13,7 @@ import JWT from '@app/middlewares/jwt';
 import User from '@app/models/user/@type';
 import { wait } from 'iter-ops';
 import CartModel from '@app/models/cart';
-
+import CustomerAddressModel from '@app/models/customerAddress';
 
 interface ErrorMessage {
   phoneNumber?: string;
@@ -84,6 +84,8 @@ const authService = {
           status: 200,
           message: 'Đăng ký thành công',
         };
+        const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
+        await newCustomerAddress.save();
         await newCart.save();
       }
 

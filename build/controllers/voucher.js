@@ -120,7 +120,9 @@ var voucherController = {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     id = req.params.id;
-                    return [4 /*yield*/, voucherService.getById(id)];
+                    return [4 /*yield*/, voucherService
+                            .getById(id)
+                            .then(function (res) { return res === null || res === void 0 ? void 0 : res.populate('listProductUsedVoucher'); })];
                 case 1:
                     voucher = _a.sent();
                     res.status(200).json(voucher);

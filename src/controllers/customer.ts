@@ -8,13 +8,13 @@ const customerService = new CustomerService(CustomerModel, 'customer');
 const customerController = {
   search: async (req: Request, res: Response) => {
     try {
-      const { pageIndex, pageSize, fullName } = req.params;
+      const { pageIndex, pageSize, fullName } = req.query;
       const params: Params = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
-        fullName: fullName,
+        fullName: fullName?.toString(),
       };
-      const result = await customerService.getPagination(params);
+      const result = await customerService.getPaginationOverriding(params);
 
       res.status(200).json(result);
     } catch (err) {

@@ -31,11 +31,17 @@ class OrderService extends CRUDService<Order> {
   // SEARCH PAGINATION
   async getPaginationOverriding(params: Params) {
     try {
-      const { pageIndex, pageSize, customerId } = params;
+      const { pageIndex, pageSize, customerId, from, to, statusOrder } = params;
 
       const filter: Filter = {};
       if (customerId) {
         filter.customerId = customerId;
+      }
+      if (from && to) {
+        filter.createdAt = { $gte: from, $lte: to };
+      }
+      if (statusOrder) {
+        filter.statusOrder = statusOrder;
       }
       const data = await this.model
         .find(filter)

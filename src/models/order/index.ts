@@ -28,6 +28,7 @@ import { CartSchema } from '../cart';
  *                 - FAIL
  *                 - QUICK_BUY
  *                 - CANCELED
+ *                 - WAITING_FOR_DELIVERING
  *              default: 'PENDING'
  *          fullName:
  *              type: string

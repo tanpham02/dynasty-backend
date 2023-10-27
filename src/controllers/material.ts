@@ -16,7 +16,7 @@ const materialController = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
       };
-      const material = await materialService.getPagination(params);
+      const material = await materialService.getPaginationOverriding(params);
       res.status(200).json(material);
     } catch (error) {
       res.status(500).json(error);
@@ -28,6 +28,17 @@ const materialController = {
     try {
       const newMaterial = await materialService.createOverriding(req);
       res.status(200).json(newMaterial);
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
+  // UPDATE MATERIAL
+  updateMaterial: async (req: Request, res: Response) => {
+    const { id } = req.params;
+    try {
+      const material = await materialService.update(id, req);
+      res.status(200).json(material);
     } catch (error) {
       res.status(500).json(error);
     }

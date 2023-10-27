@@ -14,8 +14,10 @@ var configServer = function (app) {
     app.use(express_1.default.urlencoded({ extended: true }));
     app.use((0, morgan_1.default)('dev'));
     // GET IMAGE FROM URL
-    //         URL                      folder contain image
-    app.use('/upload/img', express_1.default.static('upload/img'));
+    //         URL                                            folder contain image
+    app.use('/public/uploads/image/products', express_1.default.static('public/uploads/image/products'));
+    app.use('/public/uploads/image/users', express_1.default.static('public/uploads/image/users'));
+    app.use('/public/uploads/image/customers', express_1.default.static('public/uploads/image/customers'));
     // app.use('/static', express.static(path.join(__dirname, 'public'))) => Đi từ thư mục src vào
     // app.use('/upload/img', express.static('upload/img'));  => Đi từ thu mục cha vao
 };

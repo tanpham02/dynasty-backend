@@ -14,9 +14,9 @@ router.post('/user/login', auth_1.default.loginUser);
 // LOGIN FOR CUSTOMER
 router.post('/customer/login', auth_1.default.loginCustomer);
 // REQUEST REFRESH TOKEN FOR USER
-router.post('/user/refresh', auth_1.default.requestRefreshTokenForUser);
+router.post('/user/refresh-token', auth_1.default.requestRefreshTokenForUser);
 // REQUEST REFRESH TOKEN FOR CUSTOMER
-router.post('/customer/refresh', auth_1.default.requestRefreshTokenForCustomer);
+router.post('/customer/refresh-token', auth_1.default.requestRefreshTokenForCustomer);
 // LOGOUT
 router.post('/logout', verifyToken_1.verifyToken, auth_1.default.logout);
 exports.default = router;

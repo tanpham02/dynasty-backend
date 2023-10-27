@@ -5,7 +5,7 @@ const router = Router();
 
 /**
  * @swagger
- * '/api/customer/customer-address/find-all':
+ * '/api/customers/customer-address/find-all':
  *  get:
  *     tags: [Customer Address]
  *     summary: Find all
@@ -15,7 +15,7 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddress'
+ *                 $ref: '#/components/schema/CustomerAddressList'
  */
 
 // FIND ALL
@@ -23,7 +23,7 @@ router.get('/customer-address/find-all', customerAddressController.findAll);
 
 /**
  * @swagger
- * '/api/customer/customer-address/{customerId}':
+ * '/api/customers/customer-address/{customerId}':
  *  get:
  *     tags: [Customer Address]
  *     summary: Find by id
@@ -40,7 +40,7 @@ router.get('/customer-address/find-all', customerAddressController.findAll);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddress'
+ *                 $ref: '#/components/schema/CustomerAddressList'
  */
 
 // GET ITEM ADDRESS BY ID
@@ -48,7 +48,7 @@ router.get('/customer-address/:customerId', customerAddressController.getListAdd
 
 /**
  * @swagger
- * '/api/customer/customer-address/add':
+ * '/api/customers/customer-address/add':
  *  patch:
  *     tags: [Customer Address]
  *     summary: Add item address
@@ -63,7 +63,7 @@ router.get('/customer-address/:customerId', customerAddressController.getListAdd
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/CustomerAddressList'
+ *             $ref: '#/components/schema/CustomerAddressItem'
  *
  *     responses:
  *       200:
@@ -79,7 +79,7 @@ router.patch('/customer-address/add', customerAddressController.addAddress);
 
 /**
  * @swagger
- * '/api/customer/customer-address/{itemAddressId}':
+ * '/api/customers/customer-address/{itemAddressId}':
  *  patch:
  *     tags: [Customer Address]
  *     summary: Update item address
@@ -94,7 +94,7 @@ router.patch('/customer-address/add', customerAddressController.addAddress);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schema/CustomerAddressList'
+ *             $ref: '#/components/schema/CustomerAddressItem'
 
  *     responses:
  *       200:
@@ -102,7 +102,7 @@ router.patch('/customer-address/add', customerAddressController.addAddress);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddress'
+ *                 $ref: '#/components/schema/CustomerAddressList'
  */
 
 // UPDATE ITEM ADDRESS
@@ -110,7 +110,7 @@ router.patch('/customer-address/:itemAddressId', customerAddressController.updat
 
 /**
  * @swagger
- * '/api/customer/customer-address/{itemAddressId}':
+ * '/api/customers/customer-address/{itemAddressId}':
  *  delete:
  *     tags: [Customer Address]
  *     summary: Delete item address
@@ -127,7 +127,7 @@ router.patch('/customer-address/:itemAddressId', customerAddressController.updat
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddress'
+ *                 $ref: '#/components/schema/CustomerAddressList'
  */
 
 // DELETE ITEM ADDRESS
@@ -135,10 +135,10 @@ router.delete('/customer-address/:itemAddressId', customerAddressController.dele
 
 /**
  * @swagger
- * '/api/customer/customer-address':
+ * '/api/customers/customer-address':
  *  delete:
  *     tags: [Customer Address]
- *     summary: Delete item address
+ *     summary: Delete list address
  *     parameters:
  *       - in: query
  *         name: ids
@@ -152,7 +152,7 @@ router.delete('/customer-address/:itemAddressId', customerAddressController.dele
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddress'
+ *                 $ref: '#/components/schema/CustomerAddressList'
  */
 
 // DELETE  ADDRESS

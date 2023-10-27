@@ -1,10 +1,10 @@
 import { Model } from 'mongoose';
 import CRUDService from './crudService';
-import { CustomerAddress, CustomerAddressList } from '@app/models/customerAddress/@type';
+import { CustomerAddressItem, CustomerAddressList } from '@app/models/customerAddress/@type';
 import { Request } from 'express';
 
-class CustomerAddressService extends CRUDService<CustomerAddress> {
-  constructor(model: Model<CustomerAddress>, nameService: string) {
+class CustomerAddressService extends CRUDService<CustomerAddressList> {
+  constructor(model: Model<CustomerAddressList>, nameService: string) {
     super(model, nameService);
   }
 
@@ -27,6 +27,7 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
   }
 
   async addAddress(customerId: string | any, req: Request) {
+    console.log('req.body', req.body);
     try {
       return await this.model.findOneAndUpdate(
         { customerId: customerId },
@@ -39,7 +40,7 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
   }
 
   async updateAddress(itemAddressId: string, req: Request) {
-    const { city, district, ward, address, phoneNumber, isDefault }: CustomerAddressList = req.body;
+    const { city, district, ward, address, phoneNumber, isDefault }: CustomerAddressItem = req.body;
     const keySet = `addressList.$`;
     const dataSet: any[] = [];
 

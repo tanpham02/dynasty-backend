@@ -107,15 +107,21 @@ var OrderService = /** @class */ (function (_super) {
     // SEARCH PAGINATION
     OrderService.prototype.getPaginationOverriding = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var pageIndex, pageSize, customerId, filter, data, totalElement, totalPages, isLastPage, result, error_1;
+            var pageIndex, pageSize, customerId, from, to, statusOrder, filter, data, totalElement, totalPages, isLastPage, result, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        pageIndex = params.pageIndex, pageSize = params.pageSize, customerId = params.customerId;
+                        pageIndex = params.pageIndex, pageSize = params.pageSize, customerId = params.customerId, from = params.from, to = params.to, statusOrder = params.statusOrder;
                         filter = {};
                         if (customerId) {
                             filter.customerId = customerId;
+                        }
+                        if (from && to) {
+                            filter.createdAt = { $gte: from, $lte: to };
+                        }
+                        if (statusOrder) {
+                            filter.statusOrder = statusOrder;
                         }
                         return [4 /*yield*/, this.model
                                 .find(filter)

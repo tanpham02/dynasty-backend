@@ -90,6 +90,7 @@ var VoucherService = /** @class */ (function (_super) {
                     case 2: return [2 /*return*/, _a.sent()];
                     case 3:
                         error_1 = _a.sent();
+                        console.log("🚀 createOverriding ~ error:", error_1);
                         throw new Error("Occur error when create ".concat(this.nameService));
                     case 4: return [2 /*return*/];
                 }

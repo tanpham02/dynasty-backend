@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var user_1 = __importDefault(require("@app/controllers/user"));
 var verifyToken_1 = require("@app/middlewares/verifyToken");
+var upload_1 = require("@app/services/upload");
 var router = (0, express_1.Router)();
 /**
  * @swagger
@@ -52,9 +53,15 @@ router.get('/search', user_1.default.search);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/User'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   userInfo:
+ *                        $ref: '#/components/schema/User'
+ *                   files:
+ *                        type: string
+ *                        format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -64,7 +71,7 @@ router.get('/search', user_1.default.search);
  *                 $ref: '#/components/schema/User'
  */
 // CREATE
-router.post('/create', user_1.default.create);
+router.post('/create', upload_1.uploadFileUser, user_1.default.create);
 /**
  * @swagger
  * '/api/users/{id}':
@@ -80,9 +87,15 @@ router.post('/create', user_1.default.create);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/User'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   userInfo:
+ *                        $ref: '#/components/schema/User'
+ *                   files:
+ *                        type: string
+ *                        format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -92,7 +105,7 @@ router.post('/create', user_1.default.create);
  *                 $ref: '#/components/schema/User'
  */
 // UPDATE
-router.patch('/:id', user_1.default.update);
+router.patch('/:id', upload_1.uploadFileUser, user_1.default.update);
 /**
  * @swagger
  * '/api/users/{id}':

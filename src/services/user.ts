@@ -5,6 +5,8 @@ import { Request } from 'express';
 import { genSalt, hash } from 'bcrypt';
 import { SALT } from '@app/constants';
 import { Filter, Params } from '@app/types';
+import { configApp } from '@app/configs';
+const { APP_URL } = configApp();
 
 class UserService extends CRUDService<User> {
   constructor(model: Model<User>, nameService: string) {
@@ -26,8 +28,6 @@ class UserService extends CRUDService<User> {
         districtId,
         wardId,
         fullName,
-        from,
-        to,
         role,
       } = params;
 
@@ -102,12 +102,22 @@ class UserService extends CRUDService<User> {
 
   // CREATE
   async createOverriding(req: Request) {
-    const { password, ...user }: User = req.body;
+    const { password, ...user }: User = JSON.parse(req.body.userInfo);
+    const filename = req.file?.filename;
+    const destination = req.file?.destination;
+
+    if (filename && destination) {
+      user.image = `${APP_URL}/${destination}/${filename}`;
+    }
+
     try {
       if (password) {
         const salt = await genSalt(SALT);
         const passwordAfterHash = await hash(password, salt);
-        const newUser = new this.model({ ...user, password: passwordAfterHash });
+        const newUser = new this.model({
+          ...user,
+          password: passwordAfterHash,
+        });
         await newUser.save();
 
         const { password: pw, ...restUser } = newUser.toObject();
@@ -122,15 +132,28 @@ class UserService extends CRUDService<User> {
 
   // UPDATE
   async updateOverriding(id: string, req: Request) {
-    const dataUpdate: User = req.body;
-    const { password } = dataUpdate;
+    const dataUpdate: User = req.body?.userInfo ? JSON.parse(req.body?.userInfo) : {};
+    const filename = req?.file?.filename;
+    const destination = req?.file?.destination;
+
+    let newDataUpdate: any = {};
+
+    if (Object.keys(dataUpdate).length) {
+      newDataUpdate = {
+        ...dataUpdate,
+      };
+    }
+    if (filename && destination) {
+      newDataUpdate.image = `${APP_URL}/${destination}/${filename}`;
+    }
+
     try {
-      if (password) {
+      if (newDataUpdate?.password) {
         const salt = await genSalt(SALT);
-        const passwordAfterHash = await hash(password, salt);
-        dataUpdate.password = passwordAfterHash;
+        const passwordAfterHash = await hash(newDataUpdate?.password, salt);
+        newDataUpdate.password = passwordAfterHash;
       }
-      await this.model.findByIdAndUpdate(id, dataUpdate, { new: true });
+      await this.model.findByIdAndUpdate(id, newDataUpdate, { new: true });
 
       return { message: `Update ${this.nameService} success` };
     } catch (error) {

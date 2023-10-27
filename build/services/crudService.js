@@ -105,6 +105,9 @@ var CRUDService = /** @class */ (function () {
                         if (role) {
                             filter.role = role;
                         }
+                        if (from && to) {
+                            filter.createdAt = { $gte: from, $lte: to };
+                        }
                         return [4 /*yield*/, this.model
                                 .find(filter)
                                 .limit(pageSize)

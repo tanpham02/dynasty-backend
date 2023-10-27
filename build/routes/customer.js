@@ -8,7 +8,7 @@ var express_1 = require("express");
 var router = (0, express_1.Router)();
 /**
  * @swagger
- * '/api/customer/search':
+ * '/api/customers/search':
  *  get:
  *     tags: [Customer]
  *     summary: Search pagination
@@ -38,7 +38,7 @@ var router = (0, express_1.Router)();
 router.get('/search', customer_1.default.search);
 /**
  * @swagger
- * '/api/customer/{id}':
+ * '/api/customers/{id}':
  *  get:
  *     tags: [Customer]
  *     summary: Find by id
@@ -61,7 +61,7 @@ router.get('/search', customer_1.default.search);
 router.get('/:id', customer_1.default.getById);
 /**
  * @swagger
- * '/api/customer/{id}':
+ * '/api/customers/{id}':
  *  patch:
  *     tags: [Customer]
  *     summary: User customer
@@ -90,7 +90,7 @@ router.get('/:id', customer_1.default.getById);
 router.patch('/:id', customer_1.default.update);
 /**
  * @swagger
- * '/api/customer':
+ * '/api/customers':
  *  delete:
  *     tags: [Customer]
  *     summary: Delete customer
