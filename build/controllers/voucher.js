@@ -39,6 +39,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var exception_1 = require("@app/exception");
+var type_1 = require("@app/exception/type");
 var voucher_1 = __importDefault(require("@app/models/voucher"));
 var voucher_2 = __importDefault(require("@app/services/voucher"));
 var voucherService = new voucher_2.default(voucher_1.default, 'voucher');
@@ -61,11 +63,11 @@ var voucherController = {
                     return [4 /*yield*/, voucherService.getPagination(params)];
                 case 2:
                     voucher = _b.sent();
-                    res.status(200).json(voucher);
+                    res.status(type_1.HttpStatusCode.OK).json(voucher);
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _b.sent();
-                    res.status(500).json(error_1);
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(error_1.message);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -73,19 +75,20 @@ var voucherController = {
     }); },
     // CREATE VOUCHER
     create: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var voucher, error_2;
+        var result, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, voucherService.createOverriding(req)];
                 case 1:
-                    voucher = _a.sent();
-                    res.status(200).json(voucher);
+                    result = _a.sent();
+                    res.status(type_1.HttpStatusCode.OK).json(result);
                     return [3 /*break*/, 3];
                 case 2:
                     error_2 = _a.sent();
-                    res.status(500).json(error_2);
+                    console.log('🚀 ~ file: voucher.ts:33 ~ create: ~ error:', error_2);
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -93,7 +96,7 @@ var voucherController = {
     }); },
     // UPDATE VOUCHER
     update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, voucher, error_3;
+        var id, message, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -101,12 +104,15 @@ var voucherController = {
                     id = req.params.id;
                     return [4 /*yield*/, voucherService.update(id, req)];
                 case 1:
-                    voucher = _a.sent();
-                    res.status(200).json(voucher);
+                    message = (_a.sent()).message;
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 3];
                 case 2:
                     error_3 = _a.sent();
-                    res.status(500).json(error_3);
+                    if (error_3 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_3.status).json(error_3.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json((error_3 === null || error_3 === void 0 ? void 0 : error_3.message) || type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -125,11 +131,14 @@ var voucherController = {
                             .then(function (res) { return res === null || res === void 0 ? void 0 : res.populate('listProductUsedVoucher'); })];
                 case 1:
                     voucher = _a.sent();
-                    res.status(200).json(voucher);
+                    res.status(type_1.HttpStatusCode.OK).json(voucher);
                     return [3 /*break*/, 3];
                 case 2:
                     error_4 = _a.sent();
-                    res.status(500).json(error_4);
+                    if (error_4 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_4.status).json(error_4.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -146,11 +155,14 @@ var voucherController = {
                     return [4 /*yield*/, voucherService.delete(ids)];
                 case 1:
                     message = (_a.sent()).message;
-                    res.status(200).json(message);
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 3];
                 case 2:
                     error_5 = _a.sent();
-                    res.status(500).json(error_5);
+                    if (error_5 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_5.status).json(error_5.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

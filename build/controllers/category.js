@@ -45,37 +45,29 @@ var categoryService = new category_2.default(category_1.default, 'category');
 var categoryController = {
     // SEARCH PAGINATION CATEGORY
     search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, pageIndex, pageSize, name, comboPromotionsId, params, category, error_1;
+        var _a, pageIndex, pageSize, name, comboPromotionsId, params;
         return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, name = _a.name, comboPromotionsId = _a.comboPromotionsId;
-                    params = {
-                        pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
-                        pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
-                        name: name === null || name === void 0 ? void 0 : name.toString(),
-                        comboPromotionsId: comboPromotionsId === null || comboPromotionsId === void 0 ? void 0 : comboPromotionsId.toString(),
-                    };
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, categoryService.getPagination(params)];
-                case 2:
-                    category = _b.sent();
-                    res.status(200).json(category);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _b.sent();
-                    console.log(error_1);
-                    res.status(500).json(error_1);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+            _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, name = _a.name, comboPromotionsId = _a.comboPromotionsId;
+            params = {
+                pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
+                pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
+                name: name === null || name === void 0 ? void 0 : name.toString(),
+                comboPromotionsId: comboPromotionsId === null || comboPromotionsId === void 0 ? void 0 : comboPromotionsId.toString(),
+            };
+            try {
+                //const category = await categoryService.getPagination(params);
+                //res.status(200).json(category);
             }
+            catch (error) {
+                console.log(error);
+                res.status(500).json(error);
+            }
+            return [2 /*return*/];
         });
     }); },
     // GET BY ID CATEGORY
     getCategoryById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, category, error_2;
+        var id, category, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -92,8 +84,8 @@ var categoryController = {
                     res.status(200).json(category);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_2 = _a.sent();
-                    res.status(500).json(error_2);
+                    error_1 = _a.sent();
+                    res.status(500).json(error_1);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -101,7 +93,7 @@ var categoryController = {
     }); },
     // GET CHILDREN CATEGORY BY ID
     getChildrenCategoryById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var childCategoryId, childrenCategory, error_3;
+        var childCategoryId, childrenCategory, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -118,8 +110,8 @@ var categoryController = {
                     res.status(200).json(childrenCategory);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_3 = _a.sent();
-                    res.status(500).json(error_3);
+                    error_2 = _a.sent();
+                    res.status(500).json(error_2);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -127,7 +119,7 @@ var categoryController = {
     }); },
     // UPDATE CHILDREN CATEGORY
     updateChildrenCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var childCategoryId, childCategory, error_4;
+        var childCategoryId, childCategory, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -141,8 +133,8 @@ var categoryController = {
                     res.status(200).json(childCategory);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_4 = _a.sent();
-                    res.status(500).json(error_4);
+                    error_3 = _a.sent();
+                    res.status(500).json(error_3);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -191,7 +183,7 @@ var categoryController = {
     }); },
     // CREATE CATEGORY
     createCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var category, error_5;
+        var category, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -202,8 +194,8 @@ var categoryController = {
                     res.status(200).json(category);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_5 = _a.sent();
-                    res.status(500).json(error_5);
+                    error_4 = _a.sent();
+                    res.status(500).json(error_4);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -211,7 +203,7 @@ var categoryController = {
     }); },
     // UPDATE CATEGORY
     updateCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, category, error_6;
+        var id, category, error_5;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -225,8 +217,8 @@ var categoryController = {
                     res.status(200).json(category);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_6 = _a.sent();
-                    res.status(500).json(error_6);
+                    error_5 = _a.sent();
+                    res.status(500).json(error_5);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -234,7 +226,7 @@ var categoryController = {
     }); },
     // DELETE CATEGORY
     deleteCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var ids, message, error_7;
+        var ids, message, error_6;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -248,8 +240,8 @@ var categoryController = {
                     res.status(200).json(message);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_7 = _a.sent();
-                    res.status(500).json(error_7);
+                    error_6 = _a.sent();
+                    res.status(500).json(error_6);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -257,7 +249,7 @@ var categoryController = {
     }); },
     // SEARCH PAGINATION TO SHOW (PRODUCT)
     searchPaginationShowClient: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, _a, pageIndex, pageSize, resFromServer, error_8;
+        var id, _a, pageIndex, pageSize, resFromServer, error_7;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -270,8 +262,8 @@ var categoryController = {
                     res.status(200).json(resFromServer);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_8 = _b.sent();
-                    res.status(500).json(error_8);
+                    error_7 = _b.sent();
+                    res.status(500).json(error_7);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

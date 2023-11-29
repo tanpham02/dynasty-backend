@@ -74,15 +74,15 @@ var MaterialService = /** @class */ (function (_super) {
     // SEARCH PAGINATION
     MaterialService.prototype.getPaginationOverriding = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var pageIndex, pageSize, name_1, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, from, to, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result, error_1;
+            var pageIndex, pageSize, name, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, from, to, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result, error_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        pageIndex = params.pageIndex, pageSize = params.pageSize, name_1 = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, from = params.from, to = params.to, role = params.role;
+                        pageIndex = params.pageIndex, pageSize = params.pageSize, name = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, from = params.from, to = params.to, role = params.role;
                         filter = {};
-                        if (name_1) {
-                            patternWithName = { $regex: new RegExp(name_1, 'gi') };
+                        if (name) {
+                            patternWithName = { $regex: new RegExp(name, 'gi') };
                             filter.name = patternWithName;
                         }
                         if (productId) {

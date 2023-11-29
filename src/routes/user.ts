@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import userController from '@app/controllers/user';
-import { verifyToken, verifyTokenAndAuthenRole } from '@app/middlewares/verifyToken';
+import { verifyTokenAndAuthenRole } from '@app/middlewares/verifyToken';
 import { uploadFileUser } from '@app/services/upload';
 
 const router = Router();

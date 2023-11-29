@@ -49,6 +49,6 @@ router.get('/find', configStoreController.getAll);
  */
 
 // UPDATE
-router.patch('/:id', configStoreController.updateOverriding);
+router.patch('/:id', configStoreController.update);
 
 export default router;

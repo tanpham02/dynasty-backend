@@ -45,36 +45,28 @@ var comboService = new comboPromotions_2.default(comboPromotions_1.default, 'com
 var comboPromotionsController = {
     // SEARCH PAGINATION COMBO PROMOTIONS
     search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, pageIndex, pageSize, name, categoryId, params, comboPromotions, error_1;
+        var _a, pageIndex, pageSize, name, categoryId, params;
         return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, name = _a.name, categoryId = _a.categoryId;
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    params = {
-                        pageIndex: pageIndex ? Number(pageIndex) : 0,
-                        pageSize: pageSize ? Number(pageSize) : 10,
-                        name: name,
-                        categoryId: categoryId === null || categoryId === void 0 ? void 0 : categoryId.toString(),
-                    };
-                    return [4 /*yield*/, comboService.getPagination(params)];
-                case 2:
-                    comboPromotions = _b.sent();
-                    res.status(200).json(comboPromotions);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _b.sent();
-                    res.status(500).json(error_1);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+            _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, name = _a.name, categoryId = _a.categoryId;
+            try {
+                params = {
+                    pageIndex: pageIndex ? Number(pageIndex) : 0,
+                    pageSize: pageSize ? Number(pageSize) : 10,
+                    name: name,
+                    categoryId: categoryId === null || categoryId === void 0 ? void 0 : categoryId.toString(),
+                };
+                //   const comboPromotions = await comboService.getPagination(params);
+                //   res.status(200).json(comboPromotions);
             }
+            catch (error) {
+                res.status(500).json(error);
+            }
+            return [2 /*return*/];
         });
     }); },
     // CREATE COMBO PROMOTIONS
     create: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var comboPromotions, error_2;
+        var comboPromotions, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -85,8 +77,8 @@ var comboPromotionsController = {
                     res.status(200).json(comboPromotions);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_2 = _a.sent();
-                    res.status(500).json(error_2);
+                    error_1 = _a.sent();
+                    res.status(500).json(error_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -94,56 +86,33 @@ var comboPromotionsController = {
     }); },
     // UPDATE COMBO PROMOTIONS
     update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, comboPromotions, error_3;
+        var id;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, comboService.update(id, req)];
-                case 2:
-                    comboPromotions = _a.sent();
-                    res.status(200).json(comboPromotions);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_3 = _a.sent();
-                    res.status(500).json(error_3);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
+            id = req.params.id;
+            return [2 /*return*/];
         });
     }); },
     // GET COMBO PROMOTIONS BY ID
     getById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, comboPromotions, error_4;
+        var id;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, comboService.getById(id)];
-                case 2:
-                    comboPromotions = _a.sent();
-                    if (!comboPromotions) {
-                        return [2 /*return*/, res.status(404).json("Not found combo promotion")];
-                    }
-                    res.status(200).json(comboPromotions);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_4 = _a.sent();
-                    res.status(500).json(error_4);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+            id = req.params.id;
+            try {
+                //   const comboPromotions = await comboService.getById(id);
+                //   if (!comboPromotions) {
+                //     return res.status(404).json(`Not found combo promotion`);
+                //   }
+                //   res.status(200).json(comboPromotions);
             }
+            catch (error) {
+                res.status(500).json(error);
+            }
+            return [2 /*return*/];
         });
     }); },
     // DELETE COMBO PROMOTIONS
     delete: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var ids, message, error_5;
+        var ids, message, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -157,8 +126,8 @@ var comboPromotionsController = {
                     res.status(200).json(message);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_5 = _a.sent();
-                    res.status(500).json(error_5);
+                    error_2 = _a.sent();
+                    res.status(500).json(error_2);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

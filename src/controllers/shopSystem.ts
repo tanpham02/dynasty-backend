@@ -1,3 +1,5 @@
+import { Exception } from '@app/exception';
+import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import ShopSystemModel from '@app/models/shopSystem';
 import ShopSystemClass from '@app/services/shopSystem';
 import { Params } from '@app/types';
@@ -18,9 +20,9 @@ const shopSystemController = {
         wardId: Number(wardId),
       };
       const shopSystem = await ShopSystemService.getPagination(params);
-      res.status(200).json(shopSystem);
-    } catch (error) {
-      res.status(500).json(error);
+      res.status(HttpStatusCode.OK).json(shopSystem);
+    } catch (error: any) {
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error.message);
     }
   },
 
@@ -28,9 +30,10 @@ const shopSystemController = {
   create: async (req: Request, res: Response) => {
     try {
       const shopSystem = await ShopSystemService.create(req);
-      res.status(200).json(shopSystem);
+      res.status(HttpStatusCode.OK).json(shopSystem);
     } catch (error) {
-      res.status(500).json(error);
+      console.log('🚀 ~ file: shopSystem.ts:34 ~ create: ~ error:', error);
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
@@ -38,10 +41,13 @@ const shopSystemController = {
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const shopSystem = await ShopSystemService.update(id, req);
-      res.status(200).json(shopSystem);
-    } catch (error) {
-      res.status(500).json(error);
+      const { message } = await ShopSystemService.update(id, req);
+      res.status(HttpStatusCode.OK).json(message);
+    } catch (error: any) {
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message || INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
@@ -50,12 +56,12 @@ const shopSystemController = {
     const { id } = req.params;
     try {
       const shopSystem = await ShopSystemService.getById(id);
-      if (!shopSystem) {
-        return res.status(404).json({ message: 'Shop system not found.' });
-      }
-      res.status(200).json(shopSystem);
+      res.status(HttpStatusCode.OK).json(shopSystem);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
@@ -65,9 +71,13 @@ const shopSystemController = {
     console.log('🚀 ids:', ids);
     try {
       const { message } = await ShopSystemService.delete(ids);
-      res.status(200).json(message);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      res.status(500).json(error);
+      console.log('🚀 ~ file: shopSystem.ts:76 ~ delete: ~ error:', error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 };

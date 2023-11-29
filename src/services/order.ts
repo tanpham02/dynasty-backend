@@ -2,7 +2,7 @@ import { Order, StatusOrder } from '@app/models/order/@type';
 import CRUDService from './crudService';
 import { Model } from 'mongoose';
 import { Filter, Params } from '@app/types';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import VoucherModel from '@app/models/voucher';
 import CartModel from '@app/models/cart';
 import CartService from './cart';
@@ -68,7 +68,7 @@ class OrderService extends CRUDService<Order> {
   }
 
   // CHECKOUT
-  async checkout(req: Request) {
+  async checkout(req: Request, res: Response) {
     const customerId = req?.body?.customerId;
     let newData = { ...req.body };
     try {
@@ -89,10 +89,10 @@ class OrderService extends CRUDService<Order> {
       }
 
       const newOrder = new this.model(newData);
-      const customer = await customerService.getById(customerId);
-      if (customer) {
-        await customer?.updateOne({ $push: { orderIds: newOrder._id } });
-      }
+      //   const customer = await customerService.getById(customerId);
+      //   if (customer) {
+      //     await customer?.updateOne({ $push: { orderIds: newOrder._id } });
+      //   }
       await newOrder.save();
       return newOrder;
     } catch (error) {
@@ -101,7 +101,7 @@ class OrderService extends CRUDService<Order> {
   }
 
   // QUICK BUY
-  async quickBuy(req: Request) {
+  async quickBuy(req: Request, res: Response) {
     try {
       const productIdFromCart = req?.body?.productFromCart?.products;
 

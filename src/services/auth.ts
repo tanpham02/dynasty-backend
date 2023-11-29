@@ -1,9 +1,7 @@
 import { configApp } from '@app/configs';
 import UserModel from '@app/models/user';
 import { compare } from 'bcrypt';
-import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import jwt, { TokenI } from '@app/middlewares/jwt';
 import { MODE, SALT } from '@app/constants';
 import { verify } from 'jsonwebtoken';
 import { genSalt, hash } from 'bcrypt';
@@ -11,131 +9,88 @@ import CustomerModel from '@app/models/customer';
 import { Customer } from '@app/models/customer/@type';
 import JWT from '@app/middlewares/jwt';
 import User from '@app/models/user/@type';
-import { wait } from 'iter-ops';
 import CartModel from '@app/models/cart';
 import CustomerAddressModel from '@app/models/customerAddress';
-
-interface ErrorMessage {
-  phoneNumber?: string;
-  email?: string;
-}
-
-interface ResponseI {
-  status: number;
-  errors?: ErrorMessage;
-  message?: string;
-}
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
 
 const { jwtRefreshKey } = configApp();
-
-interface ResponseResultI {
-  status: number;
-  data: {
-    message?: string;
-    accessToken?: string;
-  };
-}
-
-const jwtUser = new JWT<User>();
-const jwtCustomer = new JWT<Customer>();
 
 const authService = {
   // SIGNUP CUSTOMER
   signup: async (req: Request, res: Response) => {
     const { password, ...customerBody }: Customer = req.body;
-    let errors: ErrorMessage = {};
-    let response: ResponseI = {
-      status: -1000,
-    };
-    try {
-      const customerExists = await CustomerModel.findOne({
-        $or: [
-          {
-            phoneNumber: customerBody.phoneNumber,
-          },
-          {
-            email: customerBody.email,
-          },
-        ],
-      });
+    const existCustomer = await CustomerModel.findOne({
+      $or: [
+        {
+          phoneNumber: customerBody.phoneNumber,
+        },
+        {
+          email: customerBody.email,
+        },
+      ],
+    });
 
-      if (customerExists) {
-        if (customerExists.phoneNumber === customerBody.phoneNumber) {
-          errors.phoneNumber = 'Phone number already exists';
-        }
-        if (customerExists.email === customerBody.email) {
-          errors.email = 'Email already exists';
-        }
-        response = {
-          status: 409,
-          errors,
-        };
-        return response;
+    if (existCustomer) {
+      if (existCustomer.phoneNumber === customerBody.phoneNumber) {
+        const exception = new Exception(HttpStatusCode.CONFLICT, 'PhoneNumber already exist');
+        throw exception;
       }
-      if (password) {
-        const salt = await genSalt(SALT);
-        const passwordAfterHash = await hash(password, salt);
-        const newCustomer = new CustomerModel({ ...customerBody, password: passwordAfterHash });
-        await newCustomer.save();
-
-        const newCart = new CartModel({ customerId: newCustomer._id });
-
-        response = {
-          status: 200,
-          message: 'Đăng ký thành công',
-        };
-        const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
-        await newCustomerAddress.save();
-        await newCart.save();
+      if (existCustomer.email === customerBody.email) {
+        const exception = new Exception(HttpStatusCode.CONFLICT, 'Email already exists');
+        throw exception;
       }
-
-      return response;
-    } catch (error) {
-      throw new Error(`${error}`);
     }
+    if (password) {
+      const salt = await genSalt(SALT);
+      const passwordAfterHash = await hash(password, salt);
+      const newCustomer = new CustomerModel({ ...customerBody, password: passwordAfterHash });
+
+      await newCustomer.save();
+
+      const newCart = new CartModel({ customerId: newCustomer._id });
+
+      const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
+      await newCustomerAddress.save();
+      await newCart.save();
+    }
+
+    return { message: 'Đăng ký thành công' };
   },
 
   // LOGIN FOR USER
   loginUser: async (req: Request, res: Response) => {
     const { username, password }: User = req.body;
+    const user = await UserModel.findOne({ username: username });
 
-    try {
-      const user = await UserModel.findOne({ username: username });
+    if (!user) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'username no exist');
+      throw exception;
+    }
+    if (password && user?.password) {
+      const validPassword = await compare(password, user?.password);
 
-      if (!user) {
+      if (!validPassword) {
+        const exception = new Exception(HttpStatusCode.UN_AUTHORIZED, 'Wrong password');
+        throw exception;
+      }
+
+      if (user && validPassword) {
+        const userJwt = new JWT(user._id, user.role);
+        const accessToken = userJwt.generateAccessToken();
+        const refreshToken = userJwt.generateRefreshToken();
+        res.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === MODE.PRODUCTION, // should turn on when run on environment production
+          sameSite: true,
+        });
+        const { password, ...remainingUser } = user.toObject();
         return {
-          status: 404,
-          message: 'Not found user',
+          user: remainingUser,
+          accessToken,
+          refreshToken, // run on environment development
         };
       }
-      if (password && user?.password) {
-        const validPassword = await compare(password, user?.password);
-
-        if (!validPassword) {
-          return { status: 401, message: 'Wrong password' };
-        }
-
-        if (user && validPassword) {
-          const accessToken = jwtUser.generateAccessToken(user);
-          const refreshToken = jwtUser.generateRefreshToken(user);
-          res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === MODE.PRODUCTION, // should turn on when run on environment production
-            sameSite: true,
-          });
-          const { password, ...remainingUser } = user.toObject();
-          return {
-            status: 200,
-            data: {
-              user: remainingUser,
-              accessToken,
-              refreshToken, // run on environment development
-            },
-          };
-        }
-      }
-    } catch (error) {
-      throw new Error('Occur error when login');
     }
   },
 
@@ -143,119 +98,95 @@ const authService = {
   loginCustomer: async (req: Request, res: Response) => {
     const { phoneNumber, password }: Customer = req.body;
 
-    try {
-      const customer = await CustomerModel.findOne({ phoneNumber: phoneNumber });
+    const customer = await CustomerModel.findOne({ phoneNumber: phoneNumber });
 
-      if (!customer) {
+    if (!customer) {
+      const exception = new Exception(
+        HttpStatusCode.NOT_FOUND,
+        'Not found customer with this phone number',
+      );
+      throw exception;
+    }
+    if (password && customer?.password) {
+      const validPassword = await compare(password, customer?.password);
+
+      if (!validPassword) {
+        const exception = new Exception(HttpStatusCode.UN_AUTHORIZED, 'Wrong password');
+        throw exception;
+      }
+
+      if (customer && validPassword) {
+        const customerJwt = new JWT(customer._id);
+        const accessToken = customerJwt.generateAccessToken();
+        const refreshToken = customerJwt.generateRefreshToken();
+        res.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === MODE.PRODUCTION, // should turn on when run on environment production
+          sameSite: true,
+        });
+        const { password, ...remainingCustomer } = customer.toObject();
         return {
-          status: 404,
-          message: 'Not found customer with this phone number',
+          customer: remainingCustomer,
+          accessToken,
+          refreshToken, // run on environment development
         };
       }
-      if (password && customer?.password) {
-        const validPassword = await compare(password, customer?.password);
-
-        if (!validPassword) {
-          return { status: 401, message: 'Wrong password' };
-        }
-
-        if (customer && validPassword) {
-          const accessToken = jwtCustomer.generateAccessToken(customer);
-          const refreshToken = jwtCustomer.generateRefreshToken(customer);
-          res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === MODE.PRODUCTION, // should turn on when run on environment production
-            sameSite: true,
-          });
-          const { password, ...remainingCustomer } = customer.toObject();
-          return {
-            status: 200,
-            data: {
-              customer: remainingCustomer,
-              accessToken,
-              refreshToken, // run on environment development
-            },
-          };
-        }
-      }
-    } catch (error) {
-      throw new Error('Occur error when login');
     }
   },
 
   // REQUEST REFRESH TOKEN FOR USER
   requestRefreshTokenForUser: async (req: Request, res: Response) => {
-    try {
-      const refreshTokenCookie = req?.headers?.cookie?.split('=')?.[1] ?? '';
+    const refreshTokenCookie = req.cookies?.refreshToken || '';
 
-      let responseResult: ResponseResultI = {
-        status: -100,
-        data: {
-          message: '',
-          accessToken: '',
-        },
-      };
+    if (!refreshTokenCookie) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, "You're not authenticated");
+      throw exception;
+    }
 
-      if (!refreshTokenCookie) {
-        responseResult = {
-          status: 401,
-          data: {
-            message: "You're not authenticated",
-          },
-        };
+    const newAccessTk = verify(refreshTokenCookie, jwtRefreshKey || '', (err: any, _user: any) => {
+      if (err) {
+        console.log('🚀 ~ file: auth.ts:173 ~ verify ~ err:', err);
+        const exception = new Exception(req?.statusCode || 0, err?.message);
+        throw exception;
       }
+      const userJwt = new JWT(_user._id, _user.role);
+      const newAccessToken = userJwt.generateAccessToken();
+      const newRefreshToken = userJwt.generateRefreshToken();
 
-      verify(refreshTokenCookie, jwtRefreshKey || '', (err, user) => {
-        if (err) console.log(err);
-        const newAccessToken = jwtUser.generateAccessToken(user as User);
-        const newRefreshToken = jwtUser.generateRefreshToken(user as User);
-
-        res.cookie('refreshToken', newRefreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === MODE.PRODUCTION,
-          sameSite: true,
-        });
-
-        responseResult = {
-          status: 200,
-          data: {
-            accessToken: newAccessToken,
-          },
-        };
+      res.cookie('refreshToken', newRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === MODE.PRODUCTION,
+        sameSite: true,
       });
 
-      return responseResult;
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
+      return newAccessToken;
+    });
+    return {
+      accessToken: newAccessTk,
+    };
   },
 
   // REQUEST REFRESH TOKEN FOR CUSTOMER
   requestRefreshTokenForCustomer: async (req: Request, res: Response) => {
-    try {
-      const refreshTokenCookie = req?.headers?.cookie?.split('=')?.[1] ?? '';
+    const refreshTokenCookie = req.cookies?.refreshToken || '';
 
-      let responseResult: ResponseResultI = {
-        status: -100,
-        data: {
-          message: '',
-          accessToken: '',
-        },
-      };
+    if (!refreshTokenCookie) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, "You're not authenticated");
+      throw exception;
+    }
 
-      if (!refreshTokenCookie) {
-        responseResult = {
-          status: 401,
-          data: {
-            message: "You're not authenticated",
-          },
-        };
-      }
-
-      verify(refreshTokenCookie, jwtRefreshKey || '', (err, customer) => {
-        if (err) console.log(err);
-        const newAccessToken = jwtCustomer.generateAccessToken(customer as Customer);
-        const newRefreshToken = jwtCustomer.generateRefreshToken(customer as Customer);
+    const newAccessTk = verify(
+      refreshTokenCookie,
+      jwtRefreshKey || '',
+      (err: any, _customer: any) => {
+        if (err) {
+          console.log('🚀 ~ file: auth.ts:173 ~ verify ~ err:', err);
+          const exception = new Exception(req?.statusCode || 0, err?.message);
+          throw exception;
+        }
+        const customerJwt = new JWT(_customer._id);
+        const newAccessToken = customerJwt.generateAccessToken();
+        const newRefreshToken = customerJwt.generateRefreshToken();
 
         res.cookie('refreshToken', newRefreshToken, {
           httpOnly: true,
@@ -263,22 +194,15 @@ const authService = {
           sameSite: true,
         });
 
-        responseResult = {
-          status: 200,
-          data: {
-            accessToken: newAccessToken,
-          },
-        };
-      });
+        return newAccessToken;
+      },
+    );
 
-      return responseResult;
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
+    return { accessToken: newAccessTk };
   },
 
   // LOGOUT
-  logout: async (req: Request, res: Response) => {
+  logout: async (res: Response) => {
     res.clearCookie('refreshToken');
 
     return { message: 'Logout success' };

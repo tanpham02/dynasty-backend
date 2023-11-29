@@ -32,7 +32,7 @@ const orderController = {
   // QUICK BUY
   quickBuy: async (req: Request, res: Response) => {
     try {
-      const orderWhenQuickBuy = await orderService.quickBuy(req);
+      const orderWhenQuickBuy = await orderService.quickBuy(req, res);
       res.status(200).json(orderWhenQuickBuy);
     } catch (error) {
       res.status(500).json(error);
@@ -57,7 +57,7 @@ const orderController = {
   // CHECKOUT
   checkout: async (req: Request, res: Response) => {
     try {
-      const newOrder = await orderService.checkout(req);
+      const newOrder = await orderService.checkout(req, res);
       res.status(200).json(newOrder);
     } catch (error) {
       res.status(500).json(error);

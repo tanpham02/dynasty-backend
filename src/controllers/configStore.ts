@@ -1,3 +1,5 @@
+import { Exception } from '@app/exception';
+import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import ConfigStoreModel from '@app/models/configStore';
 import ConfigStoreService from '@app/services/configStore';
 import { Request, Response } from 'express';
@@ -5,23 +7,25 @@ import { Request, Response } from 'express';
 const cfStoreService = new ConfigStoreService(ConfigStoreModel, 'config store');
 
 const configStoreController = {
-  getAll: async (req: Request, res: Response) => {
+  getAll: async (res: Response) => {
     const result = await cfStoreService.findAll();
-    res.status(200).json(result);
+    res.status(HttpStatusCode.OK).json(result);
     try {
-    } catch (error) {
-      console.log('error', error);
-      res.status(500).json(error);
+    } catch (error: any) {
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error.message);
     }
   },
 
-  updateOverriding: async (req: Request, res: Response) => {
+  update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const configStore = await cfStoreService.update(id, req);
-      res.status(200).json(configStore);
-    } catch (error) {
-      res.status(500).json(error);
+      const { message } = await cfStoreService.update(id, req);
+      res.status(HttpStatusCode.OK).json(message);
+    } catch (error: any) {
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message || INTERNAL_SERVER_ERROR_MSG);
     }
   },
 };

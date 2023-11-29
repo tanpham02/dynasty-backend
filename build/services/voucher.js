@@ -64,35 +64,27 @@ var VoucherService = /** @class */ (function (_super) {
     // CREATE VOUCHER
     VoucherService.prototype.createOverriding = function (req) {
         return __awaiter(this, void 0, void 0, function () {
-            var currentDate, dataRequest, startDateRequest, endDateRequest, startDate, endDate, newVoucher, error_1;
+            var currentDateTime, dataRequest, startDateRequest, endDateRequest, startDate, endDate, newVoucher;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        currentDate = new Date().getTime();
+                        currentDateTime = new Date().getTime();
                         dataRequest = req.body;
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
                         startDateRequest = dataRequest.startDate, endDateRequest = dataRequest.endDate;
                         startDate = new Date(startDateRequest).getTime();
                         endDate = new Date(endDateRequest).getTime();
-                        if (startDate < currentDate && endDate < currentDate) {
+                        if (startDate < currentDateTime && endDate < currentDateTime) {
                             dataRequest.status = constants_1.Status.IN_ACTIVE;
                         }
-                        if (startDate <= currentDate && endDate > currentDate) {
+                        if (startDate <= currentDateTime && endDate > currentDateTime) {
                             dataRequest.status = constants_1.Status.ACTIVE;
                         }
-                        if (startDate > currentDate && endDate > currentDate) {
+                        if (startDate > currentDateTime && endDate > currentDateTime) {
                             dataRequest.status = constants_1.Status.IN_COMING;
                         }
                         newVoucher = new this.model(dataRequest);
                         return [4 /*yield*/, newVoucher.save()];
-                    case 2: return [2 /*return*/, _a.sent()];
-                    case 3:
-                        error_1 = _a.sent();
-                        console.log("🚀 createOverriding ~ error:", error_1);
-                        throw new Error("Occur error when create ".concat(this.nameService));
-                    case 4: return [2 /*return*/];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
             });
         });

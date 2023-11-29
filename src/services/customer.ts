@@ -1,99 +1,52 @@
 import { Model } from 'mongoose';
 import CRUDService from '@app/services/crudService';
 import { Customer } from '@app/models/customer/@type';
-import CustomerAddressModel from '@app/models/customerAddress';
 import { Request } from 'express';
-import { Filter, Params } from '@app/types';
+import CustomerModel from '@app/models/customer';
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
+import { genSalt, hash } from 'bcrypt';
+import { SALT } from '@app/constants';
 
 class CustomerService extends CRUDService<Customer> {
   constructor(model: Model<Customer>, nameService: string) {
     super(model, nameService);
   }
-  // SEARCH PAGINATION
-  async getPaginationOverriding(params: Params) {
-    try {
-      const {
-        pageIndex,
-        pageSize,
-        name,
-        productId,
-        comboPromotionsId,
-        categoryId,
-        types,
-        cityId,
-        districtId,
-        wardId,
-        fullName,
-        role,
-      } = params;
 
-      const filter: Filter = {};
+  // UPDATE
+  async updateOverriding(id: string, req: Request) {
+    const dataUpdate: Customer = req.body?.customerInfo ? JSON.parse(req?.body?.customerInfo) : {};
 
-      if (name) {
-        const patternWithName = { $regex: new RegExp(name, 'gi') };
-        filter.name = patternWithName;
-      }
+    const isCustomerAlreadyExist = await this.getById(id);
 
-      if (productId) {
-        filter.productIds = productId;
-      }
+    const existCustomer = await CustomerModel.findOne({
+      $or: [{ phoneNumber: dataUpdate?.phoneNumber }, { email: dataUpdate?.email }],
+    });
+    let newDataUpdate: any = {};
 
-      if (comboPromotionsId) {
-        filter.comboPromotionsId = comboPromotionsId;
-      }
-
-      if (categoryId) {
-        filter.categoryId = categoryId;
-      }
-
-      if (types) {
-        filter.types = { $all: types?.split(',') };
-      }
-
-      if (cityId) {
-        filter.cityId = cityId;
-      }
-      if (districtId) {
-        filter.districtId = districtId;
-      }
-      if (wardId) {
-        filter.wardId = wardId;
-      }
-
-      if (fullName) {
-        const patternWithFullName = { $regex: new RegExp(fullName, 'gi') };
-        filter.fullName = patternWithFullName;
-      }
-
-      if (role) {
-        filter.role = role;
-      }
-
-      const data = await this.model
-        .find(filter)
-        .limit(pageSize)
-        .skip(pageSize * pageIndex);
-
-      const totalElement = await this.model.find(filter).count();
-      const totalPages = Math.ceil(totalElement / pageSize);
-      const isLastPage = pageIndex + 1 >= totalPages;
-      const result = {
-        data: data.map((item) => {
-          const { password, ...remainingCustomer } = item.toObject();
-
-          return remainingCustomer;
-        }),
-        totalElement,
-        pageIndex,
-        pageSize,
-        totalPage: totalPages,
-        isLastPage: isLastPage,
-      };
-      return result;
-    } catch (error) {
-      console.log(error);
-      throw new Error(`Occur error when fetching ${this.nameService} with ${error}`);
+    if (!isCustomerAlreadyExist) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, `${this.nameService} not found`);
+      throw exception;
     }
+
+    if (existCustomer) {
+      const exception = new Exception(HttpStatusCode.CONFLICT, `${this.nameService} already exist`);
+      throw exception;
+    }
+
+    if (Object.keys(dataUpdate).length) {
+      newDataUpdate = {
+        ...dataUpdate,
+      };
+    }
+
+    if (newDataUpdate?.password) {
+      const salt = await genSalt(SALT);
+      const passwordAfterHash = await hash(newDataUpdate.password, salt);
+      newDataUpdate.password = passwordAfterHash;
+    }
+    await this.model.findByIdAndUpdate(id, newDataUpdate, { new: true });
+    return { message: `Update ${this.nameService} success` };
   }
 }
 

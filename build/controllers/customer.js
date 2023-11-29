@@ -39,12 +39,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var exception_1 = require("@app/exception");
+var type_1 = require("@app/exception/type");
 var customer_1 = __importDefault(require("@app/models/customer"));
 var customer_2 = __importDefault(require("@app/services/customer"));
 var customerService = new customer_2.default(customer_1.default, 'customer');
 var customerController = {
+    // SEARCH PAGINATION
     search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, pageIndex, pageSize, fullName, params, result, err_1;
+        var _a, pageIndex, pageSize, fullName, params, result, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -55,21 +58,23 @@ var customerController = {
                         pageSize: pageSize ? Number(pageSize) : 10,
                         fullName: fullName === null || fullName === void 0 ? void 0 : fullName.toString(),
                     };
-                    return [4 /*yield*/, customerService.getPaginationOverriding(params)];
+                    return [4 /*yield*/, customerService.getPaginationExcludePw(params)];
                 case 1:
                     result = _b.sent();
-                    res.status(200).json(result);
+                    res.status(type_1.HttpStatusCode.OK).json(result);
                     return [3 /*break*/, 3];
                 case 2:
-                    err_1 = _b.sent();
-                    res.status(500).json(err_1);
+                    error_1 = _b.sent();
+                    console.log('🚀 ~ file: customer.ts:22 ~ search: ~ error:', error_1);
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(error_1 === null || error_1 === void 0 ? void 0 : error_1.message);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); },
+    // UPDATE
     update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, updateCustomer, error_1;
+        var id, message, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -77,21 +82,25 @@ var customerController = {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, customerService.update(id, req)];
+                    return [4 /*yield*/, customerService.updateOverriding(id, req)];
                 case 2:
-                    updateCustomer = _a.sent();
-                    res.status(200).json(updateCustomer);
+                    message = (_a.sent()).message;
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_1 = _a.sent();
-                    res.status(500).json(error_1);
+                    error_2 = _a.sent();
+                    if (error_2 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_2.status).json(error_2.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     }); },
+    // GET BY ID
     getById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, customerById, error_2;
+        var id, customerById, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -102,18 +111,22 @@ var customerController = {
                     return [4 /*yield*/, customerService.getById(id)];
                 case 2:
                     customerById = _a.sent();
-                    res.status(200).json(customerById);
+                    res.status(type_1.HttpStatusCode.OK).json(customerById);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_2 = _a.sent();
-                    res.status(500).json(error_2);
+                    error_3 = _a.sent();
+                    if (error_3 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_3.status).json(error_3.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     }); },
+    // DELETE
     delete: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var ids, message, error_3;
+        var ids, message, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -124,11 +137,14 @@ var customerController = {
                     return [4 /*yield*/, customerService.delete(ids)];
                 case 2:
                     message = (_a.sent()).message;
-                    res.status(200).json(message);
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_3 = _a.sent();
-                    res.status(500).json(error_3);
+                    error_4 = _a.sent();
+                    if (error_4 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_4.status).json(error_4.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

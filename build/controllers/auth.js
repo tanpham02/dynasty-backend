@@ -40,24 +40,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var auth_1 = __importDefault(require("@app/services/auth"));
+var type_1 = require("@app/exception/type");
+var exception_1 = require("@app/exception");
 var authController = {
     // SIGNUP CUSTOMER
     signup: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, status_1, message, errors, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var message, error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _b.trys.push([0, 2, , 3]);
+                    _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, auth_1.default.signup(req, res)];
                 case 1:
-                    _a = _b.sent(), status_1 = _a.status, message = _a.message, errors = _a.errors;
-                    if (status_1 > 200) {
-                        return [2 /*return*/, res.status(status_1).json(errors)];
-                    }
-                    return [2 /*return*/, res.status(status_1).json(message)];
+                    message = (_a.sent()).message;
+                    res.status(type_1.HttpStatusCode.OK).json(message);
+                    return [3 /*break*/, 3];
                 case 2:
-                    error_1 = _b.sent();
-                    res.status(500).json(error_1);
+                    error_1 = _a.sent();
+                    console.log('🚀 ~ file: auth.ts:13 ~ signup: ~ error:', error_1);
+                    if (error_1 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_1.status).json(error_1.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -73,16 +77,15 @@ var authController = {
                     return [4 /*yield*/, auth_1.default.loginUser(req, res)];
                 case 1:
                     response = _a.sent();
-                    if (response) {
-                        if (response.status > 400) {
-                            return [2 /*return*/, res === null || res === void 0 ? void 0 : res.status(response.status).json(response.message)];
-                        }
-                        return [2 /*return*/, res === null || res === void 0 ? void 0 : res.status(response.status).json(response.data)];
-                    }
+                    res.status(type_1.HttpStatusCode.OK).json(response);
                     return [3 /*break*/, 3];
                 case 2:
                     error_2 = _a.sent();
-                    res.status(500).json(error_2);
+                    console.log('🚀 ~ file: auth.ts:27 ~ loginUser: ~ error:', error_2);
+                    if (error_2 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_2.status).json(error_2.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -98,16 +101,15 @@ var authController = {
                     return [4 /*yield*/, auth_1.default.loginCustomer(req, res)];
                 case 1:
                     response = _a.sent();
-                    if (response) {
-                        if (response.status > 400) {
-                            return [2 /*return*/, res === null || res === void 0 ? void 0 : res.status(response.status).json(response.message)];
-                        }
-                        return [2 /*return*/, res === null || res === void 0 ? void 0 : res.status(response.status).json(response.data)];
-                    }
+                    res.status(type_1.HttpStatusCode.OK).json(response);
                     return [3 /*break*/, 3];
                 case 2:
                     error_3 = _a.sent();
-                    res.status(500).json(error_3);
+                    console.log('🚀 ~ file: auth.ts:41 ~ loginCustomer: ~ error:', error_3);
+                    if (error_3 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_3.status).json(error_3.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -115,22 +117,23 @@ var authController = {
     }); },
     // REQUEST REFRESH TOKEN FOR USER
     requestRefreshTokenForUser: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, data, status_2, error_4;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var accessToken, error_4;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _b.trys.push([0, 2, , 3]);
+                    _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, auth_1.default.requestRefreshTokenForUser(req, res)];
                 case 1:
-                    _a = _b.sent(), data = _a.data, status_2 = _a.status;
-                    if (status_2 > 400) {
-                        return [2 /*return*/, res.status(status_2).json({ message: data.message })];
-                    }
-                    res.status(status_2).json({ accessToken: data.accessToken });
+                    accessToken = (_a.sent()).accessToken;
+                    res.status(type_1.HttpStatusCode.OK).json(accessToken);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_4 = _b.sent();
-                    res.status(500).json(error_4);
+                    error_4 = _a.sent();
+                    console.log('🚀 ~ file: auth.ts:55 ~ requestRefreshTokenForUser: ~ error:', error_4);
+                    if (error_4 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_4.status).json(error_4.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -138,42 +141,43 @@ var authController = {
     }); },
     // REQUEST REFRESH TOKEN FOR CUSTOMER
     requestRefreshTokenForCustomer: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, data, status_3, error_5;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var accessToken, error_5;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _b.trys.push([0, 2, , 3]);
+                    _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, auth_1.default.requestRefreshTokenForCustomer(req, res)];
                 case 1:
-                    _a = _b.sent(), data = _a.data, status_3 = _a.status;
-                    if (status_3 > 400) {
-                        return [2 /*return*/, res.status(status_3).json({ message: data.message })];
-                    }
-                    res.status(status_3).json({ accessToken: data.accessToken });
+                    accessToken = (_a.sent()).accessToken;
+                    res.status(type_1.HttpStatusCode.OK).json(accessToken);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_5 = _b.sent();
-                    res.status(500).json(error_5);
+                    error_5 = _a.sent();
+                    console.log('🚀 ~ file: auth.ts:69 ~ requestRefreshTokenForCustomer: ~ error:', error_5);
+                    if (error_5 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_5.status).json(error_5.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); },
     // LOGOUT
-    logout: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    logout: function (res) { return __awaiter(void 0, void 0, void 0, function () {
         var message, error_6;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, auth_1.default.logout(req, res)];
+                    return [4 /*yield*/, auth_1.default.logout(res)];
                 case 1:
                     message = (_a.sent()).message;
-                    res.status(200).json(message);
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 3];
                 case 2:
                     error_6 = _a.sent();
-                    res.status(500).json(error_6);
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

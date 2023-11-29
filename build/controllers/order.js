@@ -82,7 +82,7 @@ var orderController = {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, orderService.quickBuy(req)];
+                    return [4 /*yield*/, orderService.quickBuy(req, res)];
                 case 1:
                     orderWhenQuickBuy = _a.sent();
                     res.status(200).json(orderWhenQuickBuy);
@@ -128,7 +128,7 @@ var orderController = {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, orderService.checkout(req)];
+                    return [4 /*yield*/, orderService.checkout(req, res)];
                 case 1:
                     newOrder = _a.sent();
                     res.status(200).json(newOrder);

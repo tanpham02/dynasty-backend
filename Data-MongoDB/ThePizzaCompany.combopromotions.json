@@ -1,0 +1,90 @@
+[{
+  "_id": {
+    "$oid": "64f9fb76b4ea51582a485af5"
+  },
+  "categoryId": {
+    "$oid": "64ef54867eaa590690bb98bd"
+  },
+  "productId": [
+    {
+      "$oid": "64f9f55ac952e5a9670a9ef3"
+    },
+    {
+      "$oid": "64f763fc75f6d44b4b31994e"
+    },
+    {
+      "$oid": "64f89f466b7bb775b67b2dfb"
+    }
+  ],
+  "name": "ĂN NO SƯƠNG SƯƠNG",
+  "comboPrice": 399000,
+  "image": "combo-an-ngon-suong-suong.png",
+  "createdAt": {
+    "$date": "2023-09-07T16:33:58.464Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T16:33:58.464Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f9fc856d4fd8bea3684038"
+  },
+  "categoryId": {
+    "$oid": "64ef54867eaa590690bb98bd"
+  },
+  "productId": [
+    {
+      "$oid": "64ef5d3ee1d344318a0bb46e"
+    },
+    {
+      "$oid": "64f9f3fbc952e5a9670a9ed1"
+    },
+    {
+      "$oid": "64f891e2f04c8bdc3fd56af6"
+    },
+    {
+      "$oid": "64f89fbc91bf8192f77cb7b0"
+    }
+  ],
+  "name": "ĂN NGON XỊN XÒ",
+  "comboPrice": 649000,
+  "image": "combo-an-ngon-xin-xo.png",
+  "createdAt": {
+    "$date": "2023-09-07T16:38:29.656Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T16:38:29.656Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f9fd716d4fd8bea368404b"
+  },
+  "categoryId": {
+    "$oid": "64ef54867eaa590690bb98bd"
+  },
+  "productId": [
+    {
+      "$oid": "64f9f5efc952e5a9670a9efd"
+    },
+    {
+      "$oid": "64f763475df14c9b3c7ed31e"
+    },
+    {
+      "$oid": "64f899e98a49903e5f580f8d"
+    },
+    {
+      "$oid": "64f8a125c76bd5e130e9c123"
+    }
+  ],
+  "name": "GÀ GIÒN TƯƠI",
+  "comboPrice": 159000,
+  "image": "combo-ga-gion-tuoi.png",
+  "createdAt": {
+    "$date": "2023-09-07T16:42:25.883Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-07T16:42:25.883Z"
+  }
+}]

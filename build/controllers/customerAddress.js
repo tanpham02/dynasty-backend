@@ -151,25 +151,17 @@ var customerAddressController = {
         });
     }); },
     delete: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var ids, message, error_6;
+        var ids;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    ids = req.query.ids;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, customerAddressService.delete(ids)];
-                case 2:
-                    message = (_a.sent()).message;
-                    res.status(200).json(message);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_6 = _a.sent();
-                    res.status(500).json(error_6);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+            ids = req.query.ids;
+            try {
+                //   const { message } = await customerAddressService.delete(ids);
+                //   res.status(200).json(message);
             }
+            catch (error) {
+                res.status(500).json(error);
+            }
+            return [2 /*return*/];
         });
     }); },
 };

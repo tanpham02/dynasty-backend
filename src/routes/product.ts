@@ -2,7 +2,6 @@ import productController from '@app/controllers/product';
 import { uploadFileProduct } from '@app/services/upload';
 
 import express from 'express';
-import multer from 'multer';
 const router = express.Router();
 
 /**

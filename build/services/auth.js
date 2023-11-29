@@ -71,24 +71,17 @@ var customer_1 = __importDefault(require("@app/models/customer"));
 var jwt_1 = __importDefault(require("@app/middlewares/jwt"));
 var cart_1 = __importDefault(require("@app/models/cart"));
 var customerAddress_1 = __importDefault(require("@app/models/customerAddress"));
+var exception_1 = require("@app/exception");
+var type_1 = require("@app/exception/type");
 var jwtRefreshKey = (0, configs_1.configApp)().jwtRefreshKey;
-var jwtUser = new jwt_1.default();
-var jwtCustomer = new jwt_1.default();
 var authService = {
     // SIGNUP CUSTOMER
     signup: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, password, customerBody, errors, response, customerExists, salt, passwordAfterHash, newCustomer, newCart, newCustomerAddress, error_1;
+        var _a, password, customerBody, existCustomer, exception, exception, salt, passwordAfterHash, newCustomer, newCart, newCustomerAddress;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = req.body, password = _a.password, customerBody = __rest(_a, ["password"]);
-                    errors = {};
-                    response = {
-                        status: -1000,
-                    };
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 9, , 10]);
                     return [4 /*yield*/, customer_1.default.findOne({
                             $or: [
                                 {
@@ -99,82 +92,68 @@ var authService = {
                                 },
                             ],
                         })];
-                case 2:
-                    customerExists = _b.sent();
-                    if (customerExists) {
-                        if (customerExists.phoneNumber === customerBody.phoneNumber) {
-                            errors.phoneNumber = 'Phone number already exists';
+                case 1:
+                    existCustomer = _b.sent();
+                    if (existCustomer) {
+                        if (existCustomer.phoneNumber === customerBody.phoneNumber) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.CONFLICT, 'PhoneNumber already exist');
+                            throw exception;
                         }
-                        if (customerExists.email === customerBody.email) {
-                            errors.email = 'Email already exists';
+                        if (existCustomer.email === customerBody.email) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.CONFLICT, 'Email already exists');
+                            throw exception;
                         }
-                        response = {
-                            status: 409,
-                            errors: errors,
-                        };
-                        return [2 /*return*/, response];
                     }
-                    if (!password) return [3 /*break*/, 8];
+                    if (!password) return [3 /*break*/, 7];
                     return [4 /*yield*/, (0, bcrypt_2.genSalt)(constants_1.SALT)];
-                case 3:
+                case 2:
                     salt = _b.sent();
                     return [4 /*yield*/, (0, bcrypt_2.hash)(password, salt)];
-                case 4:
+                case 3:
                     passwordAfterHash = _b.sent();
                     newCustomer = new customer_1.default(__assign(__assign({}, customerBody), { password: passwordAfterHash }));
                     return [4 /*yield*/, newCustomer.save()];
-                case 5:
+                case 4:
                     _b.sent();
                     newCart = new cart_1.default({ customerId: newCustomer._id });
-                    response = {
-                        status: 200,
-                        message: 'Đăng ký thành công',
-                    };
                     newCustomerAddress = new customerAddress_1.default({ customerId: newCustomer._id });
                     return [4 /*yield*/, newCustomerAddress.save()];
-                case 6:
+                case 5:
                     _b.sent();
                     return [4 /*yield*/, newCart.save()];
-                case 7:
+                case 6:
                     _b.sent();
-                    _b.label = 8;
-                case 8: return [2 /*return*/, response];
-                case 9:
-                    error_1 = _b.sent();
-                    throw new Error("".concat(error_1));
-                case 10: return [2 /*return*/];
+                    _b.label = 7;
+                case 7: return [2 /*return*/, { message: 'Đăng ký thành công' }];
             }
         });
     }); },
     // LOGIN FOR USER
     loginUser: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, username, password, user, validPassword, accessToken, refreshToken, _b, password_1, remainingUser, error_2;
+        var _a, username, password, user, exception, validPassword, exception, userJwt, accessToken, refreshToken, _b, password_1, remainingUser;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = req.body, username = _a.username, password = _a.password;
-                    _c.label = 1;
-                case 1:
-                    _c.trys.push([1, 5, , 6]);
                     return [4 /*yield*/, user_1.default.findOne({ username: username })];
-                case 2:
+                case 1:
                     user = _c.sent();
                     if (!user) {
-                        return [2 /*return*/, {
-                                status: 404,
-                                message: 'Not found user',
-                            }];
+                        exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, 'username no exist');
+                        throw exception;
                     }
-                    if (!(password && (user === null || user === void 0 ? void 0 : user.password))) return [3 /*break*/, 4];
+                    if (!(password && (user === null || user === void 0 ? void 0 : user.password))) return [3 /*break*/, 3];
                     return [4 /*yield*/, (0, bcrypt_1.compare)(password, user === null || user === void 0 ? void 0 : user.password)];
-                case 3:
+                case 2:
                     validPassword = _c.sent();
                     if (!validPassword) {
-                        return [2 /*return*/, { status: 401, message: 'Wrong password' }];
+                        exception = new exception_1.Exception(type_1.HttpStatusCode.UN_AUTHORIZED, 'Wrong password');
+                        throw exception;
                     }
                     if (user && validPassword) {
-                        accessToken = jwtUser.generateAccessToken(user);
-                        refreshToken = jwtUser.generateRefreshToken(user);
+                        userJwt = new jwt_1.default(user._id, user.role);
+                        accessToken = userJwt.generateAccessToken();
+                        refreshToken = userJwt.generateRefreshToken();
                         res.cookie('refreshToken', refreshToken, {
                             httpOnly: true,
                             secure: process.env.NODE_ENV === constants_1.MODE.PRODUCTION,
@@ -182,52 +161,42 @@ var authService = {
                         });
                         _b = user.toObject(), password_1 = _b.password, remainingUser = __rest(_b, ["password"]);
                         return [2 /*return*/, {
-                                status: 200,
-                                data: {
-                                    user: remainingUser,
-                                    accessToken: accessToken,
-                                    refreshToken: refreshToken,
-                                },
+                                user: remainingUser,
+                                accessToken: accessToken,
+                                refreshToken: refreshToken,
                             }];
                     }
-                    _c.label = 4;
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    error_2 = _c.sent();
-                    throw new Error('Occur error when login');
-                case 6: return [2 /*return*/];
+                    _c.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     }); },
     // LOGIN FOR CUSTOMER
     loginCustomer: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, phoneNumber, password, customer, validPassword, accessToken, refreshToken, _b, password_2, remainingCustomer, error_3;
+        var _a, phoneNumber, password, customer, exception, validPassword, exception, customerJwt, accessToken, refreshToken, _b, password_2, remainingCustomer;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
                     _a = req.body, phoneNumber = _a.phoneNumber, password = _a.password;
-                    _c.label = 1;
-                case 1:
-                    _c.trys.push([1, 5, , 6]);
                     return [4 /*yield*/, customer_1.default.findOne({ phoneNumber: phoneNumber })];
-                case 2:
+                case 1:
                     customer = _c.sent();
                     if (!customer) {
-                        return [2 /*return*/, {
-                                status: 404,
-                                message: 'Not found customer with this phone number',
-                            }];
+                        exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, 'Not found customer with this phone number');
+                        throw exception;
                     }
-                    if (!(password && (customer === null || customer === void 0 ? void 0 : customer.password))) return [3 /*break*/, 4];
+                    if (!(password && (customer === null || customer === void 0 ? void 0 : customer.password))) return [3 /*break*/, 3];
                     return [4 /*yield*/, (0, bcrypt_1.compare)(password, customer === null || customer === void 0 ? void 0 : customer.password)];
-                case 3:
+                case 2:
                     validPassword = _c.sent();
                     if (!validPassword) {
-                        return [2 /*return*/, { status: 401, message: 'Wrong password' }];
+                        exception = new exception_1.Exception(type_1.HttpStatusCode.UN_AUTHORIZED, 'Wrong password');
+                        throw exception;
                     }
                     if (customer && validPassword) {
-                        accessToken = jwtCustomer.generateAccessToken(customer);
-                        refreshToken = jwtCustomer.generateRefreshToken(customer);
+                        customerJwt = new jwt_1.default(customer._id);
+                        accessToken = customerJwt.generateAccessToken();
+                        refreshToken = customerJwt.generateRefreshToken();
                         res.cookie('refreshToken', refreshToken, {
                             httpOnly: true,
                             secure: process.env.NODE_ENV === constants_1.MODE.PRODUCTION,
@@ -235,119 +204,78 @@ var authService = {
                         });
                         _b = customer.toObject(), password_2 = _b.password, remainingCustomer = __rest(_b, ["password"]);
                         return [2 /*return*/, {
-                                status: 200,
-                                data: {
-                                    customer: remainingCustomer,
-                                    accessToken: accessToken,
-                                    refreshToken: refreshToken,
-                                },
+                                customer: remainingCustomer,
+                                accessToken: accessToken,
+                                refreshToken: refreshToken,
                             }];
                     }
-                    _c.label = 4;
-                case 4: return [3 /*break*/, 6];
-                case 5:
-                    error_3 = _c.sent();
-                    throw new Error('Occur error when login');
-                case 6: return [2 /*return*/];
+                    _c.label = 3;
+                case 3: return [2 /*return*/];
             }
         });
     }); },
     // REQUEST REFRESH TOKEN FOR USER
     requestRefreshTokenForUser: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var refreshTokenCookie, responseResult_1;
-        var _a, _b, _c, _d;
-        return __generator(this, function (_e) {
-            try {
-                refreshTokenCookie = (_d = (_c = (_b = (_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.cookie) === null || _b === void 0 ? void 0 : _b.split('=')) === null || _c === void 0 ? void 0 : _c[1]) !== null && _d !== void 0 ? _d : '';
-                responseResult_1 = {
-                    status: -100,
-                    data: {
-                        message: '',
-                        accessToken: '',
-                    },
-                };
-                if (!refreshTokenCookie) {
-                    responseResult_1 = {
-                        status: 401,
-                        data: {
-                            message: "You're not authenticated",
-                        },
-                    };
+        var refreshTokenCookie, exception, newAccessTk;
+        var _a;
+        return __generator(this, function (_b) {
+            refreshTokenCookie = ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.refreshToken) || '';
+            if (!refreshTokenCookie) {
+                exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, "You're not authenticated");
+                throw exception;
+            }
+            newAccessTk = (0, jsonwebtoken_1.verify)(refreshTokenCookie, jwtRefreshKey || '', function (err, _user) {
+                if (err) {
+                    console.log('🚀 ~ file: auth.ts:173 ~ verify ~ err:', err);
+                    var exception = new exception_1.Exception((req === null || req === void 0 ? void 0 : req.statusCode) || 0, err === null || err === void 0 ? void 0 : err.message);
+                    throw exception;
                 }
-                (0, jsonwebtoken_1.verify)(refreshTokenCookie, jwtRefreshKey || '', function (err, user) {
-                    if (err)
-                        console.log(err);
-                    var newAccessToken = jwtUser.generateAccessToken(user);
-                    var newRefreshToken = jwtUser.generateRefreshToken(user);
-                    res.cookie('refreshToken', newRefreshToken, {
-                        httpOnly: true,
-                        secure: process.env.NODE_ENV === constants_1.MODE.PRODUCTION,
-                        sameSite: true,
-                    });
-                    responseResult_1 = {
-                        status: 200,
-                        data: {
-                            accessToken: newAccessToken,
-                        },
-                    };
+                var userJwt = new jwt_1.default(_user._id, _user.role);
+                var newAccessToken = userJwt.generateAccessToken();
+                var newRefreshToken = userJwt.generateRefreshToken();
+                res.cookie('refreshToken', newRefreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === constants_1.MODE.PRODUCTION,
+                    sameSite: true,
                 });
-                return [2 /*return*/, responseResult_1];
-            }
-            catch (error) {
-                throw new Error("".concat(error));
-            }
-            return [2 /*return*/];
+                return newAccessToken;
+            });
+            return [2 /*return*/, {
+                    accessToken: newAccessTk,
+                }];
         });
     }); },
     // REQUEST REFRESH TOKEN FOR CUSTOMER
     requestRefreshTokenForCustomer: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var refreshTokenCookie, responseResult_2;
-        var _a, _b, _c, _d;
-        return __generator(this, function (_e) {
-            try {
-                refreshTokenCookie = (_d = (_c = (_b = (_a = req === null || req === void 0 ? void 0 : req.headers) === null || _a === void 0 ? void 0 : _a.cookie) === null || _b === void 0 ? void 0 : _b.split('=')) === null || _c === void 0 ? void 0 : _c[1]) !== null && _d !== void 0 ? _d : '';
-                responseResult_2 = {
-                    status: -100,
-                    data: {
-                        message: '',
-                        accessToken: '',
-                    },
-                };
-                if (!refreshTokenCookie) {
-                    responseResult_2 = {
-                        status: 401,
-                        data: {
-                            message: "You're not authenticated",
-                        },
-                    };
+        var refreshTokenCookie, exception, newAccessTk;
+        var _a;
+        return __generator(this, function (_b) {
+            refreshTokenCookie = ((_a = req.cookies) === null || _a === void 0 ? void 0 : _a.refreshToken) || '';
+            if (!refreshTokenCookie) {
+                exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, "You're not authenticated");
+                throw exception;
+            }
+            newAccessTk = (0, jsonwebtoken_1.verify)(refreshTokenCookie, jwtRefreshKey || '', function (err, _customer) {
+                if (err) {
+                    console.log('🚀 ~ file: auth.ts:173 ~ verify ~ err:', err);
+                    var exception = new exception_1.Exception((req === null || req === void 0 ? void 0 : req.statusCode) || 0, err === null || err === void 0 ? void 0 : err.message);
+                    throw exception;
                 }
-                (0, jsonwebtoken_1.verify)(refreshTokenCookie, jwtRefreshKey || '', function (err, customer) {
-                    if (err)
-                        console.log(err);
-                    var newAccessToken = jwtCustomer.generateAccessToken(customer);
-                    var newRefreshToken = jwtCustomer.generateRefreshToken(customer);
-                    res.cookie('refreshToken', newRefreshToken, {
-                        httpOnly: true,
-                        secure: process.env.NODE_ENV === constants_1.MODE.PRODUCTION,
-                        sameSite: true,
-                    });
-                    responseResult_2 = {
-                        status: 200,
-                        data: {
-                            accessToken: newAccessToken,
-                        },
-                    };
+                var customerJwt = new jwt_1.default(_customer._id);
+                var newAccessToken = customerJwt.generateAccessToken();
+                var newRefreshToken = customerJwt.generateRefreshToken();
+                res.cookie('refreshToken', newRefreshToken, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === constants_1.MODE.PRODUCTION,
+                    sameSite: true,
                 });
-                return [2 /*return*/, responseResult_2];
-            }
-            catch (error) {
-                throw new Error("".concat(error));
-            }
-            return [2 /*return*/];
+                return newAccessToken;
+            });
+            return [2 /*return*/, { accessToken: newAccessTk }];
         });
     }); },
     // LOGOUT
-    logout: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    logout: function (res) { return __awaiter(void 0, void 0, void 0, function () {
         return __generator(this, function (_a) {
             res.clearCookie('refreshToken');
             return [2 /*return*/, { message: 'Logout success' }];

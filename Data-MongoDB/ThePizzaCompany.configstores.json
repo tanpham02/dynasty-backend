@@ -1,0 +1,21 @@
+[{
+  "_id": {
+    "$oid": "64fb553337468ff3c280218d"
+  },
+  "brandStore": "The Pizza Company",
+  "deliveryPolicy": "Chính sách giao hàng",
+  "privatePolicy": "Chính sách bảo mật",
+  "termAndCondition": "Điều khoàn và điều kiện",
+  "createdAt": {
+    "$date": "2023-09-08T17:09:07.378Z"
+  },
+  "updatedAt": {
+    "$date": "2023-10-09T08:35:00.321Z"
+  },
+  "feeShip": 25000,
+  "reasonOrderCancel": [
+    "Đổi ý không muốn mua nữa",
+    "Muốn thay đổi địa chỉ mua hàng",
+    "Thay đổi đơn hàng (kích thước, đế, thêm mã giảm giá,...)"
+  ]
+}]

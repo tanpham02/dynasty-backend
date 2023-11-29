@@ -39,34 +39,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var exception_1 = require("@app/exception");
+var type_1 = require("@app/exception/type");
 var user_1 = __importDefault(require("@app/models/user"));
 var user_2 = __importDefault(require("@app/services/user"));
 var userService = new user_2.default(user_1.default, 'user');
 var userController = {
     // SEARCH PAGINATION
     search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, pageIndex, pageSize, fullName, role, params, voucher, error_1;
+        var _a, pageIndex, pageSize, fullName, role, params, result, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
                     _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, fullName = _a.fullName, role = _a.role;
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
                     params = {
                         pageIndex: pageIndex ? Number(pageIndex) : 0,
                         pageSize: pageSize ? Number(pageSize) : 10,
                         fullName: fullName === null || fullName === void 0 ? void 0 : fullName.toString(),
                         role: role === null || role === void 0 ? void 0 : role.toString(),
                     };
-                    return [4 /*yield*/, userService.getPaginationOverriding(params)];
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, userService.getPaginationExcludePw(params)];
                 case 2:
-                    voucher = _b.sent();
-                    res.status(200).json(voucher);
+                    result = _b.sent();
+                    res.status(type_1.HttpStatusCode.OK).json(result);
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _b.sent();
-                    res.status(500).json(error_1);
+                    console.log('🚀 ~ file: user.ts:26 ~ search: ~ error:', error_1);
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(error_1 === null || error_1 === void 0 ? void 0 : error_1.message);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -74,30 +77,25 @@ var userController = {
     }); },
     // CREATE USER
     create: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var userExist, newUser, error_2;
+        var result, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 3, , 4]);
-                    return [4 /*yield*/, user_1.default.findOne({
-                            $or: [{ username: req.body.username }, { phoneNumber: req.body.phoneNumber }],
-                        })];
-                case 1:
-                    userExist = _a.sent();
-                    if (userExist) {
-                        return [2 /*return*/, res.status(404).json({ message: 'Username or phoneNumber was existed' })];
-                    }
+                    _a.trys.push([0, 2, , 3]);
                     return [4 /*yield*/, userService.createOverriding(req)];
+                case 1:
+                    result = _a.sent();
+                    res.status(type_1.HttpStatusCode.OK).json(result);
+                    return [3 /*break*/, 3];
                 case 2:
-                    newUser = _a.sent();
-                    res.status(200).json(newUser);
-                    return [3 /*break*/, 4];
-                case 3:
                     error_2 = _a.sent();
-                    console.log("🚀 ~error:", error_2);
-                    res.status(500).json(error_2);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    console.log('🚀 ~ file: user.ts:36 ~ create: ~ error:', error_2);
+                    if (error_2 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_2.status).json(error_2.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
+                    return [3 /*break*/, 3];
+                case 3: return [2 /*return*/];
             }
         });
     }); },
@@ -114,11 +112,14 @@ var userController = {
                     return [4 /*yield*/, userService.updateOverriding(id, req)];
                 case 2:
                     message = (_a.sent()).message;
-                    res.status(200).json(message);
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 4];
                 case 3:
                     error_3 = _a.sent();
-                    res.status(500).json(error_3);
+                    if (error_3 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_3.status).json(error_3.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -126,7 +127,7 @@ var userController = {
     }); },
     // GET USER BY ID
     getById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, user, error_4;
+        var id, result, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -136,12 +137,15 @@ var userController = {
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, userService.getByIdOverriding(id)];
                 case 2:
-                    user = _a.sent();
-                    res.status(200).json(user);
+                    result = _a.sent();
+                    res.status(type_1.HttpStatusCode.OK).json(result);
                     return [3 /*break*/, 4];
                 case 3:
                     error_4 = _a.sent();
-                    res.status(500).json(error_4);
+                    if (error_4 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_4.status).json(error_4.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -160,11 +164,14 @@ var userController = {
                     return [4 /*yield*/, userService.delete(ids)];
                 case 2:
                     message = (_a.sent()).message;
-                    res.status(200).json(message);
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 4];
                 case 3:
                     error_5 = _a.sent();
-                    res.status(500).json(error_5);
+                    if (error_5 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_5.status).json(error_5.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

@@ -45,35 +45,27 @@ var productVariantService = new productVariant_2.default(productVariant_1.defaul
 var productVariantController = {
     // SEARCH PAGINATION PRODUCT VARIANT
     search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, pageIndex, pageSize, productId, params, productVariant, error_1;
+        var _a, pageIndex, pageSize, productId, params;
         return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, productId = _a.productId;
-                    _b.label = 1;
-                case 1:
-                    _b.trys.push([1, 3, , 4]);
-                    params = {
-                        pageIndex: pageIndex ? Number(pageIndex) : 0,
-                        pageSize: pageSize ? Number(pageSize) : 10,
-                        productId: productId === null || productId === void 0 ? void 0 : productId.toString(),
-                    };
-                    return [4 /*yield*/, productVariantService.getPagination(params)];
-                case 2:
-                    productVariant = _b.sent();
-                    res.status(200).json(productVariant);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _b.sent();
-                    res.status(500).json(error_1);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+            _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, productId = _a.productId;
+            try {
+                params = {
+                    pageIndex: pageIndex ? Number(pageIndex) : 0,
+                    pageSize: pageSize ? Number(pageSize) : 10,
+                    productId: productId === null || productId === void 0 ? void 0 : productId.toString(),
+                };
+                //   const productVariant = await productVariantService.getPagination(params);
+                //   res.status(200).json(productVariant);
             }
+            catch (error) {
+                res.status(500).json(error);
+            }
+            return [2 /*return*/];
         });
     }); },
     // CREATE PRODUCT VARIANT
     create: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var newProductVariant, error_2;
+        var newProductVariant, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -84,8 +76,8 @@ var productVariantController = {
                     res.status(200).json(newProductVariant);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_2 = _a.sent();
-                    res.status(500).json(error_2);
+                    error_1 = _a.sent();
+                    res.status(500).json(error_1);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -93,30 +85,22 @@ var productVariantController = {
     }); },
     //UPDATE PRODUCT VARIANT
     update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, productVariant, error_3;
+        var id;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, productVariantService.update(id, req)];
-                case 2:
-                    productVariant = _a.sent();
-                    res.status(200).json(productVariant);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_3 = _a.sent();
-                    res.status(500).json(error_3);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+            id = req.params.id;
+            try {
+                //   const productVariant = await productVariantService.update(id, req);
+                //   res.status(200).json(productVariant);
             }
+            catch (error) {
+                res.status(500).json(error);
+            }
+            return [2 /*return*/];
         });
     }); },
     //GET PRODUCT VARIANT BY ID
     getById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, productVariant, error_4;
+        var id, productVariant, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -133,8 +117,8 @@ var productVariantController = {
                     res.status(200).json(productVariant);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_4 = _a.sent();
-                    res.status(500).json(error_4);
+                    error_2 = _a.sent();
+                    res.status(500).json(error_2);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -142,7 +126,7 @@ var productVariantController = {
     }); },
     // DELETE PRODUCT VARIANT
     delete: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var ids, message, error_5;
+        var ids, message, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -156,8 +140,8 @@ var productVariantController = {
                     res.status(200).json(message);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_5 = _a.sent();
-                    res.status(500).json(error_5);
+                    error_3 = _a.sent();
+                    res.status(500).json(error_3);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

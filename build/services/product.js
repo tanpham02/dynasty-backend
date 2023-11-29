@@ -111,7 +111,8 @@ var ProductService = /** @class */ (function (_super) {
                     case 5:
                         error_1 = _a.sent();
                         console.log(error_1);
-                        throw new Error("Occur error when delete ".concat(this.nameService, " with ").concat(error_1));
+                        //throw new Error(`Occur error when delete ${this.nameService} with ${error}`); // on develop backend
+                        return [2 /*return*/, error_1];
                     case 6: return [2 /*return*/];
                 }
             });
@@ -177,7 +178,8 @@ var ProductService = /** @class */ (function (_super) {
                     case 12:
                         error_2 = _c.sent();
                         console.log(error_2);
-                        throw new Error("Occur error when delete ".concat(this.nameService, " with ").concat(error_2));
+                        // throw new Error(`Occur error when delete ${this.nameService} with ${error}`); // on develop backend
+                        return [2 /*return*/, error_2];
                     case 13: return [2 /*return*/];
                 }
             });

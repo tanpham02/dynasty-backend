@@ -18,8 +18,8 @@ const productController = {
         categoryId: categoryId?.toString(),
         types: types as ProductType,
       };
-      const product = await productService.getPagination(params);
-      res.status(200).json(product);
+    //   const product = await productService.getPagination(params);
+    //   res.status(200).json(product);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -64,8 +64,8 @@ const productController = {
   delete: async (req: Request, res: Response) => {
     const { ids } = req.query;
     try {
-      const { message } = await productService.deleteOverriding(ids);
-      res.status(200).json(message);
+      const ress = await productService.deleteOverriding(ids);
+      res.status(200).json(ress);
     } catch (error) {
       res.status(500).json(error);
     }

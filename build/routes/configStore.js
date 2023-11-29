@@ -49,5 +49,5 @@ router.get('/find', configStore_1.default.getAll);
  *                 $ref: '#/components/schema/ConfigStore'
  */
 // UPDATE
-router.patch('/:id', configStore_1.default.updateOverriding);
+router.patch('/:id', configStore_1.default.update);
 exports.default = router;

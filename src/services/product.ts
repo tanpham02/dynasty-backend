@@ -4,11 +4,7 @@ import { Model } from 'mongoose';
 import ProductVariantsModel from '@app/models/productVariant';
 import CategoryModel from '@app/models/category';
 import { Request } from 'express';
-import { Filter, Params } from '@app/types';
 import { configApp } from '@app/configs';
-
-import multer from 'multer';
-import JWT from '@app/middlewares/jwt';
 
 const { APP_URL } = configApp();
 class ProductService extends CRUDService<Product> {
@@ -51,7 +47,8 @@ class ProductService extends CRUDService<Product> {
       return { message: `Delete ${this.nameService} success` };
     } catch (error) {
       console.log(error);
-      throw new Error(`Occur error when delete ${this.nameService} with ${error}`);
+      //throw new Error(`Occur error when delete ${this.nameService} with ${error}`); // on develop backend
+      return error;
     }
   }
 
@@ -99,7 +96,8 @@ class ProductService extends CRUDService<Product> {
       return await newProduct.save();
     } catch (error) {
       console.log(error);
-      throw new Error(`Occur error when delete ${this.nameService} with ${error}`);
+      // throw new Error(`Occur error when delete ${this.nameService} with ${error}`); // on develop backend
+      return error;
     }
   }
 

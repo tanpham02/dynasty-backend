@@ -39,30 +39,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var exception_1 = require("@app/exception");
+var type_1 = require("@app/exception/type");
 var configStore_1 = __importDefault(require("@app/models/configStore"));
 var configStore_2 = __importDefault(require("@app/services/configStore"));
 var cfStoreService = new configStore_2.default(configStore_1.default, 'config store');
 var configStoreController = {
-    getAll: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    getAll: function (res) { return __awaiter(void 0, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, cfStoreService.findAll()];
                 case 1:
                     result = _a.sent();
-                    res.status(200).json(result);
+                    res.status(type_1.HttpStatusCode.OK).json(result);
                     try {
                     }
                     catch (error) {
-                        console.log('error', error);
-                        res.status(500).json(error);
+                        res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(error.message);
                     }
                     return [2 /*return*/];
             }
         });
     }); },
-    updateOverriding: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, configStore, error_1;
+    update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, message, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -72,12 +73,15 @@ var configStoreController = {
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, cfStoreService.update(id, req)];
                 case 2:
-                    configStore = _a.sent();
-                    res.status(200).json(configStore);
+                    message = (_a.sent()).message;
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _a.sent();
-                    res.status(500).json(error_1);
+                    if (error_1 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_1.status).json(error_1.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json((error_1 === null || error_1 === void 0 ? void 0 : error_1.message) || type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

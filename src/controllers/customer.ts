@@ -1,3 +1,5 @@
+import { Exception } from '@app/exception';
+import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import CustomerModel from '@app/models/customer';
 import CustomerService from '@app/services/customer';
 import { Params } from '@app/types';
@@ -6,6 +8,7 @@ import { Request, Response } from 'express';
 const customerService = new CustomerService(CustomerModel, 'customer');
 
 const customerController = {
+  // SEARCH PAGINATION
   search: async (req: Request, res: Response) => {
     try {
       const { pageIndex, pageSize, fullName } = req.query;
@@ -14,41 +17,54 @@ const customerController = {
         pageSize: pageSize ? Number(pageSize) : 10,
         fullName: fullName?.toString(),
       };
-      const result = await customerService.getPaginationOverriding(params);
+      const result = await customerService.getPaginationExcludePw(params);
 
-      res.status(200).json(result);
-    } catch (err) {
-      res.status(500).json(err);
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (error: any) {
+      console.log('🚀 ~ file: customer.ts:22 ~ search: ~ error:', error);
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message);
     }
   },
 
+  // UPDATE
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const updateCustomer = await customerService.update(id, req);
-      res.status(200).json(updateCustomer);
-    } catch (error) {
-      res.status(500).json(error);
+      const { message } = await customerService.updateOverriding(id, req);
+      res.status(HttpStatusCode.OK).json(message);
+    } catch (error: any) {
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
+  // GET BY ID
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
       const customerById = await customerService.getById(id);
-      res.status(200).json(customerById);
+      res.status(HttpStatusCode.OK).json(customerById);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
+  // DELETE
   delete: async (req: Request, res: Response) => {
     const { ids } = req.query;
     try {
       const { message } = await customerService.delete(ids);
-      res.status(200).json(message);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 };

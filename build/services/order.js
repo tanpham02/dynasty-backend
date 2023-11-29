@@ -153,10 +153,10 @@ var OrderService = /** @class */ (function (_super) {
         });
     };
     // CHECKOUT
-    OrderService.prototype.checkout = function (req) {
+    OrderService.prototype.checkout = function (req, res) {
         var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var customerId, newData, productCartQuery, feeShip, customerId_1, remainingProductCartQuery, shipFee, newOrder, customer, error_2;
+            var customerId, newData, productCartQuery, feeShip, customerId_1, remainingProductCartQuery, shipFee, newOrder, error_2;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -164,7 +164,7 @@ var OrderService = /** @class */ (function (_super) {
                         newData = __assign({}, req.body);
                         _c.label = 1;
                     case 1:
-                        _c.trys.push([1, 9, , 10]);
+                        _c.trys.push([1, 6, , 7]);
                         if (!customerId) return [3 /*break*/, 4];
                         return [4 /*yield*/, cartService.getCartByCustomerId(customerId)];
                     case 2:
@@ -180,28 +180,28 @@ var OrderService = /** @class */ (function (_super) {
                         _c.label = 4;
                     case 4:
                         newOrder = new this.model(newData);
-                        return [4 /*yield*/, customerService.getById(customerId)];
+                        //   const customer = await customerService.getById(customerId);
+                        //   if (customer) {
+                        //     await customer?.updateOne({ $push: { orderIds: newOrder._id } });
+                        //   }
+                        return [4 /*yield*/, newOrder.save()];
                     case 5:
-                        customer = _c.sent();
-                        if (!customer) return [3 /*break*/, 7];
-                        return [4 /*yield*/, (customer === null || customer === void 0 ? void 0 : customer.updateOne({ $push: { orderIds: newOrder._id } }))];
-                    case 6:
-                        _c.sent();
-                        _c.label = 7;
-                    case 7: return [4 /*yield*/, newOrder.save()];
-                    case 8:
+                        //   const customer = await customerService.getById(customerId);
+                        //   if (customer) {
+                        //     await customer?.updateOne({ $push: { orderIds: newOrder._id } });
+                        //   }
                         _c.sent();
                         return [2 /*return*/, newOrder];
-                    case 9:
+                    case 6:
                         error_2 = _c.sent();
                         throw new Error("Occur error when checkout ".concat(this.nameService));
-                    case 10: return [2 /*return*/];
+                    case 7: return [2 /*return*/];
                 }
             });
         });
     };
     // QUICK BUY
-    OrderService.prototype.quickBuy = function (req) {
+    OrderService.prototype.quickBuy = function (req, res) {
         var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function () {
             var productIdFromCart, product, feeShip, newData, quickBuyOrder, error_3;

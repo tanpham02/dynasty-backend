@@ -1,3 +1,5 @@
+import { Exception } from '@app/exception';
+import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import VoucherModel from '@app/models/voucher';
 import VoucherService from '@app/services/voucher';
 import { Params } from '@app/types';
@@ -16,19 +18,20 @@ const voucherController = {
         name: name?.toString(),
       };
       const voucher = await voucherService.getPagination(params);
-      res.status(200).json(voucher);
-    } catch (error) {
-      res.status(500).json(error);
+      res.status(HttpStatusCode.OK).json(voucher);
+    } catch (error: any) {
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error.message);
     }
   },
 
   // CREATE VOUCHER
   create: async (req: Request, res: Response) => {
     try {
-      const voucher = await voucherService.createOverriding(req);
-      res.status(200).json(voucher);
+      const result = await voucherService.createOverriding(req);
+      res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
-      res.status(500).json(error);
+      console.log('🚀 ~ file: voucher.ts:33 ~ create: ~ error:', error);
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
@@ -36,10 +39,13 @@ const voucherController = {
   update: async (req: Request, res: Response) => {
     try {
       const { id } = req.params;
-      const voucher = await voucherService.update(id, req);
-      res.status(200).json(voucher);
-    } catch (error) {
-      res.status(500).json(error);
+      const { message } = await voucherService.update(id, req);
+      res.status(HttpStatusCode.OK).json(message);
+    } catch (error: any) {
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message || INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
@@ -50,9 +56,12 @@ const voucherController = {
       const voucher = await voucherService
         .getById(id)
         .then((res) => res?.populate('listProductUsedVoucher'));
-      res.status(200).json(voucher);
+      res.status(HttpStatusCode.OK).json(voucher);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
@@ -61,9 +70,12 @@ const voucherController = {
     try {
       const { ids } = req.query;
       const { message } = await voucherService.delete(ids);
-      res.status(200).json(message);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 };

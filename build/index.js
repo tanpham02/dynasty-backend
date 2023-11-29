@@ -7,7 +7,6 @@ var express_1 = __importDefault(require("express"));
 require("module-alias/register");
 var configs_1 = require("@app/configs");
 var connection_1 = __importDefault(require("@app/connection"));
-var path = require('path');
 var routes_1 = require("@app/routes");
 var apiUrl_1 = require("./services/apiUrl");
 var app = (0, express_1.default)();

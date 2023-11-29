@@ -37,8 +37,8 @@ const materialController = {
   updateMaterial: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const material = await materialService.update(id, req);
-      res.status(200).json(material);
+      //   const material = await materialService.update(id, req);
+      //   res.status(200).json(material);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -48,8 +48,8 @@ const materialController = {
   getMaterialById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const material = await materialService.getById(id);
-      res.status(200).json(material);
+      //   const material = await materialService.getById(id);
+      //   res.status(200).json(material);
     } catch (error) {
       res.status(500).json(error);
     }

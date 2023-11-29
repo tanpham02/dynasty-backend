@@ -16,8 +16,8 @@ const comboPromotionsController = {
         name: name,
         categoryId: categoryId?.toString(),
       };
-      const comboPromotions = await comboService.getPagination(params);
-      res.status(200).json(comboPromotions);
+      //   const comboPromotions = await comboService.getPagination(params);
+      //   res.status(200).json(comboPromotions);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -36,23 +36,23 @@ const comboPromotionsController = {
   // UPDATE COMBO PROMOTIONS
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
-    try {
-      const comboPromotions = await comboService.update(id, req);
-      res.status(200).json(comboPromotions);
-    } catch (error) {
-      res.status(500).json(error);
-    }
+    // try {
+    //   const comboPromotions = await comboService.update(id, req);
+    //   res.status(200).json(comboPromotions);
+    // } catch (error) {
+    //   res.status(500).json(error);
+    // }
   },
 
   // GET COMBO PROMOTIONS BY ID
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const comboPromotions = await comboService.getById(id);
-      if (!comboPromotions) {
-        return res.status(404).json(`Not found combo promotion`);
-      }
-      res.status(200).json(comboPromotions);
+      //   const comboPromotions = await comboService.getById(id);
+      //   if (!comboPromotions) {
+      //     return res.status(404).json(`Not found combo promotion`);
+      //   }
+      //   res.status(200).json(comboPromotions);
     } catch (error) {
       res.status(500).json(error);
     }

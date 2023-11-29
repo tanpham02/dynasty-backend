@@ -3,18 +3,23 @@ import { sign } from 'jsonwebtoken';
 import { configApp } from '@app/configs';
 const { jwtAccessKey, jwtRefreshKey } = configApp();
 
-export interface TokenI {
-  _id?: string;
-  role?: Role;
-}
+class JWT {
+  private _id: string;
+  private role?: Role;
 
-class JWT<T> {
+  constructor(_id: string, role?: Role) {
+    this._id = _id;
+    if (role) {
+      this.role = role;
+    }
+  }
+
   // GENERATE ACCESS TOKEN
-  generateAccessToken(objectRes: T & TokenI) {
+  generateAccessToken() {
     return sign(
       {
-        id: objectRes._id,
-        role: objectRes.role,
+        id: this._id,
+        role: this.role,
       },
       jwtAccessKey ?? '',
       {
@@ -24,11 +29,11 @@ class JWT<T> {
   }
 
   // GENERATE REFRESH TOKEN
-  generateRefreshToken(objectRes: T & TokenI) {
+  generateRefreshToken() {
     return sign(
       {
-        id: objectRes._id,
-        role: objectRes.role,
+        id: this._id,
+        role: this.role,
       },
       jwtRefreshKey ?? '',
       {

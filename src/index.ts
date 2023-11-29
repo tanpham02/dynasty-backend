@@ -2,7 +2,6 @@ import express, { Application } from 'express';
 import 'module-alias/register';
 import { configApp, configServer, configSwagger } from '@app/configs';
 import connection from '@app/connection';
-const path = require('path');
 
 import {
   categoryRouter,

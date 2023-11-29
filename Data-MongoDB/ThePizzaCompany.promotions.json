@@ -1,0 +1,108 @@
+[{
+  "_id": {
+    "$oid": "64fb4511c4e369e2ed2cc463"
+  },
+  "name": "Mua 1 Tặng 1 Pizza",
+  "description": "Mua 1 Pizza size M/L, tặng 1 Pizza  dòng Classic cùng cỡ.",
+  "banner": "mua-1-tang-1-t3_4.png",
+  "promotionsList": [
+    {
+      "name": "Mua 1 Tặng 1 Pizza size L - Thứ 3",
+      "description": "Mua 1 Pizza size L, tặng 1 Pizza dòng Classic cùng cỡ.",
+      "productIsPurchasedId": {
+        "$oid": "64ef5d3ee1d344318a0bb46e"
+      },
+      "productDonatedId": {
+        "$oid": "64ef59381ea128bb59355c41"
+      },
+      "price": 349000,
+      "size": "LARGE",
+      "base": "PAN",
+      "image": "mua-1-tang-1-t3_4.png",
+      "_id": {
+        "$oid": "64fb4511c4e369e2ed2cc464"
+      },
+      "createdAt": {
+        "$date": "2023-09-08T16:00:17.348Z"
+      },
+      "updatedAt": {
+        "$date": "2023-09-08T16:00:17.348Z"
+      }
+    },
+    {
+      "name": "Mua 1 Tặng 1 Pizza size M - Thứ 3",
+      "description": "Mua 1 Pizza size M, tặng 1 Pizza dòng Classic cùng cỡ.",
+      "productIsPurchasedId": {
+        "$oid": "64ef5d3ee1d344318a0bb46e"
+      },
+      "productDonatedId": {
+        "$oid": "64ef59381ea128bb59355c41"
+      },
+      "price": 249000,
+      "size": "LARGE",
+      "base": "PAN",
+      "image": "mua-1-tang-1-t3_4.png",
+      "_id": {
+        "$oid": "64fb4511c4e369e2ed2cc465"
+      },
+      "createdAt": {
+        "$date": "2023-09-08T16:00:17.348Z"
+      },
+      "updatedAt": {
+        "$date": "2023-09-08T16:00:17.348Z"
+      }
+    },
+    {
+      "name": "Mua 1 Tặng 1 Pizza size L - Thứ 3",
+      "description": "Mua 1 Pizza size L, tặng 1 Pizza dòng Classic cùng cỡ.",
+      "productIsPurchasedId": {
+        "$oid": "64ef684e88a3078daac5c78c"
+      },
+      "productDonatedId": {
+        "$oid": "64ef68b67459a3dc3cd00cc3"
+      },
+      "price": 299000,
+      "size": "LARGE",
+      "base": "PAN",
+      "image": "mua-1-tang-1-t3_4.png",
+      "_id": {
+        "$oid": "64fb4511c4e369e2ed2cc466"
+      },
+      "createdAt": {
+        "$date": "2023-09-08T16:00:17.348Z"
+      },
+      "updatedAt": {
+        "$date": "2023-09-08T16:00:17.348Z"
+      }
+    },
+    {
+      "name": "Mua 1 Tặng 1 Pizza size M - Thứ 3",
+      "description": "Mua 1 Pizza size M, tặng 1 Pizza dòng Classic cùng cỡ.",
+      "productIsPurchasedId": {
+        "$oid": "64ef684e88a3078daac5c78c"
+      },
+      "productDonatedId": {
+        "$oid": "64ef68b67459a3dc3cd00cc3"
+      },
+      "price": 199000,
+      "size": "LARGE",
+      "base": "PAN",
+      "image": "mua-1-tang-1-t3_4.png",
+      "_id": {
+        "$oid": "64fb4511c4e369e2ed2cc467"
+      },
+      "createdAt": {
+        "$date": "2023-09-08T16:00:17.348Z"
+      },
+      "updatedAt": {
+        "$date": "2023-09-08T16:00:17.348Z"
+      }
+    }
+  ],
+  "createdAt": {
+    "$date": "2023-09-08T16:00:17.349Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-08T16:00:17.349Z"
+  }
+}]

@@ -17,8 +17,8 @@ const categoryController = {
     };
 
     try {
-      const category = await categoryService.getPagination(params);
-      res.status(200).json(category);
+      //const category = await categoryService.getPagination(params);
+      //res.status(200).json(category);
     } catch (error) {
       console.log(error);
       res.status(500).json(error);

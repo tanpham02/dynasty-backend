@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,8 +46,20 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = require("mongoose");
+var type_1 = require("@app/exception/type");
+var exception_1 = require("@app/exception");
 var CRUDService = /** @class */ (function () {
     function CRUDService(model, nameService) {
         this.model = model;
@@ -45,20 +68,13 @@ var CRUDService = /** @class */ (function () {
     // FIND ALL
     CRUDService.prototype.findAll = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var getAll, error_1;
+            var getAll;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.model.find()];
+                    case 0: return [4 /*yield*/, this.model.find()];
                     case 1:
                         getAll = _a.sent();
                         return [2 /*return*/, getAll];
-                    case 2:
-                        error_1 = _a.sent();
-                        console.log(error_1);
-                        throw new mongoose_1.Error("Occur error when find all ".concat(this.nameService, " with ").concat(error_1));
-                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -66,15 +82,14 @@ var CRUDService = /** @class */ (function () {
     // SEARCH PAGINATION
     CRUDService.prototype.getPagination = function (params) {
         return __awaiter(this, void 0, void 0, function () {
-            var pageIndex, pageSize, name_1, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, from, to, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result, error_2;
+            var pageIndex, pageSize, name, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, from, to, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        pageIndex = params.pageIndex, pageSize = params.pageSize, name_1 = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, from = params.from, to = params.to, role = params.role;
+                        pageIndex = params.pageIndex, pageSize = params.pageSize, name = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, from = params.from, to = params.to, role = params.role;
                         filter = {};
-                        if (name_1) {
-                            patternWithName = { $regex: new RegExp(name_1, 'gi') };
+                        if (name) {
+                            patternWithName = { $regex: new RegExp(name, 'gi') };
                             filter.name = patternWithName;
                         }
                         if (productId) {
@@ -128,11 +143,26 @@ var CRUDService = /** @class */ (function () {
                             isLastPage: isLastPage,
                         };
                         return [2 /*return*/, result];
-                    case 3:
-                        error_2 = _a.sent();
-                        console.log(error_2);
-                        throw new mongoose_1.Error("Occur error when fetching ".concat(this.nameService, " with ").concat(error_2));
-                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    // SEARCH PAGINATION (EXCLUDE PASSWORD)
+    CRUDService.prototype.getPaginationExcludePw = function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            var getDataPagination, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.getPagination(params)];
+                    case 1:
+                        getDataPagination = _a.sent();
+                        result = __assign(__assign({}, getDataPagination), { data: getDataPagination.data.length > 0
+                                ? getDataPagination.data.map(function (item) {
+                                    var _a = item.toObject(), password = _a.password, remainingUser = __rest(_a, ["password"]);
+                                    return remainingUser;
+                                })
+                                : [] });
+                        return [2 /*return*/, result];
                 }
             });
         });
@@ -140,19 +170,13 @@ var CRUDService = /** @class */ (function () {
     // CREATE
     CRUDService.prototype.create = function (req) {
         return __awaiter(this, void 0, void 0, function () {
-            var create, error_3;
+            var create;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        _a.trys.push([0, 2, , 3]);
                         create = new this.model(req.body);
                         return [4 /*yield*/, create.save()];
                     case 1: return [2 /*return*/, _a.sent()];
-                    case 2:
-                        error_3 = _a.sent();
-                        console.log(error_3);
-                        throw new mongoose_1.Error("Occur error when create ".concat(this.nameService, " with ").concat(error_3));
-                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -160,20 +184,17 @@ var CRUDService = /** @class */ (function () {
     // GET BY ID
     CRUDService.prototype.getById = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var category, error_4;
+            var response, exception;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.model.findById(id)];
+                    case 0: return [4 /*yield*/, this.model.findById(id)];
                     case 1:
-                        category = _a.sent();
-                        return [2 /*return*/, category];
-                    case 2:
-                        error_4 = _a.sent();
-                        console.log(error_4);
-                        throw new mongoose_1.Error("Occur error when find by id ".concat(this.nameService, " with ").concat(error_4));
-                    case 3: return [2 /*return*/];
+                        response = _a.sent();
+                        if (!response) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, "".concat(this.nameService, " not found!"));
+                            throw exception;
+                        }
+                        return [2 /*return*/, response];
                 }
             });
         });
@@ -181,20 +202,20 @@ var CRUDService = /** @class */ (function () {
     // UPDATE
     CRUDService.prototype.update = function (id, req) {
         return __awaiter(this, void 0, void 0, function () {
-            var category, error_5;
+            var isUserAlreadyExist, exception;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.model.findByIdAndUpdate(id, req.body, { new: true })];
+                    case 0: return [4 /*yield*/, this.getById(id)];
                     case 1:
-                        category = _a.sent();
-                        return [2 /*return*/, category];
+                        isUserAlreadyExist = _a.sent();
+                        if (!isUserAlreadyExist) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, "".concat(this.nameService, " not found!"));
+                            throw exception;
+                        }
+                        return [4 /*yield*/, this.model.findByIdAndUpdate(id, req.body, { new: true })];
                     case 2:
-                        error_5 = _a.sent();
-                        console.log(error_5);
-                        throw new mongoose_1.Error("Occur error when update ".concat(this.nameService, " with ").concat(error_5));
-                    case 3: return [2 /*return*/];
+                        _a.sent();
+                        return [2 /*return*/, { message: "Update ".concat(this.nameService, " success") }];
                 }
             });
         });
@@ -202,27 +223,22 @@ var CRUDService = /** @class */ (function () {
     // DELETE
     CRUDService.prototype.delete = function (ids) {
         return __awaiter(this, void 0, void 0, function () {
-            var error_6;
+            var exception;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        console.log(typeof ids);
-                        _a.label = 1;
-                    case 1:
-                        _a.trys.push([1, 3, , 4]);
+                        if (!ids) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.BAD_REQUEST, "ids field can't be empty");
+                            throw exception;
+                        }
                         return [4 /*yield*/, this.model.deleteMany({
                                 _id: {
                                     $in: ids, // $in operator: sẽ tìm bất kì những thằng nào trong database có _id match với nhứng thằng trong list id truyền vào ($in operator: nhận value[] or value)
                                 },
                             })];
-                    case 2:
+                    case 1:
                         _a.sent();
                         return [2 /*return*/, { message: "Delete ".concat(this.nameService, " success") }];
-                    case 3:
-                        error_6 = _a.sent();
-                        console.log(error_6);
-                        throw new mongoose_1.Error("Occur error when update ".concat(this.nameService, " with ").concat(error_6));
-                    case 4: return [2 /*return*/];
                 }
             });
         });

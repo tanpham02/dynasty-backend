@@ -59,8 +59,8 @@ const customerAddressController = {
   delete: async (req: Request, res: Response) => {
     const { ids } = req.query;
     try {
-      const { message } = await customerAddressService.delete(ids);
-      res.status(200).json(message);
+    //   const { message } = await customerAddressService.delete(ids);
+    //   res.status(200).json(message);
     } catch (error) {
       res.status(500).json(error);
     }

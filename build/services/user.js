@@ -79,123 +79,55 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var crudService_1 = __importDefault(require("./crudService"));
 var bcrypt_1 = require("bcrypt");
 var constants_1 = require("@app/constants");
-var configs_1 = require("@app/configs");
-var APP_URL = (0, configs_1.configApp)().APP_URL;
+var type_1 = require("@app/exception/type");
+var user_1 = __importDefault(require("@app/models/user"));
+var exception_1 = require("@app/exception");
 var UserService = /** @class */ (function (_super) {
     __extends(UserService, _super);
     function UserService(model, nameService) {
         return _super.call(this, model, nameService) || this;
     }
-    // SEARCH PAGINATION
-    UserService.prototype.getPaginationOverriding = function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            var pageIndex, pageSize, name_1, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result, error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        pageIndex = params.pageIndex, pageSize = params.pageSize, name_1 = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, role = params.role;
-                        filter = {};
-                        if (name_1) {
-                            patternWithName = { $regex: new RegExp(name_1, 'gi') };
-                            filter.name = patternWithName;
-                        }
-                        if (productId) {
-                            filter.productIds = productId;
-                        }
-                        if (comboPromotionsId) {
-                            filter.comboPromotionsId = comboPromotionsId;
-                        }
-                        if (categoryId) {
-                            filter.categoryId = categoryId;
-                        }
-                        if (types) {
-                            filter.types = { $all: types === null || types === void 0 ? void 0 : types.split(',') };
-                        }
-                        if (cityId) {
-                            filter.cityId = cityId;
-                        }
-                        if (districtId) {
-                            filter.districtId = districtId;
-                        }
-                        if (wardId) {
-                            filter.wardId = wardId;
-                        }
-                        if (fullName) {
-                            patternWithFullName = { $regex: new RegExp(fullName, 'gi') };
-                            filter.fullName = patternWithFullName;
-                        }
-                        if (role) {
-                            filter.role = role;
-                        }
-                        return [4 /*yield*/, this.model
-                                .find(filter)
-                                .limit(pageSize)
-                                .skip(pageSize * pageIndex)];
-                    case 1:
-                        data = _a.sent();
-                        return [4 /*yield*/, this.model.find(filter).count()];
-                    case 2:
-                        totalElement = _a.sent();
-                        totalPages = Math.ceil(totalElement / pageSize);
-                        isLastPage = pageIndex + 1 >= totalPages;
-                        result = {
-                            data: data.map(function (item) {
-                                var _a = item.toObject(), password = _a.password, remainingUser = __rest(_a, ["password"]);
-                                return remainingUser;
-                            }),
-                            totalElement: totalElement,
-                            pageIndex: pageIndex,
-                            pageSize: pageSize,
-                            totalPage: totalPages,
-                            isLastPage: isLastPage,
-                        };
-                        return [2 /*return*/, result];
-                    case 3:
-                        error_1 = _a.sent();
-                        console.log(error_1);
-                        throw new Error("Occur error when fetching ".concat(this.nameService, " with ").concat(error_1));
-                    case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
     // CREATE
     UserService.prototype.createOverriding = function (req) {
-        var _a, _b;
+        var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function () {
-            var _c, password, user, filename, destination, salt, passwordAfterHash, newUser, _d, pw, restUser, error_2;
-            return __generator(this, function (_e) {
-                switch (_e.label) {
+            var _e, password, user, existUser, filename, destination, exception, salt, passwordAfterHash, newUser, _f, pw, remainingUser;
+            return __generator(this, function (_g) {
+                switch (_g.label) {
                     case 0:
-                        _c = JSON.parse(req.body.userInfo), password = _c.password, user = __rest(_c, ["password"]);
-                        filename = (_a = req.file) === null || _a === void 0 ? void 0 : _a.filename;
-                        destination = (_b = req.file) === null || _b === void 0 ? void 0 : _b.destination;
-                        if (filename && destination) {
-                            user.image = "".concat(APP_URL, "/").concat(destination, "/").concat(filename);
-                        }
-                        _e.label = 1;
+                        _e = ((_a = req === null || req === void 0 ? void 0 : req.body) === null || _a === void 0 ? void 0 : _a.userInfo) ? JSON.parse((_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.userInfo) : {}, password = _e.password, user = __rest(_e, ["password"]);
+                        return [4 /*yield*/, user_1.default.findOne({
+                                $or: [
+                                    { username: user === null || user === void 0 ? void 0 : user.username },
+                                    { phoneNumber: user === null || user === void 0 ? void 0 : user.phoneNumber },
+                                    { email: user === null || user === void 0 ? void 0 : user.email },
+                                ],
+                            })];
                     case 1:
-                        _e.trys.push([1, 6, , 7]);
+                        existUser = _g.sent();
+                        filename = (_c = req.file) === null || _c === void 0 ? void 0 : _c.filename;
+                        destination = (_d = req.file) === null || _d === void 0 ? void 0 : _d.destination;
+                        if (existUser) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.CONFLICT, 'Username or phoneNumber or email already exist');
+                            throw exception;
+                        }
+                        if (filename && destination) {
+                            user.image = "/".concat(destination, "/").concat(filename);
+                        }
                         if (!password) return [3 /*break*/, 5];
                         return [4 /*yield*/, (0, bcrypt_1.genSalt)(constants_1.SALT)];
                     case 2:
-                        salt = _e.sent();
+                        salt = _g.sent();
                         return [4 /*yield*/, (0, bcrypt_1.hash)(password, salt)];
                     case 3:
-                        passwordAfterHash = _e.sent();
+                        passwordAfterHash = _g.sent();
                         newUser = new this.model(__assign(__assign({}, user), { password: passwordAfterHash }));
                         return [4 /*yield*/, newUser.save()];
                     case 4:
-                        _e.sent();
-                        _d = newUser.toObject(), pw = _d.password, restUser = __rest(_d, ["password"]);
-                        return [2 /*return*/, restUser];
-                    case 5: return [3 /*break*/, 7];
-                    case 6:
-                        error_2 = _e.sent();
-                        console.log('error', error_2);
-                        throw new Error("Occur when create ".concat(this.nameService));
-                    case 7: return [2 /*return*/];
+                        _g.sent();
+                        _f = newUser.toObject(), pw = _f.password, remainingUser = __rest(_f, ["password"]);
+                        return [2 /*return*/, remainingUser];
+                    case 5: return [2 /*return*/];
                 }
             });
         });
@@ -204,40 +136,53 @@ var UserService = /** @class */ (function (_super) {
     UserService.prototype.updateOverriding = function (id, req) {
         var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function () {
-            var dataUpdate, filename, destination, newDataUpdate, salt, passwordAfterHash, error_3;
+            var dataUpdate, filename, destination, isUserAlreadyExist, existUser, newDataUpdate, exception, exception, salt, passwordAfterHash;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
-                        dataUpdate = ((_a = req.body) === null || _a === void 0 ? void 0 : _a.userInfo) ? JSON.parse((_b = req.body) === null || _b === void 0 ? void 0 : _b.userInfo) : {};
+                        dataUpdate = ((_a = req.body) === null || _a === void 0 ? void 0 : _a.userInfo) ? JSON.parse((_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.userInfo) : {};
                         filename = (_c = req === null || req === void 0 ? void 0 : req.file) === null || _c === void 0 ? void 0 : _c.filename;
                         destination = (_d = req === null || req === void 0 ? void 0 : req.file) === null || _d === void 0 ? void 0 : _d.destination;
+                        return [4 /*yield*/, this.getById(id)];
+                    case 1:
+                        isUserAlreadyExist = _e.sent();
+                        return [4 /*yield*/, user_1.default.findOne({
+                                $or: [
+                                    { username: dataUpdate === null || dataUpdate === void 0 ? void 0 : dataUpdate.username },
+                                    { phoneNumber: dataUpdate === null || dataUpdate === void 0 ? void 0 : dataUpdate.phoneNumber },
+                                    { email: dataUpdate === null || dataUpdate === void 0 ? void 0 : dataUpdate.email },
+                                ],
+                            })];
+                    case 2:
+                        existUser = _e.sent();
                         newDataUpdate = {};
+                        if (!isUserAlreadyExist) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, 'User not found');
+                            throw exception;
+                        }
+                        if (existUser) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.CONFLICT, 'User information already exist');
+                            throw exception;
+                        }
                         if (Object.keys(dataUpdate).length) {
                             newDataUpdate = __assign({}, dataUpdate);
                         }
                         if (filename && destination) {
-                            newDataUpdate.image = "".concat(APP_URL, "/").concat(destination, "/").concat(filename);
+                            newDataUpdate.image = "/".concat(destination, "/").concat(filename);
                         }
-                        _e.label = 1;
-                    case 1:
-                        _e.trys.push([1, 6, , 7]);
-                        if (!(newDataUpdate === null || newDataUpdate === void 0 ? void 0 : newDataUpdate.password)) return [3 /*break*/, 4];
+                        if (!(newDataUpdate === null || newDataUpdate === void 0 ? void 0 : newDataUpdate.password)) return [3 /*break*/, 5];
                         return [4 /*yield*/, (0, bcrypt_1.genSalt)(constants_1.SALT)];
-                    case 2:
+                    case 3:
                         salt = _e.sent();
                         return [4 /*yield*/, (0, bcrypt_1.hash)(newDataUpdate === null || newDataUpdate === void 0 ? void 0 : newDataUpdate.password, salt)];
-                    case 3:
+                    case 4:
                         passwordAfterHash = _e.sent();
                         newDataUpdate.password = passwordAfterHash;
-                        _e.label = 4;
-                    case 4: return [4 /*yield*/, this.model.findByIdAndUpdate(id, newDataUpdate, { new: true })];
-                    case 5:
+                        _e.label = 5;
+                    case 5: return [4 /*yield*/, this.model.findByIdAndUpdate(id, newDataUpdate, { new: true })];
+                    case 6:
                         _e.sent();
                         return [2 /*return*/, { message: "Update ".concat(this.nameService, " success") }];
-                    case 6:
-                        error_3 = _e.sent();
-                        throw new Error("Occur when create ".concat(this.nameService));
-                    case 7: return [2 /*return*/];
                 }
             });
         });
@@ -245,23 +190,18 @@ var UserService = /** @class */ (function (_super) {
     // GET BY ID
     UserService.prototype.getByIdOverriding = function (id) {
         return __awaiter(this, void 0, void 0, function () {
-            var user, _a, password, remainingUser, error_4;
+            var user, exception, _a, password, remainingUser;
             return __generator(this, function (_b) {
                 switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, this.model.findById(id)];
+                    case 0: return [4 /*yield*/, this.model.findById(id)];
                     case 1:
                         user = _b.sent();
-                        if (user) {
-                            _a = user === null || user === void 0 ? void 0 : user.toObject(), password = _a.password, remainingUser = __rest(_a, ["password"]);
-                            return [2 /*return*/, remainingUser];
+                        if (!user) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, 'User not found!');
+                            throw exception;
                         }
-                        return [3 /*break*/, 3];
-                    case 2:
-                        error_4 = _b.sent();
-                        throw new Error("Occur when create ".concat(this.nameService));
-                    case 3: return [2 /*return*/];
+                        _a = user === null || user === void 0 ? void 0 : user.toObject(), password = _a.password, remainingUser = __rest(_a, ["password"]);
+                        return [2 /*return*/, remainingUser];
                 }
             });
         });

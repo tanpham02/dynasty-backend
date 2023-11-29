@@ -39,6 +39,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var exception_1 = require("@app/exception");
+var type_1 = require("@app/exception/type");
 var shopSystem_1 = __importDefault(require("@app/models/shopSystem"));
 var shopSystem_2 = __importDefault(require("@app/services/shopSystem"));
 var ShopSystemService = new shopSystem_2.default(shopSystem_1.default, 'shop system');
@@ -64,11 +66,11 @@ var shopSystemController = {
                     return [4 /*yield*/, ShopSystemService.getPagination(params)];
                 case 2:
                     shopSystem = _b.sent();
-                    res.status(200).json(shopSystem);
+                    res.status(type_1.HttpStatusCode.OK).json(shopSystem);
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _b.sent();
-                    res.status(500).json(error_1);
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(error_1.message);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -84,11 +86,12 @@ var shopSystemController = {
                     return [4 /*yield*/, ShopSystemService.create(req)];
                 case 1:
                     shopSystem = _a.sent();
-                    res.status(200).json(shopSystem);
+                    res.status(type_1.HttpStatusCode.OK).json(shopSystem);
                     return [3 /*break*/, 3];
                 case 2:
                     error_2 = _a.sent();
-                    res.status(500).json(error_2);
+                    console.log('🚀 ~ file: shopSystem.ts:34 ~ create: ~ error:', error_2);
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -96,7 +99,7 @@ var shopSystemController = {
     }); },
     //UPDATE SYSTEM STORE
     update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, shopSystem, error_3;
+        var id, message, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -106,12 +109,15 @@ var shopSystemController = {
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, ShopSystemService.update(id, req)];
                 case 2:
-                    shopSystem = _a.sent();
-                    res.status(200).json(shopSystem);
+                    message = (_a.sent()).message;
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 4];
                 case 3:
                     error_3 = _a.sent();
-                    res.status(500).json(error_3);
+                    if (error_3 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_3.status).json(error_3.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json((error_3 === null || error_3 === void 0 ? void 0 : error_3.message) || type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -130,14 +136,14 @@ var shopSystemController = {
                     return [4 /*yield*/, ShopSystemService.getById(id)];
                 case 2:
                     shopSystem = _a.sent();
-                    if (!shopSystem) {
-                        return [2 /*return*/, res.status(404).json({ message: 'Shop system not found.' })];
-                    }
-                    res.status(200).json(shopSystem);
+                    res.status(type_1.HttpStatusCode.OK).json(shopSystem);
                     return [3 /*break*/, 4];
                 case 3:
                     error_4 = _a.sent();
-                    res.status(500).json(error_4);
+                    if (error_4 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_4.status).json(error_4.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -157,11 +163,15 @@ var shopSystemController = {
                     return [4 /*yield*/, ShopSystemService.delete(ids)];
                 case 2:
                     message = (_a.sent()).message;
-                    res.status(200).json(message);
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 4];
                 case 3:
                     error_5 = _a.sent();
-                    res.status(500).json(error_5);
+                    console.log('🚀 ~ file: shopSystem.ts:76 ~ delete: ~ error:', error_5);
+                    if (error_5 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_5.status).json(error_5.message)];
+                    }
+                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

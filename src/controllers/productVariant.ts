@@ -15,8 +15,8 @@ const productVariantController = {
         pageSize: pageSize ? Number(pageSize) : 10,
         productId: productId?.toString(),
       };
-      const productVariant = await productVariantService.getPagination(params);
-      res.status(200).json(productVariant);
+      //   const productVariant = await productVariantService.getPagination(params);
+      //   res.status(200).json(productVariant);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -36,8 +36,8 @@ const productVariantController = {
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const productVariant = await productVariantService.update(id, req);
-      res.status(200).json(productVariant);
+      //   const productVariant = await productVariantService.update(id, req);
+      //   res.status(200).json(productVariant);
     } catch (error) {
       res.status(500).json(error);
     }

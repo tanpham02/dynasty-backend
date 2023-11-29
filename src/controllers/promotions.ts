@@ -1,3 +1,5 @@
+import { Exception } from '@app/exception';
+import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import PromotionsModel from '@app/models/promotions';
 import PromotionService from '@app/services/promotions';
 import { Params } from '@app/types';
@@ -5,6 +7,7 @@ import { Request, Response } from 'express';
 
 const promoService = new PromotionService(PromotionsModel, 'promotions');
 const promotionController = {
+  // SEARCH PAGINATION PROMOTIONS
   search: async (req: Request, res: Response) => {
     try {
       const { pageIndex, pageSize } = req.params;
@@ -13,38 +16,48 @@ const promotionController = {
         pageSize: pageSize ? Number(pageSize) : 10,
       };
       const result = await promoService.getPagination(params);
-
-      res.status(200).json(result);
-    } catch (err) {
-      res.status(500).json(err);
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (error: any) {
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message);
     }
   },
+
+  // CREATE PROMOTIONS
   create: async (req: Request, res: Response) => {
     try {
-      const promotionsNew = await promoService.create(req);
-      res.status(200).json(promotionsNew);
+      const newPromotion = await promoService.create(req);
+      res.status(HttpStatusCode.OK).json(newPromotion);
     } catch (error) {
-      res.status(500).json(error);
+      console.log('🚀 ~ file: promotions.ts:30 ~ create: ~ error:', error);
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
+  // UPDATE PROMOTIONS
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const promotions = await promoService.update(id, req);
-      res.status(200).json(promotions);
-    } catch (error) {
-      res.status(500).json(error);
+      const { message } = await promoService.update(id, req);
+      res.status(HttpStatusCode.OK).json(message);
+    } catch (error: any) {
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message || INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
+  // GET BY ID
   getById: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
       const promotions = await promoService.getById(id);
-      res.status(200).json(promotions);
+      res.status(HttpStatusCode.OK).json(promotions);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 
@@ -52,9 +65,12 @@ const promotionController = {
     const { ids } = req.query;
     try {
       const { message } = await promoService.delete(ids);
-      res.status(200).json(message);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
     }
   },
 };

@@ -94,53 +94,37 @@ var materialController = {
     }); },
     // UPDATE MATERIAL
     updateMaterial: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, material, error_3;
+        var id;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, materialService.update(id, req)];
-                case 2:
-                    material = _a.sent();
-                    res.status(200).json(material);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_3 = _a.sent();
-                    res.status(500).json(error_3);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+            id = req.params.id;
+            try {
+                //   const material = await materialService.update(id, req);
+                //   res.status(200).json(material);
             }
+            catch (error) {
+                res.status(500).json(error);
+            }
+            return [2 /*return*/];
         });
     }); },
     // GET BY ID
     getMaterialById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, material, error_4;
+        var id;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, materialService.getById(id)];
-                case 2:
-                    material = _a.sent();
-                    res.status(200).json(material);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_4 = _a.sent();
-                    res.status(500).json(error_4);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+            id = req.params.id;
+            try {
+                //   const material = await materialService.getById(id);
+                //   res.status(200).json(material);
             }
+            catch (error) {
+                res.status(500).json(error);
+            }
+            return [2 /*return*/];
         });
     }); },
     // DELETE
     delete: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, error_5;
+        var id, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -154,8 +138,8 @@ var materialController = {
                     res.status(200).json({ message: 'Delete material success' });
                     return [3 /*break*/, 4];
                 case 3:
-                    error_5 = _a.sent();
-                    res.status(500).json(error_5);
+                    error_3 = _a.sent();
+                    res.status(500).json(error_3);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

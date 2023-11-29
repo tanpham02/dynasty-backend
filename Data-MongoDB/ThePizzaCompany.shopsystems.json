@@ -1,0 +1,780 @@
+[{
+  "_id": {
+    "$oid": "64f5f0c7875a5086c28cc659"
+  },
+  "name": "The Pizza Company Song Hành - TP. Thủ Đức",
+  "address": "81 Song Hành, Phường An Phú , Quận 2, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T14:59:19.559Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:17:45.088Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 2",
+  "districtId": 769,
+  "ward": "Phường An Phú",
+  "wardId": 27091
+},
+{
+  "_id": {
+    "$oid": "64f5f0e1875a5086c28cc65b"
+  },
+  "name": "The Pizza Company Estella - TP. Thủ Đức",
+  "address": "Tầng 4, TTTM Estilla , 88 Song Hành, P An Phú, Quận 2, HCM",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T14:59:45.078Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:19:59.842Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 2",
+  "districtId": 769,
+  "ward": "Phường An Phú",
+  "wardId": 27091
+},
+{
+  "_id": {
+    "$oid": "64f5f0fb875a5086c28cc65d"
+  },
+  "name": "The Pizza Company Nguyễn Thị Minh Khai - Q.3",
+  "address": "506 - 508 Nguyễn Thị Minh Khai, Phường 2, Quận 3, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:00:11.021Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:21:25.921Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 3",
+  "districtId": 770,
+  "ward": "Phường 2",
+  "wardId": 27157
+},
+{
+  "_id": {
+    "$oid": "64f5f265604c841d6d7bf900"
+  },
+  "name": "The Pizza Company Lê Văn Sỹ - Q.3",
+  "address": "333 Lê Văn Sỹ, Phường 13, Quận 3, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:06:13.423Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:22:17.742Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 3",
+  "districtId": 770,
+  "ward": "Phường 13",
+  "wardId": 27136
+},
+{
+  "_id": {
+    "$oid": "64f5f27a604c841d6d7bf902"
+  },
+  "name": "The Pizza Company Bà Hom - Q.6",
+  "address": "64A1 - 64A2, Bà Hom, Phường 13, Quận 6, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:06:34.158Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:23:13.076Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 6",
+  "districtId": 775,
+  "ward": "Phường 13",
+  "wardId": 27349
+},
+{
+  "_id": {
+    "$oid": "64f5f298604c841d6d7bf904"
+  },
+  "name": "The Pizza Company Hậu Giang - Q.6",
+  "address": "167 Đường Hậu Giang, Phường 5, Quận 6, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:07:04.235Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:26:43.155Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 6",
+  "districtId": 775,
+  "ward": "Phường 5",
+  "wardId": 27361
+},
+{
+  "_id": {
+    "$oid": "64f5f358604c841d6d7bf906"
+  },
+  "name": "The Pizza Company Huỳnh Tấn Phát - Q.7",
+  "address": "346 Huỳnh Tấn Phát, Bình Thuận, Quận 7, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:10:16.894Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:28:10.086Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 7",
+  "districtId": 778,
+  "ward": "Bình Thuận",
+  "wardId": 27478
+},
+{
+  "_id": {
+    "$oid": "64f5f36f604c841d6d7bf908"
+  },
+  "name": "The Pizza Company Co.op Mart Huỳnh Tấn Phát - Q.7",
+  "address": "Co.opmart Huỳnh Tấn Phát: 80/4A Huỳnh Tấn Phát, Phường Phú Mỹ, Quận 7, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:10:39.318Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:30:23.808Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 7",
+  "districtId": 778,
+  "ward": "Phú Mỹ",
+  "wardId": 27493
+},
+{
+  "_id": {
+    "$oid": "64f5f380604c841d6d7bf90a"
+  },
+  "name": "The Pizza Company Nguyễn Đức Cảnh - Q.7",
+  "address": "101 Nguyễn Đức Cảnh, Tân Phong, Quận 7, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:10:56.026Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:31:12.149Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 7",
+  "districtId": 778,
+  "ward": "Tân Phong",
+  "wardId": 27490
+},
+{
+  "_id": {
+    "$oid": "64f5f39a604c841d6d7bf90c"
+  },
+  "name": "The Pizza Company Crescent Mall - Q.7",
+  "address": "Crescent Mall, Tầng 5, 101 Tôn Dật Tiên, Tân Phú, Quận 7, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:11:22.824Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:31:46.787Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 7",
+  "districtId": 778,
+  "ward": "Tân Phú",
+  "wardId": 27487
+},
+{
+  "_id": {
+    "$oid": "64f5f3b4604c841d6d7bf90e"
+  },
+  "name": "The Pizza Company Phạm Hùng - Q.8",
+  "address": "322B Phạm Hùng, Phường 5, Quận 8, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:11:48.379Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:33:55.769Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 8",
+  "districtId": 776,
+  "ward": "Phường 5",
+  "wardId": 27418
+},
+{
+  "_id": {
+    "$oid": "64f5f3c9604c841d6d7bf910"
+  },
+  "name": "The Pizza Company Quốc Lộ 50 - Q.8",
+  "address": "310 - 312 Quốc Lộ 50, P. 6, Quận 8, TP. HCM",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:12:09.807Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:34:27.222Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 8",
+  "districtId": 776,
+  "ward": "Phường 6",
+  "wardId": 27424
+},
+{
+  "_id": {
+    "$oid": "64f5f3f5604c841d6d7bf912"
+  },
+  "name": "The Pizza Company Vạn Hạnh Mall - Q.10",
+  "address": "11 Sư Vạn Hạnh, Phường 12, Quận 10, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:12:53.833Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:35:13.365Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 10",
+  "districtId": 771,
+  "ward": "Phường 12",
+  "wardId": 27172
+},
+{
+  "_id": {
+    "$oid": "64f5f440604c841d6d7bf918"
+  },
+  "name": "The Pizza Company Hòa Bình - Q.11",
+  "address": "80 Hòa Bình, Phường 5, Quận 11, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:14:08.032Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:36:42.314Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 11",
+  "districtId": 772,
+  "ward": "Phường 5",
+  "wardId": 27211
+},
+{
+  "_id": {
+    "$oid": "64f5f45c604c841d6d7bf91a"
+  },
+  "name": "The Pizza Company Phan Xích Long - Q. Phú Nhuận",
+  "address": "355 Phan Xích Long, Phường 1, Phú Nhuận, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:14:36.539Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:38:03.531Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Phú Nhuận",
+  "districtId": 768,
+  "ward": "Phường 1",
+  "wardId": 27058
+},
+{
+  "_id": {
+    "$oid": "64f5f472604c841d6d7bf91c"
+  },
+  "name": "The Pizza Company Nguyễn Gia Trí - Q. Bình Thạnh",
+  "address": "183 Đ. Nguyễn Gia Trí, Phường 25, Bình Thạnh, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:14:58.798Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:39:19.750Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Bình Thạnh",
+  "districtId": 765,
+  "ward": "Phường 25",
+  "wardId": 26920
+},
+{
+  "_id": {
+    "$oid": "64f5f487604c841d6d7bf91e"
+  },
+  "name": "The Pizza Company Hoàng Hoa Thám - Q. Bình Thạnh",
+  "address": "10D Hoàng Hoa Thám, Phường 7, Bình Thạnh, Thành phố Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:15:19.286Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:40:03.555Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Bình Thạnh",
+  "districtId": 765,
+  "ward": "Phường 7",
+  "wardId": 26926
+},
+{
+  "_id": {
+    "$oid": "64f5f497604c841d6d7bf920"
+  },
+  "name": "The Pizza Company Lê Đại Hành - Q.11",
+  "address": "Lô 4, Khu B, Căn Số 7, Chung Cư Phú Thọ, Lê Đại Hành, P.15, Quận 11, HCM",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:15:35.776Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:41:53.476Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận 11",
+  "districtId": 772,
+  "ward": "Phường 15",
+  "wardId": 27208
+},
+{
+  "_id": {
+    "$oid": "64f5f4b0604c841d6d7bf922"
+  },
+  "name": "The Pizza Company Thống Nhất - Q. Gò Vấp",
+  "address": "452A Thống Nhất, P.16, Quận Gò Vấp, HCM",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:16:00.592Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:42:48.589Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận Gò Vấp",
+  "districtId": 764,
+  "ward": "Phường 16",
+  "wardId": 26878
+},
+{
+  "_id": {
+    "$oid": "64f5f4c0604c841d6d7bf924"
+  },
+  "name": "The Pizza Company Quang Trung - Q. Gò Vấp",
+  "address": "638 Quang Trung, Phường 11, Quận Gò Vấp, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:16:16.201Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:43:13.093Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận Gò Vấp",
+  "districtId": 764,
+  "ward": "Phường 11",
+  "wardId": 26899
+},
+{
+  "_id": {
+    "$oid": "64f5f4cf604c841d6d7bf928"
+  },
+  "name": "The Pizza Company Phan Văn Trị - Q. Gò Vấp",
+  "address": "527J Phan Văn Trị , P 5, Quận Gò Vấp , HCM",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:16:31.868Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:43:52.896Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận Gò Vấp",
+  "districtId": 764,
+  "ward": "Phường 5",
+  "wardId": 26887
+},
+{
+  "_id": {
+    "$oid": "64f5f4e3604c841d6d7bf92a"
+  },
+  "name": "The Pizza Company Võ Văn Ngân - TP. Thủ Đức",
+  "address": "26-28-30 Võ Văn Ngân, Phường Trường Thọ, Quận Thủ Đức, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:16:51.252Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:45:36.099Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận Thủ Đức",
+  "districtId": 769,
+  "ward": "Phường Trường Thọ",
+  "wardId": 26827
+},
+{
+  "_id": {
+    "$oid": "64f5f4f6604c841d6d7bf92c"
+  },
+  "name": "The Pizza Company Sense City Phạm Văn Đồng - TP. Thủ Đức",
+  "address": "Giga Mall - TTTM Sense City Phạm Văn Đồng: L3-03, 240-242 Kha Vạn Cân - Phạm Văn Đồng, Phường Hiệp Bình Chánh, Quận Thủ Đức, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:17:10.224Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:46:45.295Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận Thủ Đức",
+  "districtId": 769,
+  "ward": "Phường Hiệp Bình Chánh",
+  "wardId": 26812
+},
+{
+  "_id": {
+    "$oid": "64f5f50c604c841d6d7bf92e"
+  },
+  "name": "The Pizza Company Bàu Cát - Q. Tân Bình",
+  "address": "207-209 Bàu Cát, Phường 13, Quận Tân Bình, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:17:32.348Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:47:39.249Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận Tân Bình",
+  "districtId": 766,
+  "ward": "Phường 13",
+  "wardId": 26974
+},
+{
+  "_id": {
+    "$oid": "64f5f51f604c841d6d7bf930"
+  },
+  "name": "The Pizza Company Tân Sơn Nhì - Q. Tân Phú",
+  "address": "456A Tân Sơn Nhì, Phường Tân Quý, Quận Tân Phú, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "createdAt": {
+    "$date": "2023-09-04T15:17:51.158Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:48:24.144Z"
+  },
+  "city": "Hồ Chí Minh",
+  "cityId": 79,
+  "district": "Quận Tân Phú",
+  "districtId": 767,
+  "ward": "Phường Tân Quý",
+  "wardId": 27019
+},
+{
+  "_id": {
+    "$oid": "64f744cafc5da7b5a3669020"
+  },
+  "name": "The Pizza Company Lê Văn Sỹ - Q. Tân Bình",
+  "address": "515 Lê Văn Sỹ, Phường 2, Quận Tân Bình, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "cityId": 79,
+  "city": "Thành phố Hồ Chí Minh",
+  "districtId": 766,
+  "district": "Quận Tân Bình",
+  "ward": "Phường 2",
+  "wardId": 26965,
+  "createdAt": {
+    "$date": "2023-09-05T15:10:02.036Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:10:02.036Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f74e41fc5da7b5a3669082"
+  },
+  "name": "The Pizza Company AEON Mall Tân Phú - Q. Tân Phú",
+  "address": "TTTM AEON Mall Tân Phú: Tầng 3, 30 Bờ Bao Tân Thắng, Phường Sơn Kỳ, Quận Tân Phú, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "cityId": 79,
+  "city": "Thành phố Hồ Chí Minh",
+  "districtId": 767,
+  "district": "Quận Tân Phú",
+  "ward": "Phường Sơn Kỳ",
+  "wardId": 27016,
+  "createdAt": {
+    "$date": "2023-09-05T15:50:25.128Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:50:25.128Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f74ea5fc5da7b5a3669086"
+  },
+  "name": "The Pizza Company Lê Văn Quới - Q. Bình Tân",
+  "address": "239 Lê Văn Quới, Phường Bình Trị Đông, Quận Bình Tân, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "cityId": 79,
+  "city": "Thành phố Hồ Chí Minh",
+  "districtId": 777,
+  "district": "Quận Bình Tân",
+  "ward": "Phường Bình Trị Đông",
+  "wardId": 27445,
+  "createdAt": {
+    "$date": "2023-09-05T15:52:05.023Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:52:05.023Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f74f0cfc5da7b5a366908a"
+  },
+  "name": "The Pizza Company Nguyễn Ảnh Thủ - Huyện Hóc Môn",
+  "address": "75/3-75/4 Nguyễn Ánh Thủ, Ấp Vạn Hạnh, Xã Trung Chánh, Huyện Hóc Môn, Hồ Chí Minh",
+  "phone": "1900 633 606",
+  "cityId": 79,
+  "city": "Thành phố Hồ Chí Minh",
+  "districtId": 784,
+  "district": "Huyện Hóc Môn",
+  "ward": "Xã Trung Chánh",
+  "wardId": 27586,
+  "createdAt": {
+    "$date": "2023-09-05T15:53:48.735Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:53:48.735Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f74f9afc5da7b5a366908c"
+  },
+  "name": "The Pizza Company Vincom Biên Hòa - TP. Biên Hoà",
+  "address": "TTTM Vincom Biên Hòa: Tầng 5, 1096 Phạm Văn Thuận, Phường Tân Mai, Thành phố Biên Hoà, Tỉnh Đồng Nai",
+  "phone": "1900 633 606",
+  "cityId": 75,
+  "city": "Tỉnh Đồng Nai",
+  "districtId": 731,
+  "district": "Thành phố Biên Hoà",
+  "ward": "Phường Tân Mai",
+  "wardId": 26026,
+  "createdAt": {
+    "$date": "2023-09-05T15:56:10.046Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:56:10.046Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f75006fc5da7b5a366908e"
+  },
+  "name": "The Pizza Company Vincom Long Xuyên - TP. Long Xuyên",
+  "address": "TTTM Vincom Long Xuyên: Gian hàng L5-06+07, 1242 Trần Hưng Đạo, Phường Mỹ Bình, Thành phố Long Xuyên, Tỉnh An Giang",
+  "phone": "1900 633 606",
+  "cityId": 89,
+  "city": "Tỉnh An Giang",
+  "districtId": 883,
+  "district": "Thành phố Long Xuyên",
+  "ward": "Phường Mỹ Bình",
+  "wardId": 30280,
+  "createdAt": {
+    "$date": "2023-09-05T15:57:58.322Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T15:57:58.322Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f7508afc5da7b5a3669090"
+  },
+  "name": "The Pizza Company Sense City Bến Tre - TP. Bến Tre",
+  "address": "TTTM Sense City Bến Tre: Tầng 1, Co.op Mart Bến Tre, 26A Trần Quốc Tuấn, Phường 4, Thành phố Bến Tre, Tỉnh Bến Tre",
+  "phone": "1900 633 606",
+  "cityId": 83,
+  "city": "Tỉnh Bến Tre",
+  "districtId": 829,
+  "district": "Thành phố Bến Tre",
+  "ward": "Phường 4",
+  "wardId": 28765,
+  "createdAt": {
+    "$date": "2023-09-05T16:00:10.915Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T16:00:10.915Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f750dafc5da7b5a3669092"
+  },
+  "name": "The Pizza Company Sense City Cần Thơ - Q. Ninh Kiều",
+  "address": "TTTM Sense City Cần Thơ: L2-04, 1 Đại lộ Hoà Bình, Phường Tân An, Quận Ninh Kiều, Tỉnh Cần Thơ",
+  "phone": "1900 633 606",
+  "cityId": 92,
+  "city": "Tỉnh Cần Thơ",
+  "districtId": 916,
+  "district": "Quận Ninh Kiều",
+  "ward": "Phường Tân An",
+  "wardId": 31135,
+  "createdAt": {
+    "$date": "2023-09-05T16:01:30.227Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T16:01:30.227Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f7512cfc5da7b5a3669094"
+  },
+  "name": "The Pizza Company Big C Mỹ Tho - TP. Mỹ Tho",
+  "address": "TTTM Big C Mỹ Tho: Tầng trệt, 545 Lê Văn Phẩm, Phường 5, Thành phố Mỹ Tho, Tỉnh Tiền Giang",
+  "phone": "1900 633 606",
+  "cityId": 82,
+  "city": "Tỉnh Tiền Giang",
+  "districtId": 815,
+  "district": "Thành phố Mỹ Tho",
+  "ward": "Phường 5",
+  "wardId": 28249,
+  "createdAt": {
+    "$date": "2023-09-05T16:02:52.485Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T16:02:52.485Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f75301fc5da7b5a366909a"
+  },
+  "name": "The Pizza Company Khu Hòa Bình - TP. Đà Lạt",
+  "address": "1A Nam Kỳ Khởi Nghĩa, Khu Hòa Bình, Thành phố Đà Lạt, Tỉnh Lâm Đồng",
+  "phone": "1900 633 606",
+  "cityId": 68,
+  "city": "Tỉnh Lâm Đồng",
+  "districtId": 672,
+  "district": "Thành phố Đà Lạt",
+  "ward": "Phường 1",
+  "wardId": 24784,
+  "createdAt": {
+    "$date": "2023-09-05T16:10:41.382Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T16:10:41.382Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f75372fc5da7b5a366909e"
+  },
+  "name": "The Pizza Company Vincom Buôn Ma Thuột - TP. Buôn Ma Thuột",
+  "address": "TTTM Vincom BMT, 78 Lý Thường Kiệt, P.Thắng Lợi, TP BMT , Tỉnh Daklak",
+  "phone": "1900 633 606",
+  "cityId": 66,
+  "city": "Tỉnh Daklak",
+  "districtId": 643,
+  "district": "TP Buôn Ma Thuột",
+  "ward": "Phường Thắng Lợi",
+  "wardId": 24133,
+  "createdAt": {
+    "$date": "2023-09-05T16:12:34.173Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T16:12:34.173Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f753eefc5da7b5a36690a0"
+  },
+  "name": "The Pizza Company Võ Thị Sáu - TP. Vũng Tàu",
+  "address": "147 Võ Thị Sáu, Phường 2, Thành phố Vũng Tàu, Tỉnh Bà Rịa Vũng Tàu",
+  "phone": "1900 633 606",
+  "cityId": 77,
+  "city": "Tỉnh Bà Rịa Vũng Tàu",
+  "districtId": 747,
+  "district": "Thành phố Vũng Tàu",
+  "ward": "Phường 2",
+  "wardId": 26509,
+  "createdAt": {
+    "$date": "2023-09-05T16:14:38.161Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T16:15:23.342Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f754a7fc5da7b5a36690a7"
+  },
+  "name": "The Pizza Company Cầu Giấy - Q. Cầu Giấy",
+  "address": "333 Cầu Giấy, P.Dịch Vọng, Q.Cầu Giấy , TP Hà Nội",
+  "phone": "1900 633 606",
+  "cityId": 1,
+  "city": "Thành Phố Hà Nội",
+  "districtId": 5,
+  "district": "Quận Cầu Giấy",
+  "ward": "Phường Dịch Vọng",
+  "wardId": 166,
+  "createdAt": {
+    "$date": "2023-09-05T16:17:43.492Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T16:17:43.492Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64f7553cfc5da7b5a36690a9"
+  },
+  "name": "The Pizza Company Times City - Q. Hai Bà Trưng",
+  "address": "458 Minh Khai, P Vĩnh Tuy , Q.Hai Bà Trưng, TP Hà Nội",
+  "phone": "1900 633 606",
+  "cityId": 1,
+  "city": "Thành Phố Hà Nội",
+  "districtId": 7,
+  "district": "Quận Hai Bà Trưng",
+  "ward": "Phường Vĩnh Tuy",
+  "wardId": 283,
+  "createdAt": {
+    "$date": "2023-09-05T16:20:12.892Z"
+  },
+  "updatedAt": {
+    "$date": "2023-09-05T16:20:12.892Z"
+  }
+}]

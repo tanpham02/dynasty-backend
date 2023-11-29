@@ -14,6 +14,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -50,97 +61,63 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var crudService_1 = __importDefault(require("@app/services/crudService"));
+var customer_1 = __importDefault(require("@app/models/customer"));
+var exception_1 = require("@app/exception");
+var type_1 = require("@app/exception/type");
+var bcrypt_1 = require("bcrypt");
+var constants_1 = require("@app/constants");
 var CustomerService = /** @class */ (function (_super) {
     __extends(CustomerService, _super);
     function CustomerService(model, nameService) {
         return _super.call(this, model, nameService) || this;
     }
-    // SEARCH PAGINATION
-    CustomerService.prototype.getPaginationOverriding = function (params) {
+    // UPDATE
+    CustomerService.prototype.updateOverriding = function (id, req) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
-            var pageIndex, pageSize, name_1, productId, comboPromotionsId, categoryId, types, cityId, districtId, wardId, fullName, role, filter, patternWithName, patternWithFullName, data, totalElement, totalPages, isLastPage, result, error_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var dataUpdate, isCustomerAlreadyExist, existCustomer, newDataUpdate, exception, exception, salt, passwordAfterHash;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        _a.trys.push([0, 3, , 4]);
-                        pageIndex = params.pageIndex, pageSize = params.pageSize, name_1 = params.name, productId = params.productId, comboPromotionsId = params.comboPromotionsId, categoryId = params.categoryId, types = params.types, cityId = params.cityId, districtId = params.districtId, wardId = params.wardId, fullName = params.fullName, role = params.role;
-                        filter = {};
-                        if (name_1) {
-                            patternWithName = { $regex: new RegExp(name_1, 'gi') };
-                            filter.name = patternWithName;
-                        }
-                        if (productId) {
-                            filter.productIds = productId;
-                        }
-                        if (comboPromotionsId) {
-                            filter.comboPromotionsId = comboPromotionsId;
-                        }
-                        if (categoryId) {
-                            filter.categoryId = categoryId;
-                        }
-                        if (types) {
-                            filter.types = { $all: types === null || types === void 0 ? void 0 : types.split(',') };
-                        }
-                        if (cityId) {
-                            filter.cityId = cityId;
-                        }
-                        if (districtId) {
-                            filter.districtId = districtId;
-                        }
-                        if (wardId) {
-                            filter.wardId = wardId;
-                        }
-                        if (fullName) {
-                            patternWithFullName = { $regex: new RegExp(fullName, 'gi') };
-                            filter.fullName = patternWithFullName;
-                        }
-                        if (role) {
-                            filter.role = role;
-                        }
-                        return [4 /*yield*/, this.model
-                                .find(filter)
-                                .limit(pageSize)
-                                .skip(pageSize * pageIndex)];
+                        dataUpdate = ((_a = req.body) === null || _a === void 0 ? void 0 : _a.customerInfo) ? JSON.parse((_b = req === null || req === void 0 ? void 0 : req.body) === null || _b === void 0 ? void 0 : _b.customerInfo) : {};
+                        return [4 /*yield*/, this.getById(id)];
                     case 1:
-                        data = _a.sent();
-                        return [4 /*yield*/, this.model.find(filter).count()];
+                        isCustomerAlreadyExist = _c.sent();
+                        return [4 /*yield*/, customer_1.default.findOne({
+                                $or: [{ phoneNumber: dataUpdate === null || dataUpdate === void 0 ? void 0 : dataUpdate.phoneNumber }, { email: dataUpdate === null || dataUpdate === void 0 ? void 0 : dataUpdate.email }],
+                            })];
                     case 2:
-                        totalElement = _a.sent();
-                        totalPages = Math.ceil(totalElement / pageSize);
-                        isLastPage = pageIndex + 1 >= totalPages;
-                        result = {
-                            data: data.map(function (item) {
-                                var _a = item.toObject(), password = _a.password, remainingCustomer = __rest(_a, ["password"]);
-                                return remainingCustomer;
-                            }),
-                            totalElement: totalElement,
-                            pageIndex: pageIndex,
-                            pageSize: pageSize,
-                            totalPage: totalPages,
-                            isLastPage: isLastPage,
-                        };
-                        return [2 /*return*/, result];
+                        existCustomer = _c.sent();
+                        newDataUpdate = {};
+                        if (!isCustomerAlreadyExist) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.NOT_FOUND, "".concat(this.nameService, " not found"));
+                            throw exception;
+                        }
+                        if (existCustomer) {
+                            exception = new exception_1.Exception(type_1.HttpStatusCode.CONFLICT, "".concat(this.nameService, " already exist"));
+                            throw exception;
+                        }
+                        if (Object.keys(dataUpdate).length) {
+                            newDataUpdate = __assign({}, dataUpdate);
+                        }
+                        if (!(newDataUpdate === null || newDataUpdate === void 0 ? void 0 : newDataUpdate.password)) return [3 /*break*/, 5];
+                        return [4 /*yield*/, (0, bcrypt_1.genSalt)(constants_1.SALT)];
                     case 3:
-                        error_1 = _a.sent();
-                        console.log(error_1);
-                        throw new Error("Occur error when fetching ".concat(this.nameService, " with ").concat(error_1));
-                    case 4: return [2 /*return*/];
+                        salt = _c.sent();
+                        return [4 /*yield*/, (0, bcrypt_1.hash)(newDataUpdate.password, salt)];
+                    case 4:
+                        passwordAfterHash = _c.sent();
+                        newDataUpdate.password = passwordAfterHash;
+                        _c.label = 5;
+                    case 5: return [4 /*yield*/, this.model.findByIdAndUpdate(id, newDataUpdate, { new: true })];
+                    case 6:
+                        _c.sent();
+                        return [2 /*return*/, { message: "Update ".concat(this.nameService, " success") }];
                 }
             });
         });

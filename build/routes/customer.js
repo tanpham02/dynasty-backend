@@ -64,7 +64,7 @@ router.get('/:id', customer_1.default.getById);
  * '/api/customers/{id}':
  *  patch:
  *     tags: [Customer]
- *     summary: User customer
+ *     summary: Update customer
  *     parameters:
  *       - in: path
  *         name: id
@@ -74,9 +74,12 @@ router.get('/:id', customer_1.default.getById);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Customer'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   customerInfo:
+ *                        $ref: '#/components/schema/Customer'
 
  *     responses:
  *       200:

@@ -4,6 +4,26 @@ import { Router } from 'express';
 
 const router = Router();
 
+/**
+ * //@swagger
+ * '/api/auth/signup':
+ *  post:
+ *     tags: [Authentication]
+ *     summary: Signup
+ *     requestBody:
+ *       required: true
+ *       content:
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   customerInfo:
+ *                        $ref: '#/components/schema/Customer'
+ *     responses:
+ *       200:
+ *         description: Ok
+ */
+
 // SIGNUP CUSTOMER
 router.post('/signup', authController.signup);
 
