@@ -1,4 +1,5 @@
 import categoryController from '@app/controllers/category';
+import { verifyToken } from '@app/middlewares/verifyToken';
 import express, { Request, Response } from 'express';
 
 const router = express.Router();
@@ -7,6 +8,8 @@ const router = express.Router();
  * @swagger
  * '/api/category/search':
  *  get:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Category]
  *     summary: Search pagination
  *     parameters:
@@ -36,7 +39,7 @@ const router = express.Router();
  */
 
 // SEARCH PAGINATION CATEGORY
-router.get('/search', categoryController.search);
+router.get('/search', verifyToken, categoryController.search);
 
 /**
  * @swagger

@@ -51,3 +51,21 @@ const configSwagger = (app: Application) => {
 };
 
 export default configSwagger;
+
+// const swaggerUiOptions = {
+//     explorer: true,
+//     swaggerOptions: {
+//       authAction: {
+//         JWT: {
+//           name: 'JWT',
+//           schema: {
+//             type: 'apiKey',
+//             in: 'header',
+//             name: 'Authorization',
+//             description: ''
+//           },
+//           value: 'Bearer <JWT token here>'
+//         }
+//       }
+//     }
+//   };

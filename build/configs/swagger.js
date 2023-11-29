@@ -51,3 +51,20 @@ var configSwagger = function (app) {
     app.use('/the-pizza-company/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs));
 };
 exports.default = configSwagger;
+// const swaggerUiOptions = {
+//     explorer: true,
+//     swaggerOptions: {
+//       authAction: {
+//         JWT: {
+//           name: 'JWT',
+//           schema: {
+//             type: 'apiKey',
+//             in: 'header',
+//             name: 'Authorization',
+//             description: ''
+//           },
+//           value: 'Bearer <JWT token here>'
+//         }
+//       }
+//     }
+//   };

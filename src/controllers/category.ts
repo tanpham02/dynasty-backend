@@ -1,3 +1,4 @@
+import { HttpStatusCode } from '@app/exception/type';
 import CategoryModel from '@app/models/category';
 import CategoryService from '@app/services/category';
 import { Params } from '@app/types';
@@ -17,11 +18,11 @@ const categoryController = {
     };
 
     try {
-      //const category = await categoryService.getPagination(params);
-      //res.status(200).json(category);
-    } catch (error) {
-      console.log(error);
-      res.status(500).json(error);
+      const category = await categoryService.getPagination(params);
+      res.status(HttpStatusCode.OK).json(category);
+    } catch (error: any) {
+      console.log('🚀 ~ file: category.ts:24 ~ search: ~ error:', error);
+      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message);
     }
   },
 

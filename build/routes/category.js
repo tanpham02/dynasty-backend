@@ -4,12 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var category_1 = __importDefault(require("@app/controllers/category"));
+var verifyToken_1 = require("@app/middlewares/verifyToken");
 var express_1 = __importDefault(require("express"));
 var router = express_1.default.Router();
 /**
  * @swagger
  * '/api/category/search':
  *  get:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Category]
  *     summary: Search pagination
  *     parameters:
@@ -38,7 +41,7 @@ var router = express_1.default.Router();
  *                 $ref: '#/components/schema/Category'
  */
 // SEARCH PAGINATION CATEGORY
-router.get('/search', category_1.default.search);
+router.get('/search', verifyToken_1.verifyToken, category_1.default.search);
 /**
  * @swagger
  * '/api/category/create':
