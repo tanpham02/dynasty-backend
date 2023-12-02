@@ -1,6 +1,5 @@
-import { Status } from '@app/constants';
 import { Schema, Document } from 'mongoose';
-import { ProductVariants } from '../productVariant/@type';
+import { ProductStatusI } from '@app/types';
 
 // SCHEMAS DESCRIPTION
 /**
@@ -34,6 +33,7 @@ import { ProductVariants } from '../productVariant/@type';
  *           enum:
  *              - ACTIVE
  *              - IN_ACTIVE
+ *           default: "ACTIVE"
  *         types:
  *           type: string
  *           enum:
@@ -58,19 +58,45 @@ enum ProductType {
   UNIQUE = 'UNIQUE', // dộc đáo
 }
 
-interface Product extends Document {
+export enum ProductVariantSizeType {
+  SMALL = 'SMALL',
+  MEDIUM = 'MEDIUM',
+  LARGE = 'LARGE',
+}
+
+export enum ProductVariantBaseType {
+  PAN = 'PAN',
+  CRISPY_THIN = 'CRISPY_THIN',
+  EXTREME_CHEESE = 'EXTREME_CHEESE',
+  EXTREME_SAUSAGE_CHEESE = 'EXTREME_SAUSAGE_CHEESE',
+}
+
+interface ProductAttribute {
+  attributeName?: string; // Tên thuộc tính
+  attributeList?: Array<{
+    // Danh sách các thuộc tính
+    name?: string;
+    value?: string; // It's can any type
+    priceAdjustment?: string;
+    priceAdjustmentValue?: number;
+  }>;
+  productVariantList: Product[]; // Danh sách sản phẩm con
+}
+
+interface Product extends ProductStatusI, Document {
   _id?: Schema.Types.ObjectId;
   name: string;
   description?: string;
   information?: String;
   categoryId?: Schema.Types.ObjectId;
   price: number;
-  oldPrice?: number;
+  oldPrice?: number; // No need to care
   image?: string;
-  status?: Status;
+  images?: string[];
   types?: ProductType[];
   orderQuantity?: number;
-  productVariantId?: Schema.Types.ObjectId;
+  visible?: boolean;
+  attribute?: ProductAttribute[];
 }
 
 export { Product, ProductType };

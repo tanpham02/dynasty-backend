@@ -39,14 +39,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var exception_1 = require("@app/exception");
 var type_1 = require("@app/exception/type");
 var user_1 = __importDefault(require("@app/models/user"));
 var user_2 = __importDefault(require("@app/services/user"));
 var userService = new user_2.default(user_1.default, 'user');
 var userController = {
     // SEARCH PAGINATION
-    search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    search: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, pageIndex, pageSize, fullName, role, params, result, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -68,15 +67,14 @@ var userController = {
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _b.sent();
-                    console.log('🚀 ~ file: user.ts:26 ~ search: ~ error:', error_1);
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(error_1 === null || error_1 === void 0 ? void 0 : error_1.message);
+                    next(error_1);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     }); },
     // CREATE USER
-    create: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    create: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var result, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -89,18 +87,14 @@ var userController = {
                     return [3 /*break*/, 3];
                 case 2:
                     error_2 = _a.sent();
-                    console.log('🚀 ~ file: user.ts:36 ~ create: ~ error:', error_2);
-                    if (error_2 instanceof exception_1.Exception) {
-                        return [2 /*return*/, res.status(error_2.status).json(error_2.message)];
-                    }
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
+                    next(error_2);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); },
     // UPDATE USER
-    update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    update: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var id, message, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -116,17 +110,14 @@ var userController = {
                     return [3 /*break*/, 4];
                 case 3:
                     error_3 = _a.sent();
-                    if (error_3 instanceof exception_1.Exception) {
-                        return [2 /*return*/, res.status(error_3.status).json(error_3.message)];
-                    }
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
+                    next();
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     }); },
     // GET USER BY ID
-    getById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    getById: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var id, result, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -142,17 +133,14 @@ var userController = {
                     return [3 /*break*/, 4];
                 case 3:
                     error_4 = _a.sent();
-                    if (error_4 instanceof exception_1.Exception) {
-                        return [2 /*return*/, res.status(error_4.status).json(error_4.message)];
-                    }
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
+                    next(error_4);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     }); },
     // GET USER BY ID
-    delete: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    delete: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var ids, message, error_5;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -168,10 +156,7 @@ var userController = {
                     return [3 /*break*/, 4];
                 case 3:
                     error_5 = _a.sent();
-                    if (error_5 instanceof exception_1.Exception) {
-                        return [2 /*return*/, res.status(error_5.status).json(error_5.message)];
-                    }
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
+                    next(error_5);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

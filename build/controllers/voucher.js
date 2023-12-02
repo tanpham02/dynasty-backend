@@ -46,7 +46,7 @@ var voucher_2 = __importDefault(require("@app/services/voucher"));
 var voucherService = new voucher_2.default(voucher_1.default, 'voucher');
 var voucherController = {
     // SEARCH PAGINATION VOUCHER
-    search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    search: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, pageIndex, pageSize, name, params, voucher, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -67,14 +67,14 @@ var voucherController = {
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _b.sent();
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(error_1.message);
+                    next(error_1);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     }); },
     // CREATE VOUCHER
-    create: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    create: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var result, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -88,14 +88,14 @@ var voucherController = {
                 case 2:
                     error_2 = _a.sent();
                     console.log('🚀 ~ file: voucher.ts:33 ~ create: ~ error:', error_2);
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
+                    next(error_2);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); },
     // UPDATE VOUCHER
-    update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    update: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var id, message, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -112,14 +112,14 @@ var voucherController = {
                     if (error_3 instanceof exception_1.Exception) {
                         return [2 /*return*/, res.status(error_3.status).json(error_3.message)];
                     }
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json((error_3 === null || error_3 === void 0 ? void 0 : error_3.message) || type_1.INTERNAL_SERVER_ERROR_MSG);
+                    next(error_3);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); },
     // GET BY ID
-    getById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    getById: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var id, voucher, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -138,14 +138,14 @@ var voucherController = {
                     if (error_4 instanceof exception_1.Exception) {
                         return [2 /*return*/, res.status(error_4.status).json(error_4.message)];
                     }
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
+                    next(error_4);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); },
     // DELETE
-    delete: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    delete: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var ids, message, error_5;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -162,7 +162,7 @@ var voucherController = {
                     if (error_5 instanceof exception_1.Exception) {
                         return [2 /*return*/, res.status(error_5.status).json(error_5.message)];
                     }
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(type_1.INTERNAL_SERVER_ERROR_MSG);
+                    next(error_5);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }

@@ -1,15 +1,17 @@
 import categoryController from '@app/controllers/category';
+import { formDataParser } from '@app/middlewares/formDataParser';
 import { verifyToken } from '@app/middlewares/verifyToken';
-import express, { Request, Response } from 'express';
+import express from 'express';
 
 const router = express.Router();
 
+// *     security:
+// *       - bearerAuth: []
+
 /**
  * @swagger
- * '/api/category/search':
+ * '/api/category':
  *  get:
- *     security:
- *       - bearerAuth: []
  *     tags: [Category]
  *     summary: Search pagination
  *     parameters:
@@ -39,20 +41,23 @@ const router = express.Router();
  */
 
 // SEARCH PAGINATION CATEGORY
-router.get('/search', verifyToken, categoryController.search);
+router.get('/', categoryController.search);
 
 /**
  * @swagger
- * '/api/category/create':
+ * '/api/category':
  *  post:
  *     tags: [Category]
  *     summary: Create category
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Category'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   categoryInfo:
+ *                        $ref: '#/components/schema/Category'
  *     responses:
  *       200:
  *         description: OK
@@ -63,7 +68,7 @@ router.get('/search', verifyToken, categoryController.search);
  */
 
 // CREATE CATEGORY
-router.post('/create', categoryController.createCategory);
+router.post('/', formDataParser(), categoryController.createCategory);
 
 /**
  * @swagger
@@ -81,9 +86,12 @@ router.post('/create', categoryController.createCategory);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Category'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   categoryInfo:
+ *                        $ref: '#/components/schema/Category'
  *
  *     responses:
  *       200:
@@ -145,7 +153,7 @@ router.get('/:id', categoryController.getCategoryById);
  */
 
 // GET CATEGORY CHILDREN BY ID
-router.get('/child/:childCategoryId', categoryController.getChildrenCategoryById);
+// router.get('/child/:childCategoryId', categoryController.getChildrenCategoryById);
 
 /**
  * @swagger
@@ -175,7 +183,7 @@ router.get('/child/:childCategoryId', categoryController.getChildrenCategoryById
  */
 
 // UPDATE CATEGORY CHILDREN
-router.patch('/child/:childCategoryId', categoryController.updateChildrenCategory);
+// router.patch('/child/:childCategoryId', categoryController.updateChildrenCategory);
 
 /**
  * @swagger
@@ -229,7 +237,7 @@ router.delete('/', categoryController.deleteCategory);
  *                 $ref: '#/components/schema/Category'
  */
 // DELETE CATEGORY
-router.delete('/child/:parentCategoryId', categoryController.deleteChildrenCategory);
+// router.delete('/child/:parentCategoryId', categoryController.deleteChildrenCategory);
 
 /**
  * @swagger
@@ -258,7 +266,7 @@ router.delete('/child/:parentCategoryId', categoryController.deleteChildrenCateg
  *                 $ref: '#/components/schema/ChildrenCategory'
  */
 // DELETE CATEGORY
-router.post('/child/:parentCategoryId', categoryController.addChildrenCategory);
+// router.post('/child/:parentCategoryId', categoryController.addChildrenCategory);
 
 /**
  * @swagger
@@ -286,6 +294,6 @@ router.post('/child/:parentCategoryId', categoryController.addChildrenCategory);
  *                 $ref: '#/components/schema/Category'
  */
 // SEARCH PRODUCT SHOW CLIENT
-router.get('/search-product/:id', categoryController.searchPaginationShowClient);
+// router.get('/search-product/:id', categoryController.searchPaginationShowClient);
 
 export default router;

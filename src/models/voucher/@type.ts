@@ -1,4 +1,4 @@
-import { Status } from '@app/constants';
+import { ProductStatusI } from '@app/types';
 import { Document, Schema } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -77,7 +77,7 @@ export enum PromotionsType {
   DISCOUNT_BY_PERCENT = 'DISCOUNT_BY_PERCENT',
 }
 
-interface Voucher extends Document {
+interface Voucher extends ProductStatusI, Document {
   name?: string;
   description?: string;
   code?: string;
@@ -92,7 +92,6 @@ interface Voucher extends Document {
   minimumOrderValue?: number;
   listProductUsedVoucher?: Schema.Types.ObjectId[];
   customerIdsUsedVoucher?: string[];
-  status?: Status;
 }
 
 export default Voucher;

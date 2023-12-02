@@ -1,7 +1,6 @@
 import { Product } from '@app/models/product/@type';
 import CRUDService from './crudService';
 import { Model } from 'mongoose';
-import ProductVariantsModel from '@app/models/productVariant';
 import CategoryModel from '@app/models/category';
 import { Request } from 'express';
 import { configApp } from '@app/configs';
@@ -16,12 +15,6 @@ class ProductService extends CRUDService<Product> {
   async deleteOverriding(ids?: string[] | string | any) {
     try {
       await this.model.deleteMany({ _id: { $in: ids } });
-      await ProductVariantsModel.updateMany(
-        {
-          productIds: { $in: ids },
-        },
-        { $pull: { productIds: { $in: ids } } },
-      );
 
       await CategoryModel.updateMany(
         {
@@ -65,12 +58,7 @@ class ProductService extends CRUDService<Product> {
       const newProduct = new this.model({
         ...product,
       });
-      const productVariantId = product.productVariantId;
       const categoryId = product.categoryId;
-      if (productVariantId) {
-        const productVariant = await ProductVariantsModel.findById(productVariantId);
-        await productVariant?.updateOne({ $push: { productIds: newProduct._id } });
-      }
       if (categoryId) {
         const category = await CategoryModel.findById(categoryId);
         const categoryChild = await CategoryModel.findOne({ 'childCategory._id': categoryId });
@@ -126,31 +114,6 @@ class ProductService extends CRUDService<Product> {
 
       const categoryId = dataUpdate?.categoryId;
       const categoryChild = await CategoryModel.findOne({ 'childCategory._id': categoryId });
-
-      if (
-        productVariantId &&
-        new Object(product?.productVariantId).valueOf() !== productVariantId
-      ) {
-        try {
-          await ProductVariantsModel.findByIdAndUpdate(
-            { _id: product?.productVariantId },
-            {
-              $pull: { productIds: product?._id },
-            },
-            { new: true },
-          );
-
-          await ProductVariantsModel.findByIdAndUpdate(
-            { _id: productVariantId },
-            {
-              $push: { productIds: product?._id },
-            },
-            { new: true },
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      }
 
       if (categoryId && new Object(product?.categoryId).valueOf() !== categoryId) {
         console.log('category id');

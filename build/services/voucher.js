@@ -74,13 +74,13 @@ var VoucherService = /** @class */ (function (_super) {
                         startDate = new Date(startDateRequest).getTime();
                         endDate = new Date(endDateRequest).getTime();
                         if (startDate < currentDateTime && endDate < currentDateTime) {
-                            dataRequest.status = constants_1.Status.IN_ACTIVE;
+                            dataRequest.status = constants_1.ProductStatus.IN_ACTIVE;
                         }
                         if (startDate <= currentDateTime && endDate > currentDateTime) {
-                            dataRequest.status = constants_1.Status.ACTIVE;
+                            dataRequest.status = constants_1.ProductStatus.ACTIVE;
                         }
                         if (startDate > currentDateTime && endDate > currentDateTime) {
-                            dataRequest.status = constants_1.Status.IN_COMING;
+                            dataRequest.status = constants_1.ProductStatus.IN_COMING;
                         }
                         newVoucher = new this.model(dataRequest);
                         return [4 /*yield*/, newVoucher.save()];

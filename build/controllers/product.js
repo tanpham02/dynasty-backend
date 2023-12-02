@@ -39,35 +39,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var type_1 = require("@app/exception/type");
 var product_1 = __importDefault(require("@app/models/product"));
 var product_2 = __importDefault(require("@app/services/product"));
 var productService = new product_2.default(product_1.default, 'product');
 var productController = {
     //SEARCH PAGINATION PRODUCT
-    search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, pageIndex, pageSize, name, categoryId, types, params;
+    search: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        var _a, pageIndex, pageSize, name, categoryId, types, params, product, error_1;
         return __generator(this, function (_b) {
-            _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, name = _a.name, categoryId = _a.categoryId, types = _a.types;
-            try {
-                params = {
-                    pageIndex: pageIndex ? Number(pageIndex) : 0,
-                    pageSize: pageSize ? Number(pageSize) : 10,
-                    name: name === null || name === void 0 ? void 0 : name.toString(),
-                    categoryId: categoryId === null || categoryId === void 0 ? void 0 : categoryId.toString(),
-                    types: types,
-                };
-                //   const product = await productService.getPagination(params);
-                //   res.status(200).json(product);
+            switch (_b.label) {
+                case 0:
+                    _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize, name = _a.name, categoryId = _a.categoryId, types = _a.types;
+                    _b.label = 1;
+                case 1:
+                    _b.trys.push([1, 3, , 4]);
+                    params = {
+                        pageIndex: pageIndex ? Number(pageIndex) : 0,
+                        pageSize: pageSize ? Number(pageSize) : 10,
+                        name: name === null || name === void 0 ? void 0 : name.toString(),
+                        categoryId: categoryId === null || categoryId === void 0 ? void 0 : categoryId.toString(),
+                        types: types,
+                    };
+                    return [4 /*yield*/, productService.getPagination(params)];
+                case 2:
+                    product = _b.sent();
+                    res.status(type_1.HttpStatusCode.OK).json(product);
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_1 = _b.sent();
+                    next(error_1);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
-            catch (error) {
-                res.status(500).json(error);
-            }
-            return [2 /*return*/];
         });
     }); },
     //CREATE PRODUCT
     create: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var product, error_1;
+        var product, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -78,8 +87,8 @@ var productController = {
                     res.status(200).json(product);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_1 = _a.sent();
-                    res.status(500).json(error_1);
+                    error_2 = _a.sent();
+                    res.status(500).json(error_2);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -87,7 +96,7 @@ var productController = {
     }); },
     //UPDATE PRODUCT
     update: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, response, error_2;
+        var id, response, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -101,8 +110,8 @@ var productController = {
                     res.status(200).json(response.message);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_2 = _a.sent();
-                    res.status(500).json(error_2);
+                    error_3 = _a.sent();
+                    res.status(500).json(error_3);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -110,7 +119,7 @@ var productController = {
     }); },
     //GET PRODUCT BY ID
     getById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, product, error_3;
+        var id, product, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -127,8 +136,8 @@ var productController = {
                     res.status(200).json(product);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_3 = _a.sent();
-                    res.status(500).json(error_3);
+                    error_4 = _a.sent();
+                    res.status(500).json(error_4);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -136,7 +145,7 @@ var productController = {
     }); },
     // DELETE PRODUCT
     delete: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var ids, ress, error_4;
+        var ids, ress, error_5;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -150,8 +159,8 @@ var productController = {
                     res.status(200).json(ress);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_4 = _a.sent();
-                    res.status(500).json(error_4);
+                    error_5 = _a.sent();
+                    res.status(500).json(error_5);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }

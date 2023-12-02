@@ -2,7 +2,7 @@ import Voucher from '@app/models/voucher/@type';
 import CRUDService from './crudService';
 import { Model } from 'mongoose';
 import { Request } from 'express';
-import { Status } from '@app/constants';
+import { ProductStatus } from '@app/constants';
 
 class VoucherService extends CRUDService<Voucher> {
   constructor(model: Model<Voucher>, nameService: string) {
@@ -17,15 +17,15 @@ class VoucherService extends CRUDService<Voucher> {
     const startDate = new Date(startDateRequest).getTime();
     const endDate = new Date(endDateRequest).getTime();
     if (startDate < currentDateTime && endDate < currentDateTime) {
-      dataRequest.status = Status.IN_ACTIVE;
+      dataRequest.status = ProductStatus.IN_ACTIVE;
     }
 
     if (startDate <= currentDateTime && endDate > currentDateTime) {
-      dataRequest.status = Status.ACTIVE;
+      dataRequest.status = ProductStatus.ACTIVE;
     }
 
     if (startDate > currentDateTime && endDate > currentDateTime) {
-      dataRequest.status = Status.IN_COMING;
+      dataRequest.status = ProductStatus.IN_COMING;
     }
 
     const newVoucher = new this.model(dataRequest);

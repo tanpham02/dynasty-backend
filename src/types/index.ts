@@ -1,3 +1,4 @@
+import { ProductStatus } from '@app/constants';
 import { ProductType } from '@app/models/product/@type';
 import { Role } from '@app/models/user/@type';
 
@@ -38,4 +39,8 @@ interface Filter {
   importDate?: any;
 }
 
-export { Params, Filter };
+interface ProductStatusI {
+  status: ProductStatus;
+}
+
+export { Params, Filter, ProductStatusI };

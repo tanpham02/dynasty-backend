@@ -63,6 +63,7 @@ var connection = function () { return __awaiter(void 0, void 0, void 0, function
             case 3:
                 err_1 = _a.sent();
                 console.log("Connect to MongoDB fail with ".concat(err_1));
+                process.exit(1);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

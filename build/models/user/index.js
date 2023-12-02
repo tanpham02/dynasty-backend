@@ -95,8 +95,8 @@ var UserSchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: constants_1.Status,
-        default: constants_1.Status.ACTIVE,
+        enum: constants_1.ProductStatus,
+        default: constants_1.ProductStatus.ACTIVE,
     },
 }, { timestamps: true, versionKey: false });
 var UserModel = (0, mongoose_1.model)('User', UserSchema);

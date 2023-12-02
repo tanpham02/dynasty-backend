@@ -39,13 +39,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var exception_1 = require("@app/exception");
 var type_1 = require("@app/exception/type");
 var category_1 = __importDefault(require("@app/models/category"));
 var category_2 = __importDefault(require("@app/services/category"));
 var categoryService = new category_2.default(category_1.default, 'category');
 var categoryController = {
     // SEARCH PAGINATION CATEGORY
-    search: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    search: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
         var _a, pageIndex, pageSize, name, comboPromotionsId, params, category, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -67,132 +68,15 @@ var categoryController = {
                     return [3 /*break*/, 4];
                 case 3:
                     error_1 = _b.sent();
-                    console.log('🚀 ~ file: category.ts:24 ~ search: ~ error:', error_1);
-                    res.status(type_1.HttpStatusCode.INTERNAL_SERVER).json(error_1 === null || error_1 === void 0 ? void 0 : error_1.message);
+                    next(error_1);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
-            }
-        });
-    }); },
-    // GET BY ID CATEGORY
-    getCategoryById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, category, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, categoryService.getCategoryById(id, 'productsDTO')];
-                case 2:
-                    category = _a.sent();
-                    if (!category) {
-                        return [2 /*return*/, res.status(404).json({ message: 'Category not found.' })];
-                    }
-                    res.status(200).json(category);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_2 = _a.sent();
-                    res.status(500).json(error_2);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
-    }); },
-    // GET CHILDREN CATEGORY BY ID
-    getChildrenCategoryById: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var childCategoryId, childrenCategory, error_3;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    childCategoryId = req.params.childCategoryId;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, categoryService.getChildrenCategoryById(childCategoryId)];
-                case 2:
-                    childrenCategory = _a.sent();
-                    if (!childrenCategory) {
-                        return [2 /*return*/, res.status(404).json({ message: 'Children category not found.' })];
-                    }
-                    res.status(200).json(childrenCategory);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_3 = _a.sent();
-                    res.status(500).json(error_3);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
-    }); },
-    // UPDATE CHILDREN CATEGORY
-    updateChildrenCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var childCategoryId, childCategory, error_4;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    childCategoryId = req.params.childCategoryId;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, categoryService.updateChildrenCategory(childCategoryId, req)];
-                case 2:
-                    childCategory = _a.sent();
-                    res.status(200).json(childCategory);
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_4 = _a.sent();
-                    res.status(500).json(error_4);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
-    }); },
-    // DELETE CHILDREN CATEGORY
-    deleteChildrenCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var parentCategoryId, childCategoryId, message;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    parentCategoryId = req.params.parentCategoryId;
-                    childCategoryId = req.query.childCategoryId;
-                    return [4 /*yield*/, categoryService.deleteChildCategoryOverriding(parentCategoryId, childCategoryId)];
-                case 1:
-                    message = (_a.sent()).message;
-                    try {
-                        res.status(200).json(message);
-                    }
-                    catch (error) {
-                        res.status(500).json(error);
-                    }
-                    return [2 /*return*/];
-            }
-        });
-    }); },
-    // ADD CHILDREN CATEGORY
-    addChildrenCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var parentCategoryId, message;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    parentCategoryId = req.params.parentCategoryId;
-                    return [4 /*yield*/, categoryService.addChildrenCategory(parentCategoryId, req)];
-                case 1:
-                    message = (_a.sent()).message;
-                    try {
-                        res.status(200).json(message);
-                    }
-                    catch (error) {
-                        res.status(500).json(error);
-                    }
-                    return [2 /*return*/];
             }
         });
     }); },
     // CREATE CATEGORY
-    createCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var category, error_5;
+    createCategory: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        var category, error_2;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -200,19 +84,19 @@ var categoryController = {
                     return [4 /*yield*/, categoryService.createOverriding(req)];
                 case 1:
                     category = _a.sent();
-                    res.status(200).json(category);
+                    res.status(type_1.HttpStatusCode.OK).json(category);
                     return [3 /*break*/, 3];
                 case 2:
-                    error_5 = _a.sent();
-                    res.status(500).json(error_5);
+                    error_2 = _a.sent();
+                    next(error_2);
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     }); },
     // UPDATE CATEGORY
-    updateCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, category, error_6;
+    updateCategory: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, message, error_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -222,12 +106,38 @@ var categoryController = {
                     _a.trys.push([1, 3, , 4]);
                     return [4 /*yield*/, categoryService.updateOverriding(id, req)];
                 case 2:
-                    category = _a.sent();
-                    res.status(200).json(category);
+                    message = (_a.sent()).message;
+                    res.status(type_1.HttpStatusCode.OK).json(message);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_6 = _a.sent();
-                    res.status(500).json(error_6);
+                    error_3 = _a.sent();
+                    next(error_3);
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
+            }
+        });
+    }); },
+    // GET BY ID CATEGORY
+    getCategoryById: function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
+        var id, category, error_4;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    id = req.params.id;
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, categoryService.getCategoryById(id)];
+                case 2:
+                    category = _a.sent();
+                    res.status(type_1.HttpStatusCode.OK).json(category);
+                    return [3 /*break*/, 4];
+                case 3:
+                    error_4 = _a.sent();
+                    if (error_4 instanceof exception_1.Exception) {
+                        return [2 /*return*/, res.status(error_4.status).json(error_4.message)];
+                    }
+                    next(error_4);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
@@ -235,7 +145,7 @@ var categoryController = {
     }); },
     // DELETE CATEGORY
     deleteCategory: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var ids, message, error_7;
+        var ids, message, error_5;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -249,34 +159,74 @@ var categoryController = {
                     res.status(200).json(message);
                     return [3 /*break*/, 4];
                 case 3:
-                    error_7 = _a.sent();
-                    res.status(500).json(error_7);
+                    error_5 = _a.sent();
+                    res.status(500).json(error_5);
                     return [3 /*break*/, 4];
                 case 4: return [2 /*return*/];
             }
         });
     }); },
+    //   // GET CHILDREN CATEGORY BY ID
+    //   getChildrenCategoryById: async (req: Request, res: Response) => {
+    //     const { childCategoryId } = req.params;
+    //     try {
+    //       const childrenCategory = await categoryService.getChildrenCategoryById(childCategoryId);
+    //       if (!childrenCategory) {
+    //         return res.status(404).json({ message: 'Children category not found.' });
+    //       }
+    //       res.status(200).json(childrenCategory);
+    //     } catch (error) {
+    //       res.status(500).json(error);
+    //     }
+    //   },
+    //   // UPDATE CHILDREN CATEGORY
+    //   updateChildrenCategory: async (req: Request, res: Response) => {
+    //     const { childCategoryId } = req.params;
+    //     try {
+    //       const childCategory = await categoryService.updateChildrenCategory(childCategoryId, req);
+    //       res.status(200).json(childCategory);
+    //     } catch (error) {
+    //       res.status(500).json(error);
+    //     }
+    //   },
+    //   // DELETE CHILDREN CATEGORY
+    //   deleteChildrenCategory: async (req: Request, res: Response) => {
+    //     const { parentCategoryId } = req.params;
+    //     const { childCategoryId } = req.query;
+    //     const { message } = await categoryService.deleteChildCategoryOverriding(
+    //       parentCategoryId,
+    //       childCategoryId,
+    //     );
+    //     try {
+    //       res.status(200).json(message);
+    //     } catch (error) {
+    //       res.status(500).json(error);
+    //     }
+    //   },
+    //   // ADD CHILDREN CATEGORY
+    //   addChildrenCategory: async (req: Request, res: Response) => {
+    //     const { parentCategoryId } = req.params;
+    //     const { message } = await categoryService.addChildrenCategory(parentCategoryId, req);
+    //     try {
+    //       res.status(200).json(message);
+    //     } catch (error) {
+    //       res.status(500).json(error);
+    //     }
+    //   },
     // SEARCH PAGINATION TO SHOW (PRODUCT)
-    searchPaginationShowClient: function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-        var id, _a, pageIndex, pageSize, resFromServer, error_8;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0:
-                    _b.trys.push([0, 2, , 3]);
-                    id = req.params.id;
-                    _a = req.query, pageIndex = _a.pageIndex, pageSize = _a.pageSize;
-                    return [4 /*yield*/, categoryService.searchPaginationToShowProduct(id, pageIndex ? Number(pageIndex) : 0, pageSize ? Number(pageSize) : 4)];
-                case 1:
-                    resFromServer = _b.sent();
-                    res.status(200).json(resFromServer);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_8 = _b.sent();
-                    res.status(500).json(error_8);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    }); },
+    //   searchPaginationShowClient: async (req: Request, res: Response) => {
+    //     try {
+    //       const { id } = req.params;
+    //       const { pageIndex, pageSize } = req.query;
+    //       const resFromServer = await categoryService.searchPaginationToShowProduct(
+    //         id,
+    //         pageIndex ? Number(pageIndex) : 0,
+    //         pageSize ? Number(pageSize) : 4,
+    //       );
+    //       res.status(200).json(resFromServer);
+    //     } catch (error) {
+    //       res.status(500).json(error);
+    //     }
+    //   },
 };
 exports.default = categoryController;

@@ -12,7 +12,7 @@ var configSwagger = function (app) {
         definition: {
             openapi: '3.1.0',
             info: {
-                title: 'The Pizza Company API',
+                title: 'Dynasty API',
                 version: '1.0.0',
                 description: 'This is a simple API application made with NodeJS + Express and documented with Swagger',
                 license: {
@@ -48,23 +48,6 @@ var configSwagger = function (app) {
         apis: ['src/routes/*.ts', 'src/routes/**.ts', 'src/models/*/*.ts', 'src/models/*/**.ts'],
     };
     var specs = (0, swagger_jsdoc_1.default)(options);
-    app.use('/the-pizza-company/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs));
+    app.use('/dynasty/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs));
 };
 exports.default = configSwagger;
-// const swaggerUiOptions = {
-//     explorer: true,
-//     swaggerOptions: {
-//       authAction: {
-//         JWT: {
-//           name: 'JWT',
-//           schema: {
-//             type: 'apiKey',
-//             in: 'header',
-//             name: 'Authorization',
-//             description: ''
-//           },
-//           value: 'Bearer <JWT token here>'
-//         }
-//       }
-//     }
-//   };

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { Category, ChildCategory } from './@type';
-import { Status } from '@app/constants';
+import { ProductStatus } from '@app/constants';
 
 // RESPONSE DESCRIPTION
 /**
@@ -14,59 +14,33 @@ import { Status } from '@app/constants';
  *      properties:
  *        name:
  *          type: string
- *          default: ""
  *        status:
  *          type: string
- *          default: ""
+ *          default: "ACTIVE"
  *          enum:
  *             - ACTIVE
  *             - IN_ACTIVE
- *        productsDTO:
+ *        products:
  *          type: array
- *          item:
- *             $ref: '#/components/schema/Product'
+ *          items:
+ *            type: string
  *
- *        comboPromotionsId:
- *             type: array
- *             item:
- *                 $ref: '#/components/schema/ComboPromotions'
- *
- *        childCategory:
+ *        childrenCategory:
  *          type: array
- *          item:
- *             $ref: '#/components/schema/Category'
- */
-
-/**
- * @swagger
- * components:
- *  schema:
- *    ChildrenCategory:
- *      type: object
- *      required:
- *        - name
- *      properties:
- *        name:
- *        parentId:
- *          type: string
- *          item:
- *             $ref: '#/components/schema/Category'
+ *          items:
+ *             type: object
+ *             properties:
+ *                parentId:
+ *                   type: string
+ *                category:
+ *                   type: array
+ *                   items:
+ *                      $ref: '#/components/schemas/Category'
  *
- *        childCategory:
- *          type: array
- *          item:
- *             $ref: '#/components/schema/ChildrenCategory'
- */
-
-/**
- * @swagger
- * components:
- *  schema:
- *    ChildCategory:
- *      type: object
- *      properties:
- *        children:
- *              $ref: '#/components/schema/Category'
+ *        priority:
+ *          type: number
+ *        visible:
+ *          type: boolean
  */
 
 const CategorySchema = new Schema<Category>(
@@ -77,21 +51,21 @@ const CategorySchema = new Schema<Category>(
     },
     status: {
       type: String,
-      enum: Status,
-      default: Status.ACTIVE,
+      enum: ProductStatus,
+      default: ProductStatus.ACTIVE,
     },
-    comboPromotionsId: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'ComboPromotions',
-      },
-    ],
-    productsDTO: [
+    products: [
       {
         type: Schema.Types.ObjectId,
         ref: 'Product',
       },
     ],
+    priority: {
+      type: Number,
+    },
+    visible: {
+      type: Boolean,
+    },
   },
   {
     versionKey: false,
@@ -104,12 +78,12 @@ const ChildCategorySchema = new Schema<ChildCategory>({
     type: Schema.Types.ObjectId,
     ref: 'Category',
   },
-  children: {
-    type: CategorySchema,
+  category: {
+    type: [CategorySchema],
   },
 });
 
-CategorySchema.add({ childCategory: { type: [ChildCategorySchema] } });
+CategorySchema.add({ childrenCategory: { type: [ChildCategorySchema] } });
 
 const CategoryModel = model('Category', CategorySchema);
 

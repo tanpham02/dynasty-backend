@@ -1,4 +1,4 @@
-import { Status } from '@app/constants';
+import { ProductStatusI } from '@app/types';
 import { Schema, Document } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -13,60 +13,46 @@ import { Schema, Document } from 'mongoose';
  *      properties:
  *        name:
  *          type: string
- *          default: ""
  *        status:
  *          type: string
- *          default: ""
+ *          default: "ACTIVE"
  *          enum:
  *             - ACTIVE
  *             - IN_ACTIVE
- *        productsDTO:
+ *        products:
  *          type: array
- *          item:
- *             $ref: '#/components/schema/Product'
+ *          items:
+ *            type: string
  *
- *        comboPromotionsId:
- *             type: array
- *             item:
- *               $ref: '#/components/schema/ComboPromotions'
- *        childCategory:
+ *        childrenCategory:
  *          type: array
- *          item:
- *             $ref: '#/components/schema/Category'
+ *          items:
+ *             type: object
+ *             properties:
+ *                parentId:
+ *                   type: string
+ *                category:
+ *                   type: array
+ *                   items:
+ *                      $ref: '#/components/schema/Category'
+ *
+ *        priority:
+ *          type: number
+ *        visible:
+ *          type: boolean
  */
 
-/**
- * @swagger
- * components:
- *  schemas:
- *    ChildrenCategory:
- *      type: object
- *      required:
- *        - name
- *      properties:
- *        name:
- *        parentId:
- *          type: string
- *          item:
- *             $ref: '#/components/schema/Category'
- *
- *        childCategory:
- *          type: array
- *          item:
- *             $ref: '#/components/schema/ChildrenCategory'
- */
-
-interface Category extends Document {
+interface Category extends ProductStatusI, Document {
   _id?: Schema.Types.ObjectId;
-  status?: Status;
   name: string;
-  childCategory?: ChildCategory[] | any;
-  productsDTO?: Schema.Types.ObjectId[];
-  comboPromotionsId?: Schema.Types.ObjectId[];
+  childrenCategory?: ChildCategory[];
+  products?: Schema.Types.ObjectId[];
+  priority?: number;
+  visible?: boolean;
 }
 
 interface ChildCategory extends Document {
   parentId?: Schema.Types.ObjectId;
-  children?: Category;
+  category?: Category[];
 }
 export { Category, ChildCategory };

@@ -3,34 +3,84 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.materialRouter = exports.orderRouter = exports.authRouter = exports.cartRouter = exports.customerRouter = exports.customerAddressRouter = exports.userRouter = exports.voucherRouter = exports.configStoreRouter = exports.promotionsRouter = exports.comboPromotionsRouter = exports.shopSystemRouter = exports.productVariantRouter = exports.productRouter = exports.categoryRouter = void 0;
+exports.routesMapping = void 0;
 var category_1 = __importDefault(require("./category"));
-exports.categoryRouter = category_1.default;
 var product_1 = __importDefault(require("./product"));
-exports.productRouter = product_1.default;
-var productVariant_1 = __importDefault(require("./productVariant"));
-exports.productVariantRouter = productVariant_1.default;
 var shopSystem_1 = __importDefault(require("./shopSystem"));
-exports.shopSystemRouter = shopSystem_1.default;
 var comboPromotions_1 = __importDefault(require("./comboPromotions"));
-exports.comboPromotionsRouter = comboPromotions_1.default;
 var promotions_1 = __importDefault(require("./promotions"));
-exports.promotionsRouter = promotions_1.default;
 var configStore_1 = __importDefault(require("./configStore"));
-exports.configStoreRouter = configStore_1.default;
 var voucher_1 = __importDefault(require("./voucher"));
-exports.voucherRouter = voucher_1.default;
 var user_1 = __importDefault(require("./user"));
-exports.userRouter = user_1.default;
 var customerAddress_1 = __importDefault(require("./customerAddress"));
-exports.customerAddressRouter = customerAddress_1.default;
 var customer_1 = __importDefault(require("./customer"));
-exports.customerRouter = customer_1.default;
 var cart_1 = __importDefault(require("./cart"));
-exports.cartRouter = cart_1.default;
 var auth_1 = __importDefault(require("./auth"));
-exports.authRouter = auth_1.default;
 var order_1 = __importDefault(require("./order"));
-exports.orderRouter = order_1.default;
 var material_1 = __importDefault(require("./material"));
-exports.materialRouter = material_1.default;
+var apiUrl_1 = require("@app/services/apiUrl");
+var routesMapping = function (app) {
+    var routesData = [
+        {
+            path: apiUrl_1.CATEGORY_URL,
+            route: category_1.default,
+        },
+        {
+            path: apiUrl_1.PRODUCT_URL,
+            route: product_1.default,
+        },
+        {
+            path: apiUrl_1.SHOP_SYSTEM_URL,
+            route: shopSystem_1.default,
+        },
+        {
+            path: apiUrl_1.COMBO_PROMOTIONS_URL,
+            route: comboPromotions_1.default,
+        },
+        {
+            path: apiUrl_1.CONFIG_STORE_URL,
+            route: configStore_1.default,
+        },
+        {
+            path: apiUrl_1.PROMOTIONS_URL,
+            route: promotions_1.default,
+        },
+        {
+            path: apiUrl_1.USER_URL,
+            route: user_1.default,
+        },
+        {
+            path: apiUrl_1.VOUCHER_URL,
+            route: voucher_1.default,
+        },
+        {
+            path: apiUrl_1.CUSTOMER_URL,
+            route: customer_1.default,
+        },
+        {
+            path: apiUrl_1.CUSTOMER_URL,
+            route: customerAddress_1.default,
+        },
+        {
+            path: apiUrl_1.CART_URL,
+            route: cart_1.default,
+        },
+        {
+            path: apiUrl_1.AUTH_URL,
+            route: auth_1.default,
+        },
+        {
+            path: apiUrl_1.ORDER_URL,
+            route: order_1.default,
+        },
+        {
+            path: apiUrl_1.MATERIAL_URL,
+            route: material_1.default,
+        },
+    ];
+    routesData.forEach(function (_a) {
+        var path = _a.path, route = _a.route;
+        return app.use("".concat(path), route);
+    });
+};
+exports.routesMapping = routesMapping;

@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import User, { Role } from './@type';
-import { Status } from '@app/constants';
+import { ProductStatus } from '@app/constants';
 
 // SCHEMAS RESPONSE
 
@@ -97,8 +97,8 @@ const UserSchema = new Schema<User>(
     },
     status: {
       type: String,
-      enum: Status,
-      default: Status.ACTIVE,
+      enum: ProductStatus,
+      default: ProductStatus.ACTIVE,
     },
   },
   { timestamps: true, versionKey: false },

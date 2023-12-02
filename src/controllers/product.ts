@@ -1,14 +1,15 @@
+import { HttpStatusCode } from '@app/exception/type';
 import ProductModel from '@app/models/product';
 import { ProductType } from '@app/models/product/@type';
 import ProductService from '@app/services/product';
 import { Params } from '@app/types';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 const productService = new ProductService(ProductModel, 'product');
 
 const productController = {
   //SEARCH PAGINATION PRODUCT
-  search: async (req: Request, res: Response) => {
+  search: async (req: Request, res: Response, next: NextFunction) => {
     const { pageIndex, pageSize, name, categoryId, types } = req.query;
     try {
       const params: Params = {
@@ -18,10 +19,10 @@ const productController = {
         categoryId: categoryId?.toString(),
         types: types as ProductType,
       };
-    //   const product = await productService.getPagination(params);
-    //   res.status(200).json(product);
+      const product = await productService.getPagination(params);
+      res.status(HttpStatusCode.OK).json(product);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 

@@ -3,13 +3,13 @@ import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import VoucherModel from '@app/models/voucher';
 import VoucherService from '@app/services/voucher';
 import { Params } from '@app/types';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 const voucherService = new VoucherService(VoucherModel, 'voucher');
 
 const voucherController = {
   // SEARCH PAGINATION VOUCHER
-  search: async (req: Request, res: Response) => {
+  search: async (req: Request, res: Response, next: NextFunction) => {
     const { pageIndex, pageSize, name } = req.query;
     try {
       const params: Params = {
@@ -20,23 +20,23 @@ const voucherController = {
       const voucher = await voucherService.getPagination(params);
       res.status(HttpStatusCode.OK).json(voucher);
     } catch (error: any) {
-      res.status(HttpStatusCode.INTERNAL_SERVER).json(error.message);
+      next(error);
     }
   },
 
   // CREATE VOUCHER
-  create: async (req: Request, res: Response) => {
+  create: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await voucherService.createOverriding(req);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       console.log('🚀 ~ file: voucher.ts:33 ~ create: ~ error:', error);
-      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
+      next(error);
     }
   },
 
   // UPDATE VOUCHER
-  update: async (req: Request, res: Response) => {
+  update: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const { message } = await voucherService.update(id, req);
@@ -45,12 +45,12 @@ const voucherController = {
       if (error instanceof Exception) {
         return res.status(error.status).json(error.message);
       }
-      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message || INTERNAL_SERVER_ERROR_MSG);
+      next(error);
     }
   },
 
   // GET BY ID
-  getById: async (req: Request, res: Response) => {
+  getById: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
       const voucher = await voucherService
@@ -61,12 +61,12 @@ const voucherController = {
       if (error instanceof Exception) {
         return res.status(error.status).json(error.message);
       }
-      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
+      next(error);
     }
   },
 
   // DELETE
-  delete: async (req: Request, res: Response) => {
+  delete: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { ids } = req.query;
       const { message } = await voucherService.delete(ids);
@@ -75,7 +75,7 @@ const voucherController = {
       if (error instanceof Exception) {
         return res.status(error.status).json(error.message);
       }
-      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
+      next(error);
     }
   },
 };

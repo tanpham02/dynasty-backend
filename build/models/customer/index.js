@@ -68,8 +68,8 @@ var CustomerSchema = new mongoose_1.Schema({
     ],
     status: {
         type: String,
-        enum: constants_1.Status,
-        default: constants_1.Status.ACTIVE,
+        enum: constants_1.ProductStatus,
+        default: constants_1.ProductStatus.ACTIVE,
     },
 }, { versionKey: false, timestamps: true });
 var CustomerModel = (0, mongoose_1.model)('Customer', CustomerSchema);

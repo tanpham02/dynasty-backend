@@ -14,57 +14,33 @@ var constants_1 = require("@app/constants");
  *      properties:
  *        name:
  *          type: string
- *          default: ""
  *        status:
  *          type: string
- *          default: ""
+ *          default: "ACTIVE"
  *          enum:
  *             - ACTIVE
  *             - IN_ACTIVE
- *        productsDTO:
+ *        products:
  *          type: array
- *          item:
- *             $ref: '#/components/schema/Product'
+ *          items:
+ *            type: string
  *
- *        comboPromotionsId:
- *             type: array
- *             item:
- *                 $ref: '#/components/schema/ComboPromotions'
- *
- *        childCategory:
+ *        childrenCategory:
  *          type: array
- *          item:
- *             $ref: '#/components/schema/Category'
- */
-/**
- * @swagger
- * components:
- *  schema:
- *    ChildrenCategory:
- *      type: object
- *      required:
- *        - name
- *      properties:
- *        name:
- *        parentId:
- *          type: string
- *          item:
- *             $ref: '#/components/schema/Category'
+ *          items:
+ *             type: object
+ *             properties:
+ *                parentId:
+ *                   type: string
+ *                category:
+ *                   type: array
+ *                   items:
+ *                      $ref: '#/components/schemas/Category'
  *
- *        childCategory:
- *          type: array
- *          item:
- *             $ref: '#/components/schema/ChildrenCategory'
- */
-/**
- * @swagger
- * components:
- *  schema:
- *    ChildCategory:
- *      type: object
- *      properties:
- *        children:
- *              $ref: '#/components/schema/Category'
+ *        priority:
+ *          type: number
+ *        visible:
+ *          type: boolean
  */
 var CategorySchema = new mongoose_1.Schema({
     name: {
@@ -73,21 +49,21 @@ var CategorySchema = new mongoose_1.Schema({
     },
     status: {
         type: String,
-        enum: constants_1.Status,
-        default: constants_1.Status.ACTIVE,
+        enum: constants_1.ProductStatus,
+        default: constants_1.ProductStatus.ACTIVE,
     },
-    comboPromotionsId: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: 'ComboPromotions',
-        },
-    ],
-    productsDTO: [
+    products: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
             ref: 'Product',
         },
     ],
+    priority: {
+        type: Number,
+    },
+    visible: {
+        type: Boolean,
+    },
 }, {
     versionKey: false,
     timestamps: true,
@@ -97,10 +73,10 @@ var ChildCategorySchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Category',
     },
-    children: {
-        type: CategorySchema,
+    category: {
+        type: [CategorySchema],
     },
 });
-CategorySchema.add({ childCategory: { type: [ChildCategorySchema] } });
+CategorySchema.add({ childrenCategory: { type: [ChildCategorySchema] } });
 var CategoryModel = (0, mongoose_1.model)('Category', CategorySchema);
 exports.default = CategoryModel;

@@ -3,13 +3,12 @@ enum MODE {
   PRODUCTION = 'production',
 }
 
-enum Status {
+enum ProductStatus {
   ACTIVE = 'ACTIVE',
   IN_ACTIVE = 'IN_ACTIVE',
-  DELETED = 'DELETED',
   IN_COMING = 'IN_COMING',
 }
 
 const SALT: number = 10;
 
-export { MODE, Status, SALT };
+export { MODE, ProductStatus, SALT };

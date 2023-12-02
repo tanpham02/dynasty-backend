@@ -1,4 +1,4 @@
-import { Status } from '@app/constants';
+import { ProductStatusI } from '@app/types';
 import { Document, Schema } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -35,7 +35,7 @@ import { Document, Schema } from 'mongoose';
  *             - IN_ACTIVE
  */
 
-interface Customer extends Document {
+interface Customer extends ProductStatusI, Document {
   phoneNumber?: string;
   fullName?: string;
   email?: string;
@@ -43,7 +43,6 @@ interface Customer extends Document {
   birthday?: string | Date;
   customerAddressId: Schema.Types.ObjectId;
   orderIds: string[];
-  status: Status;
 }
 
 export { Customer };

@@ -1,4 +1,4 @@
-import { Status } from '@app/constants';
+import { ProductStatusI } from '@app/types';
 import { Document } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -42,7 +42,7 @@ export enum Role {
   USER = 'USER',
 }
 
-interface User extends Document {
+interface User extends ProductStatusI, Document {
   username?: string;
   birthday?: string | Date;
   fullName?: string;
@@ -57,7 +57,6 @@ interface User extends Document {
   wardId: number;
   password?: string;
   role?: Role;
-  status: Status;
   image?: string;
 }
 

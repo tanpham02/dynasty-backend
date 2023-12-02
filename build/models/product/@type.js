@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProductType = void 0;
+exports.ProductType = exports.ProductVariantBaseType = exports.ProductVariantSizeType = void 0;
 // SCHEMAS DESCRIPTION
 /**
  * @swagger
@@ -33,6 +33,7 @@ exports.ProductType = void 0;
  *           enum:
  *              - ACTIVE
  *              - IN_ACTIVE
+ *           default: "ACTIVE"
  *         types:
  *           type: string
  *           enum:
@@ -56,3 +57,16 @@ var ProductType;
     ProductType["SPICY"] = "SPICY";
     ProductType["UNIQUE"] = "UNIQUE";
 })(ProductType || (exports.ProductType = ProductType = {}));
+var ProductVariantSizeType;
+(function (ProductVariantSizeType) {
+    ProductVariantSizeType["SMALL"] = "SMALL";
+    ProductVariantSizeType["MEDIUM"] = "MEDIUM";
+    ProductVariantSizeType["LARGE"] = "LARGE";
+})(ProductVariantSizeType || (exports.ProductVariantSizeType = ProductVariantSizeType = {}));
+var ProductVariantBaseType;
+(function (ProductVariantBaseType) {
+    ProductVariantBaseType["PAN"] = "PAN";
+    ProductVariantBaseType["CRISPY_THIN"] = "CRISPY_THIN";
+    ProductVariantBaseType["EXTREME_CHEESE"] = "EXTREME_CHEESE";
+    ProductVariantBaseType["EXTREME_SAUSAGE_CHEESE"] = "EXTREME_SAUSAGE_CHEESE";
+})(ProductVariantBaseType || (exports.ProductVariantBaseType = ProductVariantBaseType = {}));

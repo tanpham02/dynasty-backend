@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import Voucher, { PromotionsType, SaleScope } from './@type';
-import { Status } from '@app/constants';
+import { ProductStatus } from '@app/constants';
 
 // SCHEMAS DESCRIPTION
 
@@ -124,8 +124,8 @@ const voucherSchema = new Schema<Voucher>(
     ],
     status: {
       type: String,
-      enum: Status,
-      default: Status.ACTIVE,
+      enum: ProductStatus,
+      default: ProductStatus.ACTIVE,
     },
 
     customerIdsUsedVoucher: [

@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { Product, ProductType } from './@type';
-import { Status } from '@app/constants';
-import { ProductVariantsSchema } from '../productVariant';
+import { Product, ProductType, ProductVariantBaseType, ProductVariantSizeType } from './@type';
+import { ProductStatus } from '@app/constants';
 
 // RESPONSE  DESCRIPTION
 /**
@@ -74,30 +73,25 @@ const ProductSchema = new Schema<Product>(
     image: {
       type: String,
     },
+    images: {
+      type: [String],
+    },
     status: {
       type: String,
-      enum: Status,
-      default: Status.ACTIVE,
+      enum: ProductStatus,
+      default: ProductStatus.ACTIVE,
     },
     types: {
       type: [String],
-      enum: [
-        ProductType.NORMAL,
-        ProductType.NEW,
-        ProductType.BEST_SELLER,
-        ProductType.DELICIOUS_MUST_TRY,
-        ProductType.VEGETARIAN,
-        ProductType.SPICY,
-        ProductType.UNIQUE,
-      ],
+      enum: ProductType,
       default: [ProductType.NORMAL],
     },
     orderQuantity: {
       type: Number,
     },
-    productVariantId: {
-      type: Schema.Types.ObjectId,
-      ref: 'ProductVariant',
+    visible: {
+      type: Boolean,
+      default: true,
     },
   },
   {
@@ -105,6 +99,33 @@ const ProductSchema = new Schema<Product>(
     timestamps: true,
   },
 );
+
+ProductSchema.add({
+  attribute: [
+    {
+      attributeName: {
+        type: String,
+      },
+      attributeList: [
+        {
+          name: {
+            type: String,
+          },
+          value: {
+            type: String,
+          },
+          priceAdjustment: {
+            type: String,
+          },
+          priceAdjustmentValue: {
+            type: Number,
+          },
+        },
+      ],
+      productVariantList: [ProductSchema],
+    },
+  ],
+});
 
 const ProductModel = model('Product', ProductSchema);
 

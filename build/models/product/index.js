@@ -72,34 +72,55 @@ var ProductSchema = new mongoose_1.Schema({
     image: {
         type: String,
     },
+    images: {
+        type: [String],
+    },
     status: {
         type: String,
-        enum: constants_1.Status,
-        default: constants_1.Status.ACTIVE,
+        enum: constants_1.ProductStatus,
+        default: constants_1.ProductStatus.ACTIVE,
     },
     types: {
         type: [String],
-        enum: [
-            _type_1.ProductType.NORMAL,
-            _type_1.ProductType.NEW,
-            _type_1.ProductType.BEST_SELLER,
-            _type_1.ProductType.DELICIOUS_MUST_TRY,
-            _type_1.ProductType.VEGETARIAN,
-            _type_1.ProductType.SPICY,
-            _type_1.ProductType.UNIQUE,
-        ],
+        enum: _type_1.ProductType,
         default: [_type_1.ProductType.NORMAL],
     },
     orderQuantity: {
         type: Number,
     },
-    productVariantId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'ProductVariant',
+    visible: {
+        type: Boolean,
+        default: true,
     },
 }, {
     versionKey: false,
     timestamps: true,
+});
+ProductSchema.add({
+    attribute: [
+        {
+            attributeName: {
+                type: String,
+            },
+            attributeList: [
+                {
+                    name: {
+                        type: String,
+                    },
+                    value: {
+                        type: String,
+                    },
+                    priceAdjustment: {
+                        type: String,
+                    },
+                    priceAdjustmentValue: {
+                        type: Number,
+                    },
+                },
+            ],
+            productVariantList: [ProductSchema],
+        },
+    ],
 });
 var ProductModel = (0, mongoose_1.model)('Product', ProductSchema);
 exports.default = ProductModel;

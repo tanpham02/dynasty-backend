@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { Customer } from './@type';
-import { Status } from '@app/constants';
+import { ProductStatus } from '@app/constants';
 
 // SCHEMAS DESCRIPTION
 
@@ -71,8 +71,8 @@ const CustomerSchema = new Schema<Customer>(
     ],
     status: {
       type: String,
-      enum: Status,
-      default: Status.ACTIVE,
+      enum: ProductStatus,
+      default: ProductStatus.ACTIVE,
     },
   },
   { versionKey: false, timestamps: true },
