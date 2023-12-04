@@ -1,4 +1,4 @@
-import { ProductStatusI } from '@app/types';
+import { BaseModel } from '@app/types';
 import { Document, Schema } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -77,7 +77,7 @@ export enum PromotionsType {
   DISCOUNT_BY_PERCENT = 'DISCOUNT_BY_PERCENT',
 }
 
-interface Voucher extends ProductStatusI, Document {
+interface Voucher extends BaseModel, Document {
   name?: string;
   description?: string;
   code?: string;

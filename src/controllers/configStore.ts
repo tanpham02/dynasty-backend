@@ -19,7 +19,7 @@ const configStoreController = {
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const { message } = await cfStoreService.update(id, req);
+      const { message } = await cfStoreService.update(id, req, '');
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       if (error instanceof Exception) {

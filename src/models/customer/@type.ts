@@ -1,4 +1,4 @@
-import { ProductStatusI } from '@app/types';
+import { BaseModel } from '@app/types';
 import { Document, Schema } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -35,7 +35,7 @@ import { Document, Schema } from 'mongoose';
  *             - IN_ACTIVE
  */
 
-interface Customer extends ProductStatusI, Document {
+interface Customer extends BaseModel, Document {
   phoneNumber?: string;
   fullName?: string;
   email?: string;

@@ -1,11 +1,9 @@
-import express, { Application, NextFunction, Request, Response } from 'express';
+import express, { Application } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import cookieParser from 'cookie-parser';
 import { errorHandler } from '@app/middlewares/errorHandler';
-import { Exception } from '@app/exception';
 
 const configServer = (app: Application) => {
   dotenv.config({ path: '.env.development' });
@@ -30,18 +28,7 @@ const configServer = (app: Application) => {
   // app.use('/static', express.static(path.join(__dirname, 'public'))) => Đi từ thư mục src vào
   // app.use('/upload/img', express.static('upload/img'));  => Đi từ thu mục root vao
 
-  // GLOBAL ERROR
-  app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-    if (err instanceof Exception) {
-      return res.status(err.status).json(err.message);
-    } // Log the error stack trace
-
-    res.status(HttpStatusCode.INTERNAL_SERVER).json({
-      error: INTERNAL_SERVER_ERROR_MSG,
-    });
-  });
-
-  // ERROR HANDLER (Avoid crash app)
+  // GLOBAL ERROR - ERROR HANDLER
   app.use(errorHandler);
 };
 

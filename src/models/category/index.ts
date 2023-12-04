@@ -36,11 +36,15 @@ import { ProductStatus } from '@app/constants';
  *                   type: array
  *                   items:
  *                      $ref: '#/components/schemas/Category'
- *
+ *        slug:
+ *          type: string
  *        priority:
  *          type: number
  *        visible:
  *          type: boolean
+ *        isShowHomePage:
+ *          type: boolean
+ *          default: true
  */
 
 const CategorySchema = new Schema<Category>(
@@ -65,6 +69,13 @@ const CategorySchema = new Schema<Category>(
     },
     visible: {
       type: Boolean,
+    },
+    isShowHomePage: {
+      type: Boolean,
+      default: true,
+    },
+    slug: {
+      type: String,
     },
   },
   {

@@ -1,4 +1,4 @@
-import { ProductStatusI } from '@app/types';
+import { BaseModel } from '@app/types';
 import { Schema, Document } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -36,19 +36,25 @@ import { Schema, Document } from 'mongoose';
  *                   items:
  *                      $ref: '#/components/schema/Category'
  *
+ *        slug:
+ *          type: string
  *        priority:
  *          type: number
  *        visible:
  *          type: boolean
+ *        isShowHomePage:
+ *          type: boolean
+ *          default: true
  */
 
-interface Category extends ProductStatusI, Document {
+interface Category extends BaseModel, Document {
   _id?: Schema.Types.ObjectId;
   name: string;
   childrenCategory?: ChildCategory[];
   products?: Schema.Types.ObjectId[];
   priority?: number;
   visible?: boolean;
+  isShowHomePage?: boolean;
 }
 
 interface ChildCategory extends Document {

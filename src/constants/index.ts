@@ -11,4 +11,9 @@ enum ProductStatus {
 
 const SALT: number = 10;
 
-export { MODE, ProductStatus, SALT };
+const FIELDS_NAME = {
+  CATEGORY: 'categoryInfo',
+  USER: 'userInfo',
+};
+
+export { MODE, ProductStatus, SALT, FIELDS_NAME };

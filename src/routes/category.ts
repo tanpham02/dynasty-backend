@@ -1,3 +1,4 @@
+import { FIELDS_NAME } from '@app/constants';
 import categoryController from '@app/controllers/category';
 import { formDataParser } from '@app/middlewares/formDataParser';
 import { verifyToken } from '@app/middlewares/verifyToken';
@@ -68,7 +69,7 @@ router.get('/', categoryController.search);
  */
 
 // CREATE CATEGORY
-router.post('/', formDataParser(), categoryController.createCategory);
+router.post('/', formDataParser(FIELDS_NAME.CATEGORY), categoryController.createCategory);
 
 /**
  * @swagger
@@ -103,7 +104,7 @@ router.post('/', formDataParser(), categoryController.createCategory);
  */
 
 // UPDATE CATEGORY
-router.patch('/:id', categoryController.updateCategory);
+router.patch('/:id', formDataParser(FIELDS_NAME.CATEGORY), categoryController.updateCategory);
 
 /**
  * @swagger
@@ -132,61 +133,6 @@ router.get('/:id', categoryController.getCategoryById);
 
 /**
  * @swagger
- * '/api/category/child/{childCategoryId}':
- *  get:
- *     tags: [Category]
- *     summary: Find category children by id
- *     parameters:
- *       - in: path
- *         name: childCategoryId
- *         schema:
- *           type: string
- *         required: true
- *
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Category'
- */
-
-// GET CATEGORY CHILDREN BY ID
-// router.get('/child/:childCategoryId', categoryController.getChildrenCategoryById);
-
-/**
- * @swagger
- * '/api/category/child/{childCategoryId}':
- *  patch:
- *     tags: [Category]
- *     summary: Update child category
- *     parameters:
- *       - in: path
- *         name: childCategoryId
- *         required: true
- *
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/ChildCategory'
- *
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/ChildCategory'
- */
-
-// UPDATE CATEGORY CHILDREN
-// router.patch('/child/:childCategoryId', categoryController.updateChildrenCategory);
-
-/**
- * @swagger
  * '/api/category/':
  *  delete:
  *     tags: [Category]
@@ -212,73 +158,11 @@ router.delete('/', categoryController.deleteCategory);
 
 /**
  * @swagger
- * '/api/category/child/{parentCategoryId}':
- *  delete:
- *     tags: [Category]
- *     summary: Delete child category
- *     parameters:
- *       - in: path
- *         name: parentCategoryId
- *         type: string
- *         required: true
- *       - in: query
- *         name: childCategoryId
- *         schema:
- *           type: array
- *           item: string
- *         required: true
-
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Category'
- */
-// DELETE CATEGORY
-// router.delete('/child/:parentCategoryId', categoryController.deleteChildrenCategory);
-
-/**
- * @swagger
- * '/api/category/child/{parentCategoryId}':
- *  post:
- *     tags: [Category]
- *     summary: Add child category
- *     parameters:
- *       - in: path
- *         name: parentCategoryId
- *         type: string
- *         required: true
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/ChildrenCategory'
-
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/ChildrenCategory'
- */
-// DELETE CATEGORY
-// router.post('/child/:parentCategoryId', categoryController.addChildrenCategory);
-
-/**
- * @swagger
- * '/api/category/search-product/{id}':
+ * '/api/category/search/home-page':
  *  get:
  *     tags: [Category]
  *     summary: Search to show product
  *     parameters:
- *       - in: path
- *         name: id
- *         type: string
- *         required: true
  *       - in: query
  *         name: pageIndex
  *         type: string
@@ -294,6 +178,6 @@ router.delete('/', categoryController.deleteCategory);
  *                 $ref: '#/components/schema/Category'
  */
 // SEARCH PRODUCT SHOW CLIENT
-// router.get('/search-product/:id', categoryController.searchPaginationShowClient);
+router.get('/search/home-page', categoryController.searchPaginationShowClient);
 
 export default router;

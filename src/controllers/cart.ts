@@ -9,6 +9,7 @@ const cartController = {
   // ADD CART
   updateCart: async (req: Request, res: Response) => {
     const { customerId } = req.params;
+    console.log('gau gau');
 
     try {
       const { message } = await cartService.updateCart(customerId, req);

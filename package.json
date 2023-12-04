@@ -4,9 +4,9 @@
   "description": "",
   "main": "build",
   "scripts": {
-    "dev": "env-cmd -f .env.development concurrently \"npx tsc --watch\" \"nodemon -q build\"",
-    "build": "npm run start && env-cmd -f .env.production node ./build/index.js",
-    "start": "tsc -p tsconfig.json"
+    "run:dev": "env-cmd -f .env.production --watch nodemon ./build/index.js",
+    "run:pro": "env-cmd -f .env.production node ./build/index.js",
+    "build": "tsc"
   },
   "license": "MIT",
   "dependencies": {

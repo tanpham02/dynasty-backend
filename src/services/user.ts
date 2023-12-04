@@ -3,7 +3,7 @@ import CRUDService from './crudService';
 import { Model } from 'mongoose';
 import { Request, Response } from 'express';
 import { genSalt, hash } from 'bcrypt';
-import { SALT } from '@app/constants';
+import { FIELDS_NAME, SALT } from '@app/constants';
 import { Filter, Params } from '@app/types';
 import { configApp } from '@app/configs';
 import { HttpStatusCode } from '@app/exception/type';
@@ -17,7 +17,9 @@ class UserService extends CRUDService<User> {
 
   // CREATE
   async createOverriding(req: Request) {
-    const { password, ...user }: User = req?.body?.userInfo ? JSON.parse(req?.body?.userInfo) : {};
+    const { password, ...user }: User = req?.body?.[FIELDS_NAME.USER]
+      ? JSON.parse(req?.body?.[FIELDS_NAME.USER])
+      : {};
     const existUser = await UserModel.findOne({
       $or: [
         { username: user?.username },
@@ -56,7 +58,9 @@ class UserService extends CRUDService<User> {
 
   // UPDATE
   async updateOverriding(id: string, req: Request) {
-    const dataUpdate: User = req.body?.userInfo ? JSON.parse(req?.body?.userInfo) : {};
+    const dataUpdate: User = req.body?.[FIELDS_NAME.USER]
+      ? JSON.parse(req?.body?.[FIELDS_NAME.USER])
+      : {};
     const filename = req?.file?.filename;
     const destination = req?.file?.destination;
 

@@ -1,8 +1,9 @@
 import { Filter, Params } from '@app/types';
-import { Document, Error, Model } from 'mongoose';
-import { Request, Response } from 'express';
+import { AnyObject, Document, Model } from 'mongoose';
+import { Request } from 'express';
 import { HttpStatusCode } from '@app/exception/type';
 import { Exception } from '@app/exception';
+import { Category } from '@app/models/category/@type';
 
 class CRUDService<T extends Document> {
   protected model: Model<T>;
@@ -136,13 +137,23 @@ class CRUDService<T extends Document> {
   }
 
   // UPDATE
-  async update(id: string | any, req: Request) {
-    const isUserAlreadyExist = await this.getById(id);
-    if (!isUserAlreadyExist) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `${this.nameService} not found!`);
+  async update(id: string, req: Request, fieldName: string) {
+    const dataUpdate = req?.body?.[fieldName] ? JSON.parse(req?.body?.[fieldName]) : {};
+
+    const alreadyExist = await this.getById(id);
+
+    if (!Object.keys(fieldName).length) {
+      const exception = new Exception(HttpStatusCode.BAD_REQUEST, "Request body can't be empty");
       throw exception;
     }
-    await this.model.findByIdAndUpdate(id, req.body, { new: true });
+
+    if (!alreadyExist) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.nameService}!`);
+      throw exception;
+    }
+
+    await this.model.findByIdAndUpdate({ _id: id }, dataUpdate, { new: true });
+
     return { message: `Update ${this.nameService} success` };
   }
 

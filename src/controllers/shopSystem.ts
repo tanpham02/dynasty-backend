@@ -41,7 +41,7 @@ const shopSystemController = {
   update: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const { message } = await ShopSystemService.update(id, req);
+      const { message } = await ShopSystemService.update(id, req, '');
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       if (error instanceof Exception) {

@@ -1,5 +1,5 @@
 import multer from 'multer';
 
-export const formDataParser = () => {
-  return multer().any();
+export const formDataParser = (fieldName: string) => {
+  return multer().single(fieldName);
 };

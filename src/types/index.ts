@@ -39,8 +39,9 @@ interface Filter {
   importDate?: any;
 }
 
-interface ProductStatusI {
-  status: ProductStatus;
+interface BaseModel {
+  status?: ProductStatus;
+  slug?: string;
 }
 
-export { Params, Filter, ProductStatusI };
+export { Params, Filter, BaseModel };

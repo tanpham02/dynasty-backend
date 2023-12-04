@@ -39,7 +39,7 @@ const voucherController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const { message } = await voucherService.update(id, req);
+      const { message } = await voucherService.update(id, req, '');
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       if (error instanceof Exception) {

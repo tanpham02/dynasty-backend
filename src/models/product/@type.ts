@@ -1,5 +1,5 @@
 import { Schema, Document } from 'mongoose';
-import { ProductStatusI } from '@app/types';
+import { BaseModel } from '@app/types';
 
 // SCHEMAS DESCRIPTION
 /**
@@ -83,7 +83,7 @@ interface ProductAttribute {
   productVariantList: Product[]; // Danh sách sản phẩm con
 }
 
-interface Product extends ProductStatusI, Document {
+interface Product extends BaseModel, Document {
   _id?: Schema.Types.ObjectId;
   name: string;
   description?: string;

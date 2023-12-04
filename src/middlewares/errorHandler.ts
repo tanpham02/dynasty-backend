@@ -1,28 +1,15 @@
 import { configApp } from '@app/configs';
+import { Exception } from '@app/exception';
+import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import express, { NextFunction, Request, Response } from 'express';
 import http from 'http';
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  const server = http.createServer(express());
-  // IGNORE EXCEPTION
-  server.on('unhandledRejection', (err) => {
-    console.error(`Unhandled Rejection: ${err}`);
+  if (err instanceof Exception) {
+    return res.status(err.status).json(err.message);
+  } // Log the error stack trace
 
-    server.close((err) => {
-      console.log('🚀 ~ file: server.ts:50 ~ err:', err);
-      return;
-    });
-    //process.exit(1);
+  res.status(HttpStatusCode.INTERNAL_SERVER).json({
+    error: err?.message || INTERNAL_SERVER_ERROR_MSG,
   });
-
-  server.on('uncaughtexception', function (err) {
-    console.error(`Uncaught Exception: ${err}`);
-    server.close((err) => {
-      console.log('🚀 ~ file: server.ts:50 ~ err:', err);
-      return;
-    });
-    //process.exit(1);
-  });
-
-  next();
 };
