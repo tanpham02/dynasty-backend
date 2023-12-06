@@ -1,0 +1,43 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": { "project": ["./tsconfig.json"] },
+    "plugins": ["@typescript-eslint", "prettier"],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "eslint-config-prettier", "prettier"],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+      "@typescript-eslint/strict-boolean-expressions": [
+        2,
+        {
+          "allowString": false,
+          "allowNumber": false,
+        },
+      ],
+      "prettier/prettier": [
+        "warn",
+        {
+            "arrowParens": "always",
+            "bracketSameLine": false,
+            "bracketSpacing": true,
+            "semi": true,
+            "singleQuote": true,
+            "jsxSingleQuote": false,
+            "quoteProps": "as-needed",
+            "trailingComma": "all",
+            "singleAttributePerLine": false,
+            "htmlWhitespaceSensitivity": "css",
+            "vueIndentScriptAndStyle": false,
+            "proseWrap": "preserve",
+            "insertPragma": false,
+            "printWidth": 100,
+            "requirePragma": false,
+            "tabWidth": 2,
+            "useTabs": false,
+            "embeddedLanguageFormatting": "auto",
+            "parser": "typescript"
+          }
+      ]
+    },
+    "ignorePatterns": [".eslintrc.cjs"],
+  }

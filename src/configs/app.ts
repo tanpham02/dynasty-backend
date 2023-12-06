@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import dotenv from 'dotenv';
 import 'module-alias/register';
 import { MODE } from '@app/constants';
@@ -8,6 +9,7 @@ interface Config {
   jwtAccessKey?: string;
   jwtRefreshKey?: string;
   APP_URL?: string;
+  FRONT_END_URL?: string;
 }
 
 const configApp = () => {
@@ -29,6 +31,7 @@ const configApp = () => {
   }
   resultConfig.jwtAccessKey = process.env.JWT_ACCESS_KEY;
   resultConfig.jwtRefreshKey = process.env.JWT_REFRESH_KEY;
+  resultConfig.FRONT_END_URL = process.env.FRONTEND_URL;
 
   return resultConfig;
 };

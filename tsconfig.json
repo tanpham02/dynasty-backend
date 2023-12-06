@@ -1,21 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "module": "CommonJS",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "outDir": "build",
     "rootDir": "src",
     "lib": ["es6"],
     "allowJs": true,
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
+    "baseUrl": ".", // Đường dẫn base cho các import
     "paths": {
-      "@app/*":["./src/*"],
-    }
-
+      "@app/*":["./src/*"],  // Đường dẫn tương đối cho các import (alias)
+    },
   },
-  "include": ["src/**/*.ts", "*/upload/**/*"],
+  "files": ["src/index.d.ts"], // Các file dùng để defined global type cho dự án
+  "include": ["src/**/*.ts", "src/**/*", "public/upload/**/**/*"],
   "exclude": ["node_modules"],
  }
 

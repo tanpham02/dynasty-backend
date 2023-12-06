@@ -1,5 +1,5 @@
-import express, { Application } from 'express';
 import 'module-alias/register';
+import express, { Application } from 'express';
 import { configApp, configServer, configSwagger } from '@app/configs';
 import connection from '@app/connection';
 import { routesMapping } from './routes';

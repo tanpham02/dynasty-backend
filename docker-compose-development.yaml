@@ -1,0 +1,52 @@
+version: '3.1'
+services:
+    dynasty_ws:
+        image: tanphamvan/dynasty_ws
+        container_name: dynasty_ws
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile-development
+        ports:
+            - 1009:1009
+        depends_on:
+            - mongo
+            - mongo-express
+        environment:
+            - PORT=1009
+            - MONGO_URL=mongodb://localhost:27017/Dynasty
+            - NODE_ENV=development
+            - FRONTEND_URL=http://localhost:1311
+            - BASE_URL=http://localhost
+            - JWT_ACCESS_KEY=JWT_ACCESS_KEY
+            - JWT_REFRESH_KEY=JWT_REFRESH_KEY
+        networks:
+            - dynasty_network
+
+    mongo:
+        image: mongo
+        container_name: mongodb
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=
+            - MONGO_INITDB_ROOT_PASSWORD=
+            - MONGO_INITDB_DATABASE=Dynasty
+    mongo-express:
+        image: mongo-express
+        container_name: mongodb-express
+        environment:
+            - ME_CONFIG_MONGODB_SERVER=mongo
+            - ME_CONFIG_MONGODB_PORT=27017
+            - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+            - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+            - ME_CONFIG_MONGODB_AUTH_USERNAME=
+            - ME_CONFIG_MONGODB_AUTH_PASSWORD=
+            - ME_CONFIG_BASICAUTH_USERNAME=
+            - ME_CONFIG_BASICAUTH_PASSWORD=
+        depends_on:
+            - mongo
+        ports:
+            - "8888:8081"
+
+networks:
+    dynasty_network:
+        external: true

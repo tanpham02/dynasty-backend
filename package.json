@@ -1,12 +1,28 @@
 {
   "name": "dynasty-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "build",
+  "main": "index.js",
   "scripts": {
-    "run:dev": "env-cmd -f .env.production --watch nodemon ./build/index.js",
-    "run:pro": "env-cmd -f .env.production node ./build/index.js",
-    "build": "tsc"
+    "run:dev": "env-cmd -f .env.development nodemon",
+    "build": "rimraf ./build && tsc && tsc-alias",
+    "run:pro": "yarn build && env-cmd -f .env.production node ./build/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write ."
+  },
+  "_moduleAliases": {
+    "@app/configs": "./src/configs",
+    "@app/connection": "./src/connection",
+    "@app/constants": "./src/constants",
+    "@app/controllers": "./src/controllers",
+    "@app/exception": "./src/exception",
+    "@app/middlewares": "./src/middlewares",
+    "@app/models": "./src/models",
+    "@app/routes": "./src/routes",
+    "@app/services": "./src/services",
+    "@app/types": "./src/types",
+    "@app/utils": "./src/utils"
   },
   "license": "MIT",
   "dependencies": {
@@ -37,16 +53,34 @@
     "@types/jsonwebtoken": "^9.0.3",
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.4.5",
+    "@typescript-eslint/eslint-plugin": "^6.13.2",
+    "@typescript-eslint/parser": "^6.13.2",
     "concurrently": "^8.2.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.1",
+    "tsc-alias": "^1.8.8",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.6"
   },
-  "_moduleAliases": {
-    "@app": "build"
-  },
   "author": {
-    "name": "TanPham Dev",
+    "name": "Tan Van Pham",
     "email": "phamvantan1311@gmail.com"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/tanpham02/ThePizzaCompany_BE.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/tanpham02/ThePizzaCompany_BE/issues"
+  },
+  "homepage": "https://github.com/tanpham02/ThePizzaCompany_BE#readme",
+  "description": ""
+
 }

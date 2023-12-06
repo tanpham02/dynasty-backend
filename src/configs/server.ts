@@ -4,12 +4,14 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import { errorHandler } from '@app/middlewares/errorHandler';
+import { configApp } from '.';
+const { FRONT_END_URL } = configApp();
 
 const configServer = (app: Application) => {
   dotenv.config({ path: '.env.development' });
   app.use(
     cors({
-      origin: 'http://localhost:3001',
+      origin: FRONT_END_URL,
       optionsSuccessStatus: 200,
     }),
   );

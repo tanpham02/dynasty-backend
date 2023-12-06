@@ -52,7 +52,7 @@ const router = Router();
  */
 
 // SEARCH PAGINATION CATEGORY
-router.get('/search', orderController.searchPagination);
+//router.get('/search', orderController.searchPagination);
 
 /**
  * @swagger
@@ -75,7 +75,7 @@ router.get('/search', orderController.searchPagination);
  */
 
 // GET BY ID
-router.get('/:id', orderController.getById);
+//router.get('/:id', orderController.getById);
 
 /**
  * @swagger
@@ -98,7 +98,7 @@ router.get('/:id', orderController.getById);
  */
 
 // CHECKOUT
-router.post('/checkout', orderController.checkout);
+//router.post('/checkout', orderController.checkout);
 
 /**
  * @swagger
@@ -121,7 +121,7 @@ router.post('/checkout', orderController.checkout);
  */
 
 // QUICK BUY
-router.post('/quick-buy', orderController.quickBuy);
+//router.post('/quick-buy', orderController.quickBuy);
 
 /**
  * @swagger
@@ -151,7 +151,7 @@ router.post('/quick-buy', orderController.quickBuy);
  *                 $ref: '#/components/schema/Order'
  */
 // UPDATE TOTAL ORDER WHEN USE VOUCHER
-router.post('/when-use-voucher', orderController.updateTotalOrderWhenUseVoucher);
+// router.post('/when-use-voucher', orderController.updateTotalOrderWhenUseVoucher);
 
 /**
  * @swagger
@@ -178,7 +178,7 @@ router.post('/when-use-voucher', orderController.updateTotalOrderWhenUseVoucher)
  */
 
 // RE-ORDER
-router.post('/re-order/:orderId', orderController.reorder);
+//outer.post('/re-order/:orderId', orderController.reorder);
 
 /**
  * @swagger
@@ -205,7 +205,7 @@ router.post('/re-order/:orderId', orderController.reorder);
  */
 
 // UPDATE STATUS ORDER
-router.patch('/update-status-order', orderController.updateStatusOrder);
+// router.patch('/update-status-order', orderController.updateStatusOrder);
 
 /**
  * @swagger
@@ -232,6 +232,6 @@ router.patch('/update-status-order', orderController.updateStatusOrder);
  */
 
 // CANCEL ORDER
-router.patch('/cancel-order', orderController.requestCancelOrder);
+// router.patch('/cancel-order', orderController.requestCancelOrder);
 
 export default router;
