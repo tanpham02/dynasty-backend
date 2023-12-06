@@ -18,9 +18,7 @@ build/*
 **/build
 !build/build.xml
 *.local
-.env
-.env.development
-.env.production
+
 public
 
 
