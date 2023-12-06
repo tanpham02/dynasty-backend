@@ -87,7 +87,7 @@ interface Product extends BaseModel, Document {
   _id?: Schema.Types.ObjectId;
   name: string;
   description?: string;
-  information?: String;
+  information?: string;
   categoryId?: Schema.Types.ObjectId;
   price: number;
   oldPrice?: number; // No need to care

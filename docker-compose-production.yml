@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+    dynasty_ws:
+        image: tanphamvan/dynasty_ws
+        container_name: dynasty_ws
+        restart: always
+        build:
+            context: .
+            dockerfile: Dockerfile-production
+        ports:
+            - 1009:1009
+        depends_on:
+            - mongo_db
+            - mongo_express
+        env_file:
+            - .env.production
+        networks:
+            - dynasty_network
+
+networks:
+    dynasty_network:
+        external: true

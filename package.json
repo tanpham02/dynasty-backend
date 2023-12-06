@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "run:dev": "env-cmd -f .env.development nodemon",
+    "run:dev:docker": "env-cmd -f .env.development.docker nodemon",
     "build": "rimraf ./build && tsc && tsc-alias",
     "run:pro": "yarn build && env-cmd -f .env.production node ./build/index.js",
     "lint": "eslint .",
