@@ -31,6 +31,7 @@ services:
             - dynasty_network
         volumes:
             - mongo-db-data:/data/db
+            - ./mongo-data:/data/db
 
     mongo_express:
         image: mongo-express
@@ -55,7 +56,7 @@ services:
             - dynasty_network
             - mongodb-docker
 
-networks:
+networks: # Phai chung network
     dynasty_network:
         external: true
     mongodb-docker:
@@ -63,4 +64,5 @@ networks:
 
 volumes:
     mongo-db-data:
-        driver: local
+        name: mongo-db-data
+        external: true
