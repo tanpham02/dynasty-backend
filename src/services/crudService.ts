@@ -1,4 +1,5 @@
-import { Filter, Params } from '@app/types';
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { Filter, Params, SortOrderBy } from '@app/types';
 import { AnyObject, Document, Model } from 'mongoose';
 import { Request } from 'express';
 import { HttpStatusCode } from '@app/exception/type';
@@ -7,8 +8,8 @@ import { Category } from '@app/models/category/@type';
 
 class CRUDService<T extends Document> {
   protected model: Model<T>;
-  protected nameService: String;
-  constructor(model: Model<T>, nameService: String) {
+  protected nameService: string;
+  constructor(model: Model<T>, nameService: string) {
     this.model = model;
     this.nameService = nameService;
   }
@@ -36,9 +37,11 @@ class CRUDService<T extends Document> {
       from,
       to,
       role,
+      sort,
     } = params;
 
     const filter: Filter = {};
+    let sortFieldName: { [key: string]: any } = {};
 
     if (name) {
       const patternWithName = { $regex: new RegExp(name, 'gi') };
@@ -86,10 +89,21 @@ class CRUDService<T extends Document> {
       filter.createdAt = { $gte: from, $lte: to };
     }
 
+    if (sort) {
+      const arraySorts = sort.split(', ');
+      sortFieldName = arraySorts
+        .map((item) => ({
+          [item.split(':')?.[0].toString()]: `${item.split(':')?.[1] as any}`,
+        }))
+        .reduce((acc: any, next: any) => Object.assign(acc, next), {});
+    }
+
     const data = await this.model
       .find(filter)
       .limit(pageSize)
-      .skip(pageSize * pageIndex);
+      .skip(pageSize * pageIndex)
+      .sort(sortFieldName);
+
     const totalElement = await this.model.find(filter).count();
     const totalPages = Math.ceil(totalElement / pageSize);
     const isLastPage = pageIndex + 1 >= totalPages;

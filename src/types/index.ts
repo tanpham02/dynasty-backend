@@ -1,6 +1,7 @@
 import { ProductStatus } from '@app/constants';
 import { ProductType } from '@app/models/product/@type';
 import { Role } from '@app/models/user/@type';
+import { SortOrder } from 'mongoose';
 
 interface Params {
   pageIndex: number;
@@ -20,6 +21,7 @@ interface Params {
   role?: Role | string;
   customerId?: string;
   statusOrder?: string;
+  sort?: string;
 }
 
 interface Filter {
@@ -37,6 +39,7 @@ interface Filter {
   createdAt?: any;
   statusOrder?: string;
   importDate?: any;
+  sort?: string;
 }
 
 interface BaseModel {
@@ -44,4 +47,6 @@ interface BaseModel {
   slug?: string;
 }
 
-export { Params, Filter, BaseModel };
+type SortOrderBy = -1 | 1 | 'asc' | 'ascending' | 'desc' | 'descending';
+
+export { Params, Filter, BaseModel, SortOrderBy };

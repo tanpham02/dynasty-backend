@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import CRUDService from '@app/services/crudService';
 import { Model } from 'mongoose';
 import { Category } from '@app/models/category/@type';
@@ -11,7 +12,7 @@ import { Product } from '@app/models/product/@type';
 import generateUnsignedSlug from '@app/utils/generateSlug';
 
 class CategoryService extends CRUDService<Category> {
-  constructor(model: Model<Category>, nameService: String) {
+  constructor(model: Model<Category>, nameService: string) {
     super(model, nameService);
   }
 
@@ -70,32 +71,6 @@ class CategoryService extends CRUDService<Category> {
     );
 
     return { message: `Delete ${this.nameService} success` };
-  }
-
-  // SEARCH PAGINATION TO SHOW (PRODUCT)
-  async searchPaginationToShowProduct(pageIndex: number, pageSize: number) {
-    const category = (await this.findAll()).filter((item) => item.isShowHomePage);
-
-    // for (let i = 0; i < newMapListProductId.length; i++) {
-    //   const element = newMapListProductId[i];
-    //   const product = await ProductModel.findById(element);
-    //   listProduct.push(product as Product);
-    // }
-    // const result = pipe(
-    //   listProduct?.sort((a, b) => a.price + b.price),
-    //   skip(pageSize * pageIndex),
-    //   page(pageSize),
-    // ).first;
-
-    // const totalPage = Math.ceil(newMapListProductId.length / pageSize);
-    return {
-      data: category,
-      pageIndex,
-      pageSize,
-      //   totalPage,
-      //   totalElement: newMapListProductId?.length,
-      //   isLastPage: pageIndex + 1 >= totalPage,
-    };
   }
 }
 

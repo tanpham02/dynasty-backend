@@ -20,10 +20,11 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
- *      - name: comboPromotionsId
+ *      - name: sort
  *        in: query
  *        schema:
  *          type: string
+ *        description: Allow value 1 | -1
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -178,6 +179,6 @@ router.delete('/', categoryController.deleteCategory);
  *                 $ref: '#/components/schema/Category'
  */
 // SEARCH PRODUCT SHOW CLIENT
-router.get('/search/home-page', categoryController.searchPaginationShowClient);
+// router.get('/search/home-page', categoryController.searchPaginationShowClient);
 
 export default router;

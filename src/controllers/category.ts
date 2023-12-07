@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { FIELDS_NAME } from '@app/constants';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
@@ -11,12 +12,12 @@ const categoryService = new CategoryService(CategoryModel, 'category');
 const categoryController = {
   // SEARCH PAGINATION CATEGORY
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name, comboPromotionsId } = req.query;
+    const { pageIndex, pageSize, name, sort } = req.query;
     const params: Params = {
       pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
       pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
       name: name?.toString(),
-      comboPromotionsId: comboPromotionsId?.toString(),
+      sort: sort?.toString(),
     };
 
     try {
@@ -74,19 +75,19 @@ const categoryController = {
   },
 
   // SEARCH PAGINATION TO SHOW (UI)
-  searchPaginationShowClient: async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { pageIndex, pageSize } = req.query;
-      const response = await categoryService.searchPaginationToShowProduct(
-        pageIndex ? Number(pageIndex) : 0,
-        pageSize ? Number(pageSize) : 4,
-      );
+  //   searchPaginationShowClient: async (req: Request, res: Response, next: NextFunction) => {
+  //     try {
+  //       const { pageIndex, pageSize } = req.query;
+  //       const response = await categoryService.searchPaginationToShowProduct(
+  //         pageIndex ? Number(pageIndex) : 0,
+  //         pageSize ? Number(pageSize) : 4,
+  //       );
 
-      res.status(HttpStatusCode.OK).json(response);
-    } catch (error) {
-      next(error);
-    }
-  },
+  //       res.status(HttpStatusCode.OK).json(response);
+  //     } catch (error) {
+  //       next(error);
+  //     }
+  //   },
 };
 
 export default categoryController;
