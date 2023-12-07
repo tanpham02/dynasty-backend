@@ -26,16 +26,14 @@ import { ProductStatus } from '@app/constants';
  *            type: string
  *
  *        childrenCategory:
- *          type: array
- *          items:
- *             type: object
- *             properties:
- *                parentId:
- *                   type: string
- *                category:
- *                   type: array
- *                   items:
- *                      $ref: '#/components/schemas/Category'
+ *          type: object
+ *          properties:
+ *              parentId:
+ *                type: string
+ *              category:
+ *                type: array
+ *                items:
+ *                   $ref: '#/components/schemas/Category'
  *        slug:
  *          type: string
  *        priority:
@@ -94,7 +92,7 @@ const ChildCategorySchema = new Schema<ChildCategory>({
   },
 });
 
-CategorySchema.add({ childrenCategory: { type: [ChildCategorySchema] } });
+CategorySchema.add({ childrenCategory: { type: ChildCategorySchema } });
 
 const CategoryModel = model('Category', CategorySchema);
 

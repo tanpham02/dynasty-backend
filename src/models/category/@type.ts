@@ -25,16 +25,14 @@ import { Schema, Document } from 'mongoose';
  *            type: string
  *
  *        childrenCategory:
- *          type: array
- *          items:
- *             type: object
- *             properties:
- *                parentId:
- *                   type: string
- *                category:
- *                   type: array
- *                   items:
- *                      $ref: '#/components/schema/Category'
+ *          type: object
+ *          properties:
+ *              parentId:
+ *                type: string
+ *              category:
+ *                type: array
+ *                items:
+ *                   $ref: '#/components/schema/Category'
  *
  *        slug:
  *          type: string
@@ -50,7 +48,7 @@ import { Schema, Document } from 'mongoose';
 interface Category extends BaseModel, Document {
   _id?: Schema.Types.ObjectId;
   name: string;
-  childrenCategory?: ChildCategory[];
+  childrenCategory?: ChildCategory;
   products?: Schema.Types.ObjectId[];
   priority?: number;
   visible?: boolean;

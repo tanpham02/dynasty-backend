@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Product } from '@app/models/product/@type';
 import CRUDService from './crudService';
 import { Model } from 'mongoose';
@@ -54,6 +55,7 @@ class ProductService extends CRUDService<Product> {
     if (filename && destination) {
       product.image = `${APP_URL}/${destination}/${filename}`;
     }
+    
     try {
       const newProduct = new this.model({
         ...product,
