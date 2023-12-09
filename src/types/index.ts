@@ -47,6 +47,6 @@ interface BaseModel {
   slug?: string;
 }
 
-type SortOrderBy = -1 | 1 | 'asc' | 'ascending' | 'desc' | 'descending';
+type SortOrderBy = -1 | 1;
 
 export { Params, Filter, BaseModel, SortOrderBy };

@@ -1,46 +1,48 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { FIELDS_NAME } from '@app/constants';
 import { Exception } from '@app/exception';
-import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import VoucherModel from '@app/models/voucher';
-import VoucherService from '@app/services/voucher';
+import { HttpStatusCode } from '@app/exception/type';
+import ProductAttributeModel from '@app/models/productAttribute';
+import ProductAttriButeService from '@app/services/productAttribute';
 import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const voucherService = new VoucherService(VoucherModel, 'voucher');
+const productAttributeService = new ProductAttriButeService(
+  ProductAttributeModel,
+  'product attribute',
+);
 
-const voucherController = {
-  // SEARCH PAGINATION VOUCHER
-  search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name } = req.query;
+const productAttributeController = {
+  // SEARCH ALL
+  searchAll: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const params: Params = {
-        pageIndex: pageIndex ? Number(pageIndex) : 0,
-        pageSize: pageSize ? Number(pageSize) : 10,
-        name: name?.toString(),
-      };
-      const voucher = await voucherService.getPagination(params);
-      res.status(HttpStatusCode.OK).json(voucher);
+      const result = await productAttributeService.findAll();
+      res.status(HttpStatusCode.OK).json(result);
     } catch (error: any) {
       next(error);
     }
   },
 
-  // CREATE VOUCHER
+  // CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await voucherService.createOverriding(req);
+      const result = await productAttributeService.create(req, FIELDS_NAME.PRODUCT_ATTRIBUTE);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
-      console.log('🚀 ~ file: voucher.ts:33 ~ create: ~ error:', error);
+      console.log('🚀 ~ file: productAttribute.ts:36 ~ create: ~ error:', error);
       next(error);
     }
   },
 
-  // UPDATE VOUCHER
+  // UPDATE
   update: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const { message } = await voucherService.update(id, req, '');
+      const { message } = await productAttributeService.update(
+        id,
+        req,
+        FIELDS_NAME.PRODUCT_ATTRIBUTE,
+      );
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       if (error instanceof Exception) {
@@ -54,10 +56,8 @@ const voucherController = {
   getById: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const voucher = await voucherService
-        .getById(id)
-        .then((res) => res?.populate('listProductUsedVoucher'));
-      res.status(HttpStatusCode.OK).json(voucher);
+      const result = await productAttributeService.getById(id);
+      res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       if (error instanceof Exception) {
         return res.status(error.status).json(error.message);
@@ -70,7 +70,7 @@ const voucherController = {
   delete: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { ids } = req.query;
-      const { message } = await voucherService.delete(ids);
+      const { message } = await productAttributeService.delete(ids);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       if (error instanceof Exception) {
@@ -80,5 +80,4 @@ const voucherController = {
     }
   },
 };
-
-export default voucherController;
+export { productAttributeController };

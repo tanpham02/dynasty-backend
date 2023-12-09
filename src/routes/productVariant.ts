@@ -1,14 +1,16 @@
-import productController from '@app/controllers/product';
+import { formDataParser } from '@app/middlewares/formDataParser';
+import { productVariantController } from './../controllers/productVariant';
 import { uploadFileProduct } from '@app/services/upload';
 
 import express from 'express';
+import { FIELDS_NAME } from '@app/constants';
 const router = express.Router();
 
 /**
  * @swagger
- * '/api/products/search':
+ * '/api/products-variant':
  *  get:
- *     tags: [Product]
+ *     tags: [Product Variant]
  *     summary: Search pagination
  *     parameters:
  *      - name: name
@@ -41,50 +43,44 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Product'
+ *                 $ref: '#/components/schemas/productVariant'
  */
 
-//SEARCH PAGINATION PRODUCT
-router.get('/search', productController.search);
+//SEARCH PAGINATION
+router.get('/', productVariantController.search);
 
 /**
  * @swagger
- * '/api/products/create':
+ * '/api/products-variant':
  *  post:
- *     tags: [Product]
- *     summary: Create product
+ *     tags: [Product Variant]
+ *     summary: Create
  *     requestBody:
- *       required: true
- *         - productInfo
- *         - files
  *       content:
  *          multipart/form-data:
  *             schema:
  *                type: object
  *                properties:
- *                   productInfo:
- *                         $ref: '#/components/schemas/Product'
- *                   files:
- *                        type: string
- *                        format: binary
+ *                   productVariantInfo:
+ *                         $ref: '#/components/schemas/productVariant'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Product'
+ *                 $ref: '#/components/schemas/productVariant'
  */
 
-// CREATE PRODUCT
-router.post('/create', uploadFileProduct, productController.create);
+// CREATE
+router.post('/', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariantController.create);
 
 /**
  * @swagger
- * '/api/products/{id}':
+ * '/api/products-variant/{id}':
  *  patch:
- *     tags: [Product]
- *     summary: Update product
+ *     tags: [Product Variant]
+ *     summary: Update
  *     parameters:
  *       - in: path
  *         name: id
@@ -99,28 +95,25 @@ router.post('/create', uploadFileProduct, productController.create);
  *             schema:
  *                type: object
  *                properties:
- *                   productInfo:
- *                         $ref: '#/components/schemas/Product'
- *                   files:
- *                        type: string
- *                        format: binary
+ *                   productVariantInfo:
+ *                         $ref: '#/components/schemas/productVariant'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Product'
+ *                 $ref: '#/components/schemas/productVariant'
  */
 
-// UPDATE PRODUCT
-router.patch('/:id', uploadFileProduct, productController.update);
+// UPDATE
+router.patch('/:id', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariantController.update);
 
 /**
  * @swagger
- * '/api/products/{id}':
+ * '/api/products-variant/{id}':
  *  get:
- *     tags: [Product]
+ *     tags: [Product Variant]
  *     summary: Find by id
  *     parameters:
  *       - in: path
@@ -135,18 +128,18 @@ router.patch('/:id', uploadFileProduct, productController.update);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/productVariant'
  */
 
-// GET PRODUCT BY ID
-router.get('/:id', productController.getById);
+// GET BY ID
+router.get('/:id', productVariantController.getById);
 
 /**
  * @swagger
- * '/api/products/':
+ * '/api/products-variant/':
  *  delete:
- *     tags: [Product]
- *     summary: Delete product variant
+ *     tags: [Product Variant]
+ *     summary: Delete
  *     parameters:
  *       - in: query
  *         name: ids
@@ -161,9 +154,9 @@ router.get('/:id', productController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/productVariant'
  */
-// DELETE PRODUCT
-router.delete('/', productController.delete);
+// DELETE
+router.delete('/', productVariantController.delete);
 
 export default router;

@@ -135,8 +135,9 @@ class CRUDService<T extends Document> {
   }
 
   // CREATE
-  async create(req: Request) {
-    const create = new this.model(req.body);
+  async create(req: Request, fieldName: string) {
+    const dataRequest = req?.body?.[fieldName] ? JSON.parse(req?.body?.[fieldName]) : {};
+    const create = new this.model(dataRequest);
     return await create.save();
   }
 

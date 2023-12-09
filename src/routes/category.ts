@@ -39,7 +39,7 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schemas/Category'
  */
 
 // SEARCH PAGINATION CATEGORY
@@ -59,14 +59,14 @@ router.get('/', categoryController.search);
  *                type: object
  *                properties:
  *                   categoryInfo:
- *                        $ref: '#/components/schema/Category'
+ *                        $ref: '#/components/schemas/Category'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schemas/Category'
  */
 
 // CREATE CATEGORY

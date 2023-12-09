@@ -42,7 +42,7 @@ const categoryController = {
   updateCategory: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const response = await categoryService.update(id, req, FIELDS_NAME.CATEGORY);
+      const response = await categoryService.updateOverriding(id, req);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);

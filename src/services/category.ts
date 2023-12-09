@@ -81,6 +81,7 @@ class CategoryService extends CRUDService<Category> {
       }));
 
       childCategory.category = resultChild as unknown as any;
+      childCategory.parentId = new Object(requestFormData.childrenCategory.parentId);
     }
 
     const categoryDetail = {
@@ -88,20 +89,15 @@ class CategoryService extends CRUDService<Category> {
       slug: generateUnsignedSlug(requestFormData?.name),
     };
 
-    // !!!!!
-    // const productIds = categoryDetail?.products;
-    // if (productIds?.length) {
-    //     for (let index = 0; index < array.length; index++) {
-    //         const element = array[index];
+    const productIds = categoryDetail?.products;
+    await ProductModel.updateMany(
+      {
+        _id: { $in: productIds },
+      },
+      { $set: { categoryId: id } },
+    );
 
-    //     }
-    //   await ProductModel.updateMany(
-    //     {
-    //       _id: { $in: productIds },
-    //     },
-    //     { $set: { categoryId: id } },
-    //   );
-    // }
+    //console.log('categoryDetail', categoryDetail);
 
     await this.model.findByIdAndUpdate({ _id: id }, categoryDetail, { new: true });
 

@@ -33,7 +33,7 @@ import { ProductStatus } from '@app/constants';
  *              category:
  *                type: array
  *                items:
- *                   $ref: '#/components/schemas/Category'
+ *                   $ref: '#/components/schema/Category'
  *        slug:
  *          type: string
  *        priority:

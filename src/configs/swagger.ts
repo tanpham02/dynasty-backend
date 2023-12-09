@@ -9,7 +9,7 @@ const configSwagger = (app: Application) => {
     definition: {
       openapi: '3.1.0',
       info: {
-        title: 'Dynasty API',
+        title: 'Dynasty Pizza Restful API',
         version: '1.0.0',
         description:
           'This is a simple API application made with NodeJS + Express and documented with Swagger',
@@ -27,6 +27,7 @@ const configSwagger = (app: Application) => {
           url: `${APP_URL}`,
         },
       ],
+
       components: {
         securitySchemes: {
           bearerAuth: {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Exception } from '@app/exception';
 import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import ShopSystemModel from '@app/models/shopSystem';
@@ -29,7 +30,7 @@ const shopSystemController = {
   //CREATE SYSTEM STORE
   create: async (req: Request, res: Response) => {
     try {
-      const shopSystem = await ShopSystemService.create(req);
+      const shopSystem = await ShopSystemService.create(req, '');
       res.status(HttpStatusCode.OK).json(shopSystem);
     } catch (error) {
       console.log('🚀 ~ file: shopSystem.ts:34 ~ create: ~ error:', error);

@@ -1,5 +1,6 @@
 import { Schema, Document } from 'mongoose';
 import { BaseModel } from '@app/types';
+import { ProductAttribute } from '../productAttribute/@type';
 
 // SCHEMAS DESCRIPTION
 /**
@@ -44,8 +45,29 @@ import { BaseModel } from '@app/types';
  *              - VEGETARIAN
  *              - SPICY
  *              - UNIQUE
- *         productVariantId:
- *           type: string
+ *         attribute:
+ *           type: array
+ *           items:
+ *              type: string
+ *         productAttributeList:
+ *           type: array
+ *           items:
+ *              type: object
+ *              properties:
+ *                attributeId:
+ *                  type: string
+ *                name:
+ *                   type: string
+ *                value:
+ *                   type: string
+ *                priceAdjustment:
+ *                   type: string
+ *                priceAdjustmentValue:
+ *                   type: number
+ *         productsVariant:
+ *           type: array
+ *           items:
+ *              type: string
  */
 
 enum ProductType {
@@ -58,29 +80,17 @@ enum ProductType {
   UNIQUE = 'UNIQUE', // dộc đáo
 }
 
-export enum ProductVariantSizeType {
+enum ProductVariantSizeType {
   SMALL = 'SMALL',
   MEDIUM = 'MEDIUM',
   LARGE = 'LARGE',
 }
 
-export enum ProductVariantBaseType {
-  PAN = 'PAN',
-  CRISPY_THIN = 'CRISPY_THIN',
-  EXTREME_CHEESE = 'EXTREME_CHEESE',
-  EXTREME_SAUSAGE_CHEESE = 'EXTREME_SAUSAGE_CHEESE',
-}
-
-interface ProductAttribute {
-  attributeName?: string; // Tên thuộc tính
-  attributeList?: Array<{
-    // Danh sách các thuộc tính
-    name?: string;
-    value?: string; // It's can any type
-    priceAdjustment?: string;
-    priceAdjustmentValue?: number;
-  }>;
-  productVariantList: Product[]; // Danh sách sản phẩm con
+enum ProductVariantBaseType {
+  PAN = 'PAN', // Dày
+  CRISPY_THIN = 'CRISPY_THIN', // Mỏng giòn
+  EXTREME_CHEESE = 'EXTREME_CHEESE', // Viền pho mai
+  EXTREME_SAUSAGE_CHEESE = 'EXTREME_SAUSAGE_CHEESE', // Viền pho mai xúc xích
 }
 
 interface Product extends BaseModel, Document {
@@ -96,7 +106,15 @@ interface Product extends BaseModel, Document {
   types?: ProductType[];
   orderQuantity?: number;
   visible?: boolean;
-  attribute?: ProductAttribute[];
+  attribute?: Schema.Types.ObjectId[];
+  productAttributeList?: Array<{
+    attributeId?: Schema.Types.ObjectId;
+    name?: string;
+    value?: string;
+    priceAdjustment?: string; // + 80,000
+    priceAdjustmentValue?: number; // 80000
+  }>;
+  productsVariant?: Schema.Types.ObjectId[];
 }
 
-export { Product, ProductType };
+export { Product, ProductType, ProductVariantSizeType, ProductVariantBaseType };

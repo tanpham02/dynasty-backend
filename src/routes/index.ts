@@ -12,11 +12,15 @@ import cartRouter from './cart';
 import authRouter from './auth';
 import orderRouter from './order';
 import materialRouter from './material';
+import productAttributeRoute from './productAttribute';
+import productVariantRoute from './productVariant';
 import { Application } from 'express';
 
 import {
   CATEGORY_URL,
   PRODUCT_URL,
+  PRODUCT_ATTRIBUTE_URL,
+  PRODUCT_VARIANT_URL,
   COMBO_PROMOTIONS_URL,
   CONFIG_STORE_URL,
   PROMOTIONS_URL,
@@ -39,6 +43,14 @@ export const routesMapping = (app: Application) => {
     {
       path: PRODUCT_URL,
       route: productRouter,
+    },
+    {
+      path: PRODUCT_ATTRIBUTE_URL,
+      route: productAttributeRoute,
+    },
+    {
+      path: PRODUCT_VARIANT_URL,
+      route: productVariantRoute,
     },
     {
       path: SHOP_SYSTEM_URL,
@@ -90,5 +102,5 @@ export const routesMapping = (app: Application) => {
     },
   ];
 
-  routesData.forEach(({ path, route }) => app.use(`${path}`, route));
+  return routesData.map(({ path, route }) => app.use(`${path}`, route));
 };

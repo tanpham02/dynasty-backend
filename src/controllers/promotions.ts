@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Exception } from '@app/exception';
 import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import PromotionsModel from '@app/models/promotions';
@@ -25,7 +26,7 @@ const promotionController = {
   // CREATE PROMOTIONS
   create: async (req: Request, res: Response) => {
     try {
-      const newPromotion = await promoService.create(req);
+      const newPromotion = await promoService.create(req, '');
       res.status(HttpStatusCode.OK).json(newPromotion);
     } catch (error) {
       console.log('🚀 ~ file: promotions.ts:30 ~ create: ~ error:', error);

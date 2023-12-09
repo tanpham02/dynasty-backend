@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { HttpStatusCode } from '@app/exception/type';
 import ProductModel from '@app/models/product';
 import { ProductType } from '@app/models/product/@type';

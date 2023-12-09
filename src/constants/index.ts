@@ -14,6 +14,9 @@ const SALT: number = 10;
 const FIELDS_NAME = {
   CATEGORY: 'categoryInfo',
   USER: 'userInfo',
+  PRODUCT: 'productInfo',
+  PRODUCT_ATTRIBUTE: 'productAttributeInfo',
+  PRODUCT_VARIANT: 'productVariantInfo',
 };
 
 export { MODE, ProductStatus, SALT, FIELDS_NAME };

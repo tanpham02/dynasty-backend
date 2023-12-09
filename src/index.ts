@@ -11,10 +11,10 @@ const { APP_URL, port } = configApp();
 // Connect DB
 connection();
 
-// Config Server
+// Server Config
 configServer(app);
 
-// Config Swagger
+// Swagger Config
 configSwagger(app);
 
 // Routes

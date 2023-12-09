@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
-import { Product, ProductType, ProductVariantBaseType, ProductVariantSizeType } from './@type';
+import { Product, ProductType } from './@type';
 import { ProductStatus } from '@app/constants';
+import { ProductAttributeSchema } from '../productAttribute';
 
 // RESPONSE  DESCRIPTION
 /**
@@ -17,16 +18,16 @@ import { ProductStatus } from '@app/constants';
  *           type: string
  *         categoryId:
  *           type: string
- *         price:
- *           type: number
- *         oldPrice:
- *           type: number
  *         description:
  *           type: string
  *         information:
  *           type: string
  *         image:
  *           type: string
+ *         price:
+ *           type: number
+ *         oldPrice:
+ *           type: number
  *         orderQuantity:
  *           type: number
  *         status:
@@ -34,8 +35,9 @@ import { ProductStatus } from '@app/constants';
  *           enum:
  *              - ACTIVE
  *              - IN_ACTIVE
+ *           default: "ACTIVE"
  *         types:
- *           type: array
+ *           type: string
  *           enum:
  *              - NORMAL
  *              - NEW
@@ -43,8 +45,30 @@ import { ProductStatus } from '@app/constants';
  *              - DELICIOUS_MUST_TRY
  *              - VEGETARIAN
  *              - SPICY
- *         productVariantId:
- *           type: string
+ *              - UNIQUE
+ *         attribute:
+ *           type: array
+ *           items:
+ *              type: string
+ *         productAttributeList:
+ *           type: array
+ *           items:
+ *              type: object
+ *              properties:
+ *                attributeId:
+ *                  type: string
+ *                name:
+ *                   type: string
+ *                value:
+ *                   type: string
+ *                priceAdjustment:
+ *                   type: string
+ *                priceAdjustmentValue:
+ *                   type: number
+ *         productsVariant:
+ *           type: array
+ *           items:
+ *              type: string
  */
 
 const ProductSchema = new Schema<Product>(
@@ -93,6 +117,40 @@ const ProductSchema = new Schema<Product>(
       type: Boolean,
       default: true,
     },
+    attribute: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'ProductAttribute',
+      },
+    ],
+    productAttributeList: [
+      {
+        attributeId: {
+          type: Schema.Types.ObjectId,
+        },
+        name: {
+          type: String,
+        },
+        value: {
+          type: String,
+        },
+        priceAdjustment: {
+          type: String,
+        },
+        priceAdjustmentValue: {
+          type: Number,
+        },
+      },
+    ],
+    productsVariant: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'ProductVariant',
+      },
+    ],
+    slug: {
+      type: String,
+    },
   },
   {
     versionKey: false,
@@ -100,33 +158,7 @@ const ProductSchema = new Schema<Product>(
   },
 );
 
-ProductSchema.add({
-  attribute: [
-    {
-      attributeName: {
-        type: String,
-      },
-      attributeList: [
-        {
-          name: {
-            type: String,
-          },
-          value: {
-            type: String,
-          },
-          priceAdjustment: {
-            type: String,
-          },
-          priceAdjustmentValue: {
-            type: Number,
-          },
-        },
-      ],
-      productVariantList: [ProductSchema],
-    },
-  ],
-});
-
 const ProductModel = model('Product', ProductSchema);
 
 export default ProductModel;
+export { ProductSchema };

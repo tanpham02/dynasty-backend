@@ -24,6 +24,7 @@ const configServer = (app: Application) => {
 
   // GET IMAGE FROM URL
   //         URL                                            folder contain image
+  //   app.use(express.static("public"));
   app.use('/public/uploads/image/products', express.static('public/uploads/image/products'));
   app.use('/public/uploads/image/users', express.static('public/uploads/image/users'));
   app.use('/public/uploads/image/customers', express.static('public/uploads/image/customers'));
