@@ -54,16 +54,25 @@ import { ProductAttribute } from '../productAttribute/@type';
  *           items:
  *              type: object
  *              properties:
- *                attributeId:
- *                  type: string
- *                name:
+ *                extendedName:
  *                   type: string
- *                value:
+ *                extendedValuePairs:
  *                   type: string
- *                priceAdjustment:
- *                   type: string
- *                priceAdjustmentValue:
- *                   type: number
+ *                productAttributeItem:
+ *                   type: array
+ *                   items:
+ *                      type: object
+ *                      properties:
+ *                          attributeParentId:
+ *                             type: string
+ *                          name:
+ *                             type: string
+ *                          value:
+ *                             type: string
+ *                          priceAdjustment:
+ *                             type: string
+ *                          priceAdjustmentValue:
+ *                             type: number
  *         productsVariant:
  *           type: array
  *           items:
@@ -107,13 +116,17 @@ interface Product extends BaseModel, Document {
   orderQuantity?: number;
   visible?: boolean;
   attribute?: Schema.Types.ObjectId[];
-  productAttributeList?: Array<{
-    attributeId?: Schema.Types.ObjectId;
-    name?: string;
-    value?: string;
-    priceAdjustment?: string; // + 80,000
-    priceAdjustmentValue?: number; // 80000
-  }>;
+  productAttributeList?: {
+    extendedName?: string; // Nhỏ 6” - Dày
+    extendedValuePairs?: string; //  SMALL - PAN
+    productAttributeItem: Array<{
+      attributeParentId?: Schema.Types.ObjectId;
+      name?: string; // Nhỏ 6”
+      value?: string; //  SMALL
+      priceAdjustment?: string; // + 80,000đ
+      priceAdjustmentValue?: number; // 80000
+    }>;
+  }[];
   productsVariant?: Schema.Types.ObjectId[];
 }
 

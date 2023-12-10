@@ -28,12 +28,12 @@ const productController = {
   },
 
   //CREATE PRODUCT
-  create: async (req: Request, res: Response) => {
+  create: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const product = await productService.createOverriding(req);
-      res.status(200).json(product);
+      res.status(HttpStatusCode.OK).json(product);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 

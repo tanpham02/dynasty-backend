@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Product } from '@app/models/product/@type';
+import { Product, ProductType } from '@app/models/product/@type';
 import CRUDService from './crudService';
-import { Model } from 'mongoose';
+import { Model, Schema } from 'mongoose';
 import CategoryModel from '@app/models/category';
 import { Request } from 'express';
 import { configApp } from '@app/configs';
+import { FIELDS_NAME } from '@app/constants';
+import { ProductVariants } from '@app/models/productVariant/@type';
+import ProductVariantModel from '@app/models/productVariant';
+import ProductVariantService from './productVariant';
+import mongoose from 'mongoose';
 
 const { APP_URL } = configApp();
+
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
     super(model, nameService);
@@ -48,47 +54,97 @@ class ProductService extends CRUDService<Product> {
 
   // CREATE
   async createOverriding(req: Request) {
-    const product: Product = JSON.parse(req.body.productInfo);
+    const product: Product = JSON.parse(req.body?.[FIELDS_NAME.PRODUCT]);
     const filename = req.file?.filename;
     const destination = req.file?.destination;
+    const productVariantListIds: Schema.Types.ObjectId[] = [];
 
     if (filename && destination) {
-      product.image = `${APP_URL}/${destination}/${filename}`;
+      product.image = `/${destination}/${filename}`;
     }
-    
-    try {
-      const newProduct = new this.model({
-        ...product,
-      });
-      const categoryId = product.categoryId;
-      if (categoryId) {
-        const category = await CategoryModel.findById(categoryId);
-        const categoryChild = await CategoryModel.findOne({ 'childCategory._id': categoryId });
-        if (category) {
-          await category?.updateOne({ $push: { productsDTO: newProduct._id } });
-        }
-        if (categoryChild) {
-          await CategoryModel.findOneAndUpdate(
-            {
-              'childCategory._id': categoryId,
-            },
-            {
-              $push: {
-                'childCategory.$.children.productsDTO': newProduct._id,
-              },
-            },
-            {
-              new: true,
-            },
+
+    const newProduct = new this.model({
+      ...product,
+    });
+
+    const productAttributeList: any = product?.productAttributeList || [];
+    if (productAttributeList.length > 0) {
+      const newProductVariant: [] = productAttributeList.map(
+        (attribute: {
+          productAttributeItem: {
+            attributeParentId: Schema.Types.ObjectId;
+            name: string;
+            value: string;
+            priceAdjustment: string;
+            priceAdjustmentValue: number;
+          }[];
+          extendedName: string;
+        }) => {
+          const attributeItemValid = product.productAttributeList?.filter(
+            (item) => item.extendedName?.includes(attribute.extendedName),
           );
-        }
+          let priceAdjustment = 0;
+          if (attributeItemValid) {
+            priceAdjustment = attribute.productAttributeItem.reduce((acc, next) => {
+              const result = acc + (next?.priceAdjustmentValue || 0);
+              return result;
+            }, 0);
+          }
+
+          return {
+            parentId: newProduct._id,
+            productItem: {
+              name: `${product.name} - ${attribute.extendedName}`,
+              description: product.description,
+              information: product.information,
+              price: product.price + priceAdjustment,
+              image: product.image,
+              types: product.types,
+              visible: product.types,
+              productAttributeList: attributeItemValid,
+            },
+          };
+        },
+      );
+
+      for (let i = 0; i < newProductVariant.length; i++) {
+        const element = newProductVariant[i];
+        (async () => {
+          const newProductVariant = new ProductVariantModel(element);
+          await newProductVariant.save();
+          productVariantListIds.push(newProductVariant._id);
+        })();
       }
-      return await newProduct.save();
-    } catch (error) {
-      console.log(error);
-      // throw new Error(`Occur error when delete ${this.nameService} with ${error}`); // on develop backend
-      return error;
     }
+    newProduct.$set('productsVariant', productVariantListIds);
+
+    const categoryId = product.categoryId;
+    if (categoryId) {
+      const category = await CategoryModel.findById(categoryId);
+
+      const categoryChild = await CategoryModel.findOne({
+        'childrenCategory.category._id': categoryId,
+      });
+
+      if (category) {
+        await category.updateOne({ $push: { products: newProduct._id } });
+      }
+      if (categoryChild) {
+        await CategoryModel.findOneAndUpdate(
+          { 'childrenCategory.category._id': categoryId },
+          {
+            $push: {
+              'childrenCategory.category.$.products': newProduct._id,
+            },
+          },
+          {
+            new: true,
+          },
+        );
+      }
+    }
+
+    return await newProduct.save();
   }
 
   // UPDATE

@@ -13,6 +13,15 @@ import { ProductAttribute } from './@type';
  *       properties:
  *         name:
  *           type: string
+ *         attributeList:
+ *           type: array
+ *           items:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                     type: string
+ *                  value:
+ *                     type: string
  */
 
 export const ProductAttributeSchema = new Schema<ProductAttribute>(
@@ -21,6 +30,16 @@ export const ProductAttributeSchema = new Schema<ProductAttribute>(
       type: String,
       required: true,
     },
+    attributeList: [
+      {
+        name: {
+          type: String,
+        },
+        value: {
+          type: String,
+        },
+      },
+    ],
   },
   {
     versionKey: false,

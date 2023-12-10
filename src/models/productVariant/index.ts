@@ -7,17 +7,13 @@ import { ProductSchema } from '../product';
  * @swagger
  * components:
  *   schema:
- *     productVariant:
+ *     ProductVariant:
  *       type: object
  *       properties:
  *         parentId:
  *           type: string
  *         productItem:
  *           $ref: '#/components/schema/Product'
- *         productVariantPairs:
- *           type: array
- *           items:
- *               type: string
  */
 
 const ProductVariantSchema = new Schema<ProductVariants>(
@@ -28,9 +24,6 @@ const ProductVariantSchema = new Schema<ProductVariants>(
     },
     productItem: {
       type: ProductSchema,
-    },
-    productVariantPairs: {
-      type: [String],
     },
   },
   {

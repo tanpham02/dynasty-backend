@@ -13,10 +13,23 @@ import { Document } from 'mongoose';
  *       properties:
  *         name:
  *           type: string
+ *         attributeList:
+ *           type: array
+ *           items:
+ *              type: object
+ *              properties:
+ *                  name:
+ *                     type: string
+ *                  value:
+ *                     type: string
  */
 
 interface ProductAttribute extends BaseModel, Document {
   name?: string;
+  attributeList?: Array<{
+    name?: string;
+    value?: string;
+  }>;
 }
 
 export { ProductAttribute };

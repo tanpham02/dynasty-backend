@@ -55,16 +55,25 @@ import { ProductAttributeSchema } from '../productAttribute';
  *           items:
  *              type: object
  *              properties:
- *                attributeId:
- *                  type: string
- *                name:
+ *                extendedName:
  *                   type: string
- *                value:
+ *                extendedValuePairs:
  *                   type: string
- *                priceAdjustment:
- *                   type: string
- *                priceAdjustmentValue:
- *                   type: number
+ *                productAttributeItem:
+ *                   type: array
+ *                   items:
+ *                      type: object
+ *                      properties:
+ *                          attributeParentId:
+ *                             type: string
+ *                          name:
+ *                             type: string
+ *                          value:
+ *                             type: string
+ *                          priceAdjustment:
+ *                             type: string
+ *                          priceAdjustmentValue:
+ *                             type: number
  *         productsVariant:
  *           type: array
  *           items:
@@ -125,21 +134,31 @@ const ProductSchema = new Schema<Product>(
     ],
     productAttributeList: [
       {
-        attributeId: {
-          type: Schema.Types.ObjectId,
-        },
-        name: {
+        eventNames: {
           type: String,
         },
-        value: {
+        extendedValuePairs: {
           type: String,
         },
-        priceAdjustment: {
-          type: String,
-        },
-        priceAdjustmentValue: {
-          type: Number,
-        },
+        productAttributeItem: [
+          {
+            attributeParentId: {
+              type: Schema.Types.ObjectId,
+            },
+            name: {
+              type: String,
+            },
+            value: {
+              type: String,
+            },
+            priceAdjustment: {
+              type: String,
+            },
+            priceAdjustmentValue: {
+              type: Number,
+            },
+          },
+        ],
       },
     ],
     productsVariant: [

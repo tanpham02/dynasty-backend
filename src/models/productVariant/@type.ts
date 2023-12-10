@@ -7,24 +7,19 @@ import { Product } from '../product/@type';
  * @swagger
  * components:
  *   schemas:
- *     productVariant:
+ *     ProductVariant:
  *       type: object
  *       properties:
  *         parentId:
  *           type: string
  *         productItem:
  *           $ref: '#/components/schema/Product'
- *         productVariantPairs:
- *           type: array
- *           items:
- *               type: string
  */
 
 interface ProductVariants extends BaseModel, Document {
   _id?: Schema.Types.ObjectId;
   parentId?: Schema.Types.ObjectId;
   productItem?: Product;
-  productVariantPairs?: [string]; // [SMALL, PAN] => SMALL-PAN
 }
 
 export { ProductVariants };

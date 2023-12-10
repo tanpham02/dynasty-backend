@@ -48,7 +48,7 @@ const configSwagger = (app: Application) => {
   };
 
   const specs = swaggerJsdoc(options);
-  app.use('/dynasty/documentation', swaggerUi.serve, swaggerUi.setup(specs));
+  app.use('/dynasty-pizza/documentation', swaggerUi.serve, swaggerUi.setup(specs));
 };
 
 export default configSwagger;

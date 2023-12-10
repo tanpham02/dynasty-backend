@@ -17,7 +17,7 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
- *      - name: categoryId
+ *      - name: productParentId
  *        in: query
  *        schema:
  *          type: string
@@ -43,7 +43,7 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/productVariant'
+ *                 $ref: '#/components/schemas/ProductVariant'
  */
 
 //SEARCH PAGINATION
