@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
 import ProductModel from '@app/models/product';
 import { ProductType } from '@app/models/product/@type';
@@ -38,38 +39,41 @@ const productController = {
   },
 
   //UPDATE PRODUCT
-  update: async (req: Request, res: Response) => {
+  update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const response = await productService.updateOverriding(id, req);
-      res.status(200).json(response.message);
+      const { message } = await productService.updateOverriding(id, req);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      next(error);
     }
   },
 
   //GET PRODUCT BY ID
-  getById: async (req: Request, res: Response) => {
+  getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const product = await productService.getByIdOverridingHavePopulate(id, 'productVariantId');
-      if (!product) {
-        return res.status(404).json({ message: 'Product not found.' });
-      }
-      res.status(200).json(product);
+      const product = await productService.getByIdOverriding(id);
+      res.status(HttpStatusCode.OK).json(product);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        return res.status(error.status).json(error.message);
+      }
+      next(error);
     }
   },
 
   // DELETE PRODUCT
-  delete: async (req: Request, res: Response) => {
+  delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
-      const ress = await productService.deleteOverriding(ids);
-      res.status(200).json(ress);
+      const { message } = await productService.deleteOverriding(ids);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 };

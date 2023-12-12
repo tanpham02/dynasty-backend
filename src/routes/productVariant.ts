@@ -62,14 +62,14 @@ router.get('/', productVariantController.search);
  *                type: object
  *                properties:
  *                   productVariantInfo:
- *                         $ref: '#/components/schemas/productVariant'
+ *                         $ref: '#/components/schemas/ProductVariant'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/productVariant'
+ *                 $ref: '#/components/schemas/ProductVariant'
  */
 
 // CREATE
@@ -96,14 +96,14 @@ router.post('/', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariantCont
  *                type: object
  *                properties:
  *                   productVariantInfo:
- *                         $ref: '#/components/schemas/productVariant'
+ *                         $ref: '#/components/schemas/ProductVariant'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/productVariant'
+ *                 $ref: '#/components/schemas/ProductVariant'
  */
 
 // UPDATE

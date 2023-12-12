@@ -134,7 +134,7 @@ const ProductSchema = new Schema<Product>(
     ],
     productAttributeList: [
       {
-        eventNames: {
+        extendedName: {
           type: String,
         },
         extendedValuePairs: {

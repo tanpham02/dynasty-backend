@@ -44,7 +44,11 @@ const productVariantController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const { message } = await productVariantService.update(id, req, FIELDS_NAME.PRODUCT_VARIANT);
+      const { message } = await productVariantService.updateOverriding(
+        id,
+        req,
+        FIELDS_NAME.PRODUCT_VARIANT,
+      );
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       if (error instanceof Exception) {
@@ -72,7 +76,7 @@ const productVariantController = {
   delete: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { ids } = req.query;
-      const { message } = await productVariantService.delete(ids);
+      const { message } = await productVariantService.deleteOverriding(ids as string[]);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       if (error instanceof Exception) {

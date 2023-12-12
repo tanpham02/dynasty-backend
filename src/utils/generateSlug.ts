@@ -1,5 +1,7 @@
 const generateUnsignedSlug = (name: string) => {
   return name
+    .split(' - ')
+    .join(' ')
     .split(' ')
     .join('-')
     .toLowerCase()

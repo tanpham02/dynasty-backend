@@ -10,6 +10,7 @@ import { ProductVariants } from '@app/models/productVariant/@type';
 import ProductVariantModel from '@app/models/productVariant';
 import ProductVariantService from './productVariant';
 import mongoose from 'mongoose';
+import generateUnsignedSlug from '@app/utils/generateSlug';
 
 const { APP_URL } = configApp();
 
@@ -20,36 +21,30 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
-    try {
-      await this.model.deleteMany({ _id: { $in: ids } });
+    await this.model.deleteMany({ _id: { $in: ids } });
 
-      await CategoryModel.updateMany(
-        {
-          productsDTO: { $in: ids },
-        },
-        { $pull: { productsDTO: { $in: ids } } },
-      );
+    await CategoryModel.updateMany(
+      {
+        products: { $in: ids },
+      },
+      { $pull: { products: { $in: ids } } },
+    );
 
-      await CategoryModel.updateMany(
-        {
-          'childCategory.children.productsDTO': { $in: ids },
+    await CategoryModel.updateMany(
+      {
+        'childrenCategory.category.products': { $in: ids },
+      },
+      {
+        $pull: {
+          'childrenCategory.category.$.products': { $in: ids },
         },
-        {
-          $pull: {
-            'childCategory.$.children.productsDTO': { $in: ids },
-          },
-        },
-        {
-          new: true,
-        },
-      );
+      },
+      {
+        new: true,
+      },
+    );
 
-      return { message: `Delete ${this.nameService} success` };
-    } catch (error) {
-      console.log(error);
-      //throw new Error(`Occur error when delete ${this.nameService} with ${error}`); // on develop backend
-      return error;
-    }
+    return { message: `Delete ${this.nameService} success` };
   }
 
   // CREATE
@@ -65,11 +60,12 @@ class ProductService extends CRUDService<Product> {
 
     const newProduct = new this.model({
       ...product,
+      slug: generateUnsignedSlug(product?.name),
     });
 
-    const productAttributeList: any = product?.productAttributeList || [];
+    const productAttributeList: any[] = product?.productAttributeList || [];
     if (productAttributeList.length > 0) {
-      const newProductVariant: [] = productAttributeList.map(
+      const newProductVariant: any[] = productAttributeList.map(
         (attribute: {
           productAttributeItem: {
             attributeParentId: Schema.Types.ObjectId;
@@ -79,9 +75,10 @@ class ProductService extends CRUDService<Product> {
             priceAdjustmentValue: number;
           }[];
           extendedName: string;
+          extendedValuePairs: string;
         }) => {
           const attributeItemValid = product.productAttributeList?.filter(
-            (item) => item.extendedName?.includes(attribute.extendedName),
+            (item) => item.extendedValuePairs?.includes(attribute?.extendedValuePairs),
           );
           let priceAdjustment = 0;
           if (attributeItemValid) {
@@ -102,6 +99,7 @@ class ProductService extends CRUDService<Product> {
               types: product.types,
               visible: product.types,
               productAttributeList: attributeItemValid,
+              slug: generateUnsignedSlug(`${product.name} - ${attribute.extendedName}`),
             },
           };
         },
@@ -111,12 +109,12 @@ class ProductService extends CRUDService<Product> {
         const element = newProductVariant[i];
         (async () => {
           const newProductVariant = new ProductVariantModel(element);
-          await newProductVariant.save();
           productVariantListIds.push(newProductVariant._id);
+          await newProductVariant.save();
         })();
       }
+      newProduct.productsVariant = productVariantListIds;
     }
-    newProduct.$set('productsVariant', productVariantListIds);
 
     const categoryId = product.categoryId;
     if (categoryId) {
@@ -147,7 +145,7 @@ class ProductService extends CRUDService<Product> {
     return await newProduct.save();
   }
 
-  // UPDATE
+  // UPDATE //!!!!!
   async updateOverriding(id: string, req: Request) {
     const productRequest: Product = req?.body?.productInfo
       ? JSON.parse(req?.body?.productInfo)
@@ -259,19 +257,10 @@ class ProductService extends CRUDService<Product> {
   }
 
   // GET BY ID
-  async getByIdOverridingHavePopulate(id: string, populateName?: string) {
-    try {
-      let category;
-      if (populateName) {
-        category = await this.model
-          .findById(id)
-          .populate({ path: populateName, select: 'variants' });
-      }
-      return category;
-    } catch (error) {
-      //   console.log(error);
-      throw new Error(`Occur error when find by id ${this.nameService} with ${error}`);
-    }
+  async getByIdOverriding(id: string) {
+    const result = await this.getById(id).then((res) => res.populate('productsVariant'));
+
+    return result;
   }
 }
 export default ProductService;
