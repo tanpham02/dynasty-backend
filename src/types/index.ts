@@ -22,6 +22,7 @@ interface Params {
   customerId?: string;
   statusOrder?: string;
   sort?: string;
+  parentId?: string;
 }
 
 interface Filter {
@@ -40,6 +41,7 @@ interface Filter {
   statusOrder?: string;
   importDate?: any;
   sort?: string;
+  parentId?: string;
 }
 
 interface BaseModel {

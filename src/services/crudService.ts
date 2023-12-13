@@ -38,6 +38,7 @@ class CRUDService<T extends Document> {
       to,
       role,
       sort,
+      parentId,
     } = params;
 
     const filter: Filter = {};
@@ -58,6 +59,10 @@ class CRUDService<T extends Document> {
 
     if (categoryId) {
       filter.categoryId = categoryId;
+    }
+
+    if (parentId) {
+      filter.parentId = parentId;
     }
 
     if (types) {

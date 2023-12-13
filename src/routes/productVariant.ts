@@ -8,7 +8,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * '/api/products-variant':
+ * '/api/products-variant/search':
  *  get:
  *     tags: [Product Variant]
  *     summary: Search pagination
@@ -17,7 +17,7 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
- *      - name: productParentId
+ *      - name: parentId
  *        in: query
  *        schema:
  *          type: string
@@ -47,7 +47,7 @@ const router = express.Router();
  */
 
 //SEARCH PAGINATION
-router.get('/', productVariantController.search);
+router.get('/search', productVariantController.search);
 
 /**
  * @swagger
@@ -128,7 +128,7 @@ router.patch('/:id', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariant
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/productVariant'
+ *                 $ref: '#/components/schema/ProductVariant'
  */
 
 // GET BY ID
@@ -154,7 +154,7 @@ router.get('/:id', productVariantController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/productVariant'
+ *                 $ref: '#/components/schema/ProductVariant'
  */
 // DELETE
 router.delete('/', productVariantController.delete);

@@ -1,8 +1,7 @@
-import { configApp } from '@app/configs';
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Exception } from '@app/exception';
 import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import express, { NextFunction, Request, Response } from 'express';
-import http from 'http';
+import { NextFunction, Request, Response } from 'express';
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof Exception) {

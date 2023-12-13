@@ -13,7 +13,7 @@ const productVariantService = new ProductVariantService(ProductVariantModel, 'pr
 const productVariantController = {
   //SEARCH PAGINATION
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name, categoryId, types } = req.query;
+    const { pageIndex, pageSize, name, categoryId, types, parentId } = req.query;
     try {
       const params: Params = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
@@ -21,6 +21,7 @@ const productVariantController = {
         name: name?.toString(),
         categoryId: categoryId?.toString(),
         types: types as ProductType,
+        parentId: parentId?.toString(),
       };
       const product = await productVariantService.getPagination(params);
       res.status(HttpStatusCode.OK).json(product);

@@ -11,7 +11,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * '/api/category':
+ * '/api/category/search':
  *  get:
  *     tags: [Category]
  *     summary: Search pagination
@@ -43,7 +43,7 @@ const router = express.Router();
  */
 
 // SEARCH PAGINATION CATEGORY
-router.get('/', categoryController.search);
+router.get('/search', categoryController.search);
 
 /**
  * @swagger
@@ -156,29 +156,5 @@ router.get('/:id', categoryController.getCategoryById);
  */
 // DELETE CATEGORY
 router.delete('/', categoryController.deleteCategory);
-
-/**
- * @swagger
- * '/api/category/search/home-page':
- *  get:
- *     tags: [Category]
- *     summary: Search to show product
- *     parameters:
- *       - in: query
- *         name: pageIndex
- *         type: string
- *       - in: query
- *         name: pageSize
- *         type: string
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Category'
- */
-// SEARCH PRODUCT SHOW CLIENT
-// router.get('/search/home-page', categoryController.searchPaginationShowClient);
 
 export default router;

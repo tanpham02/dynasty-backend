@@ -2,7 +2,6 @@
 import { ProductVariants } from '@app/models/productVariant/@type';
 import CRUDService from './crudService';
 import { Model } from 'mongoose';
-import CategoryModel from '@app/models/category';
 import ProductModel from '@app/models/product';
 import { Request } from 'express';
 import { HttpStatusCode } from '@app/exception/type';

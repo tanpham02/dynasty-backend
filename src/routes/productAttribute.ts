@@ -7,7 +7,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * '/api/products-attribute':
+ * '/api/products-attribute/search-all':
  *  get:
  *     tags: [Product Attribute]
  *     summary: Search all
@@ -21,7 +21,7 @@ const router = express.Router();
  */
 
 //SEARCH ALL
-router.get('/', productAttributeController.searchAll);
+router.get('/search-all', productAttributeController.searchAll);
 
 /**
  * @swagger

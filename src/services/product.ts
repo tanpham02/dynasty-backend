@@ -12,8 +12,6 @@ import ProductVariantService from './productVariant';
 import mongoose from 'mongoose';
 import generateUnsignedSlug from '@app/utils/generateSlug';
 
-const { APP_URL } = configApp();
-
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
     super(model, nameService);
@@ -77,9 +75,10 @@ class ProductService extends CRUDService<Product> {
           extendedName: string;
           extendedValuePairs: string;
         }) => {
-          const attributeItemValid = product.productAttributeList?.filter(
+          const attributeItemValid = newProduct?.productAttributeList?.filter(
             (item) => item.extendedValuePairs?.includes(attribute?.extendedValuePairs),
           );
+
           let priceAdjustment = 0;
           if (attributeItemValid) {
             priceAdjustment = attribute.productAttributeItem.reduce((acc, next) => {
@@ -145,120 +144,65 @@ class ProductService extends CRUDService<Product> {
     return await newProduct.save();
   }
 
-  // UPDATE //!!!!!
+  // UPDATE
   async updateOverriding(id: string, req: Request) {
-    const productRequest: Product = req?.body?.productInfo
-      ? JSON.parse(req?.body?.productInfo)
+    const productRequest: Product = req.body?.[FIELDS_NAME.PRODUCT]
+      ? JSON.parse(req.body?.[FIELDS_NAME.PRODUCT])
       : {};
     const filename = req?.file?.filename;
     const destination = req?.file?.destination;
-    let dataUpdate: any = {};
+    let dataUpdate: any = {
+      parentId: id,
+    };
 
-    if (Object.keys(productRequest).length > 0) {
-      dataUpdate = {
-        ...dataUpdate,
-        ...productRequest,
-      };
+    if (filename && destination) {
+      productRequest.image = `/${destination}/${filename}`;
     }
-    try {
-      if (filename && destination) {
-        dataUpdate.image = `${APP_URL}/${destination}/${filename}`;
-      }
-      const product = await this.model.findOneAndUpdate({ _id: id }, dataUpdate, { new: true });
 
-      const productVariantId = dataUpdate?.productVariantId;
+    if (productRequest?.productAttributeList) {
+      for (let i = 0; i < productRequest?.productAttributeList.length; i++) {
+        const element: any = productRequest?.productAttributeList[i];
 
-      const categoryId = dataUpdate?.categoryId;
-      const categoryChild = await CategoryModel.findOne({ 'childCategory._id': categoryId });
+        const productVariantMatch = await ProductVariantModel.findOne({
+          'productItem.productAttributeList._id': element?._id,
+        });
 
-      if (categoryId && new Object(product?.categoryId).valueOf() !== categoryId) {
-        console.log('category id');
-        try {
-          await CategoryModel.findByIdAndUpdate(
-            { _id: product?.categoryId },
-            {
-              $pull: { productsDTO: product?._id },
-            },
-            { new: true },
-          );
+        if (productVariantMatch) {
+          dataUpdate = {
+            ...dataUpdate,
+            productItem: productRequest,
+          };
 
-          await CategoryModel.findByIdAndUpdate(
-            categoryId,
-            {
-              $push: { productsDTO: product?._id },
-            },
-            { new: true },
-          );
-
-          await CategoryModel.findOneAndUpdate(
-            {
-              'childCategory._id': product?.categoryId,
-            },
-            {
-              $pull: {
-                'childCategory.$.children.productsDTO': product?._id,
-              },
-            },
+          await ProductVariantModel.updateOne(
+            { 'productItem.productAttributeList._id': element?._id },
+            dataUpdate,
             {
               new: true,
             },
           );
-        } catch (error) {
-          console.log(error);
         }
       }
-
-      if (categoryChild && new Object(product?.categoryId).valueOf() !== categoryChild) {
-        try {
-          await CategoryModel.findOneAndUpdate(
-            {
-              'childCategory._id': product?.categoryId,
-            },
-            {
-              $pull: {
-                'childCategory.$.children.productsDTO': product?._id,
-              },
-            },
-            {
-              new: true,
-            },
-          );
-
-          await CategoryModel.findOneAndUpdate(
-            {
-              'childCategory._id': categoryId,
-            },
-            {
-              $push: {
-                'childCategory.$.children.productsDTO': product?._id,
-              },
-            },
-            {
-              new: true,
-            },
-          );
-
-          await CategoryModel.findByIdAndUpdate(
-            { _id: product?.categoryId },
-            {
-              $pull: { productsDTO: product?._id },
-            },
-            { new: true },
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      }
-      return { message: `Update ${this.nameService} success` };
-    } catch (error) {
-      console.log(error);
-      throw new Error(`Occur error when delete ${this.nameService} with ${error}`);
     }
+
+    await this.model.updateOne({ _id: id }, productRequest, { new: true });
+
+    return { message: `Update ${this.nameService} success` };
   }
 
   // GET BY ID
   async getByIdOverriding(id: string) {
-    const result = await this.getById(id).then((res) => res.populate('productsVariant'));
+    const result = await this.getById(id).then((res) =>
+      res.populate([
+        {
+          path: 'productsVariant',
+          model: 'ProductVariant',
+        },
+        {
+          path: 'attribute',
+          model: 'ProductAttribute',
+        },
+      ]),
+    );
 
     return result;
   }

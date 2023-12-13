@@ -49,7 +49,7 @@ router.get('/search', productController.search);
 
 /**
  * @swagger
- * '/api/products/create':
+ * '/api/products':
  *  post:
  *     tags: [Product]
  *     summary: Create product
@@ -77,7 +77,7 @@ router.get('/search', productController.search);
  */
 
 // CREATE PRODUCT
-router.post('/create', uploadFileProduct, productController.create);
+router.post('/', uploadFileProduct, productController.create);
 
 /**
  * @swagger

@@ -73,21 +73,6 @@ const categoryController = {
       next(error);
     }
   },
-
-  // SEARCH PAGINATION TO SHOW (UI)
-  //   searchPaginationShowClient: async (req: Request, res: Response, next: NextFunction) => {
-  //     try {
-  //       const { pageIndex, pageSize } = req.query;
-  //       const response = await categoryService.searchPaginationToShowProduct(
-  //         pageIndex ? Number(pageIndex) : 0,
-  //         pageSize ? Number(pageSize) : 4,
-  //       );
-
-  //       res.status(HttpStatusCode.OK).json(response);
-  //     } catch (error) {
-  //       next(error);
-  //     }
-  //   },
 };
 
 export default categoryController;
