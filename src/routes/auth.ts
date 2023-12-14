@@ -1,12 +1,14 @@
+import { FIELDS_NAME } from '@app/constants';
 import authController from '@app/controllers/auth';
+import { formDataParser } from '@app/middlewares/formDataParser';
 import { verifyToken } from '@app/middlewares/verifyToken';
 import { Router } from 'express';
 
 const router = Router();
 
 /**
- * //@swagger
- * '/api/auth/signup':
+ * @swagger
+ * '/api/auth/customer/signup':
  *  post:
  *     tags: [Authentication]
  *     summary: Signup
@@ -17,7 +19,7 @@ const router = Router();
  *             schema:
  *                type: object
  *                properties:
- *                   customerInfo:
+ *                   customerSignupInfo:
  *                        $ref: '#/components/schema/Customer'
  *     responses:
  *       200:
@@ -25,7 +27,7 @@ const router = Router();
  */
 
 // SIGNUP CUSTOMER
-router.post('/signup', authController.signup);
+router.post('/customer/signup', formDataParser(FIELDS_NAME.CUSTOMER_SIGNUP), authController.signup);
 
 // LOGIN FOR USER
 router.post('/user/login', authController.loginUser);

@@ -1,8 +1,10 @@
+/* eslint-disable no-unsafe-optional-chaining */
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { configApp } from '@app/configs';
 import UserModel from '@app/models/user';
 import { compare } from 'bcrypt';
 import { Request, Response } from 'express';
-import { MODE, SALT } from '@app/constants';
+import { FIELDS_NAME, MODE, SALT } from '@app/constants';
 import { verify } from 'jsonwebtoken';
 import { genSalt, hash } from 'bcrypt';
 import CustomerModel from '@app/models/customer';
@@ -18,38 +20,41 @@ const { jwtRefreshKey } = configApp();
 
 const authService = {
   // SIGNUP CUSTOMER
-  signup: async (req: Request, res: Response) => {
-    const { password, ...customerBody }: Customer = req.body;
+  signup: async (req: Request, res: Response, ) => {
+    const customerSignupRequest: Customer = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_SIGNUP]);
     const existCustomer = await CustomerModel.findOne({
       $or: [
         {
-          phoneNumber: customerBody.phoneNumber,
+          phoneNumber: customerSignupRequest?.phoneNumber,
         },
         {
-          email: customerBody.email,
+          email: customerSignupRequest?.email,
         },
       ],
     });
 
     if (existCustomer) {
-      if (existCustomer.phoneNumber === customerBody.phoneNumber) {
-        const exception = new Exception(HttpStatusCode.CONFLICT, 'PhoneNumber already exist');
+      if (existCustomer?.phoneNumber === customerSignupRequest?.phoneNumber) {
+        const exception = new Exception(HttpStatusCode.CONFLICT, 'Phone number already exist');
         throw exception;
       }
-      if (existCustomer.email === customerBody.email) {
+      if (existCustomer?.email === customerSignupRequest?.email) {
         const exception = new Exception(HttpStatusCode.CONFLICT, 'Email already exists');
         throw exception;
       }
     }
-    if (password) {
+
+    if (customerSignupRequest?.password) {
       const salt = await genSalt(SALT);
-      const passwordAfterHash = await hash(password, salt);
-      const newCustomer = new CustomerModel({ ...customerBody, password: passwordAfterHash });
+      const passwordAfterHash = await hash(customerSignupRequest.password, salt);
+      const newCustomer = new CustomerModel({
+        ...customerSignupRequest,
+        password: passwordAfterHash,
+      });
 
       await newCustomer.save();
 
       const newCart = new CartModel({ customerId: newCustomer._id });
-
       const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
       await newCustomerAddress.save();
       await newCart.save();

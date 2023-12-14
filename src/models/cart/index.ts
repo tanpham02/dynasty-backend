@@ -1,5 +1,5 @@
-import { Schema, Model, model } from 'mongoose';
-import { ActionType, Cart, CartProduct } from './@type';
+import { Schema, model } from 'mongoose';
+import { Cart } from './@type';
 
 // SCHEMAS RESPONSE
 
@@ -20,58 +20,18 @@ import { ActionType, Cart, CartProduct } from './@type';
  *           items:
  *              type: object
  *              properties:
- *                  productId:
- *                     type: string
+ *                  productItem:
+ *                     $ref: '#/components/schema/Product'
+ *                     description: This is field ObjectId (Use populate to retries data)
  *                  note:
  *                     type: string
  *                  quantityProducts:
  *                     type: number
- *         quantity:
+ *         totalQuantity:
  *           type: number
  *         totalCart:
  *           type: number
  */
-/**
- * @swagger
- * components:
- *   schema:
- *     CartRequest:
- *       type: object
- *       properties:
- *         products:
- *          type: array
- *          items:
- *            type: object
- *            properties:
- *              note:
- *                type: string
- *              productId:
- *                type: string
- *              quantityProducts:
- *                type: number
- *              actionType:
- *                type: string
- *                enum:
- *                   - ADD
- *                   - UPDATE
- *                   - DELETE
- */
-
-const CartProductSchema = new Schema<CartProduct>(
-  {
-    productId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Product',
-    },
-    note: {
-      type: String,
-    },
-    quantityProducts: {
-      type: Number,
-    },
-  },
-  { versionKey: false, timestamps: true },
-);
 
 const CartSchema = new Schema<Cart>(
   {
@@ -79,8 +39,21 @@ const CartSchema = new Schema<Cart>(
       type: Schema.Types.ObjectId,
       ref: 'Customer',
     },
-    products: [CartProductSchema],
-    quantity: {
+    products: [
+      {
+        productItem: {
+          type: Schema.Types.ObjectId,
+          ref: 'ProductVariant',
+        },
+        note: {
+          type: String,
+        },
+        quantityProducts: {
+          type: Number,
+        },
+      },
+    ],
+    totalQuantity: {
       type: Number,
     },
     totalCart: {

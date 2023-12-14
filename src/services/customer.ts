@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Model } from 'mongoose';
 import CRUDService from '@app/services/crudService';
 import { Customer } from '@app/models/customer/@type';

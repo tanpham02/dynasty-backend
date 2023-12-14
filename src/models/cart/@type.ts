@@ -19,74 +19,27 @@ import { Schema, Document } from 'mongoose';
  *           items:
  *              type: object
  *              properties:
- *                  productId:
- *                     type: string
+ *                  productItem:
+ *                     $ref: '#/components/schema/Product'
+ *                     description: This is field ObjectId (Use populate to retries data)
  *                  note:
  *                     type: string
  *                  quantityProducts:
  *                     type: number
- *         quantity:
+ *         totalQuantity:
  *           type: number
- */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Cart:
- *       type: object
- *       required:
- *         - customerId
- *         - products
- *       properties:
- *         customerId:
- *           type: string
- *         products:
- *           type: array
- *           item:
- *              schema:
- *                  $ref: '#/components/schema/CartProduct'
- *         quantity:
- *             type: number
  *         totalCart:
  *           type: number
  */
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     CartRequest:
- *       type: object
- *       properties:
- *         products:
- *          type: array
- *          items:
- *            type: object
- *            properties:
- *              note:
- *                type: string
- *              productId:
- *                type: string
- *              quantityProducts:
- *                type: number
- *              actionType:
- *                type: string
- *                enum:
- *                   - ADD
- *                   - UPDATE
- *                   - DELETE
- */
-
-interface CartProduct extends Document {
-  productId?: Schema.Types.ObjectId;
-  note?: string;
-  quantityProducts: number;
-}
 interface Cart extends Document {
   customerId: Schema.Types.ObjectId;
-  products?: CartProduct[];
-  quantity: number;
+  products?: Array<{
+    productId?: Schema.Types.ObjectId;
+    note?: string;
+    productQuantities: number;
+  }>;
+  totalQuantity: number;
   totalCart: number;
 }
 
@@ -96,4 +49,4 @@ enum ActionType {
   DELETE = 'DELETE',
 }
 
-export { Cart, CartProduct, ActionType };
+export { Cart, ActionType };

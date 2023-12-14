@@ -17,6 +17,7 @@ const FIELDS_NAME = {
   PRODUCT: 'productInfo',
   PRODUCT_ATTRIBUTE: 'productAttributeInfo',
   PRODUCT_VARIANT: 'productVariantInfo',
+  CUSTOMER_SIGNUP: 'customerSignupInfo',
 };
 
 export { MODE, ProductStatus, SALT, FIELDS_NAME };

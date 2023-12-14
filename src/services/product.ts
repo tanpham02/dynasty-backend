@@ -10,7 +10,7 @@ import { ProductVariants } from '@app/models/productVariant/@type';
 import ProductVariantModel from '@app/models/productVariant';
 import ProductVariantService from './productVariant';
 import mongoose from 'mongoose';
-import generateUnsignedSlug from '@app/utils/generateSlug';
+import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {

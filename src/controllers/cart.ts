@@ -12,8 +12,8 @@ const cartController = {
     console.log('gau gau');
 
     try {
-      const { message } = await cartService.updateCart(customerId, req);
-      res.status(200).json(message);
+      const ress = await cartService.updateCart(customerId, req);
+      res.status(200).json(ress);
     } catch (error) {
       res.status(500).json(error);
     }
@@ -24,9 +24,9 @@ const cartController = {
     const { customerId } = req.params;
     try {
       const cart = await cartService.getCartByCustomerId(customerId);
-      if (!cart) {
-        return res.status(404).json({ message: 'Not found cart!' });
-      }
+      //   if (!cart) {
+      //     return res.status(404).json({ message: 'Not found cart!' });
+      //   }
       res.status(200).json(cart);
     } catch (error) {
       res.status(500).json(error);

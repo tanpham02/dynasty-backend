@@ -6,7 +6,7 @@ import ProductModel from '@app/models/product';
 import { Request } from 'express';
 import { HttpStatusCode } from '@app/exception/type';
 import { Exception } from '@app/exception';
-import generateUnsignedSlug from '@app/utils/generateSlug';
+import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
 
 class ProductVariantService extends CRUDService<ProductVariants> {
   constructor(model: Model<ProductVariants>, nameService: string) {

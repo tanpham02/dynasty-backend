@@ -9,7 +9,7 @@ import { Exception } from '@app/exception';
 import { FIELDS_NAME } from '@app/constants';
 import { page, pipe, skip } from 'iter-ops';
 import { Product } from '@app/models/product/@type';
-import generateUnsignedSlug from '@app/utils/generateSlug';
+import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
 
 class CategoryService extends CRUDService<Category> {
   constructor(model: Model<Category>, nameService: string) {
