@@ -1,108 +1,139 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Model } from 'mongoose';
 import CRUDService from './crudService';
 import { ActionType, Cart } from '@app/models/cart/@type';
 import { Request } from 'express';
 import { Product } from '@app/models/product/@type';
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
+import { comparingObjectId } from '@app/utils/comparingObjectId';
 
 class CartService extends CRUDService<Cart> {
   constructor(model: Model<Cart>, nameService: string) {
     super(model, nameService);
   }
 
-  async updateCart(customerId: string, req: Request) {
-    // let messageRes: {
-    //   message: string;
-    // } = { message: '' };
-    // try {
-    //   if (customerId) {
-    //     const cartAfterFindByCustomerId = await this.model.findOne({ customerId: customerId });
-    //     const productItemFromBody = req?.body?.products?.[0];
-    //     const productItemFromDatabase = await this.model.findOne({
-    //       customerId: customerId,
-    //       'products.productId': productItemFromBody?.productId,
-    //     });
-    //     if (
-    //       productItemFromDatabase &&
-    //       new Object(productItemFromDatabase.customerId).valueOf() === customerId &&
-    //       productItemFromBody.actionType === ActionType.UPDATE
-    //     ) {
-    //       await this.model.updateOne(
-    //         {
-    //           'products.productId': productItemFromBody?.productId,
-    //         },
-    //         {
-    //           $set: {
-    //             'products.$.quantityProducts': productItemFromBody?.quantityProducts,
-    //           },
-    //         },
-    //         { new: true },
-    //       );
-    //       messageRes = {
-    //         message: 'Update cart item successfully',
-    //       };
-    //     }
-    //     if (productItemFromBody.actionType === ActionType.ADD) {
-    //       cartAfterFindByCustomerId?.products &&
-    //         (await cartAfterFindByCustomerId?.updateOne(
-    //           {
-    //             $set: {
-    //               products: [
-    //                 ...cartAfterFindByCustomerId?.products,
-    //                 ...[
-    //                   {
-    //                     ...productItemFromBody,
-    //                     quantityProducts: productItemFromBody?.quantityProducts || 1,
-    //                   },
-    //                 ],
-    //               ],
-    //             },
-    //           },
-    //           { new: true },
-    //         ));
-    //       messageRes = {
-    //         message: 'Add cart item successfully',
-    //       };
-    //     }
-    //     if (
-    //       productItemFromDatabase &&
-    //       new Object(productItemFromDatabase.customerId).valueOf() === customerId &&
-    //       productItemFromBody.actionType === ActionType.DELETE
-    //     ) {
-    //       await productItemFromDatabase.updateOne(
-    //         {
-    //           $pull: {
-    //             products: { productId: productItemFromBody?.productId },
-    //           },
-    //         },
-    //         { new: true },
-    //       );
-    //       messageRes = { message: 'Delete cart item successfully' };
-    //     }
-    //   }
-    //   return messageRes;
-    // } catch (error) {
-    //   console.log('error', error);
-    //   throw new Error(`Occur error when add to cart`);
-    // }
+  async addCartItem(customerId: string, req: Request) {
+    const cart = await this.model.findOne({ customerId: customerId });
+    const cartDTO: Cart['products'] = JSON.parse(JSON.stringify(req.body.products)) || [];
+    if (!cart) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Cart not found');
+      throw exception;
+    }
+
+    const handleAddCartItem = async (cartItemDTO: any, cartRecord: any) => {
+      if (comparingObjectId(cartItemDTO.product, cartRecord.product)) {
+        const quantity = cartItemDTO.productQuantities + cartRecord.productQuantities;
+        await this.model.updateOne(
+          {
+            'products.product': cartItemDTO.product,
+          },
+          {
+            $set: {
+              'products.$.productQuantities': quantity,
+              'products.$.note': cartItemDTO?.note || cartRecord?.note,
+            },
+          },
+          { new: true },
+        );
+      } else {
+        await cart.updateOne(
+          {
+            $push: { products: cartItemDTO },
+          },
+          { new: true },
+        );
+      }
+    };
+
+    cartDTO?.forEach((itemDTO) => {
+      if (cart.products && cart.products?.length > 0) {
+        cart.products?.find((productItemRecord) => handleAddCartItem(itemDTO, productItemRecord));
+      } else {
+        (async () => {
+          await cart.updateOne(
+            {
+              $set: { products: cartDTO },
+            },
+            { new: true },
+          );
+        })();
+      }
+    });
+  }
+
+  async updateCartITem(customerId: string, req: Request) {
+    const cart = await this.model.findOne({ customerId: customerId });
+    const cartDTO: Cart['products'] = JSON.parse(JSON.stringify(req.body.products)) || [];
+
+    const handleUpdateCartItem = async (cartItemDTO: any, cartRecord: any) => {
+      if (comparingObjectId(cartItemDTO.product, cartRecord.product)) {
+        if (cartItemDTO.productQuantities !== 0) {
+          await this.model.updateOne(
+            {
+              customerId: customerId,
+              'products.product': cartRecord.product,
+            },
+            {
+              $set: {
+                'products.$.productQuantities': cartItemDTO.productQuantities,
+                'products.$.note': cartItemDTO?.note || cartRecord?.note,
+              },
+            },
+            { new: true },
+          );
+        } else {
+          await cart?.updateOne(
+            {
+              $pull: {
+                products: { product: cartItemDTO.product },
+              },
+            },
+            { new: true },
+          );
+        }
+      }
+    };
+
+    cartDTO?.forEach((itemDTO) => {
+      cart?.products?.find((productItemRecord) => {
+        handleUpdateCartItem(itemDTO, productItemRecord);
+      });
+    });
+  }
+
+  async deleteCartItem(customerId: string, productIds: string[]) {
+    await this.model.updateMany(
+      { customerId: customerId },
+      {
+        $pull: {
+          products: {
+            product: {
+              $in: productIds,
+            },
+          },
+        },
+      },
+      { new: true },
+    );
   }
 
   async getCartByCustomerId(customerId: string) {
-    //     try {
-    //       let total = 0;
-    //       const cart = await this.model
-    //         .findOne({ customerId: customerId })
-    //         .populate('products.productId');
-    //       if (cart?.products) {
-    //         const totalCart = cart?.products.reduce((prev, next) => {
-    //           const productItem = next?.productId as unknown as Product;
-    //           return prev + productItem.price * next.quantityProducts;
-    //         }, 0);
-    //         return { ...JSON.parse(JSON.stringify({ ...cart }))._doc, totalCart };
-    //       }
-    //     } catch (error) {
-    //       console.log('error', error);
-    //       throw new Error(`Occur error when get cart`);
-    //     }
+    const cart = await this.model.findOne({ customerId: customerId });
+    if (!cart) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Cart not found');
+      throw exception;
+    }
+
+    if (cart?.products && cart.products.length) {
+      const cartResponse = await cart.populate('products.product');
+      const totalCart = cartResponse.products?.reduce((acc: any, next: any) => {
+        const item = next?.product as unknown as any;
+        return acc + item?.productItem?.price * next?.productQuantities;
+      }, 0);
+      cartResponse.totalCart = totalCart || 0;
+      return cartResponse;
+    }
   }
 }
 

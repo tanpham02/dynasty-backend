@@ -19,12 +19,12 @@ import { Schema, Document } from 'mongoose';
  *           items:
  *              type: object
  *              properties:
- *                  productItem:
+ *                  product:
  *                     $ref: '#/components/schema/Product'
  *                     description: This is field ObjectId (Use populate to retries data)
  *                  note:
  *                     type: string
- *                  quantityProducts:
+ *                  productQuantities:
  *                     type: number
  *         totalQuantity:
  *           type: number
@@ -32,10 +32,34 @@ import { Schema, Document } from 'mongoose';
  *           type: number
  */
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CartDTO:
+ *       type: object
+ *       required:
+ *         - products
+ *       properties:
+ *         products:
+ *           type: array
+ *           items:
+ *              type: object
+ *              properties:
+ *                  product:
+ *                     type: string
+ *                     description: This is field ObjectId (Use populate to retries data)
+ *                  note:
+ *                     type: string
+ *                  productQuantities:
+ *                     type: number
+
+ */
+
 interface Cart extends Document {
   customerId: Schema.Types.ObjectId;
   products?: Array<{
-    productId?: Schema.Types.ObjectId;
+    product?: Schema.Types.ObjectId;
     note?: string;
     productQuantities: number;
   }>;

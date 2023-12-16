@@ -20,12 +20,12 @@ import { Cart } from './@type';
  *           items:
  *              type: object
  *              properties:
- *                  productItem:
+ *                  product:
  *                     $ref: '#/components/schema/Product'
  *                     description: This is field ObjectId (Use populate to retries data)
  *                  note:
  *                     type: string
- *                  quantityProducts:
+ *                  productQuantities:
  *                     type: number
  *         totalQuantity:
  *           type: number
@@ -41,14 +41,14 @@ const CartSchema = new Schema<Cart>(
     },
     products: [
       {
-        productItem: {
+        product: {
           type: Schema.Types.ObjectId,
           ref: 'ProductVariant',
         },
         note: {
           type: String,
         },
-        quantityProducts: {
+        productQuantities: {
           type: Number,
         },
       },

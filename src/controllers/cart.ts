@@ -1,35 +1,59 @@
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
 import CartModel from '@app/models/cart';
 import CartService from '@app/services/cart';
 import { Params } from '@app/types';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 const cartService = new CartService(CartModel, 'cart');
 
 const cartController = {
   // ADD CART
-  updateCart: async (req: Request, res: Response) => {
+  addCart: async (req: Request, res: Response, next: NextFunction) => {
     const { customerId } = req.params;
-    console.log('gau gau');
-
     try {
-      const ress = await cartService.updateCart(customerId, req);
-      res.status(200).json(ress);
+      await cartService.addCartItem(customerId, req);
+      res.status(HttpStatusCode.OK).json({ message: 'Add cart successfully' });
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
+    }
+  },
+
+  // UPDATE CART
+  updateCart: async (req: Request, res: Response, next: NextFunction) => {
+    const { customerId } = req.params;
+    try {
+      await cartService.updateCartITem(customerId, req);
+      res.status(HttpStatusCode.OK).json({ message: 'Update cart successfully' });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // DELETE CART
+  deleteCart: async (req: Request, res: Response, next: NextFunction) => {
+    const { customerId } = req.params;
+    const { productIds } = req.query;
+    try {
+      await cartService.deleteCartItem(customerId as string, productIds as string[]);
+      res.status(HttpStatusCode.OK).json({ message: 'Delete cart successfully' });
+    } catch (error) {
+      next(error);
     }
   },
 
   // GET CART BY CUSTOMER_ID
-  getCartById: async (req: Request, res: Response) => {
+  getCartById: async (req: Request, res: Response, next: NextFunction) => {
     const { customerId } = req.params;
     try {
       const cart = await cartService.getCartByCustomerId(customerId);
-      //   if (!cart) {
-      //     return res.status(404).json({ message: 'Not found cart!' });
-      //   }
-      res.status(200).json(cart);
+
+      res.status(HttpStatusCode.OK).json(cart);
     } catch (error) {
-      res.status(500).json(error);
+      if (error instanceof Exception) {
+        res.status(error.status).json(error.message);
+      }
+      next(error);
     }
   },
 };

@@ -31,7 +31,7 @@ export const USER_URL = '/api/users';
 export const CUSTOMER_URL = '/api/customers';
 
 // CART
-export const CART_URL = '/api/cart';
+export const CART_URL = '/api/carts';
 
 // ORDER
 export const ORDER_URL = '/api/order';
