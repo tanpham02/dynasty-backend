@@ -56,9 +56,6 @@ const categoryController = {
       const category = await categoryService.getCategoryById(id);
       res.status(HttpStatusCode.OK).json(category);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },

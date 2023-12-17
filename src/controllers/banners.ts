@@ -47,9 +47,6 @@ const bannerController = {
       const { message } = await bannerService.updateOverriding(id, req, FIELDS_NAME.BANNER);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },
@@ -61,9 +58,6 @@ const bannerController = {
       const banner = await bannerService.getById(id);
       res.status(HttpStatusCode.OK).json(banner);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },
@@ -75,9 +69,6 @@ const bannerController = {
       const { message } = await bannerService.delete(ids);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },

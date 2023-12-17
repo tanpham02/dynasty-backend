@@ -42,10 +42,7 @@ const voucherController = {
       const { id } = req.params;
       const { message } = await voucherService.update(id, req, '');
       res.status(HttpStatusCode.OK).json(message);
-    } catch (error: any) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
+    } catch (error) {
       next(error);
     }
   },
@@ -59,9 +56,6 @@ const voucherController = {
         .then((res) => res?.populate('listProductUsedVoucher'));
       res.status(HttpStatusCode.OK).json(voucher);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },
@@ -73,9 +67,6 @@ const voucherController = {
       const { message } = await voucherService.delete(ids);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },

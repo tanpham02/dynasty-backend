@@ -4,7 +4,7 @@ import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
 import PromotionsModel from '@app/models/promotions';
 import PromotionService from '@app/services/promotions';
 import { Params } from '@app/types';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 const promoService = new PromotionService(PromotionsModel, 'promotions');
 const promotionController = {
@@ -35,43 +35,34 @@ const promotionController = {
   },
 
   // UPDATE PROMOTIONS
-  update: async (req: Request, res: Response) => {
+  update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
       const { message } = await promoService.update(id, req, '');
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
-      res.status(HttpStatusCode.INTERNAL_SERVER).json(error?.message || INTERNAL_SERVER_ERROR_MSG);
+      next(error);
     }
   },
 
   // GET BY ID
-  getById: async (req: Request, res: Response) => {
+  getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
       const promotions = await promoService.getById(id);
       res.status(HttpStatusCode.OK).json(promotions);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
-      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
+      next(error);
     }
   },
 
-  delete: async (req: Request, res: Response) => {
+  delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
       const { message } = await promoService.delete(ids);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
-      res.status(HttpStatusCode.INTERNAL_SERVER).json(INTERNAL_SERVER_ERROR_MSG);
+      next(error);
     }
   },
 };

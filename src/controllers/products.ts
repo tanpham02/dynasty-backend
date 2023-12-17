@@ -45,9 +45,6 @@ const productController = {
       const { message } = await productService.updateOverriding(id, req);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },
@@ -59,9 +56,6 @@ const productController = {
       const product = await productService.getByIdOverriding(id);
       res.status(HttpStatusCode.OK).json(product);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },

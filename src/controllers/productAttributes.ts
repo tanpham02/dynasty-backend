@@ -45,9 +45,6 @@ const productAttributeController = {
       );
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },
@@ -59,9 +56,6 @@ const productAttributeController = {
       const result = await productAttributeService.getById(id);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },
@@ -73,9 +67,6 @@ const productAttributeController = {
       const { message } = await productAttributeService.delete(ids);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },

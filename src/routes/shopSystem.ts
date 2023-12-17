@@ -1,4 +1,4 @@
-import shopSystemController from '@app/controllers/shopSystem';
+import shopSystemController from '@app/controllers/storeSystem';
 import express from 'express';
 const router = express.Router();
 

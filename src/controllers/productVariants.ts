@@ -51,10 +51,7 @@ const productVariantController = {
         FIELDS_NAME.PRODUCT_VARIANT,
       );
       res.status(HttpStatusCode.OK).json(message);
-    } catch (error: any) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
+    } catch (error) {
       next(error);
     }
   },
@@ -66,9 +63,6 @@ const productVariantController = {
       const result = await productVariantService.getById(id);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },
@@ -80,9 +74,6 @@ const productVariantController = {
       const { message } = await productVariantService.deleteOverriding(ids as string[]);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      if (error instanceof Exception) {
-        return res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },

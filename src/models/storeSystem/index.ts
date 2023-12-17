@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose';
 import ShopSystem from './@type';
+import StoreSystem from './@type';
 
 // RESPONSE DESCRIPTION
 
@@ -30,7 +31,7 @@ import ShopSystem from './@type';
  *             type: string
  */
 
-const ShopSystemSchema = new Schema<ShopSystem>(
+const StoreSystemSchema = new Schema<StoreSystem>(
   {
     name: {
       type: String,
@@ -73,6 +74,6 @@ const ShopSystemSchema = new Schema<ShopSystem>(
   { timestamps: true, versionKey: false },
 );
 
-const ShopSystemModel = model('ShopSystem', ShopSystemSchema);
+const StoreSystemModel = model('StoreSystem', StoreSystemSchema);
 
-export default ShopSystemModel;
+export default StoreSystemModel;
