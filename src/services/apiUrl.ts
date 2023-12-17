@@ -12,17 +12,23 @@ export const PRODUCT_URL = '/api/products';
 export const PRODUCT_ATTRIBUTE_URL = '/api/products-attributes';
 export const PRODUCT_VARIANT_URL = '/api/products-variants';
 
-// SHOP SYSTEM
-export const SHOP_SYSTEM_URL = '/api/shop-system';
+// STORE SYSTEM
+export const STORE_SYSTEM_URL = '/api/store-system';
+
+// STORE CONFIG
+export const STORE_CONFIG_URL = '/api/store-config';
+
+// STORE CONFIG
+export const STORE_INFORMATION_URL = '/api/store-information';
+
+// STORE CONFIG
+export const TERM_AND_POLICY_URL = '/api/term-and-policy';
 
 // COMBO PROMOTIONS
 export const COMBO_PROMOTIONS_URL = '/api/combo-promotions';
 
 //  PROMOTIONS
 export const PROMOTIONS_URL = '/api/promotions';
-
-// CONFIG STORE
-export const CONFIG_STORE_URL = '/api/config-store';
 
 // VOUCHER
 export const VOUCHER_URL = '/api/vouchers';

@@ -1,25 +1,19 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Order, StatusOrder } from '@app/models/orders/@type';
+import { Order } from '@app/models/orders/@type';
 import CRUDService from './crudService';
 import { Model } from 'mongoose';
-import { Filter, Params } from '@app/types';
+import { Params } from '@app/types';
 import { Request, Response } from 'express';
 import VoucherModel from '@app/models/vouchers';
 import CartModel from '@app/models/carts';
 import CartService from './carts';
-import { Cart } from '@app/models/carts/@type';
 import VoucherService from './vouchers';
 import CustomerService from './customers';
 import CustomerModel from '@app/models/customers';
-import ProductModel from '@app/models/products';
-import ConfigStoreService from './configStore';
-import ConfigStoreModel from '@app/models/storeConfig';
 
 const customerService = new CustomerService(CustomerModel, 'customer');
 const cartService = new CartService(CartModel, 'cart');
 const voucherService = new VoucherService(VoucherModel, 'voucher');
-
-const configStoreService = new ConfigStoreService(ConfigStoreModel, 'config store');
 
 class OrderService extends CRUDService<Order> {
   constructor(model: Model<Order>, nameService: string) {
@@ -56,10 +50,10 @@ class OrderService extends CRUDService<Order> {
   // CHECKOUT
   async checkout(req: Request, res: Response) {
     const customerId = req?.body?.customerId;
-    let newData = { ...req.body };
+    // let newData = { ...req.body };
     if (customerId) {
       const productCartQuery = await cartService.getCartByCustomerId(customerId);
-      const feeShip = await configStoreService.findAll();
+      //   const feeShip = await configStoreService.findAll();
       //   if (productCartQuery) {
       //     const { customerId, ...remainingProductCartQuery } = productCartQuery;
       //     const shipFee = feeShip?.[0]?.feeShip || 0;

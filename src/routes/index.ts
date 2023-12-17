@@ -1,9 +1,7 @@
 import categoryRouter from './category';
 import productRouter from './products';
-import shopSystemRouter from './shopSystem';
 import comboPromotionsRouter from './comboPromotions';
 import promotionsRouter from './promotions';
-import configStoreRouter from './configStore';
 import voucherRouter from './vouchers';
 import userRouter from './users';
 import customerAddressRouter from './customerAddress';
@@ -15,6 +13,10 @@ import materialRouter from './materials';
 import productAttributeRoute from './productAttributes';
 import productVariantRoute from './productVariants';
 import bannerRoute from './banners';
+import storeSystemRoute from './storeSystem';
+import storeConfigRoute from './storeConfig';
+import storeInformationRoute from './storeInformation';
+import termAndPolicyRoute from './termAndPolicy';
 import { Application } from 'express';
 
 import {
@@ -23,9 +25,7 @@ import {
   PRODUCT_ATTRIBUTE_URL,
   PRODUCT_VARIANT_URL,
   COMBO_PROMOTIONS_URL,
-  CONFIG_STORE_URL,
   PROMOTIONS_URL,
-  SHOP_SYSTEM_URL,
   USER_URL,
   VOUCHER_URL,
   CUSTOMER_URL,
@@ -34,6 +34,10 @@ import {
   ORDER_URL,
   MATERIAL_URL,
   BANNERS_URL,
+  STORE_SYSTEM_URL,
+  STORE_CONFIG_URL,
+  STORE_INFORMATION_URL,
+  TERM_AND_POLICY_URL,
 } from '@app/services/apiUrl';
 
 export const routesMapping = (app: Application) => {
@@ -59,16 +63,20 @@ export const routesMapping = (app: Application) => {
       route: productVariantRoute,
     },
     {
-      path: SHOP_SYSTEM_URL,
-      route: shopSystemRouter,
+      path: STORE_SYSTEM_URL,
+      route: storeSystemRoute,
+    },
+    {
+      path: STORE_INFORMATION_URL,
+      route: storeInformationRoute,
     },
     {
       path: COMBO_PROMOTIONS_URL,
       route: comboPromotionsRouter,
     },
     {
-      path: CONFIG_STORE_URL,
-      route: configStoreRouter,
+      path: STORE_CONFIG_URL,
+      route: storeConfigRoute,
     },
     {
       path: PROMOTIONS_URL,
@@ -105,6 +113,10 @@ export const routesMapping = (app: Application) => {
     {
       path: MATERIAL_URL,
       route: materialRouter,
+    },
+    {
+      path: TERM_AND_POLICY_URL,
+      route: termAndPolicyRoute,
     },
   ];
 

@@ -60,7 +60,7 @@ const authController = {
   },
 
   // LOGOUT
-  logout: async (res: Response, next: NextFunction) => {
+  logout: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { message } = await authService.logout(res);
       res.status(HttpStatusCode.OK).json(message);

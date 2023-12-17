@@ -19,6 +19,10 @@ const FIELDS_NAME = {
   PRODUCT_VARIANT: 'productVariantInfo',
   CUSTOMER_SIGNUP: 'customerSignupInfo',
   BANNER: 'bannerInfo',
+  STORE_SYSTEM: 'storeSystemInfo',
+  STORE_CONFIG: 'storeConfigInfo',
+  STORE_INFORMATION: 'storeInformationInfo',
+  TERM_AND_POLICY: 'termAndPolicyInfo',
 };
 
 export { MODE, ProductStatus, SALT, FIELDS_NAME };

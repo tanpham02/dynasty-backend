@@ -1,12 +1,14 @@
-import shopSystemController from '@app/controllers/storeSystem';
+import { FIELDS_NAME } from '@app/constants';
+import storeSystemController from '@app/controllers/storeSystem';
+import { formDataParser } from '@app/middlewares/formDataParser';
 import express from 'express';
 const router = express.Router();
 
 /**
  * @swagger
- * '/api/shop-system/search':
+ * '/api/store-system/search':
  *  get:
- *     tags: [Shop System]
+ *     tags: [Store System]
  *     summary: Search pagination
  *     parameters:
  *      - name: name
@@ -39,42 +41,46 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Shop System'
+ *                 $ref: '#/components/schema/Store System'
  */
 
-//SEARCH PAGINATION SHOP SYSTEM
-router.get('/search', shopSystemController.search);
+//SEARCH PAGINATION
+router.get('/search', storeSystemController.search);
 
 /**
  * @swagger
- * '/api/shop-system/create':
+ * '/api/store-system':
  *  post:
- *     tags: [Shop System]
- *     summary: Create shop system
+ *     tags: [Store System]
+ *     summary: Create
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Shop System'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   storeSystemInfo:
+ *                        $ref: '#/components/schema/Store System'
+
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Shop System'
+ *                 $ref: '#/components/schema/Store System'
  */
 
-// CREATE SHOP SYSTEM
-router.post('/create', shopSystemController.create);
+// CREATE
+router.post('/', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemController.create);
 
 /**
  * @swagger
- * '/api/shop-system/{id}':
+ * '/api/store-system/{id}':
  *  patch:
- *     tags: [Shop System]
- *     summary: Update shop system
+ *     tags: [Store System]
+ *     summary: Update
  *     parameters:
  *       - in: path
  *         name: id
@@ -84,26 +90,29 @@ router.post('/create', shopSystemController.create);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Shop System'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   storeSystemInfo:
+ *                        $ref: '#/components/schema/Store System'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Shop System'
+ *                 $ref: '#/components/schema/Store System'
  */
 
-// UPDATE SHOP SYSTEM
-router.patch('/:id', shopSystemController.update);
+// UPDATE
+router.patch('/:id', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemController.update);
 
 /**
  * @swagger
- * '/api/shop-system/{id}':
+ * '/api/store-system/{id}':
  *  get:
- *     tags: [Shop System]
+ *     tags: [Store System]
  *     summary: Get by id
  *     parameters:
  *       - in: path
@@ -117,18 +126,18 @@ router.patch('/:id', shopSystemController.update);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Shop System'
+ *                 $ref: '#/components/schema/Store System'
  */
 
-// GET SHOP SYSTEM BY ID
-router.get('/:id', shopSystemController.getById);
+// GET  BY ID
+router.get('/:id', storeSystemController.getById);
 
 /**
  * @swagger
- * '/api/shop-system/':
+ * '/api/store-system/':
  *  delete:
- *     tags: [Shop System]
- *     summary: Delete shop system
+ *     tags: [Store System]
+ *     summary: Delete
  *     parameters:
  *       - in: query
  *         name: ids
@@ -143,10 +152,10 @@ router.get('/:id', shopSystemController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Shop System'
+ *                 $ref: '#/components/schema/Store System'
  */
 
-// DELETE SHOP SYSTEM
-router.delete('/', shopSystemController.delete);
+// DELETE
+router.delete('/', storeSystemController.delete);
 
 export default router;
