@@ -13,7 +13,7 @@ import StoreSystem from './@type';
  *       properties:
  *         name:
  *           type: string
- *         address:
+ *         location:
  *           type: string
  *         phone:
  *             type: string
@@ -37,7 +37,7 @@ const StoreSystemSchema = new Schema<StoreSystem>(
       type: String,
       required: true,
     },
-    address: {
+    location: {
       type: String,
       required: true,
       unique: true,

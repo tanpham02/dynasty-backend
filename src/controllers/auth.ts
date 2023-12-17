@@ -10,7 +10,6 @@ const authController = {
       const { message } = await authService.signup(req, res);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      console.log('🚀 ~ file: auth.ts:13 ~ signup: ~ error:', error);
       next(error);
     }
   },

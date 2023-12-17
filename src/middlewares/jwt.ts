@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Role } from '@app/models/users/@type';
 import { sign } from 'jsonwebtoken';
 import { configApp } from '@app/configs';
@@ -23,7 +24,7 @@ class JWT {
       },
       jwtAccessKey ?? '',
       {
-        expiresIn: '1d',
+        expiresIn: '7d',
       },
     );
   }
@@ -37,7 +38,7 @@ class JWT {
       },
       jwtRefreshKey ?? '',
       {
-        expiresIn: '7d',
+        expiresIn: '365d',
       },
     );
   }

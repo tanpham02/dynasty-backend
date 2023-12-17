@@ -8,7 +8,7 @@ import { ProductStatus } from '@app/constants';
  * @swagger
  * components:
  *   schema:
- *     User:
+ *     Users:
  *       type: object
  *       required:
  *         - phoneNumber
@@ -26,7 +26,7 @@ import { ProductStatus } from '@app/constants';
  *           type: string
  *         email:
  *           type: string
- *         address:
+ *         location:
  *           type: string
  *         password:
  *           type: string
@@ -64,7 +64,7 @@ const UserSchema = new Schema<User>(
       unique: true,
       required: true,
     },
-    address: {
+    location: {
       type: String,
     },
     city: {

@@ -64,11 +64,9 @@ const CustomerSchema = new Schema<Customer>(
       type: Schema.Types.ObjectId,
       ref: 'CustomerAddress',
     },
-    orderIds: [
-      {
-        type: [String],
-      },
-    ],
+    orderIds: {
+      type: [String],
+    },
     status: {
       type: String,
       enum: ProductStatus,

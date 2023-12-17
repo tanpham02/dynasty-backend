@@ -29,7 +29,7 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Customer'
+ *                 $ref: '#/components/schema/Customers'
  */
 
 // SEARCH PAGINATION
@@ -54,7 +54,7 @@ router.get('/search', customerController.search);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Customer'
+ *                 $ref: '#/components/schema/Customers'
  */
 
 // GET BY ID
@@ -80,7 +80,7 @@ router.get('/:id', customerController.getById);
  *                type: object
  *                properties:
  *                   customerInfo:
- *                        $ref: '#/components/schema/Customer'
+ *                        $ref: '#/components/schema/Customers'
 
  *     responses:
  *       200:
@@ -88,7 +88,7 @@ router.get('/:id', customerController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Customer'
+ *                 $ref: '#/components/schema/Customers'
  */
 
 // UPDATE
@@ -113,7 +113,7 @@ router.patch('/:id', customerController.update);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Customer'
+ *                 $ref: '#/components/schema/Customers'
  */
 
 // DELETE CUSTOMER

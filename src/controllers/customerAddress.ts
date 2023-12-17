@@ -1,68 +1,57 @@
+import { HttpStatusCode } from '@app/exception/type';
 import CustomerAddressModel from '@app/models/customerAddress';
 import CustomerAddressService from '@app/services/customerAddress';
 import { Params } from '@app/types';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-const customerAddressService = new CustomerAddressService(CustomerAddressModel, 'list address');
+const customerAddressService = new CustomerAddressService(CustomerAddressModel, 'customer address');
 
 const customerAddressController = {
-  findAll: async (req: Request, res: Response) => {
-    try {
-      const listAddress = await customerAddressService.getAll();
-      res.status(200).json(listAddress);
-    } catch (error) {
-      res.status(500).json(error);
-    }
-  },
-
-  getListAddressByCustomerId: async (req: Request, res: Response) => {
+  // GET CUSTOMER ADDRESS BY CUSTOMER ID
+  getCustomerAddressByCustomerId: async (req: Request, res: Response, next: NextFunction) => {
     const { customerId } = req.params;
     try {
       const listAddress = await customerAddressService.getAddressByCustomerId(customerId);
-      res.status(200).json(listAddress);
+      res.status(HttpStatusCode.OK).json(listAddress);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 
-  addAddress: async (req: Request, res: Response) => {
-    const { customerId } = req.query;
+  // ADD CUSTOMER ADDRESS ITEM
+  addCustomerAddressItem: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const newListAddress = await customerAddressService.addAddress(customerId, req);
-      res.status(200).json(newListAddress);
+      const newCustomerAddressItem = await customerAddressService.addCustomerAddressItem(req);
+      res.status(HttpStatusCode.OK).json(newCustomerAddressItem);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 
-  update: async (req: Request, res: Response) => {
-    const { itemAddressId } = req.params;
+  // UPDATE CUSTOMER ADDRESS ITEM
+  updateCustomerAddressItem: async (req: Request, res: Response, next: NextFunction) => {
+    const { customerAddressItemId } = req.params;
     try {
-      const { message } = await customerAddressService.updateAddress(itemAddressId, req);
+      const response = await customerAddressService.updateCustomerAddressItem(
+        customerAddressItemId,
+        req,
+      );
 
-      res.status(200).json(message);
+      res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 
-  deleteItem: async (req: Request, res: Response) => {
-    const { itemAddressId } = req.params;
+  // DELETE CUSTOMER ADDRESS ITEM
+  deleteCustomerAddressItem: async (req: Request, res: Response, next: NextFunction) => {
+    const { customerAddressItemId } = req.params;
     try {
-      const { message } = await customerAddressService.deleteAddress(itemAddressId, req);
-      res.status(200).json(message);
+      const { message } =
+        await customerAddressService.deleteCustomerAddressItem(customerAddressItemId);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
-      res.status(500).json(error);
-    }
-  },
-
-  delete: async (req: Request, res: Response) => {
-    const { ids } = req.query;
-    try {
-    //   const { message } = await customerAddressService.delete(ids);
-    //   res.status(200).json(message);
-    } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 };

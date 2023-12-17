@@ -37,7 +37,7 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/User'
+ *                 $ref: '#/components/schema/Users'
  */
 
 // SEARCH PAGINATION
@@ -57,7 +57,7 @@ router.get('/search', userController.search);
  *                type: object
  *                properties:
  *                   userInfo:
- *                        $ref: '#/components/schema/User'
+ *                        $ref: '#/components/schema/Users'
  *                   file:
  *                        type: string
  *                        format: binary
@@ -67,7 +67,7 @@ router.get('/search', userController.search);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/User'
+ *                 $ref: '#/components/schema/Users'
  */
 
 // CREATE
@@ -93,7 +93,7 @@ router.post('/create', uploadFileUser, userController.create);
  *                type: object
  *                properties:
  *                   userInfo:
- *                        $ref: '#/components/schema/User'
+ *                        $ref: '#/components/schema/Users'
  *                   file:
  *                        type: string
  *                        format: binary
@@ -103,7 +103,7 @@ router.post('/create', uploadFileUser, userController.create);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/User'
+ *                 $ref: '#/components/schema/Users'
  */
 // UPDATE
 router.patch('/:id', uploadFileUser, userController.update);
@@ -126,7 +126,7 @@ router.patch('/:id', uploadFileUser, userController.update);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/User'
+ *                 $ref: '#/components/schema/Users'
  */
 
 // GET BY ID
@@ -151,7 +151,7 @@ router.get('/:id', userController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/User'
+ *                 $ref: '#/components/schema/Users'
  */
 router.delete('/', verifyTokenAndAuthenRole, userController.delete);
 

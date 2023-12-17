@@ -1,25 +1,9 @@
+import { FIELDS_NAME } from '@app/constants';
 import customerAddressController from '@app/controllers/customerAddress';
+import { formDataParser } from '@app/middlewares/formDataParser';
 import { Router } from 'express';
 
 const router = Router();
-
-/**
- * @swagger
- * '/api/customers/customer-address/find-all':
- *  get:
- *     tags: [Customers Address]
- *     summary: Find all
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/CustomerAddressList'
- */
-
-// FIND ALL
-router.get('/customer-address/find-all', customerAddressController.findAll);
 
 /**
  * @swagger
@@ -40,61 +24,68 @@ router.get('/customer-address/find-all', customerAddressController.findAll);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddressList'
+ *                 $ref: '#/components/schema/CustomerAddress'
  */
 
-// GET ITEM ADDRESS BY ID
-router.get('/customer-address/:customerId', customerAddressController.getListAddressByCustomerId);
+// GET CUSTOMER ADDRESS BY ID
+router.get(
+  '/customer-address/:customerId',
+  customerAddressController.getCustomerAddressByCustomerId,
+);
 
 /**
  * @swagger
- * '/api/customers/customer-address/add':
- *  patch:
+ * '/api/customers/customer-address':
+ *  post:
  *     tags: [Customers Address]
- *     summary: Add item address
- *     parameters:
- *       - in: query
- *         name: customerId
- *         schema:
- *           type: string
- *         required: true
+ *     summary: Add customer address item
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/CustomerAddressItem'
- *
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   customerAddressInfo:
+ *                        $ref: '#/components/schemas/CustomerAddressDTO'
+
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddressList'
+ *                 $ref: '#/components/schema/CustomerAddress'
  */
 
-// ADD ITEM ADDRESS
-router.patch('/customer-address/add', customerAddressController.addAddress);
+// ADD CUSTOMER ADDRESS ITEM
+router.post(
+  '/customer-address',
+  formDataParser(FIELDS_NAME.CUSTOMER_ADDRESS),
+  customerAddressController.addCustomerAddressItem,
+);
 
 /**
  * @swagger
- * '/api/customers/customer-address/{itemAddressId}':
+ * '/api/customers/customer-address/{customerAddressItemId}':
  *  patch:
  *     tags: [Customers Address]
- *     summary: Update item address
+ *     summary: Update customer address item
  *     parameters:
  *       - in: path
- *         name: itemAddressId
+ *         name: customerAddressItemId
  *         schema:
  *           type: string
  *         required: true
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/CustomerAddressItem'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   customerAddressInfo:
+ *                        $ref: '#/components/schemas/CustomerAddressDTO'
 
  *     responses:
  *       200:
@@ -102,21 +93,25 @@ router.patch('/customer-address/add', customerAddressController.addAddress);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddressList'
+ *                 $ref: '#/components/schema/CustomerAddress'
  */
 
-// UPDATE ITEM ADDRESS
-router.patch('/customer-address/:itemAddressId', customerAddressController.update);
+// UPDATE CUSTOMER ADDRESS ITEM
+router.patch(
+  '/customer-address/:customerAddressItemId',
+  formDataParser(FIELDS_NAME.CUSTOMER_ADDRESS),
+  customerAddressController.updateCustomerAddressItem,
+);
 
 /**
  * @swagger
- * '/api/customers/customer-address/{itemAddressId}':
+ * '/api/customers/customer-address/{customerAddressItemId}':
  *  delete:
  *     tags: [Customers Address]
  *     summary: Delete item address
  *     parameters:
  *       - in: path
- *         name: itemAddressId
+ *         name: customerAddressItemId
  *         schema:
  *           type: string
  *         required: true
@@ -127,35 +122,13 @@ router.patch('/customer-address/:itemAddressId', customerAddressController.updat
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/CustomerAddressList'
+ *                 $ref: '#/components/schema/CustomerAddress'
  */
 
-// DELETE ITEM ADDRESS
-router.delete('/customer-address/:itemAddressId', customerAddressController.deleteItem);
-
-/**
- * @swagger
- * '/api/customers/customer-address':
- *  delete:
- *     tags: [Customers Address]
- *     summary: Delete list address
- *     parameters:
- *       - in: query
- *         name: ids
- *         schema:
- *           type: array
- *         required: true
- *
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/CustomerAddressList'
- */
-
-// DELETE  ADDRESS
-router.delete('/customer-address', customerAddressController.delete);
+// DELETE CUSTOMER ADDRESS ITEM
+router.delete(
+  '/customer-address/:customerAddressItemId',
+  customerAddressController.deleteCustomerAddressItem,
+);
 
 export default router;

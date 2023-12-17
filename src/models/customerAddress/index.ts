@@ -1,43 +1,13 @@
 import { Schema, model } from 'mongoose';
-import { CustomerAddressList } from './@type';
+import { CustomerAddress } from './@type';
 
-// SCHEMAS RESPONSE
-
-/**
- * @swagger
- * components:
- *   schema:
- *     CustomerAddressItem:
- *       type: object
- *       properties:
- *         city:
- *             type: string
- *         cityId:
- *             type: number
- *         district:
- *             type: string
- *         districtId:
- *             type: number
- *         ward:
- *             type: string
- *         wardId:
- *             type: number
- *         address:
- *             type: string
- *         fullName:
- *             type: string
- *         phoneNumber:
- *             type: string
- *         isDefault:
- *             type: boolean
- *             default: false
- */
+// SWAGGER RESPONSE
 
 /**
  * @swagger
  * components:
  *   schema:
- *     CustomerAddressList:
+ *     CustomerAddress:
  *       type: object
  *       properties:
  *         customerId:
@@ -45,11 +15,32 @@ import { CustomerAddressList } from './@type';
  *         addressList:
  *          type: array
  *          items:
- *             schema:
- *                $ref: '#/components/schema/CustomerAddressItem'
+ *            type: object
+ *            properties:
+ *              city:
+ *                  type: string
+ *              cityId:
+ *                  type: number
+ *              district:
+ *                  type: string
+ *              districtId:
+ *                  type: number
+ *              ward:
+ *                  type: string
+ *              wardId:
+ *                  type: number
+ *              location:
+ *                  type: string
+ *              fullName:
+ *                  type: string
+ *              phoneNumber:
+ *                  type: string
+ *              isDefault:
+ *                  type: boolean
+ *                  default: false
  */
 
-const CustomerAddressSchema = new Schema<CustomerAddressList>(
+const CustomerAddressSchema = new Schema<CustomerAddress>(
   {
     customerId: {
       type: Schema.Types.ObjectId,
@@ -78,7 +69,7 @@ const CustomerAddressSchema = new Schema<CustomerAddressList>(
         fullName: {
           type: String,
         },
-        address: {
+        location: {
           type: String,
         },
         phoneNumber: {

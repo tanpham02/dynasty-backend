@@ -11,7 +11,7 @@ const router = Router();
  * '/api/auth/customer/signup':
  *  post:
  *     tags: [Authentication]
- *     summary: Signup
+ *     summary: Customer Signup
  *     requestBody:
  *       required: true
  *       content:
@@ -20,7 +20,7 @@ const router = Router();
  *                type: object
  *                properties:
  *                   customerSignupInfo:
- *                        $ref: '#/components/schema/Customer'
+ *                        $ref: '#/components/schema/Customers'
  *     responses:
  *       200:
  *         description: Ok
@@ -29,11 +29,71 @@ const router = Router();
 // SIGNUP CUSTOMER
 router.post('/customer/signup', formDataParser(FIELDS_NAME.CUSTOMER_SIGNUP), authController.signup);
 
+/**
+ * @swagger
+ * '/api/auth/user/login':
+ *  post:
+ *     tags: [Authentication]
+ *     summary: User Login
+ *     requestBody:
+ *       required: true
+ *       content:
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   userLoginInfo:
+ *                        type: object
+ *                        properties:
+ *                            username:
+ *                                type: string
+ *                            password:
+ *                                type: string
+ *     responses:
+ *       200:
+ *         description: Ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schema/Users'
+ */
 // LOGIN FOR USER
-router.post('/user/login', authController.loginUser);
+router.post('/user/login', formDataParser(FIELDS_NAME.USER_LOGIN), authController.loginUser);
 
+/**
+ * @swagger
+ * '/api/auth/customer/login':
+ *  post:
+ *     tags: [Authentication]
+ *     summary: Customer Login
+ *     requestBody:
+ *       required: true
+ *       content:
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   customerLoginInfo:
+ *                        type: object
+ *                        properties:
+ *                            phoneNumber:
+ *                                type: string
+ *                            password:
+ *                                type: string
+ *     responses:
+ *       200:
+ *         description: Ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schema/Customers'
+ */
 // LOGIN FOR CUSTOMER
-router.post('/customer/login', authController.loginCustomer);
+router.post(
+  '/customer/login',
+  formDataParser(FIELDS_NAME.CUSTOMER_LOGIN),
+  authController.loginCustomer,
+);
 
 // REQUEST REFRESH TOKEN FOR USER
 router.post('/user/refresh-token', authController.requestRefreshTokenForUser);

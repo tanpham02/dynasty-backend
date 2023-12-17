@@ -23,6 +23,7 @@ import { Document, Schema } from 'mongoose';
  *             description: 2023-05-25
  *         customerAddressId:
  *             type: string
+ *             description: Ref to them document Customer Address
  *         orderIds:
  *             type: array
  *             items:

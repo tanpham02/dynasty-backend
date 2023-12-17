@@ -1,107 +1,106 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Model } from 'mongoose';
 import CRUDService from './crudService';
-import { CustomerAddressItem, CustomerAddressList } from '@app/models/customerAddress/@type';
 import { Request } from 'express';
+import { CustomerAddress } from '@app/models/customerAddress/@type';
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
+import { FIELDS_NAME } from '@app/constants';
 
-class CustomerAddressService extends CRUDService<CustomerAddressList> {
-  constructor(model: Model<CustomerAddressList>, nameService: string) {
+class CustomerAddressService extends CRUDService<CustomerAddress> {
+  constructor(model: Model<CustomerAddress>, nameService: string) {
     super(model, nameService);
   }
 
-  async getAll() {
-    try {
-      const listAddress = await this.model.find();
-      return listAddress;
-    } catch (error) {
-      throw new Error(`Occur error when get ${this.nameService}`);
-    }
-  }
-
+  // GET CUSTOMER ADDRESS BY CUSTOMER ID
   async getAddressByCustomerId(customerId: string) {
-    try {
-      const listAddress = await this.model.find({ customerId: customerId });
-      return listAddress?.[0];
-    } catch (error) {
-      throw new Error(`Occur error when get ${this.nameService}`);
+    const customerAddress = await this.model.findOne({ customerId: customerId });
+    if (!customerAddress) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Customer addres does not exist');
+      throw exception;
     }
+    return customerAddress;
   }
 
-  async addAddress(customerId: string | any, req: Request) {
-    console.log('req.body', req.body);
-    try {
-      return await this.model.findOneAndUpdate(
-        { customerId: customerId },
-        { $push: { addressList: req.body } },
-        { new: true },
+  // ADD CUSTOMER ADDRESS ITEM
+  async addCustomerAddressItem(req: Request) {
+    const customerAddressDTO = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_ADDRESS]);
+    const customerAddress = await this.model.findOne({
+      customerId: customerAddressDTO?.customerId,
+    });
+
+    if (!customerAddress) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Customer address does not exist');
+      throw exception;
+    }
+    await customerAddress.updateOne(
+      { $push: { addressList: customerAddressDTO?.addressItem } },
+      { new: true },
+    );
+
+    return { message: 'Add address item success' };
+  }
+
+  // UPDATE CUSTOMER ADDRESS ITEM
+  async updateCustomerAddressItem(customerAddressItemId: string, req: Request) {
+    const customerAddressDTO = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_ADDRESS]);
+    console.log(
+      '🚀 ~ file: customerAddress.ts:47 ~ CustomerAddressService ~ updateCustomerAddressItem ~ customerAddressDTO:',
+      customerAddressDTO,
+    );
+
+    if (customerAddressDTO.customerId) {
+      const customerAddressById = await this.getAddressByCustomerId(
+        String(customerAddressDTO.customerId),
       );
-    } catch (error) {
-      throw new Error(`Occur error when get ${this.nameService}`);
-    }
-  }
 
-  async updateAddress(itemAddressId: string, req: Request) {
-    const { city, district, ward, address, phoneNumber, isDefault }: CustomerAddressItem = req.body;
-    const keySet = `addressList.$`;
-    const dataSet: any[] = [];
-
-    if (city) {
-      dataSet.push({ [`${keySet}.city`]: city });
-    }
-    if (district) {
-      dataSet.push({ [`${keySet}.district`]: district });
-    }
-    if (ward) {
-      dataSet.push({ [`${keySet}.ward`]: ward });
-    }
-    if (address) {
-      dataSet.push({ [`${keySet}.address`]: address });
-    }
-    if (phoneNumber) {
-      dataSet.push({ [`${keySet}.phoneNumber`]: phoneNumber });
-    }
-    if (isDefault) {
-      dataSet.push({ [`${keySet}.isDefault`]: isDefault });
-    }
-
-    try {
-      for (let i = 0; i < dataSet.length; i++) {
-        const element = dataSet[i];
-        await this.model.findOneAndUpdate(
-          {
-            'addressList._id': itemAddressId,
-          },
-          {
-            $set: element,
-          },
-          {
-            new: true,
-          },
+      if (!customerAddressById) {
+        const exception = new Exception(
+          HttpStatusCode.NOT_FOUND,
+          'Customer address does not exist',
         );
+        throw exception;
       }
-
-      return { message: `Update ${this.nameService} success` };
-    } catch (error) {
-      throw new Error(`Occur error when update item address`);
-    }
-  }
-
-  async deleteAddress(itemAddressId: string, req: Request) {
-    try {
-      await this.model.findOneAndUpdate(
+      await customerAddressById.updateOne(
         {
-          'addressList._id': itemAddressId,
+          $set: {
+            'addressList.$[outer]': {
+              ...customerAddressDTO?.addressItem,
+              _id: customerAddressItemId,
+            },
+          },
         },
         {
-          $pull: { addressList: { _id: itemAddressId } },
-        },
-        {
+          arrayFilters: [{ 'outer._id': customerAddressItemId }],
           new: true,
         },
       );
-      return { message: `Delete ${this.nameService} success` };
-    } catch (error) {
-      throw new Error(`Occur error when get ${this.nameService}`);
+
+      return { message: `Update ${this.nameService} success` };
     }
+  }
+
+  // DELETE CUSTOMER ADDRESS ITEM
+  async deleteCustomerAddressItem(customerAddressItemId: string) {
+    const customerAddressItem = await this.model.findOne({
+      'addressList._id': customerAddressItemId,
+    });
+    if (!customerAddressItem) {
+      const exception = new Exception(
+        HttpStatusCode.NOT_FOUND,
+        'Customer address item does not exist',
+      );
+      throw exception;
+    }
+    await customerAddressItem.updateOne(
+      {
+        $pull: { addressList: { _id: customerAddressItemId } },
+      },
+      {
+        new: true,
+      },
+    );
+    return { message: `Delete ${this.nameService} success` };
   }
 }
 

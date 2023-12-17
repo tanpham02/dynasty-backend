@@ -11,7 +11,7 @@ import { Document } from 'mongoose';
  *       properties:
  *         name:
  *           type: string
- *         address:
+ *         location:
  *           type: string
  *         phone:
  *             type: string
@@ -31,7 +31,7 @@ import { Document } from 'mongoose';
 
 interface StoreSystem extends Document {
   name: string;
-  address: string;
+  location: string;
   phone: string;
   cityId: number;
   city: string;

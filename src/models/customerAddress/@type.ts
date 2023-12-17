@@ -6,37 +6,7 @@ import { Document, Schema } from 'mongoose';
  * @swagger
  * components:
  *   schemas:
- *     CustomerAddressItem:
- *       type: object
- *       properties:
- *         city:
- *             type: string
- *         cityId:
- *             type: number
- *         district:
- *             type: string
- *         districtId:
- *             type: number
- *         ward:
- *             type: string
- *         wardId:
- *             type: number
- *         address:
- *             type: string
- *         fullName:
- *             type: string
- *         phoneNumber:
- *             type: string
- *         isDefault:
- *             type: boolean
- *             default: false
- */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     CustomerAddressList:
+ *     CustomerAddress:
  *       type: object
  *       properties:
  *         customerId:
@@ -44,26 +14,81 @@ import { Document, Schema } from 'mongoose';
  *         addressList:
  *          type: array
  *          items:
- *             schema:
- *                $ref: '#/components/schema/CustomerAddressItem'
+ *            type: object
+ *            properties:
+ *              city:
+ *                  type: string
+ *              cityId:
+ *                  type: number
+ *              district:
+ *                  type: string
+ *              districtId:
+ *                  type: number
+ *              ward:
+ *                  type: string
+ *              wardId:
+ *                  type: number
+ *              location:
+ *                  type: string
+ *              fullName:
+ *                  type: string
+ *              phoneNumber:
+ *                  type: string
+ *              isDefault:
+ *                  type: boolean
+ *                  default: false
  */
 
-interface CustomerAddressItem extends Document {
-  city?: string;
-  cityId?: number;
-  district?: string;
-  districtId?: number;
-  ward?: string;
-  wardId?: number;
-  fullName?: string;
-  address?: string;
-  phoneNumber?: string;
-  isDefault?: boolean;
-}
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CustomerAddressDTO:
+ *       type: object
+ *       properties:
+ *         customerId:
+ *            type: string
+ *         addressItem:
+ *            type: object
+ *            properties:
+ *              city:
+ *                  type: string
+ *              cityId:
+ *                  type: number
+ *              district:
+ *                  type: string
+ *              districtId:
+ *                  type: number
+ *              ward:
+ *                  type: string
+ *              wardId:
+ *                  type: number
+ *              location:
+ *                  type: string
+ *              fullName:
+ *                  type: string
+ *              phoneNumber:
+ *                  type: string
+ *              isDefault:
+ *                  type: boolean
+ *                  default: false
 
-interface CustomerAddressList extends Document {
+ */
+
+interface CustomerAddress extends Document {
   customerId?: Schema.Types.ObjectId;
-  addressList: CustomerAddressItem[];
+  addressList: Array<{
+    city?: string;
+    cityId?: number;
+    district?: string;
+    districtId?: number;
+    ward?: string;
+    wardId?: number;
+    location?: string;
+    fullName?: string;
+    phoneNumber?: string;
+    isDefault?: boolean;
+  }>;
 }
 
-export { CustomerAddressItem, CustomerAddressList };
+export { CustomerAddress };

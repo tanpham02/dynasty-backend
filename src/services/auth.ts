@@ -65,11 +65,11 @@ const authService = {
 
   // LOGIN FOR USER
   loginUser: async (req: Request, res: Response) => {
-    const { username, password }: User = req.body;
+    const { username, password }: User = JSON.parse(req.body?.[FIELDS_NAME.USER_LOGIN]);
     const user = await UserModel.findOne({ username: username });
 
     if (!user) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'username no exist');
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'username does not exist');
       throw exception;
     }
     if (password && user?.password) {
@@ -101,7 +101,7 @@ const authService = {
 
   // LOGIN FOR CUSTOMER
   loginCustomer: async (req: Request, res: Response) => {
-    const { phoneNumber, password }: Customer = req.body;
+    const { phoneNumber, password }: Customer = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_LOGIN]);
 
     const customer = await CustomerModel.findOne({ phoneNumber: phoneNumber });
 
@@ -150,7 +150,6 @@ const authService = {
 
     const newAccessTk = verify(refreshTokenCookie, jwtRefreshKey || '', (err: any, _user: any) => {
       if (err) {
-        console.log('🚀 ~ file: auth.ts:173 ~ verify ~ err:', err);
         const exception = new Exception(req?.statusCode || 0, err?.message);
         throw exception;
       }
@@ -185,7 +184,6 @@ const authService = {
       jwtRefreshKey || '',
       (err: any, _customer: any) => {
         if (err) {
-          console.log('🚀 ~ file: auth.ts:173 ~ verify ~ err:', err);
           const exception = new Exception(req?.statusCode || 0, err?.message);
           throw exception;
         }

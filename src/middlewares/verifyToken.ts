@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { verify } from 'jsonwebtoken';
 import { configApp } from '@app/configs';
 import { NextFunction, Request, Response } from 'express';

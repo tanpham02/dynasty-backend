@@ -7,7 +7,7 @@ import { Document } from 'mongoose';
  * @swagger
  * components:
  *   schemas:
- *     User:
+ *     Users:
  *       type: object
  *       required:
  *         - phoneNumber
@@ -25,7 +25,7 @@ import { Document } from 'mongoose';
  *           type: string
  *         email:
  *           type: string
- *         address:
+ *         location:
  *           type: string
  *         password:
  *           type: string
@@ -48,7 +48,7 @@ interface User extends BaseModel, Document {
   fullName?: string;
   phoneNumber?: string;
   email?: string;
-  address?: string;
+  location?: string;
   city: string;
   cityId: number;
   district: string;
