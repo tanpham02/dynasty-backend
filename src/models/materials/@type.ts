@@ -27,14 +27,10 @@ import { Document } from 'mongoose';
  *           type: number
  */
 
-interface MaterialInformation extends Document {
-  name?: string;
-  price?: number;
-  quantity?: string;
-}
+interface MaterialInformation extends Document {}
 interface Material extends Document {
   importDate?: string | Date;
-  materialInfo?: MaterialInformation[];
+  materialInfo?: Array<{ name?: string; price?: number; quantity?: string }>;
   totalPrice?: number;
 }
 

@@ -1,4 +1,4 @@
-import { Material, MaterialInformation } from './@type';
+import { Material } from './@type';
 import { Schema, model } from 'mongoose';
 
 // SCHEMAS RESPONSE
@@ -28,29 +28,24 @@ import { Schema, model } from 'mongoose';
  *           type: number
  */
 
-const MaterialInformationSchema = new Schema<MaterialInformation>(
-  {
-    name: {
-      type: String,
-    },
-    price: {
-      type: Number,
-    },
-    quantity: {
-      type: String,
-    },
-  },
-  { timestamps: true, versionKey: false },
-);
-
 const MaterialSchema = new Schema<Material>(
   {
     importDate: {
       type: Date,
     },
-    materialInfo: {
-      type: [MaterialInformationSchema],
-    },
+    materialInfo: [
+      {
+        name: {
+          type: String,
+        },
+        price: {
+          type: Number,
+        },
+        quantity: {
+          type: String,
+        },
+      },
+    ],
     totalPrice: {
       type: Number,
     },

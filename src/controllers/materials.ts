@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import MaterialMode from '@app/models/materials';
 import MaterialService from '@app/services/materials';
 import { Params } from '@app/types';
