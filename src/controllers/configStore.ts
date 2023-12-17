@@ -1,6 +1,6 @@
 import { Exception } from '@app/exception';
 import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import ConfigStoreModel from '@app/models/configStore';
+import ConfigStoreModel from '@app/models/storeConfig';
 import ConfigStoreService from '@app/services/configStore';
 import { Request, Response } from 'express';
 

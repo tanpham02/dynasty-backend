@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Exception } from '@app/exception';
 import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import ShopSystemModel from '@app/models/shopSystem';
+import ShopSystemModel from '@app/models/storeSystem';
 import ShopSystemClass from '@app/services/shopSystem';
 import { Params } from '@app/types';
 const ShopSystemService = new ShopSystemClass(ShopSystemModel, 'shop system');

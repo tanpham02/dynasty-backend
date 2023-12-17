@@ -2,12 +2,15 @@
 export const AUTH_URL = '/api/auth';
 
 // CATEGORY
+export const BANNERS_URL = '/api/banners';
+
+// CATEGORY
 export const CATEGORY_URL = '/api/category';
 
 // PRODUCT
 export const PRODUCT_URL = '/api/products';
-export const PRODUCT_ATTRIBUTE_URL = '/api/products-attribute';
-export const PRODUCT_VARIANT_URL = '/api/products-variant';
+export const PRODUCT_ATTRIBUTE_URL = '/api/products-attributes';
+export const PRODUCT_VARIANT_URL = '/api/products-variants';
 
 // SHOP SYSTEM
 export const SHOP_SYSTEM_URL = '/api/shop-system';
@@ -22,7 +25,7 @@ export const PROMOTIONS_URL = '/api/promotions';
 export const CONFIG_STORE_URL = '/api/config-store';
 
 // VOUCHER
-export const VOUCHER_URL = '/api/voucher';
+export const VOUCHER_URL = '/api/vouchers';
 
 // USER
 export const USER_URL = '/api/users';
@@ -34,7 +37,7 @@ export const CUSTOMER_URL = '/api/customers';
 export const CART_URL = '/api/carts';
 
 // ORDER
-export const ORDER_URL = '/api/order';
+export const ORDER_URL = '/api/orders';
 
 // MATERIAL
-export const MATERIAL_URL = '/api/material';
+export const MATERIAL_URL = '/api/materials';

@@ -1,7 +1,8 @@
 import { uploadImage } from './uploadFile';
 
-const uploadFileProduct = uploadImage('public/uploads/image/products');
-const uploadFileCustomer = uploadImage('public/uploads/image/customers');
-const uploadFileUser = uploadImage('public/uploads/image/users');
+const uploadFileProduct = uploadImage('public/uploads/image/products').single('file');
+const uploadFileCustomer = uploadImage('public/uploads/image/customers').single('file');
+const uploadFileUser = uploadImage('public/uploads/image/users').single('file');
+const uploadFileBanner = uploadImage('public/uploads/image/banners').array('files');
 
-export { uploadFileProduct, uploadFileCustomer, uploadFileUser };
+export { uploadFileProduct, uploadFileCustomer, uploadFileUser, uploadFileBanner };

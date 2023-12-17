@@ -1,17 +1,17 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { configApp } from '@app/configs';
-import UserModel from '@app/models/user';
+import UserModel from '@app/models/users';
 import { compare } from 'bcrypt';
 import { Request, Response } from 'express';
 import { FIELDS_NAME, MODE, SALT } from '@app/constants';
 import { verify } from 'jsonwebtoken';
 import { genSalt, hash } from 'bcrypt';
-import CustomerModel from '@app/models/customer';
-import { Customer } from '@app/models/customer/@type';
+import CustomerModel from '@app/models/customers';
+import { Customer } from '@app/models/customers/@type';
 import JWT from '@app/middlewares/jwt';
-import User from '@app/models/user/@type';
-import CartModel from '@app/models/cart';
+import User from '@app/models/users/@type';
+import CartModel from '@app/models/carts';
 import CustomerAddressModel from '@app/models/customerAddress';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
@@ -20,7 +20,7 @@ const { jwtRefreshKey } = configApp();
 
 const authService = {
   // SIGNUP CUSTOMER
-  signup: async (req: Request, res: Response, ) => {
+  signup: async (req: Request, res: Response) => {
     const customerSignupRequest: Customer = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_SIGNUP]);
     const existCustomer = await CustomerModel.findOne({
       $or: [

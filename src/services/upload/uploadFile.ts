@@ -8,7 +8,7 @@ const uploadImage = (destination: string) => {
     },
   });
 
-  return multer({ storage }).single('files');
+  return multer({ storage });
 };
 
 export { uploadImage };

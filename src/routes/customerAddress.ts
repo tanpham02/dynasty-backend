@@ -7,7 +7,7 @@ const router = Router();
  * @swagger
  * '/api/customers/customer-address/find-all':
  *  get:
- *     tags: [Customer Address]
+ *     tags: [Customers Address]
  *     summary: Find all
  *     responses:
  *       200:
@@ -25,7 +25,7 @@ router.get('/customer-address/find-all', customerAddressController.findAll);
  * @swagger
  * '/api/customers/customer-address/{customerId}':
  *  get:
- *     tags: [Customer Address]
+ *     tags: [Customers Address]
  *     summary: Find by id
  *     parameters:
  *       - in: path
@@ -50,7 +50,7 @@ router.get('/customer-address/:customerId', customerAddressController.getListAdd
  * @swagger
  * '/api/customers/customer-address/add':
  *  patch:
- *     tags: [Customer Address]
+ *     tags: [Customers Address]
  *     summary: Add item address
  *     parameters:
  *       - in: query
@@ -81,7 +81,7 @@ router.patch('/customer-address/add', customerAddressController.addAddress);
  * @swagger
  * '/api/customers/customer-address/{itemAddressId}':
  *  patch:
- *     tags: [Customer Address]
+ *     tags: [Customers Address]
  *     summary: Update item address
  *     parameters:
  *       - in: path
@@ -112,7 +112,7 @@ router.patch('/customer-address/:itemAddressId', customerAddressController.updat
  * @swagger
  * '/api/customers/customer-address/{itemAddressId}':
  *  delete:
- *     tags: [Customer Address]
+ *     tags: [Customers Address]
  *     summary: Delete item address
  *     parameters:
  *       - in: path
@@ -137,7 +137,7 @@ router.delete('/customer-address/:itemAddressId', customerAddressController.dele
  * @swagger
  * '/api/customers/customer-address':
  *  delete:
- *     tags: [Customer Address]
+ *     tags: [Customers Address]
  *     summary: Delete list address
  *     parameters:
  *       - in: query

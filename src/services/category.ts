@@ -2,13 +2,13 @@
 import CRUDService from '@app/services/crudService';
 import { Model } from 'mongoose';
 import { Category } from '@app/models/category/@type';
-import ProductModel from '@app/models/product';
+import ProductModel from '@app/models/products';
 import { Request } from 'express';
 import { HttpStatusCode } from '@app/exception/type';
 import { Exception } from '@app/exception';
 import { FIELDS_NAME } from '@app/constants';
 import { page, pipe, skip } from 'iter-ops';
-import { Product } from '@app/models/product/@type';
+import { Product } from '@app/models/products/@type';
 import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
 
 class CategoryService extends CRUDService<Category> {

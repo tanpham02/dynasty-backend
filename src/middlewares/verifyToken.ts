@@ -1,7 +1,7 @@
 import { verify } from 'jsonwebtoken';
 import { configApp } from '@app/configs';
 import { NextFunction, Request, Response } from 'express';
-import User, { Role } from '@app/models/user/@type';
+import User, { Role } from '@app/models/users/@type';
 import { HttpStatusCode } from '@app/exception/type';
 
 interface UserRequest extends Request {

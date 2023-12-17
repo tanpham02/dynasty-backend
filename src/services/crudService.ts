@@ -39,6 +39,8 @@ class CRUDService<T extends Document> {
       role,
       sort,
       parentId,
+      customerId,
+      statusOrder,
     } = params;
 
     const filter: Filter = {};
@@ -92,6 +94,14 @@ class CRUDService<T extends Document> {
 
     if (from && to) {
       filter.createdAt = { $gte: from, $lte: to };
+    }
+
+    if (customerId) {
+      filter.customerId = customerId;
+    }
+
+    if (statusOrder) {
+      filter.statusOrder = statusOrder;
     }
 
     if (sort) {

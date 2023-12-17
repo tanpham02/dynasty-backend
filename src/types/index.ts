@@ -1,6 +1,6 @@
 import { ProductStatus } from '@app/constants';
-import { ProductType } from '@app/models/product/@type';
-import { Role } from '@app/models/user/@type';
+import { ProductType } from '@app/models/products/@type';
+import { Role } from '@app/models/users/@type';
 import { SortOrder } from 'mongoose';
 
 interface Params {

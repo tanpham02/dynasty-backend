@@ -1,19 +1,20 @@
 import categoryRouter from './category';
-import productRouter from './product';
+import productRouter from './products';
 import shopSystemRouter from './shopSystem';
 import comboPromotionsRouter from './comboPromotions';
 import promotionsRouter from './promotions';
 import configStoreRouter from './configStore';
-import voucherRouter from './voucher';
-import userRouter from './user';
+import voucherRouter from './vouchers';
+import userRouter from './users';
 import customerAddressRouter from './customerAddress';
-import customerRouter from './customer';
-import cartRouter from './cart';
+import customerRouter from './customers';
+import cartRouter from './carts';
 import authRouter from './auth';
-import orderRouter from './order';
-import materialRouter from './material';
-import productAttributeRoute from './productAttribute';
-import productVariantRoute from './productVariant';
+import orderRouter from './orders';
+import materialRouter from './materials';
+import productAttributeRoute from './productAttributes';
+import productVariantRoute from './productVariants';
+import bannerRoute from './banners';
 import { Application } from 'express';
 
 import {
@@ -32,6 +33,7 @@ import {
   AUTH_URL,
   ORDER_URL,
   MATERIAL_URL,
+  BANNERS_URL,
 } from '@app/services/apiUrl';
 
 export const routesMapping = (app: Application) => {
@@ -39,6 +41,10 @@ export const routesMapping = (app: Application) => {
     {
       path: CATEGORY_URL,
       route: categoryRouter,
+    },
+    {
+      path: BANNERS_URL,
+      route: bannerRoute,
     },
     {
       path: PRODUCT_URL,

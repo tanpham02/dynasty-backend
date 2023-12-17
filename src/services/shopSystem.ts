@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import CRUDService from './crudService';
-import ShopSystem from '@app/models/shopSystem/@type';
+import ShopSystem from '@app/models/storeSystem/@type';
 import { Filter, Params } from '@app/types';
 
 class ShopSystemClass extends CRUDService<ShopSystem> {

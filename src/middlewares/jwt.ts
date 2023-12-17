@@ -1,4 +1,4 @@
-import { Role } from '@app/models/user/@type';
+import { Role } from '@app/models/users/@type';
 import { sign } from 'jsonwebtoken';
 import { configApp } from '@app/configs';
 const { jwtAccessKey, jwtRefreshKey } = configApp();
