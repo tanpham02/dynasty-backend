@@ -1,4 +1,6 @@
+import { FIELDS_NAME } from '@app/constants';
 import orderController from '@app/controllers/orders';
+import { formDataParser } from '@app/middlewares/formDataParser';
 import { Router } from 'express';
 
 const router = Router();
@@ -31,9 +33,10 @@ const router = Router();
  *          enum:
  *              - PENDING
  *              - DELIVERING
- *              - FAIL
  *              - CANCELED
  *              - SUCCESS
+ *              - WAITING_FOR_DELIVERING
+ *              - WAITING_FOR_PAYMENT
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -85,73 +88,23 @@ router.get('/:id', orderController.getById);
  *     summary: Checkout
  *     requestBody:
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Order'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   orderInfo:
+ *                        $ref: '#/components/schemas/Orders'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Order'
+ *                 $ref: '#/components/schemas/Orders'
  */
 
 // CHECKOUT
-router.post('/checkout', orderController.checkout);
-
-/**
- * @swagger
- * '/api/orders/quick-buy':
- *  post:
- *     tags: [Orders]
- *     summary: Quick buy
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Order'
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Order'
- */
-
-// QUICK BUY
-//router.post('/quick-buy', orderController.quickBuy);
-
-/**
- * @swagger
- * '/api/orders/when-use-voucher':
- *  post:
- *     tags: [Orders]
- *     summary: Update total order when use voucher
- *     parameters:
- *      - name: voucherId
- *        in: query
- *        schema:
- *          type: string
- *      - name: customerId
- *        in: query
- *        schema:
- *          type: string
- *      - name: orderId
- *        in: query
- *        schema:
- *          type: string
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Order'
- */
-// UPDATE TOTAL ORDER WHEN USE VOUCHER
-// router.post('/when-use-voucher', orderController.updateTotalOrderWhenUseVoucher);
+router.post('/checkout', formDataParser(FIELDS_NAME.ORDER), orderController.checkout);
 
 /**
  * @swagger
@@ -178,17 +131,17 @@ router.post('/checkout', orderController.checkout);
  */
 
 // RE-ORDER
-//outer.post('/re-order/:orderId', orderController.reorder);
+router.post('/re-order/:orderId', orderController.reorder);
 
 /**
  * @swagger
- * '/api/orders/update-status-order':
+ * '/api/orders/update-status-order/{orderId}':
  *  patch:
  *     tags: [Orders]
  *     summary: Update status order
  *     parameters:
  *      - name: orderId
- *        in: query
+ *        in: path
  *        schema:
  *          type: string
  *      - name: statusOrderRequest
@@ -205,17 +158,17 @@ router.post('/checkout', orderController.checkout);
  */
 
 // UPDATE STATUS ORDER
-// router.patch('/update-status-order', orderController.updateStatusOrder);
+router.patch('/update-status-order/:orderId', orderController.updateStatusOrder);
 
 /**
  * @swagger
- * '/api/orders/cancel-order':
+ * '/api/orders/cancel-order/{orderId}':
  *  patch:
  *     tags: [Orders]
  *     summary: Request
  *     parameters:
  *      - name: orderId
- *        in: query
+ *        in: path
  *        schema:
  *          type: string
  *      - name: reason
@@ -232,6 +185,6 @@ router.post('/checkout', orderController.checkout);
  */
 
 // CANCEL ORDER
-// router.patch('/cancel-order', orderController.requestCancelOrder);
+router.patch('/cancel-order/:orderId', orderController.requestCancelOrder);
 
 export default router;

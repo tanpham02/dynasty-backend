@@ -1,11 +1,10 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import User from '@app/models/users/@type';
 import CRUDService from './crudService';
 import { Model } from 'mongoose';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { genSalt, hash } from 'bcrypt';
 import { FIELDS_NAME, SALT } from '@app/constants';
-import { Filter, Params } from '@app/types';
-import { configApp } from '@app/configs';
 import { HttpStatusCode } from '@app/exception/type';
 import UserModel from '@app/models/users';
 import { Exception } from '@app/exception';

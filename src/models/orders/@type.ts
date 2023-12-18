@@ -1,7 +1,30 @@
 import { Schema, Document } from 'mongoose';
 import { Cart } from '../carts/@type';
+import { ProductVariants } from '../productVariants/@type';
 
 // SCHEMAS DESCRIPTION
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ProductWhenTheCustomerIsNotLoggedInOrderDTO:
+ *       type: object
+ *       required:
+ *         - products
+ *       properties:
+ *         products:
+ *           type: array
+ *           items:
+ *              type: object
+ *              properties:
+ *                  product:
+ *                     $ref: '#/components/schema/ProductVariant'
+ *                  note:
+ *                     type: string
+ *                  productQuantities:
+ *                     type: number
+ */
 
 /**
  * @swagger
@@ -13,7 +36,13 @@ import { Cart } from '../carts/@type';
  *          customerId:
  *              $ref: '#/components/schema/Customers'
  *          productsFromCart:
- *                 $ref: '#/components/schema/Carts'
+ *              $ref: '#/components/schema/Carts'
+ *          productsWhenTheCustomerIsNotLoggedIn:
+ *              type: array
+ *              items:
+ *                type: string
+ *          _id:
+ *              type: string
  *          shipFee:
  *              type: number
  *          totalAmountBeforeUsingDiscount:
@@ -52,6 +81,21 @@ import { Cart } from '../carts/@type';
  *                 - ORDER_TO_PICK_UP
  *                 - ORDER_DELIVERING
  *              default: 'ORDER_DELIVERING'
+ *          statusCheckout:
+ *              type: string
+ *              enum:
+ *                 - VERIFY_INFORMATION
+ *                 - ORDER_CONFIRMATION
+ *              default: 'VERIFY_INFORMATION'
+ *          paymentMethod:
+ *              type: string
+ *              enum:
+ *                 - PAYMENT_ON_DELIVERY
+ *                 - MONO
+ *                 - ATM_CARD
+ *                 - SHOPEE_PAY
+ *                 - ZALO_PAY
+ *              default: 'PAYMENT_ON_DELIVERY'
  *          orderReceivingTime:
  *              type: string
  *              enum:
@@ -63,7 +107,7 @@ import { Cart } from '../carts/@type';
  *          voucherId:
  *              type: string
  *              description: references to the document Voucher
- *          orderedStoreId:
+ *          orderAtStore:
  *              type: string
  *              description: references to the document Shop Store
  *          reasonOrderCancel:
@@ -94,9 +138,32 @@ enum OrderReceivingTime {
   SELECT_DATE_TIME = 'SELECT_DATE_TIME', // Chọn thời gian
 }
 
+enum StatusCheckout {
+  VERIFY_INFORMATION = 'VERIFY_INFORMATION', // Bước nhâp thông tin (WAITING_FOR_PAYMENT)
+  ORDER_CONFIRMATION = 'ORDER_CONFIRMATION', // Bước xác nhận đăt hàng, chọn phương thức thanh toán = > chờ xác nhân (PENDING)
+}
+
+enum PaymentMethod {
+  PAYMENT_ON_DELIVERY = 'PAYMENT_ON_DELIVERY', // Thanh toán khi nhân hàng
+  MONO = 'MONO',
+  ATM_CARD = 'ATM_CARD',
+  SHOPEE_PAY = 'SHOPEE_PAY',
+  ZALO_PAY = 'ZALO_PAY',
+}
+
 interface Order extends Document {
+  _id?: Schema.Types.ObjectId;
   customerId?: Schema.Types.ObjectId;
-  productsFromCart?: Cart;
+  productsFromCart?: Array<{
+    product?: Schema.Types.ObjectId;
+    note?: string;
+    productQuantities: number;
+  }>;
+  productsWhenTheCustomerIsNotLoggedIn?: Array<{
+    product?: Schema.Types.ObjectId;
+    note?: string;
+    productQuantities: number;
+  }>;
   shipFee?: number;
   totalAmountBeforeUsingDiscount?: number;
   statusOrder?: StatusOrder;
@@ -110,14 +177,16 @@ interface Order extends Document {
   ward?: string;
   wardId?: number;
   typeOrder?: TypeOrder;
-  orderReceivingTime: OrderReceivingTime;
+  orderReceivingTime?: OrderReceivingTime;
   dateTimeOrderReceive?: Date | string;
   voucherId?: Schema.Types.ObjectId;
-  orderedStoreId?: Schema.Types.ObjectId;
+  orderAtStore?: Schema.Types.ObjectId;
   reasonOrderCancel?: string;
   totalOrder?: number;
   createdAt?: string | Date;
   updatedAt?: string | Date;
+  statusCheckout?: StatusCheckout;
+  paymentMethod?: PaymentMethod;
 }
 
-export { Order, StatusOrder, TypeOrder, OrderReceivingTime };
+export { Order, StatusOrder, TypeOrder, OrderReceivingTime, StatusCheckout, PaymentMethod };

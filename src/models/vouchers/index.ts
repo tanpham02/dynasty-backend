@@ -50,7 +50,7 @@ import { ProductStatus } from '@app/constants';
  *         discount:
  *           type: number
  *         discountPercent:
- *             type: string
+ *             type: number
  *         maximumReducedAmountMoney:
  *           type: number
  *         totalQuantityVoucher:

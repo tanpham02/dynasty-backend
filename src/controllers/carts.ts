@@ -47,12 +47,9 @@ const cartController = {
     const { customerId } = req.params;
     try {
       const cart = await cartService.getCartByCustomerId(customerId);
-
+      console.log('🚀 ~ file: carts.ts:50 ~ getCartById: ~ cart:', cart);
       res.status(HttpStatusCode.OK).json(cart);
     } catch (error) {
-      if (error instanceof Exception) {
-        res.status(error.status).json(error.message);
-      }
       next(error);
     }
   },

@@ -27,6 +27,7 @@ const FIELDS_NAME = {
   STORE_CONFIG: 'storeConfigInfo',
   STORE_INFORMATION: 'storeInformationInfo',
   TERM_AND_POLICY: 'termAndPolicyInfo',
+  ORDER: 'orderInfo',
 };
 
 export { MODE, ProductStatus, SALT, FIELDS_NAME };

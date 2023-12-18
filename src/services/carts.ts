@@ -125,15 +125,15 @@ class CartService extends CRUDService<Cart> {
       throw exception;
     }
 
+    const cartResponse = await cart.populate('products.product');
     if (cart?.products && cart.products.length) {
-      const cartResponse = await cart.populate('products.product');
       const totalCart = cartResponse.products?.reduce((acc: any, next: any) => {
         const item = next?.product as unknown as any;
         return acc + item?.productItem?.price * next?.productQuantities;
       }, 0);
       cartResponse.totalCart = totalCart || 0;
-      return cartResponse;
     }
+    return cartResponse;
   }
 }
 

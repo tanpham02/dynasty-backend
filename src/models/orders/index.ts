@@ -1,6 +1,14 @@
 import { Schema, model } from 'mongoose';
-import { Order, StatusOrder, OrderReceivingTime, TypeOrder } from './@type';
+import {
+  Order,
+  StatusOrder,
+  OrderReceivingTime,
+  TypeOrder,
+  StatusCheckout,
+  PaymentMethod,
+} from './@type';
 import { CartSchema } from '../carts';
+import { ProductVariantSchema } from '../productVariants';
 
 // SCHEMAS RESPONSE
 
@@ -15,6 +23,12 @@ import { CartSchema } from '../carts';
  *              $ref: '#/components/schema/Customers'
  *          productsFromCart:
  *                 $ref: '#/components/schema/Carts'
+ *          productsWhenTheCustomerIsNotLoggedIn:
+ *              type: array
+ *              items:
+ *                type: string
+ *          _id:
+ *              type: string
  *          shipFee:
  *              type: number
  *          totalAmountBeforeUsingDiscount:
@@ -53,6 +67,21 @@ import { CartSchema } from '../carts';
  *                 - ORDER_TO_PICK_UP
  *                 - ORDER_DELIVERING
  *              default: 'ORDER_DELIVERING'
+ *          paymentMethod:
+ *              type: string
+ *              enum:
+ *                 - PAYMENT_ON_DELIVERY
+ *                 - MONO
+ *                 - ATM_CARD
+ *                 - SHOPEE_PAY
+ *                 - ZALO_PAY
+ *              default: 'PAYMENT_ON_DELIVERY'
+ *          statusCheckout:
+ *              type: string
+ *              enum:
+ *                 - VERIFY_INFORMATION
+ *                 - ORDER_CONFIRMATION
+ *              default: 'VERIFY_INFORMATION'
  *          orderReceivingTime:
  *              type: string
  *              enum:
@@ -64,7 +93,7 @@ import { CartSchema } from '../carts';
  *          voucherId:
  *              type: string
  *              description: references to the document Voucher
- *          orderedStoreId:
+ *          orderAtStore:
  *              type: string
  *              description: references to the document Shop Store
  *          reasonOrderCancel:
@@ -83,9 +112,34 @@ const OrderSchema = new Schema<Order>(
       type: Schema.Types.ObjectId,
       ref: 'Customer',
     },
-    productsFromCart: {
-      type: CartSchema,
-    },
+    productsFromCart: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: 'ProductVariant',
+        },
+        note: {
+          type: String,
+        },
+        productQuantities: {
+          type: Number,
+        },
+      },
+    ],
+    productsWhenTheCustomerIsNotLoggedIn: [
+      {
+        product: {
+          type: Schema.Types.ObjectId,
+          ref: 'ProductVariant',
+        },
+        note: {
+          type: String,
+        },
+        productQuantities: {
+          type: Number,
+        },
+      },
+    ],
     shipFee: {
       type: Number,
     },
@@ -95,7 +149,6 @@ const OrderSchema = new Schema<Order>(
     statusOrder: {
       type: String,
       enum: StatusOrder,
-      default: StatusOrder.PENDING,
     },
     fullName: {
       type: String,
@@ -139,7 +192,7 @@ const OrderSchema = new Schema<Order>(
       type: Schema.Types.ObjectId,
       ref: 'Voucher',
     },
-    orderedStoreId: {
+    orderAtStore: {
       type: Schema.Types.ObjectId,
       ref: 'ShopSystem',
     },
@@ -148,6 +201,14 @@ const OrderSchema = new Schema<Order>(
     },
     totalOrder: {
       type: Number,
+    },
+    statusCheckout: {
+      type: String,
+      enum: StatusCheckout,
+    },
+    paymentMethod: {
+      type: String,
+      enum: PaymentMethod,
     },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },

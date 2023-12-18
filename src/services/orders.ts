@@ -1,18 +1,26 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Order } from '@app/models/orders/@type';
+import { Order, StatusCheckout, StatusOrder, TypeOrder } from '@app/models/orders/@type';
 import CRUDService from './crudService';
 import { Model } from 'mongoose';
 import { Params } from '@app/types';
 import { Request, Response } from 'express';
-import VoucherModel from '@app/models/vouchers';
 import CartModel from '@app/models/carts';
 import CartService from './carts';
+import StoreConfigService from './storeConfig';
+import StoreConfigModel from '@app/models/storeConfig';
+import { FIELDS_NAME } from '@app/constants';
+import StoreSystemService from './storeSystem';
+import StoreSystemModel from '@app/models/storeSystem';
 import VoucherService from './vouchers';
-import CustomerService from './customers';
-import CustomerModel from '@app/models/customers';
+import VoucherModel from '@app/models/vouchers';
+import OrderModel from '@app/models/orders';
+import ProductVariantModel from '@app/models/productVariants';
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
 
-const customerService = new CustomerService(CustomerModel, 'customer');
+const storeConfigService = new StoreConfigService(StoreConfigModel, 'store config');
 const cartService = new CartService(CartModel, 'cart');
+const storeSystemService = new StoreSystemService(StoreSystemModel, 'store system');
 const voucherService = new VoucherService(VoucherModel, 'voucher');
 
 class OrderService extends CRUDService<Order> {
@@ -37,9 +45,19 @@ class OrderService extends CRUDService<Order> {
   // GET ORDER BY ID
   async getOrderById(orderId: string) {
     try {
-      const order = await this.model
-        .findById(orderId)
-        ?.populate('productsFromCart.products.product');
+      const order = await this.model.findById(orderId).then(
+        (res) =>
+          res?.populate([
+            {
+              path: 'productsFromCart.product',
+              model: 'ProductVariant',
+            },
+            {
+              path: 'productsWhenTheCustomerIsNotLoggedIn.product',
+              model: 'ProductVariant',
+            },
+          ]),
+      );
 
       return order;
     } catch (error) {
@@ -48,205 +66,162 @@ class OrderService extends CRUDService<Order> {
   }
 
   // CHECKOUT
-  async checkout(req: Request, res: Response) {
-    const customerId = req?.body?.customerId;
-    // let newData = { ...req.body };
-    if (customerId) {
-      const productCartQuery = await cartService.getCartByCustomerId(customerId);
-      //   const feeShip = await configStoreService.findAll();
-      //   if (productCartQuery) {
-      //     const { customerId, ...remainingProductCartQuery } = productCartQuery;
-      //     const shipFee = feeShip?.[0]?.feeShip || 0;
-      //     newData = {
-      //       ...newData,
-      //       productFromCart: { ...remainingProductCartQuery },
-      //       totalOrderAmountBeforeUseDiscount: remainingProductCartQuery.totalCart,
-      //       totalOrder: remainingProductCartQuery.totalCart + shipFee,
-      //       shipFee: shipFee,
-      //     };
-      //   }
+  async checkout(req: Request) {
+    const orderDTO: Order = JSON.parse(req.body?.[FIELDS_NAME.ORDER]);
+
+    if (orderDTO.statusCheckout === StatusCheckout.VERIFY_INFORMATION) {
+      let newOrder: any = { ...orderDTO };
+      const storeConfig = await storeConfigService.findAll();
+      const storeDetail = await storeSystemService.getById(String(orderDTO?.orderAtStore));
+
+      if (orderDTO.typeOrder === TypeOrder.ORDER_DELIVERING) {
+        const feeShip = storeConfig?.[0]?.feeShip;
+        newOrder.shipFee = feeShip;
+      }
+      if (orderDTO.typeOrder === TypeOrder.ORDER_TO_PICK_UP) {
+        newOrder.shipFee = 0;
+      }
+
+      if (orderDTO?.customerId) {
+        const cartLists = await cartService.getCartByCustomerId(String(orderDTO.customerId));
+
+        const totalCart = cartLists.totalCart;
+        const productsFromCart = cartLists.products;
+
+        newOrder = {
+          ...newOrder,
+          totalAmountBeforeUsingDiscount: totalCart + newOrder.shipFee,
+          totalOrder: totalCart + newOrder.shipFee,
+          productsFromCart: productsFromCart,
+          orderAtStore: storeDetail,
+          statusOrder: StatusOrder.WAITING_FOR_PAYMENT,
+        };
+      } else {
+        const productLists = [];
+        const productWhenCustomerIsNotLogin = orderDTO?.productsWhenTheCustomerIsNotLoggedIn;
+        if (productWhenCustomerIsNotLogin && productWhenCustomerIsNotLogin?.length) {
+          for (let i = 0; i < productWhenCustomerIsNotLogin.length; i++) {
+            const element = productWhenCustomerIsNotLogin[i];
+            const productItem = await ProductVariantModel.findById(element?.product);
+            if (productItem) {
+              productLists.push({
+                product: productItem,
+                note: element.note,
+                productQuantities: element.productQuantities,
+              });
+            }
+          }
+        }
+        const totalAmount = productLists?.reduce((acc: any, next) => {
+          let result: number = 0;
+          if (next?.product?.productItem?.price) {
+            result = acc + next.product.productItem.price * next.productQuantities;
+          }
+          return result;
+        }, 0);
+
+        newOrder = {
+          ...newOrder,
+          totalAmountBeforeUsingDiscount: totalAmount + newOrder.shipFee,
+          totalOrder: totalAmount + newOrder.shipFee,
+          productsWhenTheCustomerIsNotLoggedIn: productLists,
+          orderAtStore: storeDetail,
+          statusOrder: StatusOrder.WAITING_FOR_PAYMENT,
+        };
+      }
+
+      const newOrderModel = new OrderModel(newOrder);
+      await newOrderModel.save();
+      return newOrder;
     }
 
-    // const newOrder = new this.model(newData);
-    // const customer = await customerService.getById(customerId);
-    // if (customer) {
-    //   await customer?.updateOne({ $push: { orderIds: newOrder._id } });
-    // }
-    // await newOrder.save();
-    // return newOrder;
+    if (orderDTO.statusCheckout === StatusCheckout.ORDER_CONFIRMATION) {
+      const orderDetail = await this.getOrderById(String(orderDTO._id));
+      let updateData: any = { ...orderDTO };
+      if (orderDTO?.voucherId) {
+        const voucherDetail = await voucherService.getById(String(orderDTO.voucherId));
+        if (
+          voucherDetail &&
+          !voucherDetail.customerIdsUsedVoucher?.includes(String(orderDTO.customerId))
+        ) {
+          if (voucherDetail?.discount) {
+            updateData = {
+              ...updateData,
+              totalOrder:
+                orderDetail?.totalOrder && orderDetail.totalOrder - voucherDetail?.discount,
+            };
+          }
+          if (voucherDetail?.discountPercent) {
+            updateData = {
+              ...updateData,
+              totalOrder:
+                orderDetail?.totalOrder &&
+                orderDetail.totalOrder * ((100 - voucherDetail?.discountPercent) / 100),
+            };
+          }
+          await VoucherModel.updateOne(
+            { _id: orderDTO.voucherId },
+            {
+              $set: { customerIdsUsedVoucher: orderDTO.customerId },
+            },
+            {
+              new: true,
+            },
+          );
+        }
+      }
+      updateData = {
+        ...updateData,
+        statusOrder: StatusOrder.PENDING,
+      };
+
+      await orderDetail?.updateOne(updateData, { new: true });
+      return updateData;
+    }
   }
 
-  //   // QUICK BUY
-  //   async quickBuy(req: Request, res: Response) {
-  //     try {
-  //       const productIdFromCart = req?.body?.productFromCart?.products;
+  //RE-ORDER
+  async reorder(orderId: string, customerId: string, req: Request) {
+    const orderDetail = await this.getOrderById(orderId);
 
-  //       const product = await ProductModel.findById(productIdFromCart?.[0]?.productId);
-  //       const feeShip = await configStoreService.findAll();
+    return orderDetail;
+  }
 
-  //       const newData = {
-  //         ...req.body,
-  //         productFromCart: {
-  //           products: [...productIdFromCart],
-  //           totalCart: product?.price,
-  //         },
-  //         shipFee: feeShip,
-  //         totalOrderAmountBeforeUseDiscount: product?.price,
-  //         totalOrder: (product?.price || 0) + (feeShip?.[0]?.feeShip || 0),
-  //       };
+  // UPDATE STATUS ORDER
+  async updateStatusOrder(status: StatusOrder, orderId: string) {
+    const orderDetail = await this.getById(orderId);
 
-  //       const quickBuyOrder = new this.model(newData);
-  //       await quickBuyOrder.save();
+    if (!orderDetail) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found order');
+      throw exception;
+    }
 
-  //       return { orderId: quickBuyOrder._id };
-  //     } catch (error) {
-  //       console.log('🚀 error:', error);
-  //       throw new Error(`Occur ${error} when handle quick buy`);
-  //     }
-  //   }
+    await this.model.findOneAndUpdate({ _id: orderId }, { $set: { statusOrder: status } });
+    return {
+      message: 'Update status order success',
+    };
+  }
 
-  //   // UPDATE TOTAL ORDER WHEN USE VOUCHER
-  //   async updateTotalOrderWhenUseVoucher(voucherId: string, customerId: string, orderId: string) {
-  //     try {
-  //       if (voucherId) {
-  //         const voucher = await VoucherModel.findById(voucherId);
-  //         if (!voucher?.customerIdsUsedVoucher?.includes(customerId)) {
-  //           await voucher?.updateOne({
-  //             $push: { customerIdsUsedVoucher: customerId },
-  //           });
-  //         }
-  //         const order = await this.model.findOne({ _id: orderId });
+  // CANCEL ORDER
+  async cancelOrder(orderId: string, reason: string) {
+    const orderDetail = await this.getById(orderId);
 
-  //         if (order && order?.totalOrder && voucher && voucher?.discount) {
-  //           await order?.updateOne(
-  //             { $set: { totalOrder: order.totalOrder - voucher?.discount, voucherId: voucherId } },
-  //             { new: true },
-  //           );
-  //         }
-  //       }
-  //     } catch (error) {
-  //       throw new Error('Occur error when update total order when use voucher');
-  //     }
-  //   }
+    if (!orderDetail) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found order');
+      throw exception;
+    }
 
-  //   // RE-ORDER
-  //   async reorder(orderId: string, customerId: string, req: Request) {
-  //     try {
-  //       if (orderId) {
-  //         const ordered = await this.model
-  //           .findById(orderId)
-  //           .then((res) => res?.populate('productFromCart.products.productId'));
-
-  //         const cartAfterFindByCustomerId = await CartModel.findOne({ customerId: customerId });
-  //         if (ordered) {
-  //           const productOrdered = (ordered?.productFromCart as any) || [];
-  //           const productInCarted = cartAfterFindByCustomerId?.products || [];
-
-  //           const productOrderedQueryProducts = productOrdered?.products;
-
-  //           const addCartWhenNoExist = async (productIdNotExistInCart?: string) => {
-  //             if (productIdNotExistInCart) {
-  //               const quantityProdNotExistCart = productOrderedQueryProducts?.find(
-  //                 (item: any) => new Object(item.productId._id).valueOf() === productIdNotExistInCart,
-  //               );
-  //               return await cartAfterFindByCustomerId?.updateOne(
-  //                 {
-  //                   $push: {
-  //                     products: quantityProdNotExistCart,
-  //                   },
-  //                 },
-  //                 { new: true },
-  //               );
-  //             }
-
-  //             await cartAfterFindByCustomerId?.updateOne(
-  //               {
-  //                 $set: {
-  //                   products: productOrderedQueryProducts,
-  //                 },
-  //               },
-  //               { new: true },
-  //             );
-  //           };
-
-  //           if (productInCarted.length > 0) {
-  //             for (let index = 0; index < productOrderedQueryProducts?.length; index++) {
-  //               const elementProductOrdered = productOrderedQueryProducts?.[index];
-  //               const convertElementProductOrdered_Id = elementProductOrdered?.productId as any;
-  //               const elementProductOrderedId = JSON.parse(
-  //                 JSON.stringify(convertElementProductOrdered_Id._id),
-  //               );
-  //               const quantityProdInCart = await cartAfterFindByCustomerId?.products?.find(
-  //                 (item) => new Object(item.productId).valueOf() === elementProductOrderedId,
-  //               );
-  //               if (quantityProdInCart) {
-  //                 (async function () {
-  //                   return await CartModel?.updateOne(
-  //                     {
-  //                       'products.productId': elementProductOrderedId,
-  //                     },
-  //                     {
-  //                       $set: {
-  //                         'products.$.quantityProducts':
-  //                           elementProductOrdered.quantityProducts +
-  //                           quantityProdInCart.quantityProducts,
-  //                       },
-  //                     },
-  //                     { new: true },
-  //                   );
-  //                 })();
-  //               }
-  //               if (!quantityProdInCart) {
-  //                 addCartWhenNoExist(elementProductOrderedId);
-  //               }
-  //             }
-  //             return;
-  //           }
-  //           addCartWhenNoExist();
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.log('🚀error:', error);
-  //       throw new Error(`Occur ${error} when handle quick buy`);
-  //     }
-  //   }
-
-  //   // UPDATE STATUS ORDER
-  //   async updateStatusOrder(status: StatusOrder, orderId: string) {
-  //     try {
-  //       if (orderId) {
-  //         await this.model.findOneAndUpdate({ _id: orderId }, { $set: { statusOrder: status } });
-  //         return {
-  //           message: 'Update status order success',
-  //           statusCode: 200,
-  //         };
-  //       }
-  //       return {
-  //         message: `Not found order with this ${orderId}`,
-  //         statusCode: 404,
-  //       };
-  //     } catch (error) {
-  //       throw new Error(`Occur error when change status ${this.nameService}`);
-  //     }
-  //   }
-
-  //   // CANCEL ORDER
-  //   async cancelOrder(orderId: string, reason: string) {
-  //     try {
-  //       await this.model.findOneAndUpdate(
-  //         {
-  //           _id: orderId,
-  //         },
-  //         {
-  //           $set: { reasonCancelOrder: reason, statusOrder: 'CANCELED' },
-  //         },
-  //         { new: true },
-  //       );
-  //       return { message: 'In process' };
-  //     } catch (error) {
-  //       throw new Error('Occur error when send request cancel order');
-  //     }
-  //   }
+    await this.model.findOneAndUpdate(
+      {
+        _id: orderId,
+      },
+      {
+        $set: { reasonOrderCancel: reason, statusOrder: StatusOrder.CANCELED },
+      },
+      { new: true },
+    );
+    return { message: 'Handling...' };
+  }
 }
 
 export default OrderService;

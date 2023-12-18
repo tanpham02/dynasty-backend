@@ -16,7 +16,7 @@ import { ProductSchema } from '../products';
  *           $ref: '#/components/schema/Product'
  */
 
-const ProductVariantSchema = new Schema<ProductVariants>(
+export const ProductVariantSchema = new Schema<ProductVariants>(
   {
     parentId: {
       type: Schema.Types.ObjectId,

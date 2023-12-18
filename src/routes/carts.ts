@@ -26,7 +26,7 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Cart'
+ *                 $ref: '#/components/schema/Carts'
  */
 
 // ADD CART
@@ -56,7 +56,7 @@ router.post('/:customerId', cartController.addCart);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Cart'
+ *                 $ref: '#/components/schema/Carts'
  */
 
 // UPDATE CART
@@ -87,7 +87,7 @@ router.patch('/:customerId', cartController.updateCart);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Cart'
+ *                 $ref: '#/components/schema/Carts'
  */
 
 // DELETE CART
@@ -105,13 +105,14 @@ router.delete('/:customerId', cartController.deleteCart);
  *         schema:
  *           type: string
  *         required: true
+ *
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Cart'
+ *                 $ref: '#/components/schema/Carts'
  */
 
 // GET CART BY ID

@@ -53,7 +53,6 @@ import { Schema, Document } from 'mongoose';
  *                     type: string
  *                  productQuantities:
  *                     type: number
-
  */
 
 interface Cart extends Document {

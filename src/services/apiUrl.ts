@@ -10,7 +10,7 @@ export const CATEGORY_URL = '/api/category';
 // PRODUCT
 export const PRODUCT_URL = '/api/products';
 export const PRODUCT_ATTRIBUTE_URL = '/api/products-attributes';
-export const PRODUCT_VARIANT_URL = '/api/products-variants';
+export const PRODUCT_VARIANT_URL = '/api/product-variants';
 
 // STORE SYSTEM
 export const STORE_SYSTEM_URL = '/api/store-system';
