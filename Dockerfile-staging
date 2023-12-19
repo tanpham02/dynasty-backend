@@ -10,4 +10,4 @@ RUN yarn cache clean
 
 COPY . .
 
-CMD ["yarn", "run:dev:docker"]
+CMD ["yarn", "run:staging"]

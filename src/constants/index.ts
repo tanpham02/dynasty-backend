@@ -1,6 +1,7 @@
 enum MODE {
   DEVELOPMENT = 'development',
   PRODUCTION = 'production',
+  STAGING = 'staging',
 }
 
 enum ProductStatus {

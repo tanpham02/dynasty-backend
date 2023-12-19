@@ -21,6 +21,15 @@ const configApp = () => {
     APP_URL: `${process.env.BASE_URL}:${process.env.PORT}`,
   };
 
+  if (process.env.NODE_ENV === MODE.STAGING) {
+    dotenv.config({ path: '.env.staging' });
+    resultConfig = {
+      port: process.env.PORT ? Number(process.env.PORT) : 8081,
+      MONGO_URL: process.env.MONGO_URL || '',
+      APP_URL: `${process.env.BASE_URL}:${process.env.PORT}`,
+    };
+  }
+
   if (process.env.NODE_ENV === MODE.PRODUCTION) {
     dotenv.config({ path: '.env.production' });
     resultConfig = {

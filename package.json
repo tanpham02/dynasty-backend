@@ -4,9 +4,9 @@
   "main": "index.js",
   "scripts": {
     "run:dev": "env-cmd -f .env.development nodemon",
-    "run:dev:docker": "env-cmd -f .env.development.docker nodemon",
-    "build": "rimraf ./build && tsc && tsc-alias",
     "run:pro": "yarn build && env-cmd -f .env.production node ./build/index.js",
+    "run:staging": "yarn build && env-cmd -f .env.staging node ./build/index.js",
+    "build": "rimraf ./build && tsc && tsc-alias",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check .",
