@@ -6,7 +6,7 @@ services:
         restart: always
         build:
             context: .
-            dockerfile: Dockerfile-development
+            dockerfile: Dockerfile-staging
         ports:
             - 1009:1009
         depends_on:
@@ -30,7 +30,6 @@ services:
             - mongodb-docker
             - dynasty_network
         volumes:
-            - mongo-db-data:/data/db
             - ./mongo-data:/data/db
 
     mongo_express:
@@ -56,13 +55,14 @@ services:
             - dynasty_network
             - mongodb-docker
 
-networks: # Phai chung network
+networks:
+    # Phai chung network
     dynasty_network:
         external: true
     mongodb-docker:
         external: true
 
-volumes:
-    mongo-db-data:
-        name: mongo-db-data
-        external: true
+#volumes:
+#    mongo-db-data:
+#        name: mongo-db-data
+#        driver: local

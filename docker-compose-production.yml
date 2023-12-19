@@ -9,9 +9,6 @@ services:
             dockerfile: Dockerfile-production
         ports:
             - 1009:1009
-        depends_on:
-            - mongo_db
-            - mongo_express
         env_file:
             - .env.production
         networks:
@@ -20,3 +17,8 @@ services:
 networks:
     dynasty_network:
         external: true
+
+# volumes:
+#     mongo-db-data:
+#         name: mongo-db-data
+#         driver: local
