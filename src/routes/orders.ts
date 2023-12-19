@@ -20,12 +20,12 @@ const router = Router();
  *        in: query
  *        schema:
  *          type: string
- *        description: VD 2023-10-05
+ *        description: VD 2023-10-05 00:00:00
  *      - name: to
  *        in: query
  *        schema:
  *          type: string
- *        description: VD 2023-10-05
+ *        description: VD 2023-10-05 23:59:00
  *      - name: statusOrder
  *        in: query
  *        schema:
@@ -74,7 +74,7 @@ router.get('/search', orderController.searchPagination);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Order'
+ *                 $ref: '#/components/schema/Orders'
  */
 
 // GET BY ID
@@ -127,7 +127,7 @@ router.post('/checkout', formDataParser(FIELDS_NAME.ORDER), orderController.chec
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Order'
+ *                 $ref: '#/components/schema/Orders'
  */
 
 // RE-ORDER
@@ -154,7 +154,7 @@ router.post('/re-order/:orderId', orderController.reorder);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Order'
+ *                 $ref: '#/components/schema/Orders'
  */
 
 // UPDATE STATUS ORDER
@@ -181,7 +181,7 @@ router.patch('/update-status-order/:orderId', orderController.updateStatusOrder)
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Order'
+ *                 $ref: '#/components/schema/Orders'
  */
 
 // CANCEL ORDER

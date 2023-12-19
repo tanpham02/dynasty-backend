@@ -55,7 +55,7 @@ const orderController = {
     const { orderId } = req.params;
     const { customerId } = req.query;
     try {
-      await orderService.reorder(orderId, customerId ? customerId.toString() : '', req);
+      await orderService.reorder(orderId, customerId?.toString() || '', req);
       res.status(HttpStatusCode.OK).json('Add product in reorder to cart success');
     } catch (error) {
       next(error);

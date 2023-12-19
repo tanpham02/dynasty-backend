@@ -37,18 +37,23 @@ class CartService extends CRUDService<Cart> {
           { new: true },
         );
       } else {
-        await cart.updateOne(
-          {
-            $push: { products: cartItemDTO },
-          },
-          { new: true },
-        );
+        // !!!!!
+        if (cartDTO?.length === 1) {
+          return await cart.updateOne(
+            {
+              $push: { products: cartItemDTO },
+            },
+            { new: true },
+          );
+        }
       }
     };
 
-    cartDTO?.forEach((itemDTO) => {
-      if (cart.products && cart.products?.length > 0) {
-        cart.products?.find((productItemRecord) => handleAddCartItem(itemDTO, productItemRecord));
+    cart.products?.forEach((productItemRecord) => {
+      if (cart?.products && cart.products?.length > 0) {
+        cartDTO?.find((itemDTO) => {
+          handleAddCartItem(itemDTO, productItemRecord);
+        });
       } else {
         (async () => {
           await cart.updateOne(
@@ -134,6 +139,18 @@ class CartService extends CRUDService<Cart> {
       cartResponse.totalCart = totalCart || 0;
     }
     return cartResponse;
+  }
+
+  async clearCart(customerId: string) {
+    await this.model.updateOne(
+      { customerId: customerId },
+      {
+        $set: {
+          products: [],
+        },
+      },
+      { new: true },
+    );
   }
 }
 
