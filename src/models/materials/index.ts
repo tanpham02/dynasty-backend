@@ -44,6 +44,9 @@ const MaterialSchema = new Schema<Material>(
         quantity: {
           type: String,
         },
+        unit: {
+          type: String,
+        },
       },
     ],
     totalPrice: {
