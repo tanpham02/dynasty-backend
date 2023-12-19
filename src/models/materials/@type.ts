@@ -6,7 +6,7 @@ import { Document } from 'mongoose';
  * @swagger
  * components:
  *   schemas:
- *     Material:
+ *     Materials:
  *       type: object
  *       properties:
  *         importDate:
@@ -22,7 +22,7 @@ import { Document } from 'mongoose';
  *                 price:
  *                    type: number
  *                 quantity:
- *                    type: string
+ *                    type: number
  *                 unit:
  *                    type: string
  *         totalPrice:
@@ -32,7 +32,7 @@ import { Document } from 'mongoose';
 interface MaterialInformation extends Document {}
 interface Material extends Document {
   importDate?: string | Date;
-  materialInfo?: Array<{ name?: string; price?: number; quantity?: string; unit?: string }>;
+  materialInfo?: Array<{ name?: string; price?: number; quantity?: number; unit?: string }>;
   totalPrice?: number;
 }
 
