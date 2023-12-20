@@ -36,15 +36,17 @@ import { ProductAttribute } from '../productAttributes/@type';
  *              - IN_ACTIVE
  *           default: "ACTIVE"
  *         types:
- *           type: string
- *           enum:
- *              - NORMAL
- *              - NEW
- *              - BEST_SELLER
- *              - DELICIOUS_MUST_TRY
- *              - VEGETARIAN
- *              - SPICY
- *              - UNIQUE
+ *           type: array
+ *           items:
+ *              type: string
+ *              enum:
+ *                 - NORMAL
+ *                 - NEW
+ *                 - BEST_SELLER
+ *                 - DELICIOUS_MUST_TRY
+ *                 - VEGETARIAN
+ *                 - SPICY
+ *                 - UNIQUE
  *         attribute:
  *           type: array
  *           items:
