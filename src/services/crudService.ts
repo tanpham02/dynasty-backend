@@ -114,7 +114,6 @@ class CRUDService<T extends Document> {
     if (statusOrder) {
       filter.statusOrder = statusOrder;
     }
-    console.log('🚀 ~ file: crudService.ts:116 ~ CRUDService<T ~ getPagination ~ filter:', filter);
 
     if (sort) {
       const arraySorts = sort.split(', ');

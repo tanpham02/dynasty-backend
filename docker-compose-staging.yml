@@ -30,7 +30,7 @@ services:
             - mongodb-docker
             - dynasty_network
         volumes:
-            - ./mongo-data:/data/db
+            - ./Data-MongoDB:/data/db
 
     mongo_express:
         image: mongo-express
