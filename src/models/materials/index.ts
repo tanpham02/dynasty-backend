@@ -7,7 +7,7 @@ import { Schema, model } from 'mongoose';
  * @swagger
  * components:
  *   schema:
- *     Material:
+ *     Materials:
  *       type: object
  *       properties:
  *         importDate:
@@ -23,6 +23,8 @@ import { Schema, model } from 'mongoose';
  *                 price:
  *                    type: number
  *                 quantity:
+ *                    type: number
+ *                 unit:
  *                    type: string
  *         totalPrice:
  *           type: number
@@ -42,7 +44,7 @@ const MaterialSchema = new Schema<Material>(
           type: Number,
         },
         quantity: {
-          type: String,
+          type: Number,
         },
         unit: {
           type: String,

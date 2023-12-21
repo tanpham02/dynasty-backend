@@ -25,7 +25,7 @@ router.get('/search-all', productAttributeController.searchAll);
 
 /**
  * @swagger
- * '/api/products-attributes':
+ * '/api/product-attributes':
  *  post:
  *     tags: [Product Attributes]
  *     summary: Create
@@ -51,7 +51,7 @@ router.post('/', formDataParser(FIELDS_NAME.PRODUCT_ATTRIBUTE), productAttribute
 
 /**
  * @swagger
- * '/api/products-attributes/{id}':
+ * '/api/product-attributes/{id}':
  *  patch:
  *     tags: [Product Attributes]
  *     summary: Update
@@ -89,7 +89,7 @@ router.patch(
 
 /**
  * @swagger
- * '/api/products-attributes/{id}':
+ * '/api/product-attributes/{id}':
  *  get:
  *     tags: [Product Attributes]
  *     summary: Find by id
@@ -114,7 +114,7 @@ router.get('/:id', productAttributeController.getById);
 
 /**
  * @swagger
- * '/api/products-attributes/':
+ * '/api/product-attributes/':
  *  delete:
  *     tags: [Product Attributes]
  *     summary: Delete

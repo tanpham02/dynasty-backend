@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { HttpStatusCode } from '@app/exception/type';
 import MaterialMode from '@app/models/materials';
 import MaterialService from '@app/services/materials';
 import { Params } from '@app/types';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 const materialService = new MaterialService(MaterialMode, 'material');
 
 const materialController = {
   // SEARCH PAGINATION
-  search: async (req: Request, res: Response) => {
+  search: async (req: Request, res: Response, next: NextFunction) => {
     const { pageIndex, pageSize, from, to } = req.query;
     try {
       const params: Params = {
@@ -17,42 +18,42 @@ const materialController = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
       };
-      const material = await materialService.getPaginationOverriding(params);
-      res.status(200).json(material);
+      const material = await materialService.getPagination(params);
+      res.status(HttpStatusCode.OK).json(material);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 
   // CREATE MATERIAL
-  createMaterial: async (req: Request, res: Response) => {
+  createMaterial: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const newMaterial = await materialService.createOverriding(req);
-      res.status(200).json(newMaterial);
+      res.status(HttpStatusCode.OK).json(newMaterial);
     } catch (error) {
-      res.status(500).json(error);
+      next(500);
     }
   },
 
   // UPDATE MATERIAL
-  updateMaterial: async (req: Request, res: Response) => {
+  updateMaterial: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      //   const material = await materialService.update(id, req);
-      //   res.status(200).json(material);
+      const material = await materialService.updateOverriding(id, req);
+      res.status(HttpStatusCode.OK).json(material);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 
   // GET BY ID
-  getMaterialById: async (req: Request, res: Response) => {
+  getMaterialById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      //   const material = await materialService.getById(id);
-      //   res.status(200).json(material);
+      const material = await materialService.getById(id);
+      res.status(HttpStatusCode.OK).json(material);
     } catch (error) {
-      res.status(500).json(error);
+      next(error);
     }
   },
 

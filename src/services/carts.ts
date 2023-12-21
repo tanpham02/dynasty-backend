@@ -14,6 +14,7 @@ class CartService extends CRUDService<Cart> {
   }
 
   async addCartItem(customerId: string, req: Request) {
+    let breakFlag = false;
     const cart = await this.model.findOne({ customerId: customerId });
     const cartDTO: Cart['products'] = JSON.parse(JSON.stringify(req.body.products)) || [];
     if (!cart) {
@@ -36,19 +37,24 @@ class CartService extends CRUDService<Cart> {
           },
           { new: true },
         );
-      } else {
+        breakFlag = true;
+      } else if (cartDTO?.length === 1 && !breakFlag) {
         await cart.updateOne(
           {
             $push: { products: cartItemDTO },
           },
           { new: true },
         );
+        breakFlag = false;
       }
+      return breakFlag;
     };
 
-    cartDTO?.forEach((itemDTO) => {
-      if (cart.products && cart.products?.length > 0) {
-        cart.products?.find((productItemRecord) => handleAddCartItem(itemDTO, productItemRecord));
+    cart.products?.forEach((productItemRecord) => {
+      if (cart?.products && cart.products?.length > 0) {
+        cartDTO?.find((itemDTO) => {
+          handleAddCartItem(itemDTO, productItemRecord);
+        });
       } else {
         (async () => {
           await cart.updateOne(
@@ -134,6 +140,18 @@ class CartService extends CRUDService<Cart> {
       cartResponse.totalCart = totalCart || 0;
     }
     return cartResponse;
+  }
+
+  async clearCart(customerId: string) {
+    await this.model.updateOne(
+      { customerId: customerId },
+      {
+        $set: {
+          products: [],
+        },
+      },
+      { new: true },
+    );
   }
 }
 

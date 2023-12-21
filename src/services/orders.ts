@@ -44,25 +44,21 @@ class OrderService extends CRUDService<Order> {
 
   // GET ORDER BY ID
   async getOrderById(orderId: string) {
-    try {
-      const order = await this.model.findById(orderId).then(
-        (res) =>
-          res?.populate([
-            {
-              path: 'productsFromCart.product',
-              model: 'ProductVariant',
-            },
-            {
-              path: 'productsWhenTheCustomerIsNotLoggedIn.product',
-              model: 'ProductVariant',
-            },
-          ]),
-      );
+    const order = await this.model.findById(orderId).then(
+      (res) =>
+        res?.populate([
+          {
+            path: 'productsFromCart.product',
+            model: 'ProductVariant',
+          },
+          {
+            path: 'productsWhenTheCustomerIsNotLoggedIn.product',
+            model: 'ProductVariant',
+          },
+        ]),
+    );
 
-      return order;
-    } catch (error) {
-      throw new Error('Occur error when retries order');
-    }
+    return order;
   }
 
   // CHECKOUT
@@ -85,13 +81,13 @@ class OrderService extends CRUDService<Order> {
       if (orderDTO?.customerId) {
         const cartLists = await cartService.getCartByCustomerId(String(orderDTO.customerId));
 
-        const totalCart = cartLists.totalCart;
-        const productsFromCart = cartLists.products;
+        const totalCart = cartLists?.totalCart;
+        const productsFromCart = cartLists?.products;
 
         newOrder = {
           ...newOrder,
-          totalAmountBeforeUsingDiscount: totalCart + newOrder.shipFee,
-          totalOrder: totalCart + newOrder.shipFee,
+          totalAmountBeforeUsingDiscount: totalCart || 0 + newOrder.shipFee,
+          totalOrder: totalCart || 0 + newOrder.shipFee,
           productsFromCart: productsFromCart,
           orderAtStore: storeDetail,
           statusOrder: StatusOrder.WAITING_FOR_PAYMENT,
@@ -122,8 +118,8 @@ class OrderService extends CRUDService<Order> {
 
         newOrder = {
           ...newOrder,
-          totalAmountBeforeUsingDiscount: totalAmount + newOrder.shipFee,
-          totalOrder: totalAmount + newOrder.shipFee,
+          totalAmountBeforeUsingDiscount: totalAmount || 0 + newOrder.shipFee,
+          totalOrder: totalAmount || 0 + newOrder.shipFee,
           productsWhenTheCustomerIsNotLoggedIn: productLists,
           orderAtStore: storeDetail,
           statusOrder: StatusOrder.WAITING_FOR_PAYMENT,
@@ -176,14 +172,20 @@ class OrderService extends CRUDService<Order> {
       };
 
       await orderDetail?.updateOne(updateData, { new: true });
+      await cartService.clearCart(String(orderDTO?.customerId));
       return updateData;
     }
   }
 
   //RE-ORDER
   async reorder(orderId: string, customerId: string, req: Request) {
-    const orderDetail = await this.getOrderById(orderId);
-
+    const orderDetail = await this.getOrderById(orderId).then(
+      (res) => res?.depopulate('productsFromCart.product'),
+    );
+    if (orderDetail) {
+      req.body.products = orderDetail.productsFromCart;
+      await cartService.addCartItem(customerId, req);
+    }
     return orderDetail;
   }
 

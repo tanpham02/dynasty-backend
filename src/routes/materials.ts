@@ -1,4 +1,6 @@
+import { FIELDS_NAME } from '@app/constants';
 import materialController from '@app/controllers/materials';
+import { formDataParser } from '@app/middlewares/formDataParser';
 import { verifyTokenAndAuthenRole } from '@app/middlewares/verifyToken';
 import { Router } from 'express';
 
@@ -15,12 +17,12 @@ const router = Router();
  *        in: query
  *        schema:
  *          type: string
- *        description: VD 2023-10-15
+ *        description: VD 2023-10-15 00:00:00
  *      - name: to
  *        in: query
  *        schema:
  *          type: string
- *        description: VD 2023-10-15
+ *        description: VD 2023-10-15 23:59:00
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -35,7 +37,7 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Material'
+ *                 $ref: '#/components/schema/Materials'
  */
 
 // SEARCH PAGINATION
@@ -43,33 +45,37 @@ router.get('/search', materialController.search);
 
 /**
  * @swagger
- * '/api/materials/create':
+ * '/api/materials':
  *  post:
  *     tags: [Materials]
  *     summary: Create the material
  *     requestBody:
+ *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Material'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   materialInfo:
+ *                        $ref: '#/components/schema/Materials'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Material'
+ *                 $ref: '#/components/schema/Materials'
  */
 
 // CREATE MATERIAL
-router.post('/create', materialController.createMaterial);
+router.post('/', formDataParser(FIELDS_NAME.MATERIAL), materialController.createMaterial);
 
 /**
  * @swagger
  * '/api/materials/{id}':
- *  get:
+ *  patch:
  *     tags: [Materials]
- *     summary: Find by id
+ *     summary: Update
  *     parameters:
  *       - in: path
  *         name: id
@@ -77,10 +83,14 @@ router.post('/create', materialController.createMaterial);
  *           type: string
  *         required: true
  *     requestBody:
+ *       required: true
  *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schema/Material'
+ *          multipart/form-data:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   materialInfo:
+ *                        $ref: '#/components/schema/Materials'
  *
  *     responses:
  *       200:
@@ -88,11 +98,11 @@ router.post('/create', materialController.createMaterial);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Material'
+ *                 $ref: '#/components/schema/Materials'
  */
 
 // GET BY ID
-router.patch('/:id', materialController.updateMaterial);
+router.patch('/:id', formDataParser(FIELDS_NAME.MATERIAL), materialController.updateMaterial);
 
 /**
  * @swagger
@@ -113,7 +123,7 @@ router.patch('/:id', materialController.updateMaterial);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Material'
+ *                 $ref: '#/components/schema/Materials'
  */
 
 // GET BY ID
@@ -138,10 +148,10 @@ router.get('/:id', materialController.getMaterialById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Material'
+ *                 $ref: '#/components/schema/Materials'
  */
 
 // DELETE MATERIAL
-router.delete('/:id', verifyTokenAndAuthenRole, materialController.delete);
+router.delete('/:id', materialController.delete);
 
 export default router;

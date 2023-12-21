@@ -92,7 +92,18 @@ class CRUDService<T extends Document> {
       filter.role = role;
     }
 
+    if (from) {
+      filter.importDate = { $gte: from };
+      filter.createdAt = { $gte: from };
+    }
+
+    if (to) {
+      filter.importDate = { $lte: to };
+      filter.createdAt = { $lte: to };
+    }
+
     if (from && to) {
+      filter.importDate = { $gte: from, $lte: to };
       filter.createdAt = { $gte: from, $lte: to };
     }
 
@@ -103,6 +114,7 @@ class CRUDService<T extends Document> {
     if (statusOrder) {
       filter.statusOrder = statusOrder;
     }
+    console.log('🚀 ~ file: crudService.ts:116 ~ CRUDService<T ~ getPagination ~ filter:', filter);
 
     if (sort) {
       const arraySorts = sort.split(', ');
@@ -187,7 +199,7 @@ class CRUDService<T extends Document> {
     return { message: `Update ${this.nameService} success` };
   }
 
-  // DELETE
+  // DELETE MULTIPLE
   async delete(ids: string[] | any) {
     if (!ids) {
       const exception = new Exception(HttpStatusCode.BAD_REQUEST, "ids field can't be empty");
@@ -198,6 +210,20 @@ class CRUDService<T extends Document> {
       _id: {
         $in: ids, // $in operator: sẽ tìm bất kì những thằng nào trong database có _id match với nhứng thằng trong list id truyền vào ($in operator: nhận value[] or value)
       },
+    });
+
+    return { message: `Delete ${this.nameService} success` };
+  }
+
+  // DELETE ONE
+  async deleteOne(id: string) {
+    if (!id) {
+      const exception = new Exception(HttpStatusCode.BAD_REQUEST, "id field can't be empty");
+      throw exception;
+    }
+
+    await this.model.deleteOne({
+      _id: id,
     });
 
     return { message: `Delete ${this.nameService} success` };

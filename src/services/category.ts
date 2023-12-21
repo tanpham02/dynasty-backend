@@ -108,7 +108,7 @@ class CategoryService extends CRUDService<Category> {
   async getCategoryById(id: string) {
     const category = await this.model
       .findOne({
-        $or: [{ _id: id }, { 'childrenCategory._id': id }],
+        $or: [{ _id: id }, { 'childrenCategory.category._id': id }],
       })
       .populate(['products', `childrenCategory.category.products`]);
 
