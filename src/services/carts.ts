@@ -14,7 +14,6 @@ class CartService extends CRUDService<Cart> {
   }
 
   async addCartItem(customerId: string, req: Request) {
-    let breakFlag = false;
     const cart = await this.model.findOne({ customerId: customerId });
     const cartDTO: Cart['products'] = JSON.parse(JSON.stringify(req.body.products)) || [];
     if (!cart) {
@@ -25,6 +24,7 @@ class CartService extends CRUDService<Cart> {
     const handleAddCartItem = async (cartItemDTO: any, cartRecord: any) => {
       if (comparingObjectId(cartItemDTO.product, cartRecord.product)) {
         const quantity = cartItemDTO.productQuantities + cartRecord.productQuantities;
+
         await this.model.updateOne(
           {
             'products.product': cartItemDTO.product,
@@ -37,17 +37,14 @@ class CartService extends CRUDService<Cart> {
           },
           { new: true },
         );
-        breakFlag = true;
-      } else if (cartDTO?.length === 1 && !breakFlag) {
+      } else {
         await cart.updateOne(
           {
             $push: { products: cartItemDTO },
           },
           { new: true },
         );
-        breakFlag = false;
       }
-      return breakFlag;
     };
 
     cart.products?.forEach((productItemRecord) => {

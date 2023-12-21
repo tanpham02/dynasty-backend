@@ -41,6 +41,7 @@ class CRUDService<T extends Document> {
       parentId,
       customerId,
       statusOrder,
+      customerType,
     } = params;
 
     const filter: Filter = {};
@@ -114,7 +115,10 @@ class CRUDService<T extends Document> {
     if (statusOrder) {
       filter.statusOrder = statusOrder;
     }
-    console.log('🚀 ~ file: crudService.ts:116 ~ CRUDService<T ~ getPagination ~ filter:', filter);
+
+    if (customerType) {
+      filter.customerType = customerType;
+    }
 
     if (sort) {
       const arraySorts = sort.split(', ');

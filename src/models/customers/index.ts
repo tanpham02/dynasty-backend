@@ -1,5 +1,5 @@
 import { Schema, model } from 'mongoose';
-import { Customer } from './@type';
+import { Customer, CustomerType } from './@type';
 import { ProductStatus } from '@app/constants';
 
 // SCHEMAS DESCRIPTION
@@ -34,6 +34,14 @@ import { ProductStatus } from '@app/constants';
  *          enum:
  *             - ACTIVE
  *             - IN_ACTIVE
+ *         customerType:
+ *          type: string
+ *          default: "NEW"
+ *          enum:
+ *            - NEW
+ *            - EXIST
+ *            - POTENTIAL
+ *            - BUY_THE_MOST_ORDERS
  */
 
 const CustomerSchema = new Schema<Customer>(
@@ -71,6 +79,11 @@ const CustomerSchema = new Schema<Customer>(
       type: String,
       enum: ProductStatus,
       default: ProductStatus.ACTIVE,
+    },
+    customerType: {
+      type: String,
+      enum: CustomerType,
+      default: CustomerType.NEW,
     },
   },
   { versionKey: false, timestamps: true },
