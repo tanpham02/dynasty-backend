@@ -12,11 +12,12 @@ const customerController = {
   // SEARCH PAGINATION
   search: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { pageIndex, pageSize, fullName } = req.query;
+      const { pageIndex, pageSize, fullName, customerType } = req.query;
       const params: Params = {
         pageIndex: pageIndex ? Number(pageIndex) : 0,
         pageSize: pageSize ? Number(pageSize) : 10,
         fullName: fullName?.toString(),
+        customerType: customerType?.toString(),
       };
       const result = await customerService.getPaginationExcludePw(params);
 

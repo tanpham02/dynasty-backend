@@ -34,8 +34,22 @@ import { Document, Schema } from 'mongoose';
  *          enum:
  *             - ACTIVE
  *             - IN_ACTIVE
+ *         customerType:
+ *          type: string
+ *          default: "NEW"
+ *          enum:
+ *            - NEW
+ *            - EXIST
+ *            - POTENTIAL
+ *            - BUY_THE_MOST_ORDERS
  */
 
+enum CustomerType {
+  NEW = 'NEW',
+  EXIST = 'EXIST',
+  POTENTIAL = 'POTENTIAL',
+  BUY_THE_MOST_ORDERS = 'BUY_THE_MOST_ORDERS',
+}
 interface Customer extends BaseModel, Document {
   phoneNumber?: string;
   fullName?: string;
@@ -44,6 +58,7 @@ interface Customer extends BaseModel, Document {
   birthday?: string | Date;
   customerAddressId: Schema.Types.ObjectId;
   orderIds: string[];
+  customerType: CustomerType;
 }
 
-export { Customer };
+export { Customer, CustomerType };

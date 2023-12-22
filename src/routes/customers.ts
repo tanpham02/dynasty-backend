@@ -14,6 +14,15 @@ const router = Router();
  *        in: query
  *        schema:
  *          type: integer($int32)
+ *      - name: customerType
+ *        in: query
+ *        schema:
+ *          type: string
+ *          enum:
+ *            - NEW
+ *            - EXIST
+ *            - POTENTIAL
+ *            - BUY_THE_MOST_ORDERS
  *      - name: pageIndex
  *        in: query
  *        schema:

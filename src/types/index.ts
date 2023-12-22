@@ -1,4 +1,5 @@
 import { ProductStatus } from '@app/constants';
+import { CustomerType } from '@app/models/customers/@type';
 import { ProductType } from '@app/models/products/@type';
 import { Role } from '@app/models/users/@type';
 import { SortOrder } from 'mongoose';
@@ -23,6 +24,7 @@ interface Params {
   statusOrder?: string;
   sort?: string;
   parentId?: string;
+  customerType?: CustomerType | string;
 }
 
 interface Filter {
@@ -42,6 +44,7 @@ interface Filter {
   importDate?: any;
   sort?: string;
   parentId?: string;
+  customerType?: CustomerType | string;
 }
 
 interface BaseModel {
