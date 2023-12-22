@@ -2,6 +2,9 @@
 export const AUTH_URL = '/api/auth';
 
 // CATEGORY
+export const STATISTIC_URL = '/api/statistic';
+
+// CATEGORY
 export const BANNERS_URL = '/api/banners';
 
 // CATEGORY

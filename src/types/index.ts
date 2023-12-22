@@ -2,7 +2,6 @@ import { ProductStatus } from '@app/constants';
 import { CustomerType } from '@app/models/customers/@type';
 import { ProductType } from '@app/models/products/@type';
 import { Role } from '@app/models/users/@type';
-import { SortOrder } from 'mongoose';
 
 interface Params {
   pageIndex: number;

@@ -17,6 +17,7 @@ import storeSystemRoute from './storeSystem';
 import storeConfigRoute from './storeConfig';
 import storeInformationRoute from './storeInformation';
 import termAndPolicyRoute from './termAndPolicy';
+import statisticRoute from './statistics';
 import { Application } from 'express';
 
 import {
@@ -38,10 +39,15 @@ import {
   STORE_CONFIG_URL,
   STORE_INFORMATION_URL,
   TERM_AND_POLICY_URL,
+  STATISTIC_URL,
 } from '@app/services/apiUrl';
 
 export const routesMapping = (app: Application) => {
   const routesData = [
+    {
+      path: STATISTIC_URL,
+      route: statisticRoute,
+    },
     {
       path: CATEGORY_URL,
       route: categoryRouter,
