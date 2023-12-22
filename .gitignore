@@ -19,7 +19,6 @@ build/*
 !build/build.xml
 *.local
 mongo-data
-Data-MongoDB
 public
 
 
