@@ -43,7 +43,7 @@ services:
         environment:
             - ME_CONFIG_OPTIONS_EDITORTHEME=default
             - ME_CONFIG_MONGODB_SERVER=mongo_db
-            - ME_CONFIG_MONGODB_PORT=27018
+            - ME_CONFIG_MONGODB_PORT=27017  # not the mapped port, get port default
             - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
             - ME_CONFIG_MONGODB_AUTH_DATABASE=Dynasty
             - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
