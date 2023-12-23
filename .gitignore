@@ -10,6 +10,14 @@ lerna-debug.log*
 
 .gitignore
 node_modules
+.env
+.env.development
+.env.production
+.env.staging
+*.env
+*.env.development
+*.env.production
+*.env.staging
 dist
 dist-ssr
 build/
@@ -20,6 +28,10 @@ build/*
 *.local
 mongo-data
 public
+.env
+.env.development
+.env.production
+.env.staging
 
 
 # Editor directories and files

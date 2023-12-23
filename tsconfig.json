@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
+    "types": ["node", "moment", "moment-timezone"],
     "baseUrl": ".", // Đường dẫn base cho các import
     "paths": {
       "@app/*":["./src/*"],  // Đường dẫn tương đối cho các import (alias)

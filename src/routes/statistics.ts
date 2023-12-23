@@ -9,31 +9,16 @@ const router = Router();
  *     tags: [Statistic]
  *     summary: Statistic customer
  *     parameters:
- *      - name: times
- *        in: query
- *        schema:
- *          type: string
- *          enum:
- *            - YEAR
- *            - MONTH
- *            - DAY
  *      - name: from
  *        in: query
  *        schema:
  *          type: string
+ *        description: 2023-12-23T00:00:00
  *      - name: to
  *        in: query
  *        schema:
  *          type: string
- *      - name: customerType
- *        in: query
- *        schema:
- *          type: string
- *          enum:
- *            - NEW
- *            - EXIST
- *            - POTENTIAL
- *            - BUY_THE_MOST_ORDERS
+ *        description: 2023-12-23T23:59:59
 
  *     responses:
  *       200:

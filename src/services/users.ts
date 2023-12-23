@@ -16,6 +16,7 @@ class UserService extends CRUDService<User> {
 
   // CREATE
   async createOverriding(req: Request) {
+    let result: any = {};
     const { password, ...user }: User = req?.body?.[FIELDS_NAME.USER]
       ? JSON.parse(req?.body?.[FIELDS_NAME.USER])
       : {};
@@ -51,8 +52,9 @@ class UserService extends CRUDService<User> {
       await newUser.save();
 
       const { password: pw, ...remainingUser } = newUser.toObject();
-      return remainingUser;
+      result = remainingUser && remainingUser;
     }
+    return result;
   }
 
   // UPDATE

@@ -20,9 +20,11 @@ services:
         image: mongo
         container_name: mongo_container
         restart: on-failure
+        env_file:
+            - .env
         environment:
-            - MONGO_INITDB_ROOT_USERNAME=
-            - MONGO_INITDB_ROOT_PASSWORD=
+            - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
             - MONGO_INITDB_DATABASE=Dynasty
         ports:
             - 27017:27017

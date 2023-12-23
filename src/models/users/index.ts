@@ -13,20 +13,32 @@ import { ProductStatus } from '@app/constants';
  *       required:
  *         - phoneNumber
  *         - password
- *         - username
  *         - email
  *       properties:
- *         username:
- *           type: string
  *         birthday:
  *           type: string
+ *           description: VD 2023-09-09
  *         fullName:
  *             type: string
+ *         image:
+ *           type: string
  *         phoneNumber:
  *           type: string
  *         email:
  *           type: string
  *         location:
+ *           type: string
+ *         city:
+ *           type: string
+ *         cityId:
+ *           type: string
+ *         district:
+ *           type: string
+ *         districtId:
+ *           type: string
+ *         ward:
+ *           type: string
+ *         wardId:
  *           type: string
  *         password:
  *           type: string

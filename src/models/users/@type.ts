@@ -27,6 +27,18 @@ import { Document } from 'mongoose';
  *           type: string
  *         location:
  *           type: string
+ *         city:
+ *           type: string
+ *         cityId:
+ *           type: string
+ *         district:
+ *           type: string
+ *         districtId:
+ *           type: string
+ *         ward:
+ *           type: string
+ *         wardId:
+ *           type: string
  *         password:
  *           type: string
  *         role:

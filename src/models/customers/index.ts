@@ -1,6 +1,9 @@
 import { Schema, model } from 'mongoose';
 import { Customer, CustomerType } from './@type';
 import { ProductStatus } from '@app/constants';
+import moment from 'moment';
+import 'moment-timezone';
+import { TIME_ZONE_VIET_NAME, YYYY_MM_DDTHH_MM_SS, YYYY_MM_DD_HH_MM_SS } from '@app/utils/date';
 
 // SCHEMAS DESCRIPTION
 
@@ -86,7 +89,17 @@ const CustomerSchema = new Schema<Customer>(
       default: CustomerType.NEW,
     },
   },
-  { versionKey: false, timestamps: true },
+  {
+    versionKey: false,
+    timestamps: {
+      currentTime() {
+        const now = new Date();
+        const strictUTC = moment(now).utc(true);
+        const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
+        return Number(dayAdjustment);
+      },
+    },
+  },
 );
 
 const CustomerModel = model('Customer', CustomerSchema);

@@ -43,6 +43,7 @@
     "lodash": "^4.17.21",
     "module-alias": "^2.2.3",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "mongoose": "^7.4.3",
     "multer": "^1.4.5-lts.1",
     "swagger-jsdoc": "^6.2.8",
@@ -55,6 +56,7 @@
     "@types/express": "^4.17.17",
     "@types/jsonwebtoken": "^9.0.3",
     "@types/lodash": "^4.14.202",
+    "@types/moment-timezone": "^0.5.30",
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.4.5",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
@@ -75,15 +77,6 @@
   "author": {
     "name": "Tan Van Pham",
     "email": "phamvantan1311@gmail.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://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@github.com/tanpham02/ThePizzaCompany_BE.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/tanpham02/ThePizzaCompany_BE/issues"
-  },
-  "homepage": "https://github.com/tanpham02/ThePizzaCompany_BE#readme",
-  "description": ""
+  }
+
 }
