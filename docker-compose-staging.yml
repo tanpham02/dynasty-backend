@@ -23,12 +23,11 @@ services:
         env_file:
             - .env
         environment:
-            - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+            - MONGO_INITDB_ROOT_USERNAME=
+            - MONGO_INITDB_ROOT_PASSWORD=
             - MONGO_INITDB_DATABASE=Dynasty
-        command: [--auth]
         ports:
-            - 27018:27017
+            - 27017:27017
         networks:
             - mongodb-docker
             - dynasty_network
@@ -44,10 +43,8 @@ services:
             - ME_CONFIG_OPTIONS_EDITORTHEME=default
             - ME_CONFIG_MONGODB_SERVER=mongo_db
             - ME_CONFIG_MONGODB_PORT=27017  # not the mapped port, get port default
-            - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+            - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
             - ME_CONFIG_MONGODB_AUTH_DATABASE=Dynasty
-            - ME_CONFIG_MONGODB_AUTH_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-            - ME_CONFIG_MONGODB_AUTH_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
             - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_ROOT_USER}
             - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
         ports:
