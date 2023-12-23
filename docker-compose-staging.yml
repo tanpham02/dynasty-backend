@@ -28,7 +28,7 @@ services:
             - MONGO_INITDB_DATABASE=Dynasty
         command: [--auth]
         ports:
-            - 27017:27017
+            - 27018:27017
         networks:
             - mongodb-docker
             - dynasty_network
