@@ -9,7 +9,15 @@ const statisticService = new StatisticService();
 export const statisticController = {
   customers: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await statisticService.customer(req);
+      const result = await statisticService.customers(req);
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+  orders: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await statisticService.orders(req);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       next(error);

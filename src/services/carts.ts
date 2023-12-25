@@ -7,6 +7,7 @@ import { Product } from '@app/models/products/@type';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
+import CartModel from '@app/models/carts';
 
 class CartService extends CRUDService<Cart> {
   constructor(model: Model<Cart>, nameService: string) {
@@ -14,64 +15,65 @@ class CartService extends CRUDService<Cart> {
   }
 
   async addCartItem(customerId: string, req: Request) {
-    const cart = await this.model.findOne({ customerId: customerId });
-    const cartDTO: Cart['products'] = JSON.parse(JSON.stringify(req.body.products)) || [];
-    if (!cart) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Cart not found');
+    const cartRecord = await this.model.findOne({ customerId: customerId });
+    const cartRequestBody = req.body;
+
+    if (!cartRecord) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found with customer id');
       throw exception;
     }
 
-    const handleAddCartItem = async (cartItemDTO: any, cartRecord: any) => {
-      if (comparingObjectId(cartItemDTO.product, cartRecord.product)) {
-        const quantity = cartItemDTO.productQuantities + cartRecord.productQuantities;
-
+    const handleAddCartItem = async (cartProductRecord: any) => {
+      if (comparingObjectId(cartRequestBody.product, cartProductRecord.product)) {
+        const quantity = cartRequestBody.productQuantities + cartProductRecord.productQuantities;
         await this.model.updateOne(
           {
-            'products.product': cartItemDTO.product,
+            'products.product': cartRequestBody.product,
           },
           {
             $set: {
               'products.$.productQuantities': quantity,
-              'products.$.note': cartItemDTO?.note || cartRecord?.note,
+              'products.$.note': cartRequestBody?.note || cartProductRecord?.note,
             },
           },
           { new: true },
         );
       } else {
-        await cart.updateOne(
+        await cartRecord?.updateOne(
           {
-            $push: { products: cartItemDTO },
+            $push: { products: cartRequestBody },
           },
           { new: true },
         );
       }
     };
 
-    cart.products?.forEach((productItemRecord) => {
-      if (cart?.products && cart.products?.length > 0) {
-        cartDTO?.find((itemDTO) => {
-          handleAddCartItem(itemDTO, productItemRecord);
-        });
-      } else {
-        (async () => {
-          await cart.updateOne(
-            {
-              $set: { products: cartDTO },
-            },
-            { new: true },
-          );
-        })();
-      }
-    });
+    if (cartRecord?.products && cartRecord.products?.length > 0) {
+      cartRecord.products.find((productItemRecord) => handleAddCartItem(productItemRecord));
+    } else {
+      (async () => {
+        await cartRecord?.updateOne(
+          {
+            $push: { products: cartRequestBody },
+          },
+          { new: true },
+        );
+      })();
+    }
   }
 
   async updateCartITem(customerId: string, req: Request) {
-    const cart = await this.model.findOne({ customerId: customerId });
-    const cartDTO: Cart['products'] = JSON.parse(JSON.stringify(req.body.products)) || [];
+    const cartRecord = await this.model.findOne({ customerId: customerId });
+    const cartRequestBody = req.body;
 
-    const handleUpdateCartItem = async (cartItemDTO: any, cartRecord: any) => {
-      if (comparingObjectId(cartItemDTO.product, cartRecord.product)) {
-        if (cartItemDTO.productQuantities !== 0) {
+    if (!cartRecord) {
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found with customer id');
+      throw exception;
+    }
+
+    const handleUpdateCartItem = async (cartRecord: any) => {
+      if (comparingObjectId(cartRequestBody.product, cartRecord.product)) {
+        if (cartRequestBody.productQuantities !== 0) {
           await this.model.updateOne(
             {
               customerId: customerId,
@@ -79,8 +81,8 @@ class CartService extends CRUDService<Cart> {
             },
             {
               $set: {
-                'products.$.productQuantities': cartItemDTO.productQuantities,
-                'products.$.note': cartItemDTO?.note || cartRecord?.note,
+                'products.$.productQuantities': cartRequestBody.productQuantities,
+                'products.$.note': cartRequestBody?.note || cartRecord?.note,
               },
             },
             { new: true },
@@ -89,7 +91,7 @@ class CartService extends CRUDService<Cart> {
           await cart?.updateOne(
             {
               $pull: {
-                products: { product: cartItemDTO.product },
+                products: { product: ActionType cartItemDTO.product },
               },
             },
             { new: true },
@@ -98,11 +100,7 @@ class CartService extends CRUDService<Cart> {
       }
     };
 
-    cartDTO?.forEach((itemDTO) => {
-      cart?.products?.find((productItemRecord) => {
-        handleUpdateCartItem(itemDTO, productItemRecord);
-      });
-    });
+    cartRecord?.products?.find((productItemRecord) => handleUpdateCartItem(productItemRecord));
   }
 
   async deleteCartItem(customerId: string, productIds: string[]) {

@@ -9,6 +9,8 @@ import {
 } from './@type';
 import { CartSchema } from '../carts';
 import { ProductVariantSchema } from '../productVariants';
+import moment from 'moment';
+import { TIME_ZONE_VIET_NAME } from '@app/utils/date';
 
 // SCHEMAS RESPONSE
 
@@ -42,7 +44,7 @@ import { ProductVariantSchema } from '../productVariants';
  *                 - CANCELED
  *                 - WAITING_FOR_DELIVERING
  *                 - WAITING_FOR_PAYMENT
- *              default: 'PENDING'
+ *              default: 'WAITING_FOR_PAYMENT'
  *          fullName:
  *              type: string
  *          phoneNumber:
@@ -99,10 +101,6 @@ import { ProductVariantSchema } from '../productVariants';
  *          reasonOrderCancel:
  *              type: string
  *          totalOrder:
- *              type: number
- *          createdAt:
- *              type: number
- *          updatedAt:
  *              type: number
  */
 
@@ -210,11 +208,19 @@ const OrderSchema = new Schema<Order>(
       type: String,
       enum: PaymentMethod,
     },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
+    // createdAt: { type: Date, default: Date.now },
+    // updatedAt: { type: Date, default: Date.now },
   },
   {
     versionKey: false,
+    timestamps: {
+      currentTime() {
+        const now = new Date();
+        const strictUTC = moment(now).utc(true);
+        const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
+        return Number(dayAdjustment);
+      },
+    },
   },
 );
 

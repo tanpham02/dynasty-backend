@@ -92,9 +92,9 @@ enum ProductType {
 }
 
 enum ProductVariantSizeType {
-  SMALL = 'SMALL',
-  MEDIUM = 'MEDIUM',
-  LARGE = 'LARGE',
+  SMALL = 'SMALL', // Nhỏ 6”
+  MEDIUM = 'MEDIUM', // Vừa 9”
+  LARGE = 'LARGE', // Lớn 12”
 }
 
 enum ProductVariantBaseType {

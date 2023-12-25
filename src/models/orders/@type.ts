@@ -56,7 +56,7 @@ import { ProductVariants } from '../productVariants/@type';
  *                 - CANCELED
  *                 - WAITING_FOR_DELIVERING
  *                 - WAITING_FOR_PAYMENT
- *              default: 'PENDING'
+ *              default: 'WAITING_FOR_PAYMENT'
  *          fullName:
  *              type: string
  *          phoneNumber:
@@ -113,10 +113,6 @@ import { ProductVariants } from '../productVariants/@type';
  *          reasonOrderCancel:
  *              type: string
  *          totalOrder:
- *              type: number
- *          createdAt:
- *              type: number
- *          updatedAt:
  *              type: number
  */
 

@@ -42,19 +42,20 @@ class UserService extends CRUDService<User> {
       user.image = `/${destination}/${filename}`;
     }
 
-    if (password) {
-      const salt = await genSalt(SALT);
-      const passwordAfterHash = await hash(password, salt);
-      const newUser = new this.model({
-        ...user,
-        password: passwordAfterHash,
-      });
-      await newUser.save();
-
-      const { password: pw, ...remainingUser } = newUser.toObject();
-      result = remainingUser && remainingUser;
+    if (!password) {
+      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'password field is requirement');
+      throw exception;
     }
-    return result;
+    const salt = await genSalt(SALT);
+    const passwordAfterHash = await hash(password, salt);
+    const newUser = new this.model({
+      ...user,
+      password: passwordAfterHash,
+    });
+    await newUser.save();
+
+    const { password: pw, ...remainingUser } = newUser.toObject();
+    return remainingUser;
   }
 
   // UPDATE

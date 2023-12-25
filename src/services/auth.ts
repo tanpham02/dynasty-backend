@@ -44,22 +44,24 @@ const authService = {
       }
     }
 
-    if (customerSignupRequest?.password) {
-      const salt = await genSalt(SALT);
-      const passwordAfterHash = await hash(customerSignupRequest.password, salt);
-      const newCustomer = new CustomerModel({
-        ...customerSignupRequest,
-        password: passwordAfterHash,
-      });
-
-      await newCustomer.save();
-
-      const newCart = new CartModel({ customerId: newCustomer._id });
-      const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
-      await newCustomerAddress.save();
-      await newCart.save();
+    if (!customerSignupRequest?.password) {
+      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'password field is requirement');
+      throw exception;
     }
 
+    const salt = await genSalt(SALT);
+    const passwordAfterHash = await hash(customerSignupRequest.password, salt);
+    const newCustomer = new CustomerModel({
+      ...customerSignupRequest,
+      password: passwordAfterHash,
+    });
+
+    await newCustomer.save();
+
+    const newCart = new CartModel({ customerId: newCustomer._id });
+    const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
+    await newCustomerAddress.save();
+    await newCart.save();
     return { message: 'Đăng ký thành công' };
   },
 

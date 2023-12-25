@@ -38,21 +38,14 @@ import { Schema, Document } from 'mongoose';
  *   schemas:
  *     CartDTO:
  *       type: object
- *       required:
- *         - products
  *       properties:
- *         products:
- *           type: array
- *           items:
- *              type: object
- *              properties:
- *                  product:
- *                     type: string
- *                     description: This is field ObjectId (Use populate to retries data)
- *                  note:
- *                     type: string
- *                  productQuantities:
- *                     type: number
+ *           product:
+ *              type: string
+ *              description: This is field ObjectId (Use populate to retries data)
+ *           note:
+ *              type: string
+ *           productQuantities:
+ *              type: number
  */
 
 interface Cart extends Document {

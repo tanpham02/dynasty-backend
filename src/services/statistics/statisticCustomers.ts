@@ -13,7 +13,7 @@ interface StatisticQuery {
 }
 
 class StatisticService {
-  async customer(req: Request) {
+  async customers(req: Request) {
     const { from, to }: StatisticQuery = req.query;
 
     const totalQuantityCustomerByGroupCustomerType = async (target: string) => {
@@ -103,6 +103,8 @@ class StatisticService {
         }
       : {};
   }
+
+  async orders(req: Request) {}
 }
 
 export default StatisticService;
