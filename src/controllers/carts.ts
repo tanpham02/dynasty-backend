@@ -20,15 +20,15 @@ const cartController = {
   },
 
   // UPDATE CART
-  updateCart: async (req: Request, res: Response, next: NextFunction) => {
-    const { customerId } = req.params;
-    try {
-      await cartService.updateCartITem(customerId, req);
-      res.status(HttpStatusCode.OK).json({ message: 'Update cart successfully' });
-    } catch (error) {
-      next(error);
-    }
-  },
+  //   updateCart: async (req: Request, res: Response, next: NextFunction) => {
+  //     const { customerId } = req.params;
+  //     try {
+  //       await cartService.updateCartITem(customerId, req);
+  //       res.status(HttpStatusCode.OK).json({ message: 'Update cart successfully' });
+  //     } catch (error) {
+  //       next(error);
+  //     }
+  //   },
 
   // DELETE CART
   deleteCart: async (req: Request, res: Response, next: NextFunction) => {

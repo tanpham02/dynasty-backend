@@ -11,6 +11,7 @@ import { ProductStatus } from '@app/constants';
  *     Users:
  *       type: object
  *       required:
+ *         - username
  *         - phoneNumber
  *         - password
  *         - email
@@ -18,6 +19,8 @@ import { ProductStatus } from '@app/constants';
  *         birthday:
  *           type: string
  *           description: VD 2023-09-09
+ *         username:
+ *             type: string
  *         fullName:
  *             type: string
  *         image:

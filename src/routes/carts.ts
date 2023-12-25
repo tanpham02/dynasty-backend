@@ -60,7 +60,7 @@ router.post('/:customerId', cartController.addCart);
  */
 
 // UPDATE CART
-router.patch('/:customerId', cartController.updateCart);
+// router.patch('/:customerId', cartController.updateCart);
 
 /**
  * @swagger

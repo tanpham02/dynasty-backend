@@ -62,46 +62,46 @@ class CartService extends CRUDService<Cart> {
     }
   }
 
-  async updateCartITem(customerId: string, req: Request) {
-    const cartRecord = await this.model.findOne({ customerId: customerId });
-    const cartRequestBody = req.body;
+  //   async updateCartITem(customerId: string, req: Request) {
+  //     const cartRecord = await this.model.findOne({ customerId: customerId });
+  //     const cartRequestBody = req.body;
 
-    if (!cartRecord) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found with customer id');
-      throw exception;
-    }
+  //     if (!cartRecord) {
+  //       const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found with customer id');
+  //       throw exception;
+  //     }
 
-    const handleUpdateCartItem = async (cartRecord: any) => {
-      if (comparingObjectId(cartRequestBody.product, cartRecord.product)) {
-        if (cartRequestBody.productQuantities !== 0) {
-          await this.model.updateOne(
-            {
-              customerId: customerId,
-              'products.product': cartRecord.product,
-            },
-            {
-              $set: {
-                'products.$.productQuantities': cartRequestBody.productQuantities,
-                'products.$.note': cartRequestBody?.note || cartRecord?.note,
-              },
-            },
-            { new: true },
-          );
-        } else {
-          await cart?.updateOne(
-            {
-              $pull: {
-                products: { product: ActionType cartItemDTO.product },
-              },
-            },
-            { new: true },
-          );
-        }
-      }
-    };
+  //     const handleUpdateCartItem = async (cartRecord: any) => {
+  //       if (comparingObjectId(cartRequestBody.product, cartRecord.product)) {
+  //         if (cartRequestBody.productQuantities !== 0) {
+  //           await this.model.updateOne(
+  //             {
+  //               customerId: customerId,
+  //               'products.product': cartRecord.product,
+  //             },
+  //             {
+  //               $set: {
+  //                 'products.$.productQuantities': cartRequestBody.productQuantities,
+  //                 'products.$.note': cartRequestBody?.note || cartRecord?.note,
+  //               },
+  //             },
+  //             { new: true },
+  //           );
+  //         } else {
+  //           await cartRecord?.updateOne(
+  //             {
+  //               $pull: {
+  //                 products: { product: cartItemDTO.product },
+  //               },
+  //             },
+  //             { new: true },
+  //           );
+  //         }
+  //       }
+  //     };
 
-    cartRecord?.products?.find((productItemRecord) => handleUpdateCartItem(productItemRecord));
-  }
+  //     cartRecord?.products?.find((productItemRecord) => handleUpdateCartItem(productItemRecord));
+  //   }
 
   async deleteCartItem(customerId: string, productIds: string[]) {
     await this.model.updateMany(

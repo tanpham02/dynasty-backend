@@ -9,60 +9,60 @@ services:
             dockerfile: Dockerfile-staging
         ports:
             - 1009:1009
-        depends_on:
-            - mongo_db
-            - mongo_express
+        # depends_on:
+        #     - mongo_db
+        #     - mongo_express
         networks:
             - dynasty_network
-            - mongodb-docker
+            # - mongodb-docker
 
-    mongo_db:
-        image: mongo
-        container_name: mongo_container
-        restart: on-failure
-        env_file:
-            - .env
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=
-            - MONGO_INITDB_ROOT_PASSWORD=
-            - MONGO_INITDB_DATABASE=Dynasty
-        ports:
-            - 27017:27017
-        networks:
-            - mongodb-docker
-            - dynasty_network
-        volumes:
-            - ./mongo-data:/data/db
+    # mongo_db:
+    #     image: mongo
+    #     container_name: mongo_container
+    #     restart: on-failure
+    #     env_file:
+    #         - .env
+    #     environment:
+    #         - MONGO_INITDB_ROOT_USERNAME=
+    #         - MONGO_INITDB_ROOT_PASSWORD=
+    #         - MONGO_INITDB_DATABASE=Dynasty
+    #     ports:
+    #         - 27017:27017
+    #     networks:
+    #         - mongodb-docker
+    #         - dynasty_network
+    #     volumes:
+    #         - ./mongo-data:/data/db
 
-    mongo_express:
-        image: mongo-express
-        container_name: mongo-express_container
-        env_file:
-            - .env
-        environment:
-            - ME_CONFIG_OPTIONS_EDITORTHEME=default
-            - ME_CONFIG_MONGODB_SERVER=mongo_db
-            - ME_CONFIG_MONGODB_PORT=27017  # not the mapped port, get port default
-            - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
-            - ME_CONFIG_MONGODB_AUTH_DATABASE=Dynasty
-            - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_ROOT_USER}
-            - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
-        ports:
-            - "8081:8081"
-        restart: on-failure
+    # mongo_express:
+        # image: mongo-express
+        # container_name: mongo-express_container
+        # env_file:
+        #     - .env
+        # environment:
+        #     - ME_CONFIG_OPTIONS_EDITORTHEME=default
+        #     - ME_CONFIG_MONGODB_SERVER=mongo_db
+        #     - ME_CONFIG_MONGODB_PORT=27017  # not the mapped port, get port default
+        #     - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+        #     - ME_CONFIG_MONGODB_AUTH_DATABASE=Dynasty
+        #     - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_ROOT_USER}
+        #     - ME_CONFIG_BASICAUTH_PASSWORD=${MONGO_ROOT_PASSWORD}
+        # ports:
+        #     - "8081:8081"
+        # restart: on-failure
 
-        depends_on:
-            - mongo_db
-        networks:
-            - dynasty_network
-            - mongodb-docker
+        # depends_on:
+        #     - mongo_db
+        # networks:
+        #     - dynasty_network
+        #     - mongodb-docker
 
 networks:
     # Phai chung network
     dynasty_network:
         external: true
-    mongodb-docker:
-        external: true
+    # mongodb-docker:
+    #     external: true
 
 #volumes:
 #    mongo-db-data:

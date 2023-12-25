@@ -10,6 +10,7 @@ import { Document } from 'mongoose';
  *     Users:
  *       type: object
  *       required:
+ *         - username
  *         - phoneNumber
  *         - password
  *         - email
@@ -17,6 +18,8 @@ import { Document } from 'mongoose';
  *         birthday:
  *           type: string
  *           description: VD 2023-09-09
+ *         username:
+ *             type: string
  *         fullName:
  *             type: string
  *         image:
