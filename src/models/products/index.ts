@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { Product, ProductType } from './@type';
 import { ProductStatus } from '@app/constants';
-import { ProductAttributeSchema } from '../productAttributes';
 
 // RESPONSE  DESCRIPTION
 /**
@@ -48,10 +47,6 @@ import { ProductAttributeSchema } from '../productAttributes';
  *                 - VEGETARIAN
  *                 - SPICY
  *                 - UNIQUE
- *         attribute:
- *           type: array
- *           items:
- *              type: string
  *         productAttributeList:
  *           type: array
  *           items:
@@ -59,20 +54,14 @@ import { ProductAttributeSchema } from '../productAttributes';
  *              properties:
  *                extendedName:
  *                   type: string
- *                extendedValuePairs:
+ *                extendedValue:
  *                   type: string
  *                productAttributeItem:
  *                   type: array
  *                   items:
  *                      type: object
  *                      properties:
- *                          attributeParentId:
- *                             type: string
- *                          name:
- *                             type: string
- *                          value:
- *                             type: string
- *                          priceAdjustment:
+ *                          attributeId:
  *                             type: string
  *                          priceAdjustmentValue:
  *                             type: number
@@ -128,33 +117,18 @@ const ProductSchema = new Schema<Product>(
       type: Boolean,
       default: true,
     },
-    attribute: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'ProductAttribute',
-      },
-    ],
     productAttributeList: [
       {
         extendedName: {
           type: String,
         },
-        extendedValuePairs: {
+        extendedValue: {
           type: String,
         },
         productAttributeItem: [
           {
-            attributeParentId: {
+            attributeId: {
               type: Schema.Types.ObjectId,
-            },
-            name: {
-              type: String,
-            },
-            value: {
-              type: String,
-            },
-            priceAdjustment: {
-              type: String,
             },
             priceAdjustmentValue: {
               type: Number,

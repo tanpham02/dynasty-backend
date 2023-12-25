@@ -1,6 +1,5 @@
 import { Schema, Document } from 'mongoose';
 import { BaseModel } from '@app/types';
-import { ProductAttribute } from '../productAttributes/@type';
 
 // SCHEMAS DESCRIPTION
 /**
@@ -47,10 +46,6 @@ import { ProductAttribute } from '../productAttributes/@type';
  *                 - VEGETARIAN
  *                 - SPICY
  *                 - UNIQUE
- *         attribute:
- *           type: array
- *           items:
- *              type: string
  *         productAttributeList:
  *           type: array
  *           items:
@@ -58,20 +53,14 @@ import { ProductAttribute } from '../productAttributes/@type';
  *              properties:
  *                extendedName:
  *                   type: string
- *                extendedValuePairs:
+ *                extendedValue:
  *                   type: string
  *                productAttributeItem:
  *                   type: array
  *                   items:
  *                      type: object
  *                      properties:
- *                          attributeParentId:
- *                             type: string
- *                          name:
- *                             type: string
- *                          value:
- *                             type: string
- *                          priceAdjustment:
+ *                          attributeId:
  *                             type: string
  *                          priceAdjustmentValue:
  *                             type: number
@@ -117,15 +106,11 @@ interface Product extends BaseModel, Document {
   types?: ProductType[];
   orderQuantity?: number;
   visible?: boolean;
-  attribute?: Schema.Types.ObjectId[];
   productAttributeList?: {
     extendedName?: string; // Nhỏ 6” - Dày
-    extendedValuePairs?: string; //  SMALL - PAN
+    extendedValue?: string; // nho6_day
     productAttributeItem: Array<{
-      attributeParentId?: Schema.Types.ObjectId;
-      name?: string; // Nhỏ 6”
-      value?: string; //  SMALL
-      priceAdjustment?: string; // + 80,000đ
+      attributeId?: Schema.Types.ObjectId;
       priceAdjustmentValue?: number; // 80000
     }>;
   }[];

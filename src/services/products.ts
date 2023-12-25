@@ -66,17 +66,14 @@ class ProductService extends CRUDService<Product> {
       const newProductVariant: any[] = productAttributeList.map(
         (attribute: {
           productAttributeItem: {
-            attributeParentId: Schema.Types.ObjectId;
-            name: string;
-            value: string;
-            priceAdjustment: string;
+            attributeId: Schema.Types.ObjectId;
             priceAdjustmentValue: number;
           }[];
           extendedName: string;
-          extendedValuePairs: string;
+          extendedValue: string;
         }) => {
           const attributeItemValid = newProduct?.productAttributeList?.filter(
-            (item) => item.extendedValuePairs?.includes(attribute?.extendedValuePairs),
+            (item) => item.extendedValue?.includes(attribute?.extendedValue),
           );
 
           let priceAdjustment = 0;
