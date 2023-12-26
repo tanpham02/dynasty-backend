@@ -1,5 +1,7 @@
+import moment from 'moment';
 import { Material } from './@type';
 import { Schema, model } from 'mongoose';
+import { TIME_ZONE_VIET_NAME } from '@app/utils/date';
 
 // SCHEMAS RESPONSE
 
@@ -22,7 +24,9 @@ import { Schema, model } from 'mongoose';
  *                    type: string
  *                 price:
  *                    type: number
- *                 quantity:
+ *                 quantityImport:
+ *                    type: number
+ *                 remainingQuantity:
  *                    type: number
  *                 unit:
  *                    type: string
@@ -43,7 +47,10 @@ const MaterialSchema = new Schema<Material>(
         price: {
           type: Number,
         },
-        quantity: {
+        quantityImport: {
+          type: Number,
+        },
+        remainingQuantity: {
           type: Number,
         },
         unit: {
@@ -55,7 +62,17 @@ const MaterialSchema = new Schema<Material>(
       type: Number,
     },
   },
-  { timestamps: true, versionKey: false },
+  {
+    timestamps: {
+      currentTime() {
+        const now = new Date();
+        const strictUTC = moment(now).utc(true);
+        const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
+        return Number(dayAdjustment);
+      },
+    },
+    versionKey: false,
+  },
 );
 
 const MaterialMode = model('Material', MaterialSchema);

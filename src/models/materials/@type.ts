@@ -21,7 +21,11 @@ import { Document } from 'mongoose';
  *                    type: string
  *                 price:
  *                    type: number
- *                 quantity:
+ *                 quantityImport:
+ *                    type: number
+ *                 quantityImport:
+ *                    type: number
+ *                 remainingQuantity:
  *                    type: number
  *                 unit:
  *                    type: string
@@ -29,11 +33,16 @@ import { Document } from 'mongoose';
  *           type: number
  */
 
-interface MaterialInformation extends Document {}
 interface Material extends Document {
   importDate?: string | Date;
-  materialInfo?: Array<{ name?: string; price?: number; quantity?: number; unit?: string }>;
+  materialInfo?: Array<{
+    name?: string;
+    price?: number;
+    quantityImport?: number;
+    remainingQuantity?: number;
+    unit?: string;
+  }>;
   totalPrice?: number;
 }
 
-export { Material, MaterialInformation };
+export { Material };
