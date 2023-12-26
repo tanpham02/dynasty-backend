@@ -33,7 +33,7 @@ import { ProductStatus } from '@app/constants';
  *           type: string
  *           enum:
  *              - ACTIVE
- *              - IN_ACTIVE
+ *              - INACTIVE
  *           default: "ACTIVE"
  *         types:
  *           type: array
@@ -54,8 +54,6 @@ import { ProductStatus } from '@app/constants';
  *              properties:
  *                extendedName:
  *                   type: string
- *                extendedValue:
- *                   type: string
  *                productAttributeItem:
  *                   type: array
  *                   items:
@@ -69,6 +67,8 @@ import { ProductStatus } from '@app/constants';
  *           type: array
  *           items:
  *              type: string
+ *         visible:
+ *           type: boolean
  */
 
 const ProductSchema = new Schema<Product>(
@@ -120,9 +120,6 @@ const ProductSchema = new Schema<Product>(
     productAttributeList: [
       {
         extendedName: {
-          type: String,
-        },
-        extendedValue: {
           type: String,
         },
         productAttributeItem: [

@@ -6,8 +6,8 @@ enum MODE {
 
 enum ProductStatus {
   ACTIVE = 'ACTIVE',
-  IN_ACTIVE = 'IN_ACTIVE',
-  IN_COMING = 'IN_COMING',
+  INACTIVE = 'INACTIVE',
+  INCOMING = 'INCOMING',
 }
 
 const SALT: number = 10;
@@ -29,7 +29,7 @@ const FIELDS_NAME = {
   STORE_INFORMATION: 'storeInformationInfo',
   TERM_AND_POLICY: 'termAndPolicyInfo',
   ORDER: 'orderInfo',
-  MATERIAL: 'materialInfo'
+  MATERIAL: 'materialInfo',
 };
 
 export { MODE, ProductStatus, SALT, FIELDS_NAME };

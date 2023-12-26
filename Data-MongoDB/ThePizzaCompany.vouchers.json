@@ -18,7 +18,7 @@
   "totalQuantityVoucher": 1222,
   "minimumOrderValue": 132313,
   "listProductUsedVoucher": [],
-  "status": "IN_COMING",
+  "status": "INCOMING",
   "customerIdsUsedVoucher": [],
   "createdAt": {
     "$date": "2023-10-27T14:31:03.182Z"
@@ -54,7 +54,7 @@
       "$oid": "6535e96fb47231ef3b3088f3"
     }
   ],
-  "status": "IN_ACTIVE",
+  "status": "INACTIVE",
   "customerIdsUsedVoucher": [],
   "createdAt": {
     "$date": "2023-10-27T14:33:04.600Z"
@@ -85,7 +85,7 @@
     "$numberLong": "13131531563"
   },
   "listProductUsedVoucher": [],
-  "status": "IN_COMING",
+  "status": "INCOMING",
   "customerIdsUsedVoucher": [],
   "createdAt": {
     "$date": "2023-10-27T14:34:32.990Z"
@@ -121,7 +121,7 @@
       "$oid": "6535e96fb47231ef3b3088f3"
     }
   ],
-  "status": "IN_COMING",
+  "status": "INCOMING",
   "customerIdsUsedVoucher": [],
   "createdAt": {
     "$date": "2023-10-27T15:06:47.038Z"

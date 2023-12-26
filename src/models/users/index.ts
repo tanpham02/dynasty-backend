@@ -50,7 +50,7 @@ import { ProductStatus } from '@app/constants';
  *           enum: [ADMIN, USER]
  *         status:
  *           type: string
- *           enum: [ACTIVE, IN_ACTIVE]
+ *           enum: [ACTIVE, INACTIVE]
  */
 
 const UserSchema = new Schema<User>(

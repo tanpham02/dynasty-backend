@@ -32,7 +32,7 @@ import { BaseModel } from '@app/types';
  *           type: string
  *           enum:
  *              - ACTIVE
- *              - IN_ACTIVE
+ *              - INACTIVE
  *           default: "ACTIVE"
  *         types:
  *           type: array
@@ -53,8 +53,6 @@ import { BaseModel } from '@app/types';
  *              properties:
  *                extendedName:
  *                   type: string
- *                extendedValue:
- *                   type: string
  *                productAttributeItem:
  *                   type: array
  *                   items:
@@ -68,6 +66,8 @@ import { BaseModel } from '@app/types';
  *           type: array
  *           items:
  *              type: string
+ *         visible:
+ *           type: boolean
  */
 
 enum ProductType {
@@ -108,7 +108,6 @@ interface Product extends BaseModel, Document {
   visible?: boolean;
   productAttributeList?: {
     extendedName?: string; // Nhỏ 6” - Dày
-    extendedValue?: string; // nho6_day
     productAttributeItem: Array<{
       attributeId?: Schema.Types.ObjectId;
       priceAdjustmentValue?: number; // 80000

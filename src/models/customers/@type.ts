@@ -33,7 +33,7 @@ import { Document, Schema } from 'mongoose';
  *          default: "ACTIVE"
  *          enum:
  *             - ACTIVE
- *             - IN_ACTIVE
+ *             - INACTIVE
  *         customerType:
  *          type: string
  *          default: "NEW"

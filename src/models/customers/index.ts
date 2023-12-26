@@ -36,7 +36,7 @@ import { TIME_ZONE_VIET_NAME, YYYY_MM_DDTHH_MM_SS, YYYY_MM_DD_HH_MM_SS } from '@
  *          default: "ACTIVE"
  *          enum:
  *             - ACTIVE
- *             - IN_ACTIVE
+ *             - INACTIVE
  *         customerType:
  *          type: string
  *          default: "NEW"

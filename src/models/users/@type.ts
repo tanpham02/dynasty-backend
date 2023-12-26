@@ -49,7 +49,7 @@ import { Document } from 'mongoose';
  *           enum: [ADMIN, USER]
  *         status:
  *           type: string
- *           enum: [ACTIVE, IN_ACTIVE]
+ *           enum: [ACTIVE, INACTIVE]
  */
 
 export enum Role {

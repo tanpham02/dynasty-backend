@@ -17,7 +17,7 @@ class VoucherService extends CRUDService<Voucher> {
     const startDate = new Date(startDateRequest).getTime();
     const endDate = new Date(endDateRequest).getTime();
     if (startDate < currentDateTime && endDate < currentDateTime) {
-      dataRequest.status = ProductStatus.IN_ACTIVE;
+      dataRequest.status = ProductStatus.INACTIVE;
     }
 
     if (startDate <= currentDateTime && endDate > currentDateTime) {
@@ -25,7 +25,7 @@ class VoucherService extends CRUDService<Voucher> {
     }
 
     if (startDate > currentDateTime && endDate > currentDateTime) {
-      dataRequest.status = ProductStatus.IN_COMING;
+      dataRequest.status = ProductStatus.INCOMING;
     }
 
     const newVoucher = new this.model(dataRequest);

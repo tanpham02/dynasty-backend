@@ -47,21 +47,25 @@ class ProductService extends CRUDService<Product> {
 
   // CREATE
   async createOverriding(req: Request) {
-    const product: Product = JSON.parse(req.body?.[FIELDS_NAME.PRODUCT]);
+    const productBodyRequest: Product = JSON.parse(req.body?.[FIELDS_NAME.PRODUCT]);
+    console.log(
+      '🚀 ~ file: products.ts:51 ~ ProductService ~ createOverriding ~ productBodyRequest:',
+      productBodyRequest,
+    );
     const filename = req.file?.filename;
     const destination = req.file?.destination;
     const productVariantListIds: Schema.Types.ObjectId[] = [];
 
     if (filename && destination) {
-      product.image = `/${destination}/${filename}`;
+      productBodyRequest.image = `/${destination}/${filename}`;
     }
 
     const newProduct = new this.model({
-      ...product,
-      slug: generateUnsignedSlug(product?.name),
+      ...productBodyRequest,
+      slug: generateUnsignedSlug(productBodyRequest?.name),
     });
 
-    const productAttributeList: any[] = product?.productAttributeList || [];
+    const productAttributeList: any[] = productBodyRequest?.productAttributeList || [];
     if (productAttributeList.length > 0) {
       const newProductVariant: any[] = productAttributeList.map(
         (attribute: {
@@ -70,7 +74,9 @@ class ProductService extends CRUDService<Product> {
             priceAdjustmentValue: number;
           }[];
           extendedName: string;
-          extendedValue: string;
+
+
+
         }) => {
           const attributeItemValid = newProduct?.productAttributeList?.filter(
             (item) => item.extendedValue?.includes(attribute?.extendedValue),
@@ -112,33 +118,32 @@ class ProductService extends CRUDService<Product> {
       newProduct.productsVariant = productVariantListIds;
     }
 
-    const categoryId = product.categoryId;
-    if (categoryId) {
-      const category = await CategoryModel.findById(categoryId);
+    // const categoryId = product.categoryId;
+    // if (categoryId) {
+    //   const category = await CategoryModel.findById(categoryId);
 
-      const categoryChild = await CategoryModel.findOne({
-        'childrenCategory.category._id': categoryId,
-      });
+    //   const categoryChild = await CategoryModel.findOne({
+    //     'childrenCategory.category._id': categoryId,
+    //   });
 
-      if (category) {
-        await category.updateOne({ $push: { products: newProduct._id } });
-      }
-      if (categoryChild) {
-        await CategoryModel.findOneAndUpdate(
-          { 'childrenCategory.category._id': categoryId },
-          {
-            $push: {
-              'childrenCategory.category.$.products': newProduct._id,
-            },
-          },
-          {
-            new: true,
-          },
-        );
-      }
-    }
-
-    return await newProduct.save();
+    //   if (category) {
+    //     await category.updateOne({ $push: { products: newProduct._id } });
+    //   }
+    //   if (categoryChild) {
+    //     await CategoryModel.findOneAndUpdate(
+    //       { 'childrenCategory.category._id': categoryId },
+    //       {
+    //         $push: {
+    //           'childrenCategory.category.$.products': newProduct._id,
+    //         },
+    //       },
+    //       {
+    //         new: true,
+    //       },
+    //     );
+    //   }
+    // }
+    // return await newProduct.save();
   }
 
   // UPDATE

@@ -19,7 +19,7 @@ import { ProductStatus } from '@app/constants';
  *          default: "ACTIVE"
  *          enum:
  *             - ACTIVE
- *             - IN_ACTIVE
+ *             - INACTIVE
  *        products:
  *          type: array
  *          items:

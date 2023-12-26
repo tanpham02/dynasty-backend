@@ -18,7 +18,7 @@ import { Schema, Document } from 'mongoose';
  *          default: "ACTIVE"
  *          enum:
  *             - ACTIVE
- *             - IN_ACTIVE
+ *             - INACTIVE
  *        products:
  *          type: array
  *          items:
