@@ -47,6 +47,10 @@ import { ProductStatus } from '@app/constants';
  *                 - VEGETARIAN
  *                 - SPICY
  *                 - UNIQUE
+ *         attributeMapping:
+ *           type: array
+ *           items:
+ *             type: string
  *         productAttributeList:
  *           type: array
  *           items:

@@ -60,7 +60,7 @@ router.post('/:customerId', cartController.addCart);
  */
 
 // UPDATE CART
-// router.patch('/:customerId', cartController.updateCart);
+router.patch('/:customerId', cartController.updateCart);
 
 /**
  * @swagger
@@ -75,10 +75,9 @@ router.post('/:customerId', cartController.addCart);
  *           type: string
  *         required: true
  *       - in: query
- *         name: productIds
+ *         name: productId
  *         schema:
- *           type: array
- *           item: string
+ *           type: string
  *         required: true
 
  *     responses:

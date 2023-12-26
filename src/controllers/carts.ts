@@ -20,22 +20,22 @@ const cartController = {
   },
 
   // UPDATE CART
-  //   updateCart: async (req: Request, res: Response, next: NextFunction) => {
-  //     const { customerId } = req.params;
-  //     try {
-  //       await cartService.updateCartITem(customerId, req);
-  //       res.status(HttpStatusCode.OK).json({ message: 'Update cart successfully' });
-  //     } catch (error) {
-  //       next(error);
-  //     }
-  //   },
+  updateCart: async (req: Request, res: Response, next: NextFunction) => {
+    const { customerId } = req.params;
+    try {
+      await cartService.updateCartITem(customerId, req);
+      res.status(HttpStatusCode.OK).json({ message: 'Update cart successfully' });
+    } catch (error) {
+      next(error);
+    }
+  },
 
   // DELETE CART
   deleteCart: async (req: Request, res: Response, next: NextFunction) => {
     const { customerId } = req.params;
-    const { productIds } = req.query;
+    const { productId } = req.query;
     try {
-      await cartService.deleteCartItem(customerId as string, productIds as string[]);
+      await cartService.deleteCartItem(customerId as string, productId?.toString() || '');
       res.status(HttpStatusCode.OK).json({ message: 'Delete cart successfully' });
     } catch (error) {
       next(error);

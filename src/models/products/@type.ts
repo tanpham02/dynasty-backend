@@ -46,6 +46,10 @@ import { BaseModel } from '@app/types';
  *                 - VEGETARIAN
  *                 - SPICY
  *                 - UNIQUE
+ *         attributeMapping:
+ *           type: array
+ *           items:
+ *             type: string
  *         productAttributeList:
  *           type: array
  *           items:
