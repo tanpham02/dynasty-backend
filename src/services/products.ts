@@ -48,10 +48,6 @@ class ProductService extends CRUDService<Product> {
   // CREATE
   async createOverriding(req: Request) {
     const productBodyRequest: Product = JSON.parse(req.body?.[FIELDS_NAME.PRODUCT]);
-    console.log(
-      '🚀 ~ file: products.ts:51 ~ ProductService ~ createOverriding ~ productBodyRequest:',
-      productBodyRequest,
-    );
     const filename = req.file?.filename;
     const destination = req.file?.destination;
     const productVariantListIds: Schema.Types.ObjectId[] = [];
@@ -74,12 +70,10 @@ class ProductService extends CRUDService<Product> {
             priceAdjustmentValue: number;
           }[];
           extendedName: string;
-
-
-
+          extendedValue: string;
         }) => {
-          const attributeItemValid = newProduct?.productAttributeList?.filter(
-            (item) => item.extendedValue?.includes(attribute?.extendedValue),
+          const attributeItemValid = newProduct?.productAttributeList?.find(
+            (item) => item.extendedValue === attribute?.extendedValue,
           );
 
           let priceAdjustment = 0;
@@ -93,15 +87,15 @@ class ProductService extends CRUDService<Product> {
           return {
             parentId: newProduct._id,
             productItem: {
-              name: `${product.name} - ${attribute.extendedName}`,
-              description: product.description,
-              information: product.information,
-              price: product.price + priceAdjustment,
-              image: product?.image,
-              types: product?.types,
-              visible: product?.visible,
-              productAttributeList: attributeItemValid,
-              slug: generateUnsignedSlug(`${product.name} - ${attribute.extendedName}`),
+              name: `${productBodyRequest.name} - ${attribute.extendedName}`,
+              description: productBodyRequest.description,
+              information: productBodyRequest.information,
+              price: productBodyRequest.price + priceAdjustment,
+              image: productBodyRequest?.image,
+              types: productBodyRequest?.types,
+              visible: productBodyRequest?.visible,
+              productAttributeList: [attributeItemValid],
+              slug: generateUnsignedSlug(`${productBodyRequest.name} - ${attribute.extendedName}`),
             },
           };
         },
@@ -118,32 +112,33 @@ class ProductService extends CRUDService<Product> {
       newProduct.productsVariant = productVariantListIds;
     }
 
-    // const categoryId = product.categoryId;
-    // if (categoryId) {
-    //   const category = await CategoryModel.findById(categoryId);
+    const categoryId = productBodyRequest.categoryId;
+    if (categoryId) {
+      const category = await CategoryModel.findById(categoryId);
 
-    //   const categoryChild = await CategoryModel.findOne({
-    //     'childrenCategory.category._id': categoryId,
-    //   });
+      const categoryChild = await CategoryModel.findOne({
+        'childrenCategory.category._id': categoryId,
+      });
 
-    //   if (category) {
-    //     await category.updateOne({ $push: { products: newProduct._id } });
-    //   }
-    //   if (categoryChild) {
-    //     await CategoryModel.findOneAndUpdate(
-    //       { 'childrenCategory.category._id': categoryId },
-    //       {
-    //         $push: {
-    //           'childrenCategory.category.$.products': newProduct._id,
-    //         },
-    //       },
-    //       {
-    //         new: true,
-    //       },
-    //     );
-    //   }
-    // }
-    // return await newProduct.save();
+      if (category) {
+        await category.updateOne({ $push: { products: newProduct._id } });
+      }
+
+      if (categoryChild) {
+        await CategoryModel.findOneAndUpdate(
+          { 'childrenCategory.category._id': categoryId },
+          {
+            $push: {
+              'childrenCategory.category.$.products': newProduct._id,
+            },
+          },
+          {
+            new: true,
+          },
+        );
+      }
+    }
+    return await newProduct.save();
   }
 
   // UPDATE
@@ -161,7 +156,10 @@ class ProductService extends CRUDService<Product> {
       productRequest.image = `/${destination}/${filename}`;
     }
 
-    if (productRequest?.productAttributeList) {
+    if (
+      productRequest?.productAttributeList &&
+      Array.from(productRequest.productAttributeList).length > 0
+    ) {
       for (let i = 0; i < productRequest?.productAttributeList.length; i++) {
         const element: any = productRequest?.productAttributeList[i];
 
@@ -170,9 +168,27 @@ class ProductService extends CRUDService<Product> {
         });
 
         if (productVariantMatch) {
+          const priceAdjustment = Array.from(element?.productAttributeItem).reduce(
+            (acc: any, next: any) => {
+              return acc + (next?.priceAdjustmentValue || 0);
+            },
+            0,
+          ) as any;
+
+          const attributeItemValid = productVariantMatch.productItem?.productAttributeList?.find(
+            (item) => item.extendedValue === element?.extendedValue,
+          );
+
           dataUpdate = {
             ...dataUpdate,
-            productItem: productRequest,
+            parentId: id,
+            productItem: {
+              ...productRequest,
+              name: `${productRequest?.name} - ${element?.extendedName}`,
+              price: productVariantMatch.productItem?.price + (priceAdjustment || 0),
+              slug: generateUnsignedSlug(`${productRequest.name} - ${element.extendedName}`),
+              productAttributeList: [attributeItemValid],
+            },
           };
 
           await ProductVariantModel.updateOne(
@@ -184,6 +200,10 @@ class ProductService extends CRUDService<Product> {
           );
         }
       }
+    }
+
+    if (productRequest?.name) {
+      productRequest.slug = generateUnsignedSlug(productRequest.name);
     }
 
     await this.model.updateOne({ _id: id }, productRequest, { new: true });
@@ -200,7 +220,8 @@ class ProductService extends CRUDService<Product> {
           model: 'ProductVariant',
         },
         {
-          path: 'attribute',
+          path: 'productAttributeList.productAttributeItem.attributeId',
+          select: 'attributeList._id',
           model: 'ProductAttribute',
         },
       ]),

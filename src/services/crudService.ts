@@ -124,7 +124,7 @@ class CRUDService<T extends Document> {
       const arraySorts = sort.split(', ');
       sortFieldName = arraySorts
         .map((item) => ({
-          [item.split(':')?.[0].toString()]: `${item.split(':')?.[1] as any}`,
+          [`${item.split(':')?.[0].toString()}`]: `${item.split(':')?.[1] as any}`,
         }))
         .reduce((acc: any, next: any) => Object.assign(acc, next), {});
     }

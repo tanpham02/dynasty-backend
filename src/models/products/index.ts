@@ -54,6 +54,8 @@ import { ProductStatus } from '@app/constants';
  *              properties:
  *                extendedName:
  *                   type: string
+ *                extendedValue:
+ *                   type: string
  *                productAttributeItem:
  *                   type: array
  *                   items:
@@ -122,10 +124,14 @@ const ProductSchema = new Schema<Product>(
         extendedName: {
           type: String,
         },
+        extendedValue: {
+          type: String,
+        },
         productAttributeItem: [
           {
             attributeId: {
               type: Schema.Types.ObjectId,
+              ref: 'ProductAttribute',
             },
             priceAdjustmentValue: {
               type: Number,

@@ -53,6 +53,8 @@ import { BaseModel } from '@app/types';
  *              properties:
  *                extendedName:
  *                   type: string
+ *                extendedValue:
+ *                   type: string
  *                productAttributeItem:
  *                   type: array
  *                   items:
@@ -100,7 +102,7 @@ interface Product extends BaseModel, Document {
   information?: string;
   categoryId?: Schema.Types.ObjectId;
   price: number;
-  oldPrice?: number; // No need to care
+  oldPrice?: number; // Don't need to care
   image?: string;
   images?: string[];
   types?: ProductType[];
@@ -108,6 +110,7 @@ interface Product extends BaseModel, Document {
   visible?: boolean;
   productAttributeList?: {
     extendedName?: string; // Nhỏ 6” - Dày
+    extendedValue?: string; // nho_day
     productAttributeItem: Array<{
       attributeId?: Schema.Types.ObjectId;
       priceAdjustmentValue?: number; // 80000
