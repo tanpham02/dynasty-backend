@@ -108,6 +108,7 @@ interface Product extends BaseModel, Document {
   types?: ProductType[];
   orderQuantity?: number;
   visible?: boolean;
+  attributeMapping?: [string];
   productAttributeList?: {
     extendedName?: string; // Nhỏ 6” - Dày
     extendedValue?: string; // nho_day

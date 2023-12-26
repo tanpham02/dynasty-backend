@@ -119,6 +119,12 @@ const ProductSchema = new Schema<Product>(
       type: Boolean,
       default: true,
     },
+    attributeMapping: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'ProductAttribute',
+      },
+    ],
     productAttributeList: [
       {
         extendedName: {
@@ -130,9 +136,12 @@ const ProductSchema = new Schema<Product>(
         productAttributeItem: [
           {
             attributeId: {
-              type: Schema.Types.ObjectId,
-              ref: 'ProductAttribute',
+              type: String,
             },
+            // attributeId: {
+            //   type: Schema.Types.ObjectId,
+            //   ref: 'ProductAttribute',
+            // },
             priceAdjustmentValue: {
               type: Number,
             },

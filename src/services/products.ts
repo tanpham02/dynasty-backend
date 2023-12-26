@@ -11,6 +11,11 @@ import ProductVariantModel from '@app/models/productVariants';
 import ProductVariantService from './productVariants';
 import mongoose from 'mongoose';
 import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
+import ProductModel from '@app/models/products';
+import ProductAttributeModel from '@app/models/productAttributes';
+import { comparingObjectId } from '@app/utils/comparingObjectId';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
@@ -156,10 +161,37 @@ class ProductService extends CRUDService<Product> {
       productRequest.image = `/${destination}/${filename}`;
     }
 
+    if (productRequest?.price && !productRequest?.productAttributeList) {
+      const productById = await this.getById(id);
+      if (productById && productById?.productsVariant) {
+        if (productById.price !== productRequest?.price) {
+          for (let i = 0; i < productById.productsVariant.length; i++) {
+            const productVariantObjectId = productById.productsVariant[i];
+            (async () => {
+              const productVariantById = await ProductVariantModel.findById(productVariantObjectId);
+              const priceAdjustment =
+                productVariantById?.productItem?.productAttributeList?.[0].productAttributeItem.reduce(
+                  (acc, next) => {
+                    return acc + (next?.priceAdjustmentValue || 0);
+                  },
+                  0,
+                );
+              if (productVariantById) {
+                await productVariantById.updateOne({
+                  $set: { 'productItem.price': productRequest.price + (priceAdjustment || 0) },
+                });
+              }
+            })();
+          }
+        }
+      }
+    }
+
     if (
       productRequest?.productAttributeList &&
       Array.from(productRequest.productAttributeList).length > 0
     ) {
+      const attributeValid: any[] = [];
       for (let i = 0; i < productRequest?.productAttributeList.length; i++) {
         const element: any = productRequest?.productAttributeList[i];
 
@@ -175,9 +207,11 @@ class ProductService extends CRUDService<Product> {
             0,
           ) as any;
 
-          const attributeItemValid = productVariantMatch.productItem?.productAttributeList?.find(
-            (item) => item.extendedValue === element?.extendedValue,
-          );
+          productVariantMatch.productItem?.productAttributeList?.forEach((item) => {
+            if (item.extendedValue === element?.extendedValue) {
+              attributeValid.push(element);
+            }
+          });
 
           dataUpdate = {
             ...dataUpdate,
@@ -185,9 +219,11 @@ class ProductService extends CRUDService<Product> {
             productItem: {
               ...productRequest,
               name: `${productRequest?.name} - ${element?.extendedName}`,
-              price: productVariantMatch.productItem?.price + (priceAdjustment || 0),
+              price:
+                (productRequest?.price || productVariantMatch.productItem?.price) +
+                (priceAdjustment || 0),
               slug: generateUnsignedSlug(`${productRequest.name} - ${element.extendedName}`),
-              productAttributeList: [attributeItemValid],
+              productAttributeList: attributeValid,
             },
           };
 
@@ -207,27 +243,42 @@ class ProductService extends CRUDService<Product> {
     }
 
     await this.model.updateOne({ _id: id }, productRequest, { new: true });
-
     return { message: `Update ${this.nameService} success` };
   }
 
   // GET BY ID
   async getByIdOverriding(id: string) {
-    const result = await this.getById(id).then((res) =>
-      res.populate([
-        {
-          path: 'productsVariant',
-          model: 'ProductVariant',
-        },
-        {
-          path: 'productAttributeList.productAttributeItem.attributeId',
-          select: 'attributeList._id',
-          model: 'ProductAttribute',
-        },
-      ]),
-    );
+    const result = await this.getById(id);
 
-    return result;
+    if (result && result.productAttributeList && result.productAttributeList?.length > 0) {
+      for (const item of result.productAttributeList) {
+        for (const attributeItem of item.productAttributeItem) {
+          const attribute = await ProductAttributeModel.findOne({
+            'attributeList._id': attributeItem.attributeId,
+          });
+
+          if (attribute) {
+            const attributeChild = attribute.attributeList?.find((item: any) =>
+              comparingObjectId(item._id, attributeItem.attributeId),
+            );
+            if (attributeChild) {
+              attributeItem.attributeId = JSON.stringify(attributeChild) as any;
+            }
+          }
+        }
+      }
+    }
+
+    return await result.populate([
+      {
+        path: 'productsVariant',
+        model: 'ProductVariant',
+      },
+      {
+        path: 'attributeMapping',
+        model: 'ProductAttribute',
+      },
+    ]);
   }
 }
 export default ProductService;
