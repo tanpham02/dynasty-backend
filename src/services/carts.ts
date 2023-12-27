@@ -18,43 +18,43 @@ class CartService extends CRUDService<Cart> {
   async addCartItem(customerId: string, req: Request) {
     const cartRecord = await this.model.findOne({ customerId: customerId });
     const cartRequestBody = req.body;
-    console.log(
-      '🚀 ~ file: carts.ts:21 ~ CartService ~ addCartItem ~ cartRequestBody:',
-      cartRequestBody,
-    );
 
     if (!cartRecord) {
       const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found with customer id');
       throw exception;
     }
 
-    const handleAddCartItem = async (cartProductRecord: any) => {
-      if (comparingObjectId(cartRequestBody.product, cartProductRecord.product)) {
-        const quantity = cartRequestBody.productQuantities + cartProductRecord.productQuantities;
-        await this.model.updateOne(
-          {
-            'products.product': cartRequestBody.product,
-          },
-          {
-            $set: {
-              'products.$.productQuantities': quantity,
-              'products.$.note': cartRequestBody?.note || cartProductRecord?.note,
-            },
-          },
-          { new: true },
-        );
-      } else {
-        await cartRecord?.updateOne(
-          {
-            $push: { products: cartRequestBody },
-          },
-          { new: true },
-        );
-      }
-    };
-
     if (cartRecord?.products && cartRecord.products?.length > 0) {
-      cartRecord.products.find((productItemRecord) => handleAddCartItem(productItemRecord));
+      const productItemMatching = cartRecord.products.find((productItemRecord) =>
+        comparingObjectId(cartRequestBody.product, productItemRecord.product),
+      );
+
+      if (comparingObjectId(productItemMatching?.product, cartRequestBody.product)) {
+        const quantity = cartRequestBody.productQuantities + productItemMatching?.productQuantities;
+        (async () => {
+          await this.model.updateOne(
+            {
+              'products.product': cartRequestBody.product,
+            },
+            {
+              $set: {
+                'products.$.productQuantities': quantity,
+                'products.$.note': cartRequestBody?.note || productItemMatching?.note,
+              },
+            },
+            { new: true },
+          );
+        })();
+      } else {
+        (async () => {
+          await cartRecord?.updateOne(
+            {
+              $push: { products: cartRequestBody },
+            },
+            { new: true },
+          );
+        })();
+      }
     } else {
       (async () => {
         await cartRecord?.updateOne(

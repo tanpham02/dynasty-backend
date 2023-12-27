@@ -81,13 +81,13 @@ class OrderService extends CRUDService<Order> {
       if (orderDTO?.customerId) {
         const cartLists = await cartService.getCartByCustomerId(String(orderDTO.customerId));
 
-        const totalCart = cartLists?.totalCart;
+        const totalCart = cartLists?.totalCart + newOrder.shipFee;
         const productsFromCart = cartLists?.products;
 
         newOrder = {
           ...newOrder,
-          totalAmountBeforeUsingDiscount: totalCart || 0 + newOrder.shipFee,
-          totalOrder: totalCart || 0 + newOrder.shipFee,
+          totalAmountBeforeUsingDiscount: totalCart,
+          totalOrder: totalCart,
           productsFromCart: productsFromCart,
           orderAtStore: storeDetail,
           statusOrder: StatusOrder.WAITING_FOR_PAYMENT,
@@ -177,14 +177,18 @@ class OrderService extends CRUDService<Order> {
     }
   }
 
-  //RE-ORDER // !!!!!
+  //RE-ORDER
   async reorder(orderId: string, customerId: string, req: Request) {
     const orderDetail = await this.getOrderById(orderId).then(
       (res) => res?.depopulate('productsFromCart.product'),
     );
-    if (orderDetail) {
-      req.body.products = orderDetail.productsFromCart;
-      await cartService.addCartItem(customerId, req);
+
+    if (orderDetail && orderDetail.productsFromCart) {
+      for (let i = 0; i < orderDetail.productsFromCart.length; i++) {
+        const element = orderDetail.productsFromCart[i];
+        req.body = element;
+        await cartService.addCartItem(customerId, req);
+      }
     }
     return orderDetail;
   }
