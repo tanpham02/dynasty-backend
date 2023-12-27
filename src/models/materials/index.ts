@@ -24,9 +24,7 @@ import { TIME_ZONE_VIET_NAME } from '@app/utils/date';
  *                    type: string
  *                 price:
  *                    type: number
- *                 quantityImport:
- *                    type: number
- *                 remainingQuantity:
+ *                 quantity:
  *                    type: number
  *                 unit:
  *                    type: string
@@ -47,10 +45,7 @@ const MaterialSchema = new Schema<Material>(
         price: {
           type: Number,
         },
-        quantityImport: {
-          type: Number,
-        },
-        remainingQuantity: {
+        quantity: {
           type: Number,
         },
         unit: {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Model } from 'mongoose';
 import { Material } from '@app/models/materials/@type';
 import CRUDService from './crudService';
@@ -17,8 +18,8 @@ class MaterialService extends CRUDService<Material> {
     const bodyRequest: Material = JSON.parse(req.body?.[FIELDS_NAME.MATERIAL]);
     try {
       const totalPrice = bodyRequest.materialInfo?.reduce((acc: any, next) => {
-        if (next && next.price && next.quantityImport) {
-          return acc + next.price * next.quantityImport;
+        if (next && next.price && next.quantity) {
+          return acc + next.price * next.quantity;
         }
       }, 0);
       const newMaterial = new this.model({ ...bodyRequest, totalPrice });
@@ -39,8 +40,8 @@ class MaterialService extends CRUDService<Material> {
       throw exception;
     }
     const totalPrice = bodyRequest.materialInfo?.reduce((acc: any, next) => {
-      if (next && next.price && next.quantityImport) {
-        return acc + next.price * next.quantityImport;
+      if (next && next.price && next.quantity) {
+        return acc + next.price * next.quantity;
       }
     }, 0);
 
