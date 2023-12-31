@@ -75,7 +75,7 @@ router.post('/', uploadFileUser, userController.create);
 
 /**
  * @swagger
- * '/api/users/{id}':
+ * '/api/users/update-user/{id}':
  *  patch:
  *     tags: [Users]
  *     summary: Update user
@@ -106,7 +106,7 @@ router.post('/', uploadFileUser, userController.create);
  *                 $ref: '#/components/schema/Users'
  */
 // UPDATE
-router.patch('/:id', uploadFileUser, userController.update);
+router.patch('/update-user/:id', uploadFileUser, userController.update);
 
 /**
  * @swagger
