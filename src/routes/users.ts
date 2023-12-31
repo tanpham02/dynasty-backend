@@ -45,7 +45,7 @@ router.get('/search', userController.search);
 
 /**
  * @swagger
- * '/api/users/create':
+ * '/api/users':
  *  post:
  *     tags: [Users]
  *     summary: Create user
@@ -71,7 +71,7 @@ router.get('/search', userController.search);
  */
 
 // CREATE
-router.post('/create', uploadFileUser, userController.create);
+router.post('/', uploadFileUser, userController.create);
 
 /**
  * @swagger

@@ -77,7 +77,7 @@ class CategoryService extends CRUDService<Category> {
       const childCategory = requestFormData?.childrenCategory;
       const resultChild = childCategory.category?.map((item: any) => ({
         ...item,
-        slug: generateUnsignedSlug(item.name),
+        slug: generateUnsignedSlug(item?.name),
       }));
 
       childCategory.category = resultChild as unknown as any;
