@@ -1,3 +1,5 @@
+/* eslint-disable no-unsafe-optional-chaining */
+/* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import User from '@app/models/users/@type';
 import CRUDService from './crudService';
