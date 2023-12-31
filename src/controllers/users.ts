@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Exception } from '@app/exception';
 import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
@@ -42,9 +43,10 @@ const userController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await userService.updateOverriding(id, req);
+      const { message } = await userService.updateOverriding(id?.toString()!, req);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
+      console.log('🚀 ~ file: users.ts:49 ~ update: ~ error:', error);
       next();
     }
   },

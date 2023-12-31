@@ -126,5 +126,5 @@ export const routesMapping = (app: Application) => {
     },
   ];
 
-  return routesData.map(({ path, route }) => app.use(`${path}`, route));
+  return routesData.map(({ path, route }) => app.use(path, route));
 };
