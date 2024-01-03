@@ -1,21 +1,16 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Product, ProductType } from '@app/models/products/@type';
-import CRUDService from './crudService';
 import { Model, Schema } from 'mongoose';
+import { Product } from '@app/models/products/@type';
+import CRUDService from './crudService';
 import CategoryModel from '@app/models/category';
 import { Request } from 'express';
-import { configApp } from '@app/configs';
 import { FIELDS_NAME } from '@app/constants';
-import { ProductVariants } from '@app/models/productVariants/@type';
 import ProductVariantModel from '@app/models/productVariants';
-import ProductVariantService from './productVariants';
-import mongoose from 'mongoose';
 import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
-import { Exception } from '@app/exception';
-import { HttpStatusCode } from '@app/exception/type';
-import ProductModel from '@app/models/products';
 import ProductAttributeModel from '@app/models/productAttributes';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
@@ -24,6 +19,11 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
+    if (ids && Array.from(ids).length < 0) {
+      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
+      throw exception;
+    }
+
     await this.model.deleteMany({ _id: { $in: ids } });
 
     await CategoryModel.updateMany(
