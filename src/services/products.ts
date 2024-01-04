@@ -19,35 +19,35 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
-    if (ids && Array.from(ids).length < 0) {
+    if (!ids || (ids && Array.from(ids).length < 0)) {
       const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
       throw exception;
-    }
+    } else {
+      await this.model.deleteMany({ _id: { $in: ids } });
 
-    await this.model.deleteMany({ _id: { $in: ids } });
-
-    await CategoryModel.updateMany(
-      {
-        products: { $in: ids },
-      },
-      { $pull: { products: { $in: ids } } },
-    );
-
-    await CategoryModel.updateMany(
-      {
-        'childrenCategory.category.products': { $in: ids },
-      },
-      {
-        $pull: {
-          'childrenCategory.category.$.products': { $in: ids },
+      await CategoryModel.updateMany(
+        {
+          products: { $in: ids },
         },
-      },
-      {
-        new: true,
-      },
-    );
+        { $pull: { products: { $in: ids } } },
+      );
 
-    return { message: `Delete ${this.nameService} success` };
+      await CategoryModel.updateMany(
+        {
+          'childrenCategory.category.products': { $in: ids },
+        },
+        {
+          $pull: {
+            'childrenCategory.category.$.products': { $in: ids },
+          },
+        },
+        {
+          new: true,
+        },
+      );
+
+      return { message: `Delete ${this.nameService} success` };
+    }
   }
 
   // CREATE

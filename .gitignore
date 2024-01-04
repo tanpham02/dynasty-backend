@@ -28,10 +28,6 @@ build/*
 *.local
 mongo-data
 public
-.env
-.env.development
-.env.production
-.env.staging
 
 
 # Editor directories and files
