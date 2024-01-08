@@ -187,4 +187,31 @@ router.patch('/update-status-order/:orderId', orderController.updateStatusOrder)
 // CANCEL ORDER
 router.patch('/cancel-order/:orderId', orderController.requestCancelOrder);
 
+/**
+ * @swagger
+ * '/api/orders/{id}':
+ *  patch:
+ *     tags: [Orders]
+ *     summary: Delete
+ *     parameters:
+ *      - name: id
+ *        in: path
+ *        schema:
+ *          type: string
+ *      - name: reason
+ *        in: query
+ *        schema:
+ *          type: string
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schema/Orders'
+ */
+
+// DELETE ORDER
+router.delete('/:id', orderController.deleteOrder);
+
 export default router;

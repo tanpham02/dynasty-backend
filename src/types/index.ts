@@ -51,6 +51,11 @@ interface BaseModel {
   slug?: string;
 }
 
+enum TypeUpload {
+  ONE = 'ONE',
+  MULTIPLE = 'MULTIPLE',
+}
+
 type SortOrderBy = -1 | 1;
 
-export { Params, Filter, BaseModel, SortOrderBy };
+export { Params, Filter, BaseModel, SortOrderBy, TypeUpload };
