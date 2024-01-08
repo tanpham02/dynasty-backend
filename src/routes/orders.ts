@@ -190,16 +190,12 @@ router.patch('/cancel-order/:orderId', orderController.requestCancelOrder);
 /**
  * @swagger
  * '/api/orders/{id}':
- *  patch:
+ *  delete:
  *     tags: [Orders]
  *     summary: Delete
  *     parameters:
  *      - name: id
  *        in: path
- *        schema:
- *          type: string
- *      - name: reason
- *        in: query
  *        schema:
  *          type: string
  *     responses:
