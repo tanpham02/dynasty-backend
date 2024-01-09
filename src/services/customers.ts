@@ -49,6 +49,16 @@ class CustomerService extends CRUDService<Customer> {
     await this.model.findByIdAndUpdate(id, newDataUpdate, { new: true });
     return { message: `Update ${this.nameService} success` };
   }
+
+  // GET BY ID
+  async getByIdOverriding(id: string) {
+    const customer = (await this.getById(id)).populate({
+      path: 'customerAddressId',
+      model: 'CustomerAddress',
+    });
+
+    return await customer;
+  }
 }
 
 export default CustomerService;

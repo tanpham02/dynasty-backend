@@ -42,7 +42,7 @@ const customerController = {
   getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const customerById = await customerService.getById(id);
+      const customerById = await customerService.getByIdOverriding(id);
       res.status(HttpStatusCode.OK).json(customerById);
     } catch (error) {
       next(error);
