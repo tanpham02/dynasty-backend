@@ -56,10 +56,11 @@ const authService = {
       password: passwordAfterHash,
     });
 
-    await newCustomer.save();
+    const customer = await newCustomer.save();
 
     const newCart = new CartModel({ customerId: newCustomer._id });
     const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
+    await customer.updateOne({ $set: { customerAddressId: newCustomerAddress._id } });
     await newCustomerAddress.save();
     await newCart.save();
     return { message: 'Đăng ký thành công' };
