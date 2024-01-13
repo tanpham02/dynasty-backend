@@ -9,8 +9,6 @@ import ProductVariantModel from '@app/models/productVariants';
 import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
 import ProductAttributeModel from '@app/models/productAttributes';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
-import { Exception } from '@app/exception';
-import { HttpStatusCode } from '@app/exception/type';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
@@ -19,35 +17,30 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
-    if (!ids || (ids && Array.from(ids).length < 0)) {
-      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
-      throw exception;
-    } else {
-      await this.model.deleteMany({ _id: { $in: ids } });
+    await this.model.deleteMany({ _id: { $in: ids } });
 
-      await CategoryModel.updateMany(
-        {
-          products: { $in: ids },
-        },
-        { $pull: { products: { $in: ids } } },
-      );
+    await CategoryModel.updateMany(
+      {
+        products: { $in: ids },
+      },
+      { $pull: { products: { $in: ids } } },
+    );
 
-      await CategoryModel.updateMany(
-        {
-          'childrenCategory.category.products': { $in: ids },
+    await CategoryModel.updateMany(
+      {
+        'childrenCategory.category.products': { $in: ids },
+      },
+      {
+        $pull: {
+          'childrenCategory.category.$.products': { $in: ids },
         },
-        {
-          $pull: {
-            'childrenCategory.category.$.products': { $in: ids },
-          },
-        },
-        {
-          new: true,
-        },
-      );
+      },
+      {
+        new: true,
+      },
+    );
 
-      return { message: `Delete ${this.nameService} success` };
-    }
+    return { message: `Delete ${this.nameService} success` };
   }
 
   // CREATE
