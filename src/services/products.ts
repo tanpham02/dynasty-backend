@@ -19,28 +19,34 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
-    console.log('🚀 ~ ProductService ~ deleteOverriding ~ ids:', ids);
     if (!ids || (ids && Array.from(ids).length < 0)) {
       const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
       throw exception;
     } else {
-      const category = await CategoryModel.findById(ids?.[0]);
-      await this.model.deleteMany({ _id: { $in: ids } });
+      let productIds = [];
+      if (!Array.isArray(ids)) {
+        productIds.push(ids);
+      } else {
+        productIds = [...ids];
+      }
+      await this.model.deleteMany({ _id: { $in: productIds } });
+
+      const category = await CategoryModel.findById(productIds[0]);
       if (category) {
         await CategoryModel.updateMany(
           {
-            products: { $in: ids },
+            products: { $in: productIds },
           },
-          { $pull: { products: { $in: ids } } },
+          { $pull: { products: { $in: productIds } } },
         );
       } else {
         await CategoryModel.updateMany(
           {
-            'childrenCategory.category.products': { $in: ids },
+            'childrenCategory.category.products': { $in: productIds },
           },
           {
             $pull: {
-              'childrenCategory.category.$.products': { $in: ids },
+              'childrenCategory.category.$.products': { $in: productIds },
             },
           },
           {
