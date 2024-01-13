@@ -1,7 +1,7 @@
 version: '3.7'
 services:
     dynasty_ws:
-        image: tanphamvan/dynasty_ws
+        image: tanphamvan/dynasty_ws:staging
         container_name: dynasty_ws
         restart: always
         build:

@@ -19,6 +19,7 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
+    console.log('🚀 ~ ProductService ~ deleteOverriding ~ ids:', ids);
     if (!ids || (ids && Array.from(ids).length < 0)) {
       const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
       throw exception;
