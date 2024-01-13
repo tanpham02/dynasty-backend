@@ -146,7 +146,7 @@ router.get('/:id', productController.getById);
  * '/api/products/':
  *  delete:
  *     tags: [Products]
- *     summary: Delete product variant
+ *     summary: Delete product
  *     parameters:
  *       - in: query
  *         name: ids

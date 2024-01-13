@@ -9,6 +9,8 @@ import ProductVariantModel from '@app/models/productVariants';
 import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
 import ProductAttributeModel from '@app/models/productAttributes';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
@@ -17,30 +19,36 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
-    await this.model.deleteMany({ _id: { $in: ids } });
-
-    await CategoryModel.updateMany(
-      {
-        products: { $in: ids },
-      },
-      { $pull: { products: { $in: ids } } },
-    );
-
-    await CategoryModel.updateMany(
-      {
-        'childrenCategory.category.products': { $in: ids },
-      },
-      {
-        $pull: {
-          'childrenCategory.category.$.products': { $in: ids },
-        },
-      },
-      {
-        new: true,
-      },
-    );
-
-    return { message: `Delete ${this.nameService} success` };
+    if (!ids || (ids && Array.from(ids).length < 0)) {
+      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
+      throw exception;
+    } else {
+      const category = await CategoryModel.findById(ids?.[0]);
+      await this.model.deleteMany({ _id: { $in: ids } });
+      if (category) {
+        await CategoryModel.updateMany(
+          {
+            products: { $in: ids },
+          },
+          { $pull: { products: { $in: ids } } },
+        );
+      } else {
+        await CategoryModel.updateMany(
+          {
+            'childrenCategory.category.products': { $in: ids },
+          },
+          {
+            $pull: {
+              'childrenCategory.category.$.products': { $in: ids },
+            },
+          },
+          {
+            new: true,
+          },
+        );
+      }
+      return { message: `Delete ${this.nameService} success` };
+    }
   }
 
   // CREATE
