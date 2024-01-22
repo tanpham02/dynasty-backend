@@ -26,7 +26,7 @@ const configApp = () => {
     resultConfig = {
       port: process.env.PORT ? Number(process.env.PORT) : 8081,
       MONGO_URL: process.env.MONGO_URL || '',
-      APP_URL: `${process.env.BASE_URL}:${process.env.PORT}`,
+      APP_URL: `${process.env.BASE_URL}`,
     };
   }
 
@@ -35,7 +35,7 @@ const configApp = () => {
     resultConfig = {
       port: process.env.PORT ? Number(process.env.PORT) : 8081,
       MONGO_URL: process.env.MONGO_URL || '',
-      APP_URL: `${process.env.BASE_URL}:${process.env.PORT}`,
+      APP_URL: `${process.env.BASE_URL}`,
     };
   }
   resultConfig.jwtAccessKey = process.env.JWT_ACCESS_KEY;
