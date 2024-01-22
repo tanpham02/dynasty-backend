@@ -208,7 +208,7 @@ const OrderSchema = new Schema<Order>(
       type: String,
       enum: PaymentMethod,
     },
-    // createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date.now },
     // updatedAt: { type: Date, default: Date.now },
   },
   {

@@ -103,9 +103,12 @@ class CRUDService<T extends Document> {
       filter.createdAt = { $lte: to };
     }
 
-    if (from && to) {
+    if (from !== to) {
       filter.importDate = { $gte: from, $lte: to };
       filter.createdAt = { $gte: from, $lte: to };
+    } else {
+      filter.importDate = { $gte: `${from} 00:00:00`, $lte: `${to} 23:59:00` };
+      filter.createdAt = { $gte: `${from} 00:00:00`, $lte: `${to} 23:59:00` };
     }
 
     if (customerId) {
