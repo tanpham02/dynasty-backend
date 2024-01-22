@@ -19,8 +19,8 @@ const connectOptions: ConnectOptionsCustom = {
 const seedData = {
   username: 'admin',
   phoneNumber: '0372800762',
-  email: 'admin@gmail.com',
-  password: '123456',
+  email: 'phamvantan1311@gmail.com',
+  password: '13112002',
   role: 'ADMIN',
 };
 

@@ -28,6 +28,7 @@ build/*
 *.local
 mongo-data
 public
+public/*
 
 
 # Editor directories and files
