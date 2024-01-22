@@ -208,7 +208,7 @@ const OrderSchema = new Schema<Order>(
       type: String,
       enum: PaymentMethod,
     },
-    createdAt: {
+    orderAt: {
       type: Date,
       default: moment(new Date()).tz(TIME_ZONE_VIET_NAME),
     },

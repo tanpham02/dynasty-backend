@@ -180,6 +180,7 @@ interface Order extends Document {
   reasonOrderCancel?: string;
   totalOrder?: number;
   createdAt?: string | Date;
+  orderAt?: string | Date;
   updatedAt?: string | Date;
   statusCheckout?: StatusCheckout;
   paymentMethod?: PaymentMethod;

@@ -41,6 +41,7 @@ interface Filter {
   createdAt?: any;
   statusOrder?: string;
   importDate?: any;
+  orderAt?: any;
   sort?: string;
   parentId?: string;
   customerType?: CustomerType | string;
