@@ -10,7 +10,7 @@ import {
 import { CartSchema } from '../carts';
 import { ProductVariantSchema } from '../productVariants';
 import moment from 'moment';
-import { TIME_ZONE_VIET_NAME } from '@app/utils/date';
+import { TIME_ZONE_VIET_NAME, YYYY_MM_DD_HH_MM_SS } from '@app/utils/date';
 
 // SCHEMAS RESPONSE
 
@@ -208,22 +208,17 @@ const OrderSchema = new Schema<Order>(
       type: String,
       enum: PaymentMethod,
     },
-    orderAt: {
+    createdAt: {
       type: Date,
-      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME).format('YYYY-MM-DD HH:mm:ss'),
+      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME).format(YYYY_MM_DD_HH_MM_SS),
     },
-    // updatedAt: { type: Date, default: Date.now },
+    updatedAt: {
+      type: Date,
+      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME).format(YYYY_MM_DD_HH_MM_SS),
+    },
   },
   {
     versionKey: false,
-    // timestamps: {
-    //   currentTime() {
-    //     const now = new Date();
-    //     const strictUTC = moment(now).utc(true);
-    //     const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
-    //     return Number(dayAdjustment);
-    //   },
-    // },
   },
 );
 

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { Material } from './@type';
 import { Schema, model } from 'mongoose';
-import { TIME_ZONE_VIET_NAME } from '@app/utils/date';
+import { TIME_ZONE_VIET_NAME, YYYY_MM_DD_HH_MM_SS } from '@app/utils/date';
 
 // SCHEMAS RESPONSE
 
@@ -36,7 +36,7 @@ const MaterialSchema = new Schema<Material>(
   {
     importDate: {
       type: Date,
-      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME),
+      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME).format(YYYY_MM_DD_HH_MM_SS),
     },
     materialInfo: [
       {
@@ -57,16 +57,16 @@ const MaterialSchema = new Schema<Material>(
     totalPrice: {
       type: Number,
     },
+    createdAt: {
+      type: Date,
+      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME).format(YYYY_MM_DD_HH_MM_SS),
+    },
+    updatedAt: {
+      type: Date,
+      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME).format(YYYY_MM_DD_HH_MM_SS),
+    },
   },
   {
-    // timestamps: {
-    //   currentTime() {
-    //     const now = new Date();
-    //     const strictUTC = moment(now).utc(true);
-    //     const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
-    //     return Number(dayAdjustment);
-    //   },
-    // },
     versionKey: false,
   },
 );
