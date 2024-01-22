@@ -15,6 +15,9 @@ services:
         networks:
             - dynasty_network
             # - mongodb-docker
+        volumes:
+            # - mongo-db-data:/data/db
+            - ./file-upload:/app/public
 
     # mongo_db:
     #     image: mongo
@@ -64,7 +67,7 @@ networks:
     # mongodb-docker:
     #     external: true
 
-#volumes:
+# volumes:
 #    mongo-db-data:
 #        name: mongo-db-data
 #        driver: local

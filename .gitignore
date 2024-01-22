@@ -29,6 +29,7 @@ build/*
 mongo-data
 public
 public/*
+file-upload/*
 
 
 # Editor directories and files
