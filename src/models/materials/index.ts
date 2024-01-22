@@ -36,6 +36,7 @@ const MaterialSchema = new Schema<Material>(
   {
     importDate: {
       type: Date,
+      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME),
     },
     materialInfo: [
       {
@@ -58,18 +59,18 @@ const MaterialSchema = new Schema<Material>(
     },
   },
   {
-    timestamps: {
-      currentTime() {
-        const now = new Date();
-        const strictUTC = moment(now).utc(true);
-        const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
-        return Number(dayAdjustment);
-      },
-    },
+    // timestamps: {
+    //   currentTime() {
+    //     const now = new Date();
+    //     const strictUTC = moment(now).utc(true);
+    //     const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
+    //     return Number(dayAdjustment);
+    //   },
+    // },
     versionKey: false,
   },
 );
 
-const MaterialMode = model('Material', MaterialSchema);
+const MaterialModel = model('Material', MaterialSchema);
 
-export default MaterialMode;
+export default MaterialModel;
