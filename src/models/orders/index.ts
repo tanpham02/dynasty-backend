@@ -210,7 +210,7 @@ const OrderSchema = new Schema<Order>(
     },
     orderAt: {
       type: Date,
-      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME),
+      default: moment(new Date()).tz(TIME_ZONE_VIET_NAME).format('YYYY-MM-DD HH:mm:ss'),
     },
     // updatedAt: { type: Date, default: Date.now },
   },
