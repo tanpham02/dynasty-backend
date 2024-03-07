@@ -1,10 +1,12 @@
-import express, { Application } from 'express';
-import cors from 'cors';
-import morgan from 'morgan';
-import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express, { Application } from 'express';
+import morgan from 'morgan';
+
 import { errorHandler } from '@app/middlewares/errorHandler';
 import { configApp } from '.';
+
 const { FRONT_END_URL } = configApp();
 
 const configServer = (app: Application) => {

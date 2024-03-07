@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Filter, Params, SortOrderBy } from '@app/types';
-import { AnyObject, Document, Model } from 'mongoose';
-import { Request } from 'express';
-import { HttpStatusCode } from '@app/exception/type';
 import { Exception } from '@app/exception';
-import { Category } from '@app/models/category/@type';
+import { HttpStatusCode } from '@app/exception/type';
+import { Filter, Params } from '@app/types';
+import { Request } from 'express';
+import { Document, Model } from 'mongoose';
 
 class CRUDService<T extends Document> {
   protected model: Model<T>;
@@ -42,6 +41,7 @@ class CRUDService<T extends Document> {
       customerId,
       statusOrder,
       customerType,
+      isShowHomePage,
     } = params;
 
     const filter: Filter = {};
@@ -104,13 +104,8 @@ class CRUDService<T extends Document> {
     }
 
     if (from && to) {
-      if (from !== to) {
-        filter.importDate = { $gte: from, $lte: to };
-        filter.createdAt = { $gte: from, $lte: to };
-      } else {
-        filter.importDate = { $gte: `${from} 00:00:00`, $lte: `${to} 23:59:00` };
-        filter.createdAt = { $gte: `${from} 00:00:00`, $lte: `${to} 23:59:00` };
-      }
+      filter.importDate = { $gte: from, $lte: to };
+      filter.createdAt = { $gte: from, $lte: to };
     }
 
     if (customerId) {
@@ -123,6 +118,10 @@ class CRUDService<T extends Document> {
 
     if (customerType) {
       filter.customerType = customerType;
+    }
+
+    if (isShowHomePage || isShowHomePage === 0) {
+      filter.isShowHomePage = Boolean(isShowHomePage);
     }
 
     if (sort) {
@@ -140,7 +139,7 @@ class CRUDService<T extends Document> {
       .skip(pageSize * pageIndex)
       .sort(sortFieldName);
 
-    const totalElement = await this.model.find(filter).count();
+    const totalElement = (await this.model.find(filter)).length;
     const totalPages = Math.ceil(totalElement / pageSize);
     const isLastPage = pageIndex + 1 >= totalPages;
     const result = {

@@ -18,6 +18,8 @@ import { Document, Schema } from 'mongoose';
  *             type: string
  *         password:
  *             type: string
+ *         otp:
+ *             type: string
  *         birthday:
  *             type: string
  *             description: 2023-05-25
@@ -59,6 +61,7 @@ interface Customer extends BaseModel, Document {
   customerAddressId: Schema.Types.ObjectId;
   orderIds: string[];
   customerType: CustomerType;
+  otp?: string;
 }
 
 export { Customer, CustomerType };

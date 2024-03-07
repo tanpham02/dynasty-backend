@@ -24,6 +24,7 @@ interface Params {
   sort?: string;
   parentId?: string;
   customerType?: CustomerType | string;
+  isShowHomePage?: number;
 }
 
 interface Filter {
@@ -44,6 +45,7 @@ interface Filter {
   sort?: string;
   parentId?: string;
   customerType?: CustomerType | string;
+  isShowHomePage?: boolean;
 }
 
 interface BaseModel {

@@ -1,6 +1,7 @@
 import { Application } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+
 import { configApp } from '@app/configs';
 
 const configSwagger = (app: Application) => {

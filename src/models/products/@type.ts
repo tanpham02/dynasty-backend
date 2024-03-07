@@ -83,7 +83,7 @@ enum ProductType {
   DELICIOUS_MUST_TRY = 'DELICIOUS_MUST_TRY', // ngon phải thử
   VEGETARIAN = 'VEGETARIAN', // chay
   SPICY = 'SPICY', // cay
-  UNIQUE = 'UNIQUE', // dộc đáo
+  UNIQUE = 'UNIQUE', // độc đáo
 }
 
 enum ProductVariantSizeType {

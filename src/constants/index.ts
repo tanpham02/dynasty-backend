@@ -30,6 +30,8 @@ const FIELDS_NAME = {
   TERM_AND_POLICY: 'termAndPolicyInfo',
   ORDER: 'orderInfo',
   MATERIAL: 'materialInfo',
+  EMAIL_CONFIG: 'emailConfigInfo',
+  EMAIL_TEMPLATE: 'emailTemplateInfo',
 };
 
-export { MODE, ProductStatus, SALT, FIELDS_NAME };
+export { FIELDS_NAME, MODE, ProductStatus, SALT };

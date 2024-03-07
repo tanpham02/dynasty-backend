@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import mongoose, { ConnectOptions } from 'mongoose';
-import 'module-alias/register';
-import { configApp } from '@app/configs';
-import UserModel from '@app/models/users';
 import bcrypt from 'bcrypt';
+import 'module-alias/register';
+import mongoose, { ConnectOptions } from 'mongoose';
+
+import { configApp } from '@app/configs';
 import { SALT } from '@app/constants';
+import UserModel from '@app/models/users';
 
 interface ConnectOptionsCustom extends ConnectOptions {
   useNewUrlParser: boolean;

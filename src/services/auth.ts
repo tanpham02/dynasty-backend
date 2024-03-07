@@ -20,7 +20,7 @@ const { jwtRefreshKey } = configApp();
 
 const authService = {
   // SIGNUP CUSTOMER
-  signup: async (req: Request, res: Response) => {
+  signup: async (req: Request, __res: Response) => {
     const customerSignupRequest: Customer = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_SIGNUP]);
     const existCustomer = await CustomerModel.findOne({
       $or: [
@@ -56,11 +56,10 @@ const authService = {
       password: passwordAfterHash,
     });
 
-    const customer = await newCustomer.save();
+    await newCustomer.save();
 
     const newCart = new CartModel({ customerId: newCustomer._id });
     const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
-    await customer.updateOne({ $set: { customerAddressId: newCustomerAddress._id } });
     await newCustomerAddress.save();
     await newCart.save();
     return { message: 'Đăng ký thành công' };

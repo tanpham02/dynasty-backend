@@ -88,6 +88,7 @@ interface CustomerAddress extends Document {
     fullName?: string;
     phoneNumber?: string;
     isDefault?: boolean;
+    _id?: any;
   }>;
 }
 

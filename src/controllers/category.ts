@@ -10,14 +10,25 @@ import { NextFunction, Request, Response } from 'express';
 const categoryService = new CategoryService(CategoryModel, 'category');
 
 const categoryController = {
+  // SEARCH ALL
+  searchAll: async (__req: Request, res: Response, next: NextFunction) => {
+    try {
+      const category = await categoryService.findAll();
+      res.status(HttpStatusCode.OK).json(category);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // SEARCH PAGINATION CATEGORY
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name, sort } = req.query;
+    const { pageIndex, pageSize, name, sort, isShowHomePage } = req.query;
     const params: Params = {
       pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
       pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
       name: name?.toString(),
       sort: sort?.toString(),
+      isShowHomePage: Number(isShowHomePage),
     };
 
     try {

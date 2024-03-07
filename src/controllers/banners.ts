@@ -1,17 +1,25 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME } from '@app/constants';
-import { Exception } from '@app/exception';
-import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import BannerModel from '@app/models/banner';
-import VoucherModel from '@app/models/vouchers';
-import BannerService from '@app/services/banner';
-import VoucherService from '@app/services/vouchers';
-import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
+
+import { FIELDS_NAME } from '@app/constants';
+import { HttpStatusCode } from '@app/exception/type';
+import BannerModel from '@app/models/banner';
+import BannerService from '@app/services/banner';
+import { Params } from '@app/types';
 
 const bannerService = new BannerService(BannerModel, 'banner');
 
 const bannerController = {
+  // SEARCH PAGINATION
+  searchAll: async (__req: Request, res: Response, next: NextFunction) => {
+    try {
+      const banner = await bannerService.findAll();
+      res.status(HttpStatusCode.OK).json(banner);
+    } catch (error: any) {
+      next(error);
+    }
+  },
+
   // SEARCH PAGINATION
   search: async (req: Request, res: Response, next: NextFunction) => {
     const { pageIndex, pageSize, name, sort } = req.query;

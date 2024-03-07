@@ -1,9 +1,9 @@
-import { Exception } from '@app/exception';
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { NextFunction, Request, Response } from 'express';
+
 import { HttpStatusCode } from '@app/exception/type';
 import CartModel from '@app/models/carts';
 import CartService from '@app/services/carts';
-import { Params } from '@app/types';
-import { NextFunction, Request, Response } from 'express';
 
 const cartService = new CartService(CartModel, 'cart');
 

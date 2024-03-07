@@ -11,6 +11,8 @@ import { HttpStatusCode } from '@app/exception/type';
 import UserModel from '@app/models/users';
 import { Exception } from '@app/exception';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
+import handleUploadFile from '@app/utils/handleUploadFile';
+import { TypeUpload } from '@app/types';
 
 class UserService extends CRUDService<User> {
   constructor(model: Model<User>, nameService: string) {
@@ -19,10 +21,11 @@ class UserService extends CRUDService<User> {
 
   // CREATE
   async createOverriding(req: Request) {
-    let result: any = {};
     const { password, ...user }: User = req?.body?.[FIELDS_NAME.USER]
       ? JSON.parse(req?.body?.[FIELDS_NAME.USER])
       : {};
+    const avatars = handleUploadFile(req, TypeUpload.ONE);
+
     const existUser = await UserModel.findOne({
       $or: [
         { username: user?.username },
@@ -30,8 +33,6 @@ class UserService extends CRUDService<User> {
         { email: user?.email },
       ],
     });
-    const filename = req.file?.filename;
-    const destination = req.file?.destination;
 
     if (existUser) {
       const exception = new Exception(
@@ -41,8 +42,8 @@ class UserService extends CRUDService<User> {
       throw exception;
     }
 
-    if (filename && destination) {
-      user.image = `/${destination}/${filename}`;
+    if (avatars[0]) {
+      user.image = avatars[0];
     }
 
     if (!password) {
@@ -66,8 +67,8 @@ class UserService extends CRUDService<User> {
     const dataUpdate: User = req.body?.[FIELDS_NAME.USER]
       ? JSON.parse(req?.body?.[FIELDS_NAME.USER])
       : {};
-    const filename = req?.file?.filename;
-    const destination = req?.file?.destination;
+
+    const avatars = handleUploadFile(req, TypeUpload.ONE);
 
     const isUserAlreadyExist = await UserModel.findById(id);
     const existUser = await UserModel.findOne({
@@ -88,14 +89,15 @@ class UserService extends CRUDService<User> {
       const exception = new Exception(HttpStatusCode.CONFLICT, 'User information already exist');
       throw exception;
     }
+
     if (Object.keys(dataUpdate).length > 0) {
       newDataUpdate = {
         ...dataUpdate,
       };
     }
 
-    if (filename && destination) {
-      newDataUpdate.image = `/${destination}/${filename}`;
+    if (avatars[0]) {
+      newDataUpdate.image = avatars[0];
     }
 
     if (newDataUpdate?.password) {

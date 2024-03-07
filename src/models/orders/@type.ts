@@ -183,6 +183,7 @@ interface Order extends Document {
   updatedAt?: string | Date;
   statusCheckout?: StatusCheckout;
   paymentMethod?: PaymentMethod;
+  note?: string;
 }
 
 export { Order, StatusOrder, TypeOrder, OrderReceivingTime, StatusCheckout, PaymentMethod };

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { NextFunction, Request, Response } from 'express';
+
 import { HttpStatusCode } from '@app/exception/type';
 import OrderModel from '@app/models/orders';
 import { StatusOrder } from '@app/models/orders/@type';
-import CategoryService from '@app/services/category';
 import OrderService from '@app/services/orders';
 import { Params } from '@app/types';
-import { NextFunction, Request, Response } from 'express';
 
 const orderService = new OrderService(OrderModel, 'order');
 

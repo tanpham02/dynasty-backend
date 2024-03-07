@@ -1,16 +1,15 @@
+import moment from 'moment';
 import { Schema, model } from 'mongoose';
+
+import { TIME_ZONE_VIET_NAME } from '@app/utils/date';
 import {
   Order,
-  StatusOrder,
   OrderReceivingTime,
-  TypeOrder,
-  StatusCheckout,
   PaymentMethod,
+  StatusCheckout,
+  StatusOrder,
+  TypeOrder,
 } from './@type';
-import { CartSchema } from '../carts';
-import { ProductVariantSchema } from '../productVariants';
-import moment from 'moment';
-import { TIME_ZONE_VIET_NAME, YYYY_MM_DD_HH_MM_SS } from '@app/utils/date';
 
 // SCHEMAS RESPONSE
 
@@ -216,9 +215,19 @@ const OrderSchema = new Schema<Order>(
       type: Date,
       default: moment.tz(Date.now(), TIME_ZONE_VIET_NAME),
     },
+    note: {
+      type: String,
+    },
   },
   {
-    timestamps: false,
+    timestamps: {
+      currentTime() {
+        const now = new Date();
+        const strictUTC = moment(now).utc(true);
+        const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
+        return Number(dayAdjustment);
+      },
+    },
     versionKey: false,
   },
 );

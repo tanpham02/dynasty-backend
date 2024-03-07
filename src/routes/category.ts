@@ -25,6 +25,11 @@ const router = express.Router();
  *        schema:
  *          type: string
  *        description: Allow value 1 | -1
+ *      - name: isShowHomePage
+ *        in: query
+ *        schema:
+ *          type: number
+ *        description: Allow value 1 | 0
  *      - name: pageIndex
  *        in: query
  *        schema:
@@ -44,6 +49,24 @@ const router = express.Router();
 
 // SEARCH PAGINATION CATEGORY
 router.get('/search', categoryController.search);
+
+/**
+ * @swagger
+ * '/api/category/search-all':
+ *  get:
+ *     tags: [Category]
+ *     summary: Search all
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/Category'
+ */
+
+// SEARCH ALL
+router.get('/search-all', categoryController.searchAll);
 
 /**
  * @swagger

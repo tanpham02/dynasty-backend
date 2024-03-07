@@ -13,6 +13,8 @@ import StoreInformation from './@type';
  *       properties:
  *         brandStore:
  *             type: string
+ *         introduce:
+ *             type: string
  *         brandLogo:
  *             type: string
  *         representativeOffice:
@@ -21,6 +23,8 @@ import StoreInformation from './@type';
  *                name:
  *                   type: string
  *                address:
+ *                   type: string
+ *                email:
  *                   type: string
  *                phoneNumber:
  *                   type: string
@@ -35,11 +39,17 @@ const StoreInformationSchema = new Schema<StoreInformation>(
     brandStore: {
       type: String,
     },
+    introduce: {
+      type: String,
+    },
     brandLogo: {
       type: String,
     },
     representativeOffice: {
       name: {
+        type: String,
+      },
+      email: {
         type: String,
       },
       address: {

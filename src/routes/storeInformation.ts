@@ -1,6 +1,5 @@
-import { FIELDS_NAME } from '@app/constants';
 import storeInformationController from '@app/controllers/storeInformation';
-import { formDataParser } from '@app/middlewares/formDataParser';
+import { uploadFileStoreInformation } from '@app/services/upload';
 import express from 'express';
 const router = express.Router();
 
@@ -48,7 +47,7 @@ router.get('/search-all', storeInformationController.searchAll);
  */
 
 // CREATE
-router.post('/', formDataParser(FIELDS_NAME.STORE_INFORMATION), storeInformationController.create);
+router.post('/', uploadFileStoreInformation, storeInformationController.create);
 
 /**
  * @swagger
@@ -81,11 +80,7 @@ router.post('/', formDataParser(FIELDS_NAME.STORE_INFORMATION), storeInformation
  */
 
 // UPDATE
-router.patch(
-  '/:id',
-  formDataParser(FIELDS_NAME.STORE_INFORMATION),
-  storeInformationController.update,
-);
+router.patch('/:id', uploadFileStoreInformation, storeInformationController.update);
 
 /**
  * @swagger

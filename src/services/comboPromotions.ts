@@ -1,9 +1,8 @@
+import CategoryModel from '@app/models/category';
+import ComboPromotions from '@app/models/comboPromotions/@type';
+import { Request } from 'express';
 import { Model } from 'mongoose';
 import CRUDService from './crudService';
-import ComboPromotions from '@app/models/comboPromotions/@type';
-import { Filter, Params } from '@app/types';
-import { Request } from 'express';
-import CategoryModel from '@app/models/category';
 
 class comboPromotionsService extends CRUDService<ComboPromotions> {
   constructor(model: Model<ComboPromotions>, nameService: string) {

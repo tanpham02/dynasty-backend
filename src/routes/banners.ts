@@ -8,36 +8,18 @@ const router = Router();
  * '/api/banners/search':
  *  get:
  *     tags: [Banners]
- *     summary: Search pagination
- *     parameters:
- *      - name: name
- *        in: query
- *        schema:
- *          type: string
- *      - name: sort
- *        in: query
- *        schema:
- *          type: string
- *        description: Allow value 1 | -1
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *     summary: Search all
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Voucher'
+ *                 $ref: '#/components/schema/Banners'
  */
 
-// SEARCH PAGINATION
-router.get('/search', bannerController.search);
+// SEARCH ALL
+router.get('/search', bannerController.searchAll);
 
 /**
  * @swagger

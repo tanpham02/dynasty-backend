@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Order, StatusCheckout, StatusOrder, TypeOrder } from '@app/models/orders/@type';
-import CRUDService from './crudService';
-import { Model } from 'mongoose';
-import { Params } from '@app/types';
-import { Request, Response } from 'express';
-import CartModel from '@app/models/carts';
-import CartService from './carts';
-import StoreConfigService from './storeConfig';
-import StoreConfigModel from '@app/models/storeConfig';
 import { FIELDS_NAME } from '@app/constants';
-import StoreSystemService from './storeSystem';
-import StoreSystemModel from '@app/models/storeSystem';
-import VoucherService from './vouchers';
-import VoucherModel from '@app/models/vouchers';
-import OrderModel from '@app/models/orders';
-import ProductVariantModel from '@app/models/productVariants';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
+import CartModel from '@app/models/carts';
+import OrderModel from '@app/models/orders';
+import { Order, StatusCheckout, StatusOrder, TypeOrder } from '@app/models/orders/@type';
+import ProductVariantModel from '@app/models/productVariants';
+import StoreConfigModel from '@app/models/storeConfig';
+import StoreSystemModel from '@app/models/storeSystem';
+import VoucherModel from '@app/models/vouchers';
+import { Params } from '@app/types';
+import { Request } from 'express';
+import { Model } from 'mongoose';
+import CartService from './carts';
+import CRUDService from './crudService';
+import StoreConfigService from './storeConfig';
+import StoreSystemService from './storeSystem';
+import VoucherService from './vouchers';
 
 const storeConfigService = new StoreConfigService(StoreConfigModel, 'store config');
 const cartService = new CartService(CartModel, 'cart');
@@ -32,9 +32,11 @@ class OrderService extends CRUDService<Order> {
   async getPaginationOverriding(params: Params) {
     const { data, ...remaining } = await this.getPagination(params);
 
-    const dataCustom = data.sort(
-      (a, b) => new Date(b?.createdAt ?? '').getTime() - new Date(a?.createdAt ?? '').getTime(),
-    );
+    const dataCustom = data
+      .sort(
+        (a, b) => new Date(b?.createdAt ?? '').getTime() - new Date(a?.createdAt ?? '').getTime(),
+      )
+      .filter((item) => item.statusCheckout === StatusCheckout.ORDER_CONFIRMATION);
 
     return {
       ...remaining,
@@ -71,7 +73,7 @@ class OrderService extends CRUDService<Order> {
       const storeDetail = await storeSystemService.getById(String(orderDTO?.orderAtStore));
 
       if (orderDTO.typeOrder === TypeOrder.ORDER_DELIVERING) {
-        const feeShip = storeConfig?.[0]?.feeShip;
+        const feeShip = storeConfig?.[0]?.feeShip || 0;
         newOrder.shipFee = feeShip;
       }
       if (orderDTO.typeOrder === TypeOrder.ORDER_TO_PICK_UP) {
@@ -86,8 +88,8 @@ class OrderService extends CRUDService<Order> {
 
         newOrder = {
           ...newOrder,
-          totalAmountBeforeUsingDiscount: totalCart,
-          totalOrder: totalCart,
+          totalAmountBeforeUsingDiscount: cartLists?.totalCart || 0,
+          totalOrder: totalCart || 0,
           productsFromCart: productsFromCart,
           orderAtStore: storeDetail,
           statusOrder: StatusOrder.WAITING_FOR_PAYMENT,
@@ -128,7 +130,7 @@ class OrderService extends CRUDService<Order> {
 
       const newOrderModel = new OrderModel(newOrder);
       await newOrderModel.save();
-      return newOrder;
+      return newOrderModel;
     }
 
     if (orderDTO.statusCheckout === StatusCheckout.ORDER_CONFIRMATION) {

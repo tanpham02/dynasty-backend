@@ -11,6 +11,8 @@ import { Document } from 'mongoose';
  *       properties:
  *         brandStore:
  *             type: string
+ *         introduce:
+ *             type: string
  *         brandLogo:
  *             type: string
  *         representativeOffice:
@@ -19,6 +21,8 @@ import { Document } from 'mongoose';
  *                name:
  *                   type: string
  *                address:
+ *                   type: string
+ *                email:
  *                   type: string
  *                phoneNumber:
  *                   type: string
@@ -29,10 +33,12 @@ import { Document } from 'mongoose';
  */
 
 interface StoreInformation extends Document {
+  introduce?: string;
   brandStore?: string;
   brandLogo?: string;
   representativeOffice?: {
     name: string;
+    email: string;
     address: string;
     phoneNumber: string;
     taxCode: string;

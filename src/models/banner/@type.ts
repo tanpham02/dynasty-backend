@@ -22,8 +22,10 @@ import { Document } from 'mongoose';
 interface Banner extends Document {
   name?: string;
   priority: number;
-  banner?: string;
+  url?: string;
   redirect?: string;
+
+  [key: string]: any;
 }
 
 export default Banner;

@@ -11,6 +11,9 @@ import ProductAttributeModel from '@app/models/productAttributes';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
+import handleUploadFile from '@app/utils/handleUploadFile';
+import { TypeUpload } from '@app/types';
+import { ProductVariants } from '@app/models/productVariants/@type';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, nameService: string) {
@@ -19,54 +22,47 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteOverriding(ids?: string[] | string | any) {
-    if (!ids || (ids && Array.from(ids).length < 0)) {
+    if (ids && Array.from(ids).length < 0) {
       const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
       throw exception;
-    } else {
-      let productIds = [];
-      if (!Array.isArray(ids)) {
-        productIds.push(ids);
-      } else {
-        productIds = [...ids];
-      }
-      await this.model.deleteMany({ _id: { $in: productIds } });
-
-      const category = await CategoryModel.findById(productIds[0]);
-      if (category) {
-        await CategoryModel.updateMany(
-          {
-            products: { $in: productIds },
-          },
-          { $pull: { products: { $in: productIds } } },
-        );
-      } else {
-        await CategoryModel.updateMany(
-          {
-            'childrenCategory.category.products': { $in: productIds },
-          },
-          {
-            $pull: {
-              'childrenCategory.category.$.products': { $in: productIds },
-            },
-          },
-          {
-            new: true,
-          },
-        );
-      }
-      return { message: `Delete ${this.nameService} success` };
     }
+
+    await this.model.deleteMany({ _id: { $in: ids } });
+
+    await CategoryModel.updateMany(
+      {
+        products: { $in: ids },
+      },
+      { $pull: { products: { $in: ids } } },
+    );
+
+    await CategoryModel.updateMany(
+      {
+        'childrenCategory.category.products': { $in: ids },
+      },
+      {
+        $pull: {
+          'childrenCategory.category.$.products': { $in: ids },
+        },
+      },
+      {
+        new: true,
+      },
+    );
+
+    return { message: `Delete ${this.nameService} success` };
   }
 
   // CREATE
   async createOverriding(req: Request) {
+    const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
+
     const productBodyRequest: Product = JSON.parse(req.body?.[FIELDS_NAME.PRODUCT]);
-    const filename = req.file?.filename;
-    const destination = req.file?.destination;
     const productVariantListIds: Schema.Types.ObjectId[] = [];
 
-    if (filename && destination) {
-      productBodyRequest.image = `/${destination}/${filename}`;
+    if (req.files && Number(req.files?.length) > 0) {
+      productBodyRequest.image = listFileUploads[0];
+      productBodyRequest.images = listFileUploads;
     }
 
     const newProduct = new this.model({
@@ -105,6 +101,7 @@ class ProductService extends CRUDService<Product> {
               information: productBodyRequest.information,
               price: productBodyRequest.price + priceAdjustment,
               image: productBodyRequest?.image,
+              images: productBodyRequest?.images,
               types: productBodyRequest?.types,
               visible: productBodyRequest?.visible,
               productAttributeList: [attributeItemValid],
@@ -156,17 +153,32 @@ class ProductService extends CRUDService<Product> {
 
   // UPDATE
   async updateOverriding(id: string, req: Request) {
+    const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
     const productRequest: Product = req.body?.[FIELDS_NAME.PRODUCT]
       ? JSON.parse(req.body?.[FIELDS_NAME.PRODUCT])
       : {};
-    const filename = req?.file?.filename;
-    const destination = req?.file?.destination;
     let dataUpdate: any = {
       parentId: id,
     };
+    if (req.files && Number(req.files?.length) > 0) {
+      productRequest.image = listFileUploads[0];
+      productRequest.images = listFileUploads;
 
-    if (filename && destination) {
-      productRequest.image = `/${destination}/${filename}`;
+      const productVariants = ProductVariantModel.find({ parentId: id });
+      const updateImageProductVariant = async (item: ProductVariants) => {
+        await item.updateOne({
+          $set: {
+            'productItem.image': listFileUploads[0],
+            'productItem.images': listFileUploads,
+          },
+        });
+      };
+
+      if (productVariants) {
+        (await productVariants).forEach((item) => {
+          updateImageProductVariant(item);
+        });
+      }
     }
 
     if (productRequest?.price && !productRequest?.productAttributeList) {
@@ -186,7 +198,9 @@ class ProductService extends CRUDService<Product> {
                 );
               if (productVariantById) {
                 await productVariantById.updateOne({
-                  $set: { 'productItem.price': productRequest.price + (priceAdjustment || 0) },
+                  $set: {
+                    'productItem.price': productRequest.price + (priceAdjustment || 0),
+                  },
                 });
               }
             })();
@@ -226,11 +240,17 @@ class ProductService extends CRUDService<Product> {
             parentId: id,
             productItem: {
               ...productRequest,
-              name: `${productRequest?.name} - ${element?.extendedName}`,
+              name: `${
+                productRequest?.name || productVariantMatch.productItem?.name.split('-')[0].trim()
+              } - ${element?.extendedName}`,
               price:
                 (productRequest?.price || productVariantMatch.productItem?.price) +
                 (priceAdjustment || 0),
-              slug: generateUnsignedSlug(`${productRequest.name} - ${element.extendedName}`),
+              slug: generateUnsignedSlug(
+                `${
+                  productRequest?.name || productVariantMatch.productItem?.name.split('-')[0].trim()
+                } - ${element.extendedName}`,
+              ),
               productAttributeList: attributeValid,
             },
           };

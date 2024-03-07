@@ -6,6 +6,7 @@ import { CustomerAddress } from '@app/models/customerAddress/@type';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
 import { FIELDS_NAME } from '@app/constants';
+import CustomerAddressModel from '@app/models/customerAddress';
 
 class CustomerAddressService extends CRUDService<CustomerAddress> {
   constructor(model: Model<CustomerAddress>, nameService: string) {
@@ -33,6 +34,25 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
       const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Customer address does not exist');
       throw exception;
     }
+
+    if (customerAddressDTO?.addressItem?.isDefault) {
+      customerAddress.addressList.forEach((item) => {
+        (async () => {
+          await CustomerAddressModel.updateOne(
+            { 'addressList._id': item._id },
+            {
+              $set: {
+                'addressList.$.isDefault': false,
+              },
+            },
+            {
+              new: true,
+            },
+          );
+        })();
+      });
+    }
+
     await customerAddress.updateOne(
       { $push: { addressList: customerAddressDTO?.addressItem } },
       { new: true },
@@ -44,10 +64,6 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
   // UPDATE CUSTOMER ADDRESS ITEM
   async updateCustomerAddressItem(customerAddressItemId: string, req: Request) {
     const customerAddressDTO = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_ADDRESS]);
-    console.log(
-      '🚀 ~ file: customerAddress.ts:47 ~ CustomerAddressService ~ updateCustomerAddressItem ~ customerAddressDTO:',
-      customerAddressDTO,
-    );
 
     if (customerAddressDTO.customerId) {
       const customerAddressById = await this.getAddressByCustomerId(
@@ -61,17 +77,44 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
         );
         throw exception;
       }
+
+      if (customerAddressDTO?.addressItem?.isDefault) {
+        customerAddressById.addressList.forEach((item) => {
+          (async () => {
+            await CustomerAddressModel.updateOne(
+              { 'addressList._id': item._id },
+              {
+                $set: {
+                  'addressList.$.isDefault': false,
+                },
+              },
+              {
+                new: true,
+              },
+            );
+          })();
+        });
+        await customerAddressById.updateOne(
+          {
+            $set: {
+              'addressList.$[inner]': customerAddressDTO?.addressItem,
+            },
+          },
+          {
+            arrayFilters: [{ 'inner._id': customerAddressItemId }],
+            new: true,
+          },
+        );
+      }
+
       await customerAddressById.updateOne(
         {
           $set: {
-            'addressList.$[outer]': {
-              ...customerAddressDTO?.addressItem,
-              _id: customerAddressItemId,
-            },
+            'addressList.$[inner]': customerAddressDTO?.addressItem,
           },
         },
         {
-          arrayFilters: [{ 'outer._id': customerAddressItemId }],
+          arrayFilters: [{ 'inner._id': customerAddressItemId }],
           new: true,
         },
       );

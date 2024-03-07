@@ -1,20 +1,19 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Model } from 'mongoose';
-import CRUDService from './crudService';
-import { ActionType, Cart } from '@app/models/carts/@type';
-import { Request } from 'express';
-import { Product } from '@app/models/products/@type';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
-import { comparingObjectId } from '@app/utils/comparingObjectId';
 import CartModel from '@app/models/carts';
+import { Cart } from '@app/models/carts/@type';
+import { comparingObjectId } from '@app/utils/comparingObjectId';
+import { Request } from 'express';
+import { Model } from 'mongoose';
+import CRUDService from './crudService';
 
 class CartService extends CRUDService<Cart> {
   constructor(model: Model<Cart>, nameService: string) {
     super(model, nameService);
   }
 
-  /**@ADD_CART */
+  /** ADD CART */
   async addCartItem(customerId: string, req: Request) {
     const cartRecord = await this.model.findOne({ customerId: customerId });
     const cartRequestBody = req.body;
@@ -67,7 +66,7 @@ class CartService extends CRUDService<Cart> {
     }
   }
 
-  /**@UPDATE_CART */
+  /** UPDATE CART */
   async updateCartITem(customerId: string, req: Request) {
     const cartRecord = await this.model.findOne({ customerId: customerId });
     const cartRequestBody = req.body;
@@ -113,7 +112,7 @@ class CartService extends CRUDService<Cart> {
     cartRecord?.products?.find((productItemRecord) => handleUpdateCartItem(productItemRecord));
   }
 
-  /**@DELETE_CART */
+  /** DELETE CART */
   async deleteCartItem(customerId: string, productId: string) {
     const productItem = await this.model.findOne({
       'products.product': productId,

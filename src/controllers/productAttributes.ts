@@ -14,7 +14,7 @@ const productAttributeService = new ProductAttriButeService(
 
 const productAttributeController = {
   // SEARCH ALL
-  searchAll: async (req: Request, res: Response, next: NextFunction) => {
+  searchAll: async (__req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await productAttributeService.findAll();
       res.status(HttpStatusCode.OK).json(result);

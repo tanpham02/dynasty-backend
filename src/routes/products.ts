@@ -64,9 +64,11 @@ router.get('/search', productController.search);
  *                properties:
  *                   productInfo:
  *                         $ref: '#/components/schemas/Product'
- *                   file:
- *                        type: string
- *                        format: binary
+ *                   files:
+ *                        type: array
+ *                        items:
+ *                           type: string
+ *                           format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -101,9 +103,11 @@ router.post('/', uploadFileProduct, productController.create);
  *                properties:
  *                   productInfo:
  *                         $ref: '#/components/schemas/Product'
- *                   file:
- *                        type: string
- *                        format: binary
+ *                   files:
+ *                        type: array
+ *                        items:
+ *                           type: string
+ *                           format: binary
  *     responses:
  *       200:
  *         description: OK

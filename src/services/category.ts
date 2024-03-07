@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import CRUDService from '@app/services/crudService';
-import { Model } from 'mongoose';
+import { FIELDS_NAME } from '@app/constants';
+import { Exception } from '@app/exception';
+import { HttpStatusCode } from '@app/exception/type';
 import { Category } from '@app/models/category/@type';
 import ProductModel from '@app/models/products';
-import { Request } from 'express';
-import { HttpStatusCode } from '@app/exception/type';
-import { Exception } from '@app/exception';
-import { FIELDS_NAME } from '@app/constants';
-import { page, pipe, skip } from 'iter-ops';
-import { Product } from '@app/models/products/@type';
+import CRUDService from '@app/services/crudService';
 import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
+import { Request } from 'express';
+import { Model } from 'mongoose';
 
 class CategoryService extends CRUDService<Category> {
   constructor(model: Model<Category>, nameService: string) {
@@ -75,19 +73,25 @@ class CategoryService extends CRUDService<Category> {
       Object.keys(requestFormData.childrenCategory).length > 0
     ) {
       const childCategory = requestFormData?.childrenCategory;
-      const resultChild = childCategory.category?.map((item: any) => ({
-        ...item,
-        slug: generateUnsignedSlug(item?.name),
-      }));
 
-      childCategory.category = resultChild as unknown as any;
-      childCategory.parentId = new Object(requestFormData.childrenCategory.parentId);
+      if (childCategory) {
+        const resultChild = childCategory.category?.map((item: any) => ({
+          ...item,
+          slug: generateUnsignedSlug(item?.name),
+        }));
+
+        childCategory.category = resultChild as unknown as any;
+        childCategory.parentId = new Object(requestFormData.childrenCategory.parentId);
+      }
     }
 
     const categoryDetail = {
       ...requestFormData,
-      slug: generateUnsignedSlug(requestFormData?.name),
     };
+
+    if (requestFormData?.name) {
+      categoryDetail.slug = generateUnsignedSlug(requestFormData.name);
+    }
 
     const productIds = categoryDetail?.products;
     await ProductModel.updateMany(
@@ -96,8 +100,6 @@ class CategoryService extends CRUDService<Category> {
       },
       { $set: { categoryId: id } },
     );
-
-    //console.log('categoryDetail', categoryDetail);
 
     await this.model.findByIdAndUpdate({ _id: id }, categoryDetail, { new: true });
 
