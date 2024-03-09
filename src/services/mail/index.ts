@@ -1,25 +1,25 @@
 import nodemailer from 'nodemailer';
 import { MailOptions } from 'nodemailer/lib/json-transport';
 
-class MailService {
-  private username: string;
-  private password: string;
-  private mailOption!: MailOptions;
+import { configApp } from '@app/configs';
+import { MAIL_HOST, MAIL_POST, MAIL_SERVICE } from '@app/constants';
 
-  constructor(username: string, password: string, mailOption: MailOptions) {
-    this.username = username;
-    this.password = password;
+const { MAIL_APPLICATION_PASSWORD, MAIL_USERNAME } = configApp();
+class MailService {
+  private mailOption: MailOptions;
+
+  constructor(mailOption: MailOptions) {
     this.mailOption = mailOption;
   }
 
   sendMail() {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      host: 'smtp.gmail.com',
-      port: 587,
+      service: MAIL_HOST,
+      host: MAIL_SERVICE,
+      port: MAIL_POST,
       auth: {
-        user: 'phamvantan1311@gmail.com',
-        pass: 'wxbs cjkw dlrn mukk', // application password
+        user: MAIL_USERNAME,
+        pass: MAIL_APPLICATION_PASSWORD,
       },
     });
 

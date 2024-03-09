@@ -12,6 +12,10 @@ enum ProductStatus {
 
 const SALT: number = 10;
 
+const MAIL_POST: number = 587;
+const MAIL_SERVICE: string = 'gmail';
+const MAIL_HOST: string = 'smtp.gmail.com';
+
 const FIELDS_NAME = {
   CUSTOMER_SIGNUP: 'customerSignupInfo',
   USER_LOGIN: 'userLoginInfo',
@@ -34,4 +38,4 @@ const FIELDS_NAME = {
   EMAIL_TEMPLATE: 'emailTemplateInfo',
 };
 
-export { FIELDS_NAME, MODE, ProductStatus, SALT };
+export { FIELDS_NAME, MODE, ProductStatus, SALT, MAIL_HOST, MAIL_SERVICE, MAIL_POST };

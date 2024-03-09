@@ -294,7 +294,7 @@ const mailController = {
         </html>`,
       };
 
-      const nodeMailer = new MailService('', '', mailOption);
+      const nodeMailer = new MailService(mailOption);
       const response = nodeMailer.sendMail();
 
       return res.json(response);

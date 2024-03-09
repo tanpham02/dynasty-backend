@@ -10,6 +10,8 @@ interface Config {
   jwtRefreshKey?: string;
   APP_URL?: string;
   FRONT_END_URL?: string;
+  MAIL_USERNAME?: string;
+  MAIL_APPLICATION_PASSWORD?: string;
 }
 
 const configApp = () => {
@@ -41,6 +43,8 @@ const configApp = () => {
   resultConfig.jwtAccessKey = process.env.JWT_ACCESS_KEY;
   resultConfig.jwtRefreshKey = process.env.JWT_REFRESH_KEY;
   resultConfig.FRONT_END_URL = process.env.FRONTEND_URL;
+  resultConfig.MAIL_APPLICATION_PASSWORD = process.env.MAIL_APPLICATION_PASSWORD;
+  resultConfig.MAIL_USERNAME = process.env.MAIL_USERNAME;
 
   return resultConfig;
 };
