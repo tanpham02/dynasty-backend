@@ -1,23 +1,24 @@
-import categoryRouter from './category';
-import productRouter from './products';
-import comboPromotionsRouter from './comboPromotions';
-import promotionsRouter from './promotions';
-import voucherRouter from './vouchers';
-import userRouter from './users';
-import customerAddressRouter from './customerAddress';
-import customerRouter from './customers';
-import cartRouter from './carts';
-import authRouter from './auth';
-import orderRouter from './orders';
-import materialRouter from './materials';
-import productAttributeRoute from './productAttributes';
-import productVariantRoute from './productVariants';
-import bannerRoute from './banners';
-import storeSystemRoute from './storeSystem';
-import storeConfigRoute from './storeConfig';
-import storeInformationRoute from './storeInformation';
-import termAndPolicyRoute from './termAndPolicy';
-import statisticRoute from './statistics';
+import { default as categoryRouter } from './category';
+import { default as productRouter } from './products';
+import { default as comboPromotionsRouter } from './comboPromotions';
+import { default as promotionsRouter } from './promotions';
+import { default as voucherRouter } from './vouchers';
+import { default as userRouter } from './users';
+import { default as customerAddressRouter } from './customerAddress';
+import { default as customerRouter } from './customers';
+import { default as cartRouter } from './carts';
+import { default as authRouter } from './auth';
+import { default as orderRouter } from './orders';
+import { default as materialRouter } from './materials';
+import { default as productAttributeRoute } from './productAttributes';
+import { default as productVariantRoute } from './productVariants';
+import { default as bannerRoute } from './banners';
+import { default as storeSystemRoute } from './storeSystem';
+import { default as storeConfigRoute } from './storeConfig';
+import { default as storeInformationRoute } from './storeInformation';
+import { default as termAndPolicyRoute } from './termAndPolicy';
+import { default as statisticRoute } from './statistics';
+import { default as mailerRoute } from './mail';
 import { Application } from 'express';
 
 import {
@@ -40,6 +41,7 @@ import {
   STORE_INFORMATION_URL,
   TERM_AND_POLICY_URL,
   STATISTIC_URL,
+  MAILER_URL,
 } from '@app/services/apiUrl';
 
 export const routesMapping = (app: Application) => {
@@ -123,6 +125,10 @@ export const routesMapping = (app: Application) => {
     {
       path: TERM_AND_POLICY_URL,
       route: termAndPolicyRoute,
+    },
+    {
+      path: MAILER_URL,
+      route: mailerRoute,
     },
   ];
 

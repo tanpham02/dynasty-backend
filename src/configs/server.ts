@@ -24,15 +24,8 @@ const configServer = (app: Application) => {
   app.use(morgan('dev'));
   app.use(cookieParser()); // retries value from cookie
 
-  // GET IMAGE FROM URL
-  //         URL                                            folder contain image
-  //   app.use(express.static("public"));
-  app.use('/public/uploads/image/products', express.static('public/uploads/image/products'));
-  app.use('/public/uploads/image/users', express.static('public/uploads/image/users'));
-  app.use('/public/uploads/image/customers', express.static('public/uploads/image/customers'));
-  app.use('/public/uploads/image/banners', express.static('public/uploads/image/banners'));
-  // app.use('/static', express.static(path.join(__dirname, 'public'))) => Đi từ thư mục src vào
-  // app.use('/upload/img', express.static('upload/img'));  => Đi từ thu mục root vao
+  // STATIC FILE
+  app.use('/public', express.static('public'));
 
   // GLOBAL ERROR - ERROR HANDLER
   app.use(errorHandler);

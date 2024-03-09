@@ -1,7 +1,5 @@
-import { FIELDS_NAME } from '@app/constants';
 import categoryController from '@app/controllers/category';
-import { formDataParser } from '@app/middlewares/formDataParser';
-import { verifyToken } from '@app/middlewares/verifyToken';
+import { uploadFileCategory } from '@app/services/upload';
 import express from 'express';
 
 const router = express.Router();
@@ -83,6 +81,9 @@ router.get('/search-all', categoryController.searchAll);
  *                properties:
  *                   categoryInfo:
  *                        $ref: '#/components/schemas/Category'
+ *                   file:
+ *                        type: string
+ *                        format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -93,7 +94,7 @@ router.get('/search-all', categoryController.searchAll);
  */
 
 // CREATE CATEGORY
-router.post('/', formDataParser(FIELDS_NAME.CATEGORY), categoryController.createCategory);
+router.post('/', uploadFileCategory, categoryController.createCategory);
 
 /**
  * @swagger
@@ -117,6 +118,9 @@ router.post('/', formDataParser(FIELDS_NAME.CATEGORY), categoryController.create
  *                properties:
  *                   categoryInfo:
  *                        $ref: '#/components/schema/Category'
+ *                   file:
+ *                        type: string
+ *                        format: binary
  *
  *     responses:
  *       200:
@@ -128,7 +132,7 @@ router.post('/', formDataParser(FIELDS_NAME.CATEGORY), categoryController.create
  */
 
 // UPDATE CATEGORY
-router.patch('/:id', formDataParser(FIELDS_NAME.CATEGORY), categoryController.updateCategory);
+router.patch('/:id', uploadFileCategory, categoryController.updateCategory);
 
 /**
  * @swagger

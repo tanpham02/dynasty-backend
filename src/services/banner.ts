@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /* eslint-disable prefer-const */
-import Banner from '@app/models/banner/@type';
-import CRUDService from './crudService';
-import { Model } from 'mongoose';
 import { Request } from 'express';
-import { File } from 'buffer';
+import { Model } from 'mongoose';
+
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
-import { JSONCookie } from 'cookie-parser';
-import handleUploadFile from '@app/utils/handleUploadFile';
+import Banner from '@app/models/banner/@type';
 import { TypeUpload } from '@app/types';
+import handleUploadFile from '@app/utils/handleUploadFile';
+import CRUDService from './crudService';
 
 class BannerService extends CRUDService<Banner> {
   constructor(model: Model<Banner>, nameService: string) {
@@ -18,29 +17,35 @@ class BannerService extends CRUDService<Banner> {
 
   // CREATE
   async createOverriding(req: Request, fieldName: string) {
-    if (req.files) {
-      const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
-      if (Array.isArray(req.body?.[fieldName])) {
-        (async () => {
-          let bannersDTO: Banner[] = req.body?.[fieldName].map((item: string) => JSON.parse(item));
-          bannersDTO
-            .map((banner, index) => ({
-              ...banner,
-              url: listFileUploads[index],
-            }))
-            .forEach(async (item) => {
-              const newBanner = new this.model(item);
-              await newBanner.save();
-            });
-        })();
-      } else {
-        const newData = JSON.parse(req.body?.[fieldName]);
-        const newBn = new this.model({ ...newData, url: listFileUploads[0] });
-        await newBn.save();
-      }
+    const requestBody = req.body?.[fieldName];
 
-      return { message: 'Add banner success' };
+    if (Array.isArray(requestBody) && requestBody.length > 0) {
+      let bannersDTO: Banner[] = requestBody.map((item: string) => JSON.parse(item));
+      (async () => {
+        bannersDTO
+          .map((banner) => banner)
+          .forEach(async (item, index) => {
+            if (req.files) {
+              const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
+              item.url = listFileUploads[index];
+            }
+            const newBanner = new this.model(item);
+            console.log('🚀 ~ BannerService ~ .forEach ~ newBanner:', newBanner);
+            await newBanner.save();
+          });
+      })();
+    } else {
+      const newData = JSON.parse(requestBody);
+
+      if (req.files) {
+        const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
+        newData.url = listFileUploads[0];
+      }
+      const newBn = new this.model(newData);
+      await newBn.save();
     }
+
+    return { message: 'Add banner success' };
   }
 
   // UPDATE

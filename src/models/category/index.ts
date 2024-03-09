@@ -51,6 +51,7 @@ const CategorySchema = new Schema<Category>(
       type: String,
       required: true,
     },
+
     status: {
       type: String,
       enum: ProductStatus,
@@ -64,6 +65,9 @@ const CategorySchema = new Schema<Category>(
     ],
     priority: {
       type: Number,
+    },
+    avatar: {
+      type: String,
     },
     visible: {
       type: Boolean,

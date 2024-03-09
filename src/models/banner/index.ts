@@ -14,7 +14,7 @@ import { Schema, model } from 'mongoose';
  *             type: string
  *         priority:
  *             type: number
- *         banner:
+ *         url:
  *             type: string
  *         redirect:
  *             type: string
@@ -28,7 +28,7 @@ const BannerSchema = new Schema<Banner>(
     priority: {
       type: Number,
     },
-    banner: {
+    url: {
       type: String,
     },
     redirect: {

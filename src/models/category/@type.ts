@@ -53,6 +53,7 @@ interface Category extends BaseModel, Document {
   priority?: number;
   visible?: boolean;
   isShowHomePage?: boolean;
+  avatar?: string;
 }
 
 interface ChildCategory extends Document {

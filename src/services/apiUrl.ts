@@ -50,3 +50,6 @@ export const ORDER_URL = '/api/orders';
 
 // MATERIAL
 export const MATERIAL_URL = '/api/materials';
+
+// MATERIAL
+export const MAILER_URL = '/api/mail';

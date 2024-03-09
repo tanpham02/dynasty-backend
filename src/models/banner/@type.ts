@@ -13,7 +13,7 @@ import { Document } from 'mongoose';
  *             type: string
  *         priority:
  *             type: number
- *         banner:
+ *         url:
  *             type: string
  *         redirect:
  *             type: string

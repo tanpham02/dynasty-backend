@@ -46,6 +46,7 @@
     "moment-timezone": "^0.5.43",
     "mongoose": "^7.4.3",
     "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.11",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   },
@@ -59,6 +60,7 @@
     "@types/moment-timezone": "^0.5.30",
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.4.5",
+    "@types/nodemailer": "^6.4.14",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "concurrently": "^8.2.0",
@@ -78,5 +80,4 @@
     "name": "Tan Van Pham",
     "email": "phamvantan1311@gmail.com"
   }
-
 }

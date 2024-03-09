@@ -6,6 +6,7 @@ const uploadFileUser = uploadImage('public/uploads/image/users').single('file');
 const uploadFileStoreInformation = uploadImage('public/uploads/image/store-information').single(
   'file',
 );
+const uploadFileCategory = uploadImage('public/uploads/image/category').single('file');
 
 // Multiple
 const uploadFileBanner = uploadImage('public/uploads/image/banners').array('files', 10);
@@ -17,4 +18,5 @@ export {
   uploadFileUser,
   uploadFileBanner,
   uploadFileStoreInformation,
+  uploadFileCategory,
 };

@@ -5,7 +5,9 @@ import { HttpStatusCode } from '@app/exception/type';
 import { Category } from '@app/models/category/@type';
 import ProductModel from '@app/models/products';
 import CRUDService from '@app/services/crudService';
+import { TypeUpload } from '@app/types';
 import generateUnsignedSlug from '@app/utils/generateUnsignedSlug';
+import handleUploadFile from '@app/utils/handleUploadFile';
 import { Request } from 'express';
 import { Model } from 'mongoose';
 
@@ -19,6 +21,8 @@ class CategoryService extends CRUDService<Category> {
     const requestFormData = req?.body?.[FIELDS_NAME.CATEGORY]
       ? JSON.parse(req?.body?.[FIELDS_NAME.CATEGORY])
       : {};
+
+    const fileUploads = handleUploadFile(req, TypeUpload.ONE);
 
     if (
       requestFormData?.childrenCategory &&
@@ -37,6 +41,10 @@ class CategoryService extends CRUDService<Category> {
       ...requestFormData,
       slug: generateUnsignedSlug(requestFormData?.name),
     });
+
+    if (fileUploads.length) {
+      newCategory.set('avatar', fileUploads[0]);
+    }
 
     const productIds = newCategory?.products;
     const childrenCategory = newCategory?.childrenCategory;
