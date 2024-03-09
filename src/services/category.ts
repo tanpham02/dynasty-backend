@@ -70,6 +70,8 @@ class CategoryService extends CRUDService<Category> {
       ? JSON.parse(req?.body?.[FIELDS_NAME.CATEGORY])
       : {};
 
+    const fileUploads = handleUploadFile(req, TypeUpload.ONE);
+
     const alreadyExist = await this.getById(id);
     if (!alreadyExist) {
       const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.nameService}!`);
@@ -96,6 +98,10 @@ class CategoryService extends CRUDService<Category> {
     const categoryDetail = {
       ...requestFormData,
     };
+
+    if (req.file) {
+      categoryDetail.avatar = fileUploads[0];
+    }
 
     if (requestFormData?.name) {
       categoryDetail.slug = generateUnsignedSlug(requestFormData.name);
