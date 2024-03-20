@@ -1,7 +1,6 @@
-import { NextFunction, Request, Response } from 'express';
+import { HttpStatusCode } from '@app/exception/type';
 import authService from '@app/services/auth';
-import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import { Exception } from '@app/exception';
+import { NextFunction, Request, Response } from 'express';
 
 const authController = {
   // SIGNUP CUSTOMER
@@ -21,6 +20,27 @@ const authController = {
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       console.log('🚀 ~ file: auth.ts:27 ~ loginUser: ~ error:', error);
+      next(error);
+    }
+  },
+
+  // CUSTOMER LOGIN APP WITH PHONE NUMBER (OTP)
+  customerLoginWithPhoneNumber: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await authService.customerLoginWithPhoneNumber(req, res);
+    } catch (error) {
+      console.log('🚀 ~ error:', error);
+      next(error);
+    }
+  },
+
+  // LOGIN WITH GOOGLE ACCOUNT
+  loginWithGoogleAccount: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await authService.loginWithGoogleAccount(req, res, next);
+      res.status(HttpStatusCode.OK).json(response);
+    } catch (error) {
+      console.log('🚀 ~ error:', error);
       next(error);
     }
   },

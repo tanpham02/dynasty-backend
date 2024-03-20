@@ -1,9 +1,9 @@
-import { Schema, model } from 'mongoose';
-import { Customer, CustomerType } from './@type';
 import { ProductStatus } from '@app/constants';
+import { TIME_ZONE_VIET_NAME } from '@app/utils/date';
 import moment from 'moment';
 import 'moment-timezone';
-import { TIME_ZONE_VIET_NAME, YYYY_MM_DDTHH_MM_SS, YYYY_MM_DD_HH_MM_SS } from '@app/utils/date';
+import { Schema, model } from 'mongoose';
+import { Customer, CustomerType } from './@type';
 
 // SCHEMAS DESCRIPTION
 
@@ -26,6 +26,8 @@ import { TIME_ZONE_VIET_NAME, YYYY_MM_DDTHH_MM_SS, YYYY_MM_DD_HH_MM_SS } from '@
  *             type: string
  *             description: 2023-05-25
  *         customerAddressId:
+ *             type: string
+ *         otp:
  *             type: string
  *         orderIds:
  *             type: array
@@ -51,8 +53,9 @@ const CustomerSchema = new Schema<Customer>(
   {
     phoneNumber: {
       type: String,
-      unique: true,
-      required: true,
+    },
+    avatar: {
+      type: String,
     },
     fullName: {
       type: String,
@@ -87,6 +90,9 @@ const CustomerSchema = new Schema<Customer>(
       type: String,
       enum: CustomerType,
       default: CustomerType.NEW,
+    },
+    otp: {
+      type: String,
     },
   },
   {

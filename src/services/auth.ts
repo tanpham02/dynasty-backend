@@ -1,20 +1,24 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { configApp } from '@app/configs';
-import UserModel from '@app/models/users';
-import { compare } from 'bcrypt';
-import { Request, Response } from 'express';
 import { FIELDS_NAME, MODE, SALT } from '@app/constants';
-import { verify } from 'jsonwebtoken';
-import { genSalt, hash } from 'bcrypt';
-import CustomerModel from '@app/models/customers';
-import { Customer } from '@app/models/customers/@type';
-import JWT from '@app/middlewares/jwt';
-import User from '@app/models/users/@type';
-import CartModel from '@app/models/carts';
-import CustomerAddressModel from '@app/models/customerAddress';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
+import JWT from '@app/middlewares/jwt';
+import CartModel from '@app/models/carts';
+import CustomerAddressModel from '@app/models/customerAddress';
+import CustomerModel from '@app/models/customers';
+import { Customer, CustomerType } from '@app/models/customers/@type';
+import UserModel from '@app/models/users';
+import User from '@app/models/users/@type';
+import { compare, genSalt, hash, hashSync } from 'bcrypt';
+import { NextFunction, Request, Response } from 'express';
+import { verify } from 'jsonwebtoken';
+
+import FirebaseAdmin from 'firebase-admin';
+import { OAuth2Client } from 'google-auth-library';
+import googleService from './googleService';
+import CustomerService from './customers';
 
 const { jwtRefreshKey } = configApp();
 
@@ -101,6 +105,27 @@ const authService = {
     }
   },
 
+  // CUSTOMER LOGIN APP WITH PHONE NUMBER (OTP)
+  customerLoginWithPhoneNumber: async (req: Request, res: Response) => {
+    const { phoneNumber } = JSON.parse(req.body[FIELDS_NAME.CUSTOMER]);
+    console.log('🚀 ~ customerLoginWithPhoneNumber: ~ phoneNumber:', phoneNumber);
+
+    // const userExisted = await FirebaseAdmin.auth().getUserByPhoneNumber(phoneNumber);
+    // if (userExisted) {
+    const response = await FirebaseAdmin.auth().createUser({
+      phoneNumber: phoneNumber,
+    });
+
+    // const appVerifier =
+
+    // const auth = getAuth();
+    // const appVerifier = window.recaptchaVerifier;
+    // await signInWithPhoneNumber(auth, phoneNumber);
+
+    // console.log('🚀 ~ response:', response);
+    // return response;
+  },
+
   // LOGIN FOR CUSTOMER
   loginCustomer: async (req: Request, res: Response) => {
     const { phoneNumber, password }: Customer = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_LOGIN]);
@@ -138,6 +163,52 @@ const authService = {
           refreshToken, // run on environment development
         };
       }
+    }
+  },
+
+  // LOGIN WITH GOOGLE ACCOUNT
+  loginWithGoogleAccount: async (req: Request, res: Response, next: NextFunction) => {
+    const { accessToken } = req.body;
+
+    const customerService = new CustomerService(CustomerModel, 'customer');
+
+    const userInfo = await googleService.getCustomerInfo(accessToken, next);
+
+    if (userInfo) {
+      const customerByEmail = await customerService.getByEmail(userInfo.email);
+      if (!customerByEmail) {
+        const salt = await genSalt(SALT);
+        const pwAfterHash = await hash(userInfo.email, salt);
+        const newCustomer = new CustomerModel({
+          fullName: userInfo.name,
+          email: userInfo.email,
+          customerType: CustomerType.NEW,
+          avatar: userInfo.picture,
+          password: pwAfterHash,
+        });
+
+        const response = await newCustomer.save();
+        const customerJwt = new JWT(response._id);
+        const accessToken = customerJwt.generateAccessToken();
+        const refreshToken = customerJwt.generateRefreshToken();
+
+        const { password, ...infoRemaining } = response.toObject();
+        return {
+          customerInfo: infoRemaining,
+          accessToken,
+          refreshToken,
+        };
+      }
+
+      const customerJwt = new JWT(customerByEmail._id);
+      const accessToken = customerJwt.generateAccessToken();
+      const refreshToken = customerJwt.generateRefreshToken();
+
+      return {
+        customerInfo: customerByEmail,
+        accessToken,
+        refreshToken,
+      };
     }
   },
 

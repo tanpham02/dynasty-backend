@@ -1,10 +1,10 @@
-import MailService from '@app/services/mail';
-import dotenv from 'dotenv';
+import { NextFunction, Request, Response } from 'express';
 import { MailOptions } from 'nodemailer/lib/json-transport';
-import { Request, Response, NextFunction } from 'express';
+
+import MailService from '@app/services/mail';
 
 const mailController = {
-  sendMail: async (req: Request, res: Response, next: NextFunction) => {
+  sendMail: async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const mailOption: MailOptions = {
         from: {

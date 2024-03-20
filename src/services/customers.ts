@@ -54,6 +54,17 @@ class CustomerService extends CRUDService<Customer> {
 
     return await customer;
   }
+
+  // GET BY ID
+  async getByEmail(email: string) {
+    const customer = await this.model.findOne({ email });
+    if (customer) {
+      const { password, ...customerRemaining } = customer.toObject();
+
+      return customerRemaining;
+    }
+    return undefined;
+  }
 }
 
 export default CustomerService;

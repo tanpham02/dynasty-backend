@@ -10,14 +10,16 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "sourceMap": false,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "strict": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "types": ["node", "moment", "moment-timezone"],
     "baseUrl": ".", // Đường dẫn base cho các import
     "paths": {
       "@app/*":["./src/*"],  // Đường dẫn tương đối cho các import (alias)
     },
   },
+
   "files": ["src/index.d.ts"], // Các file dùng để defined global type cho dự án
   "include": ["src/**/*.ts", "src/**/*", "public/upload/**/**/*"],
   "exclude": ["node_modules"],

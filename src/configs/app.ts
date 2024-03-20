@@ -12,6 +12,9 @@ interface Config {
   FRONT_END_URL?: string;
   MAIL_USERNAME?: string;
   MAIL_APPLICATION_PASSWORD?: string;
+  CLIENT_ID?: string;
+  CLIENT_SECRET?: string;
+  REDIRECT_URL?: string;
 }
 
 const configApp = () => {
@@ -45,6 +48,9 @@ const configApp = () => {
   resultConfig.FRONT_END_URL = process.env.FRONTEND_URL;
   resultConfig.MAIL_APPLICATION_PASSWORD = process.env.MAIL_APPLICATION_PASSWORD;
   resultConfig.MAIL_USERNAME = process.env.MAIL_USERNAME;
+  resultConfig.CLIENT_ID = process.env.CLIENT_ID;
+  resultConfig.CLIENT_SECRET = process.env.CLIENT_SECRET;
+  resultConfig.REDIRECT_URL = process.env.REDIRECT_URL;
 
   return resultConfig;
 };

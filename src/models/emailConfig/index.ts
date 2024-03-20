@@ -1,11 +1,31 @@
 import { Schema, model } from 'mongoose';
 import { EmailConfig } from './@type';
 
+// SCHEMAS DESCRIPTION
+
+/**
+ * @swagger
+ * components:
+ *   schema:
+ *     EmailConfig:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         username:
+ *           type: string
+ *         password:
+ *           type: string
+ *         mailServer:
+ *           type: string
+ *         port:
+ *           type: number
+ *         isDefault:
+ *           type: boolean
+ */
+
 const EmailConfigSchema = new Schema<EmailConfig>(
   {
-    _id: {
-      type: Schema.Types.ObjectId,
-    },
     username: {
       type: String,
       required: true,
@@ -16,11 +36,9 @@ const EmailConfigSchema = new Schema<EmailConfig>(
     },
     mailServer: {
       type: String,
-      required: true,
     },
     port: {
       type: Number,
-      required: true,
     },
     isDefault: {
       type: Boolean,

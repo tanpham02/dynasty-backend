@@ -95,6 +95,41 @@ router.post(
   authController.loginCustomer,
 );
 
+// CUSTOMER LOGIN APP WITH PHONE NUMBER (OTP)
+router.post(
+  '/customer/phone-number',
+  formDataParser(FIELDS_NAME.CUSTOMER_LOGIN),
+  authController.customerLoginWithPhoneNumber,
+);
+
+/**
+ * @swagger
+ * '/api/auth/customer/login/social-account/google':
+ *  post:
+ *     tags: [Authentication]
+ *     summary: Customer login google account
+ *     requestBody:
+ *       required: true
+ *       content:
+ *          application/json:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   accessToken:
+ *                        type: string
+ *
+ *     responses:
+ *       200:
+ *         description: Ok
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schema/Customers'
+ */
+
+// LOGIN WITH GOOGLE ACCOUNT
+router.post('/customer/login/social-account/google', authController.loginWithGoogleAccount);
+
 // REQUEST REFRESH TOKEN FOR USER
 router.post('/user/refresh-token', authController.requestRefreshTokenForUser);
 

@@ -3,6 +3,9 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import morgan from 'morgan';
+import FirebaseAdmin from 'firebase-admin';
+
+import credentials from '../../firebase-adminsdk.json';
 
 import { errorHandler } from '@app/middlewares/errorHandler';
 import { configApp } from '.';
@@ -23,6 +26,11 @@ const configServer = (app: Application) => {
 
   app.use(morgan('dev'));
   app.use(cookieParser()); // retries value from cookie
+
+  // INITIALIZE APP FIREBASE
+  FirebaseAdmin.initializeApp({
+    credential: FirebaseAdmin.credential.cert(JSON.parse(JSON.stringify(credentials))),
+  });
 
   // STATIC FILE
   app.use('/public', express.static('public'));

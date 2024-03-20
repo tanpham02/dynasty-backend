@@ -19,6 +19,8 @@ import { default as storeInformationRoute } from './storeInformation';
 import { default as termAndPolicyRoute } from './termAndPolicy';
 import { default as statisticRoute } from './statistics';
 import { default as mailerRoute } from './mail';
+import { default as emailConfigRoute } from './emailConfig';
+import { default as emailTemplateRoute } from './emailTemplate';
 import { Application } from 'express';
 
 import {
@@ -42,6 +44,8 @@ import {
   TERM_AND_POLICY_URL,
   STATISTIC_URL,
   MAILER_URL,
+  EMAIL_CONFIG_URL,
+  EMAIL_TEMPLATE_URL,
 } from '@app/services/apiUrl';
 
 export const routesMapping = (app: Application) => {
@@ -129,6 +133,14 @@ export const routesMapping = (app: Application) => {
     {
       path: MAILER_URL,
       route: mailerRoute,
+    },
+    {
+      path: EMAIL_CONFIG_URL,
+      route: emailConfigRoute,
+    },
+    {
+      path: EMAIL_TEMPLATE_URL,
+      route: emailTemplateRoute,
     },
   ];
 

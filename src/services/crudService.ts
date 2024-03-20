@@ -42,6 +42,7 @@ class CRUDService<T extends Document> {
       statusOrder,
       customerType,
       isShowHomePage,
+      isDefault,
     } = params;
 
     const filter: Filter = {};
@@ -122,6 +123,10 @@ class CRUDService<T extends Document> {
 
     if (isShowHomePage || isShowHomePage === 0) {
       filter.isShowHomePage = Boolean(isShowHomePage);
+    }
+
+    if (isDefault) {
+      filter.isDefault = Boolean(Number(isDefault));
     }
 
     if (sort) {

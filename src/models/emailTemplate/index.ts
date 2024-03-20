@@ -1,12 +1,30 @@
 import { Schema, model } from 'mongoose';
 import { EmailTemplate, TemplateType } from './@type';
 
-const EmailConfigSchema = new Schema<EmailTemplate>(
-  {
-    _id: {
-      type: Schema.Types.ObjectId,
-    },
+// SCHEMAS DESCRIPTION
 
+/**
+ * @swagger
+ * components:
+ *   schema:
+ *     EmailTemplate:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         subject:
+ *           type: string
+ *         body:
+ *           type: string
+ *         templateType:
+ *           type: string
+ *           enum:
+ *             - WELCOME_EMAIL
+ *             - ORDER_CONFIRM_EMAIL
+ */
+
+const EmailTemplateSchema = new Schema<EmailTemplate>(
+  {
     subject: {
       type: String,
       required: true,
@@ -23,6 +41,6 @@ const EmailConfigSchema = new Schema<EmailTemplate>(
   { versionKey: false, timestamps: true },
 );
 
-const EmailConfigModel = model('EmailConfigModel', EmailConfigSchema);
+const EmailTemplateModel = model('EmailTemplateModel', EmailTemplateSchema);
 
-export default EmailConfigModel;
+export default EmailTemplateModel;

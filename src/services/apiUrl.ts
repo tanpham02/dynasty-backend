@@ -51,5 +51,11 @@ export const ORDER_URL = '/api/orders';
 // MATERIAL
 export const MATERIAL_URL = '/api/materials';
 
-// MATERIAL
+// MAILER
 export const MAILER_URL = '/api/mail';
+
+// EMAIL CONFIG
+export const EMAIL_CONFIG_URL = '/api/email-config';
+
+// EMAIL CONFIG
+export const EMAIL_TEMPLATE_URL = '/api/email-template';

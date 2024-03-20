@@ -62,6 +62,7 @@ interface Customer extends BaseModel, Document {
   orderIds: string[];
   customerType: CustomerType;
   otp?: string;
+  avatar?: string;
 }
 
 export { Customer, CustomerType };
