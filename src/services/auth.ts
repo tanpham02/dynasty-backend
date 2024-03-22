@@ -1,10 +1,10 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { configApp } from '@app/configs';
 import { FIELDS_NAME, MODE, SALT } from '@app/constants';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
-import JWT from '@app/middlewares/jwt';
 import CartModel from '@app/models/carts';
 import CustomerAddressModel from '@app/models/customerAddress';
 import CustomerModel from '@app/models/customers';
@@ -19,6 +19,10 @@ import FirebaseAdmin from 'firebase-admin';
 import { OAuth2Client } from 'google-auth-library';
 import googleService from './googleService';
 import CustomerService from './customers';
+import SMSService from './smsService';
+import { generateOtp } from '@app/utils/generateOtp';
+import { SMSType } from '@app/models/smsModel/@type';
+import JWT from '@app/middlewares/jwt';
 
 const { jwtRefreshKey } = configApp();
 
@@ -105,25 +109,53 @@ const authService = {
     }
   },
 
-  // CUSTOMER LOGIN APP WITH PHONE NUMBER (OTP)
-  customerLoginWithPhoneNumber: async (req: Request, res: Response) => {
-    const { phoneNumber } = JSON.parse(req.body[FIELDS_NAME.CUSTOMER]);
-    console.log('🚀 ~ customerLoginWithPhoneNumber: ~ phoneNumber:', phoneNumber);
+  // SEND OTP TP CUSTOMER WHEN LOGIN WITH PHONE NUMBER
+  sendOtpToCustomer: async (req: Request, res: Response) => {
+    const request = req.body;
+    const phoneNumber = request?.phoneNumber;
+    const otp = generateOtp();
 
-    // const userExisted = await FirebaseAdmin.auth().getUserByPhoneNumber(phoneNumber);
-    // if (userExisted) {
-    const response = await FirebaseAdmin.auth().createUser({
-      phoneNumber: phoneNumber,
-    });
+    if (phoneNumber) {
+      const smsService = new SMSService(phoneNumber, otp);
 
-    // const appVerifier =
+      const salt = await genSalt(SALT);
+      const pwAfterHash = await hash(phoneNumber, salt);
 
-    // const auth = getAuth();
-    // const appVerifier = window.recaptchaVerifier;
-    // await signInWithPhoneNumber(auth, phoneNumber);
+      const newCustomer = new CustomerModel({
+        phoneNumber: phoneNumber,
+        password: pwAfterHash,
+        otp: otp,
+      });
 
-    // console.log('🚀 ~ response:', response);
-    // return response;
+      await newCustomer.save();
+      await smsService.sendSms();
+    }
+  },
+
+  // VERIFY OTP AND COMPLETE LOGIN WITH PHONE NUMBER
+  verifyOtpAndGetCustomer: async (req: Request, res: Response) => {
+    const { phoneNumber, otp } = req.body;
+
+    if (phoneNumber && otp) {
+      const smsService = new SMSService(phoneNumber, otp);
+      const customer = await smsService.verifyOtpAndGetCustomer();
+
+      if (!customer) {
+        const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'OTP is wrong or invalid!');
+        throw exception;
+      }
+
+      const { password, ...customerRemaining }: any = customer?.toObject();
+
+      const jwt = new JWT(customer?._id);
+
+      const accessToken = jwt.generateAccessToken();
+      const refreshToken = jwt.generateRefreshToken();
+
+      await CustomerModel.updateOne({ _id: customer._id }, { $set: { otp: null } });
+
+      return { customerInfo: customerRemaining, accessToken, refreshToken };
+    }
   },
 
   // LOGIN FOR CUSTOMER

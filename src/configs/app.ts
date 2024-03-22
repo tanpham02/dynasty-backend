@@ -15,6 +15,8 @@ interface Config {
   CLIENT_ID?: string;
   CLIENT_SECRET?: string;
   REDIRECT_URL?: string;
+  INFOBIP_API_KEY?: string;
+  INFOBIP_HOST?: string;
 }
 
 const configApp = () => {
@@ -51,6 +53,8 @@ const configApp = () => {
   resultConfig.CLIENT_ID = process.env.CLIENT_ID;
   resultConfig.CLIENT_SECRET = process.env.CLIENT_SECRET;
   resultConfig.REDIRECT_URL = process.env.REDIRECT_URL;
+  resultConfig.INFOBIP_API_KEY = process.env.INFOBIP_API_KEY;
+  resultConfig.INFOBIP_HOST = process.env.INFOBIP_HOST;
 
   return resultConfig;
 };

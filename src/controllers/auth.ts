@@ -25,9 +25,21 @@ const authController = {
   },
 
   // CUSTOMER LOGIN APP WITH PHONE NUMBER (OTP)
-  customerLoginWithPhoneNumber: async (req: Request, res: Response, next: NextFunction) => {
+  sendOtpToCustomer: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await authService.customerLoginWithPhoneNumber(req, res);
+      const response = await authService.sendOtpToCustomer(req, res);
+      return res.status(HttpStatusCode.OK).json(response);
+    } catch (error) {
+      console.log('🚀 ~ error:', error);
+      next(error);
+    }
+  },
+
+  // VERIFY OTP AND COMPLETE LOGIN WITH PHONE NUMBER
+  verifyOtpAndGetCustomer: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await authService.verifyOtpAndGetCustomer(req, res);
+      return res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       console.log('🚀 ~ error:', error);
       next(error);

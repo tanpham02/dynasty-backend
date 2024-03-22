@@ -59,11 +59,9 @@ const CustomerSchema = new Schema<Customer>(
     },
     fullName: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
-      required: true,
       unique: true,
     },
     password: {

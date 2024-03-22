@@ -96,11 +96,10 @@ router.post(
 );
 
 // CUSTOMER LOGIN APP WITH PHONE NUMBER (OTP)
-router.post(
-  '/customer/phone-number',
-  formDataParser(FIELDS_NAME.CUSTOMER_LOGIN),
-  authController.customerLoginWithPhoneNumber,
-);
+router.post('/customer/login/phone-number', authController.sendOtpToCustomer);
+
+// VERIFY OTP AND COMPLETE LOGIN WITH PHONE NUMBER
+router.post('/customer/login/phone-number/verify-otp', authController.verifyOtpAndGetCustomer);
 
 /**
  * @swagger
