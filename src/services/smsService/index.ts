@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { configApp } from '@app/configs';
-import { generateOtp } from '@app/utils/generateOtp';
 import { https } from 'follow-redirects';
-import CustomerService from '../customers';
+
+import { configApp } from '@app/configs';
 import CustomerModel from '@app/models/customers';
-import { Customer } from '@app/models/customers/@type';
-import { Document } from 'mongoose';
+
+const { INFO_BIP_API_KEY, INFO_BIP_HOST } = configApp();
 
 class SMSService {
   private phoneNumber: string;
@@ -19,10 +18,10 @@ class SMSService {
   async sendSms() {
     const options = {
       method: 'POST',
-      hostname: `${configApp().INFOBIP_HOST}`,
+      hostname: `${INFO_BIP_HOST}`,
       path: '/sms/2/text/advanced',
       headers: {
-        Authorization: `App ${configApp().INFOBIP_API_KEY}`,
+        Authorization: `App ${INFO_BIP_API_KEY}`,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -63,7 +62,6 @@ class SMSService {
     });
 
     req.write(postData);
-
     req.end();
   }
 

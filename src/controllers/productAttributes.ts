@@ -1,14 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { FIELDS_NAME } from '@app/constants';
-import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
-import ProductAttributeModel from '@app/models/productAttributes';
+import { Models } from '@app/models';
 import ProductAttriButeService from '@app/services/productAttributes';
-import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
 const productAttributeService = new ProductAttriButeService(
-  ProductAttributeModel,
+  Models.ProductAttributeModel,
   'product attribute',
 );
 

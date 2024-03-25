@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { FIELDS_NAME } from '@app/constants';
 import { HttpStatusCode } from '@app/exception/type';
-import StoreConfigModel from '@app/models/storeConfig';
+import { Models } from '@app/models';
 import StoreConfigService from '@app/services/storeConfig';
 import { NextFunction, Request, Response } from 'express';
 
-const storeConfigService = new StoreConfigService(StoreConfigModel, 'store config');
+const storeConfigService = new StoreConfigService(Models.StoreConfigModel, 'store config');
 
 const storeConfigController = {
   //SEARCH ALL

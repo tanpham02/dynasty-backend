@@ -6,7 +6,7 @@ import { routesMapping } from './routes';
 
 const app: Application = express();
 
-const { APP_URL, port } = configApp();
+const { APP_URL, PORT } = configApp();
 
 // Connect DB
 connection();
@@ -20,6 +20,6 @@ configSwagger(app);
 // Routes
 routesMapping(app);
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(`Server is running at ${APP_URL}`);
 });

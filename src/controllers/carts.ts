@@ -2,10 +2,10 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { HttpStatusCode } from '@app/exception/type';
-import CartModel from '@app/models/carts';
+import { Models } from '@app/models';
 import CartService from '@app/services/carts';
 
-const cartService = new CartService(CartModel, 'cart');
+const cartService = new CartService(Models.CartModel, 'cart');
 
 const cartController = {
   // ADD CART

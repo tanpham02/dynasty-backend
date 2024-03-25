@@ -1,8 +1,6 @@
-import { StatisticModel } from '@app/models/statistics';
-import { NextFunction, Request, Response } from 'express';
-import { statisticCustomersService } from '@app/services/statistics';
 import { HttpStatusCode } from '@app/exception/type';
 import StatisticService from '@app/services/statistics/statisticCustomers';
+import { NextFunction, Request, Response } from 'express';
 
 const statisticService = new StatisticService();
 

@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { FIELDS_NAME } from '@app/constants';
 import materialController from '@app/controllers/materials';
-import { formDataParser } from '@app/middlewares/formDataParser';
+import { formDataParser } from '@app/utils/formDataParser';
 import emailTemplateController from '@app/controllers/emailTemplate';
 
 const router = Router();

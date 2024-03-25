@@ -1,4 +1,4 @@
-import { formDataParser } from '@app/middlewares/formDataParser';
+import { formDataParser } from '@app/utils/formDataParser';
 import { productVariantController } from '../controllers/productVariants';
 import { uploadFileProduct } from '@app/services/upload';
 

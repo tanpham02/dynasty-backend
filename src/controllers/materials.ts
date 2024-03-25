@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { HttpStatusCode } from '@app/exception/type';
-import MaterialModel from '@app/models/materials';
+import { Models } from '@app/models';
 import MaterialService from '@app/services/materials';
 import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const materialService = new MaterialService(MaterialModel, 'material');
+const materialService = new MaterialService(Models.MaterialModel, 'material');
 
 const materialController = {
   // SEARCH PAGINATION

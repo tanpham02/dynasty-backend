@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { FIELDS_NAME } from '@app/constants';
 import { HttpStatusCode } from '@app/exception/type';
-import TermAndPolicyModel from '@app/models/termAndPolicy';
+import { Models } from '@app/models';
 import TermAndPolicyService from '@app/services/termAndPolicy';
 import { NextFunction, Request, Response } from 'express';
 
-const termAndPolicyService = new TermAndPolicyService(TermAndPolicyModel, 'term and policy');
+const termAndPolicyService = new TermAndPolicyService(Models.TermAndPolicyModel, 'term and policy');
 
 const termAndPolicyController = {
   //SEARCH ALL

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Exception } from '@app/exception';
 import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import CustomerModel from '@app/models/customers';
+import { Models } from '@app/models';
 import CustomerService from '@app/services/customers';
 import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const customerService = new CustomerService(CustomerModel, 'customer');
+const customerService = new CustomerService(Models.CustomerModel, 'customer');
 
 const customerController = {
   // SEARCH PAGINATION

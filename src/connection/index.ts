@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import bcrypt from 'bcrypt';
 import 'module-alias/register';
 import mongoose, { ConnectOptions } from 'mongoose';
 
 import { configApp } from '@app/configs';
-import { SALT } from '@app/constants';
-import UserModel from '@app/models/users';
+import { UserModel } from '@app/models/exportModel';
+import hashPassword from '@app/utils/hashPassword';
 
 interface ConnectOptionsCustom extends ConnectOptions {
   useNewUrlParser: boolean;
@@ -32,8 +31,7 @@ const connection = async () => {
     console.log(`Connect to MongoDB success with ${connectMongo.connection.host}`);
     const checkEmpty = await UserModel.find();
     if (Array.isArray(checkEmpty) && !checkEmpty.length) {
-      const salt = await bcrypt.genSalt(SALT);
-      const passwordEncryption = await bcrypt.hash(seedData.password, salt);
+      const passwordEncryption = await hashPassword(seedData.password);
       const newUser = new UserModel({ ...seedData, password: passwordEncryption });
       await newUser.save();
       console.log('created seed data');

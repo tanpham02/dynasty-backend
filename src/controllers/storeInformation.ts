@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { FIELDS_NAME } from '@app/constants';
 import { HttpStatusCode } from '@app/exception/type';
-import StoreInformationModel from '@app/models/storeInformation';
+import { Models } from '@app/models';
 import StoreInformationService from '@app/services/storeInformation';
-import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
 const storeInformationService = new StoreInformationService(
-  StoreInformationModel,
+  Models.StoreInformationModel,
   'store information',
 );
 

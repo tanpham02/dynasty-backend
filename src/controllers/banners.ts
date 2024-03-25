@@ -3,11 +3,11 @@ import { NextFunction, Request, Response } from 'express';
 
 import { FIELDS_NAME } from '@app/constants';
 import { HttpStatusCode } from '@app/exception/type';
-import BannerModel from '@app/models/banner';
+import { Models } from '@app/models';
 import BannerService from '@app/services/banner';
 import { Params } from '@app/types';
 
-const bannerService = new BannerService(BannerModel, 'banner');
+const bannerService = new BannerService(Models.BannerModel, 'banner');
 
 const bannerController = {
   // SEARCH PAGINATION

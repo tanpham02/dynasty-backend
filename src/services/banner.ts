@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
-import Banner from '@app/models/banner/@type';
+import Banner from '@app/models/banners/@type';
 import { TypeUpload } from '@app/types';
 import handleUploadFile from '@app/utils/handleUploadFile';
 import CRUDService from './crudService';

@@ -2,12 +2,11 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { HttpStatusCode } from '@app/exception/type';
-import OrderModel from '@app/models/orders';
-import { StatusOrder } from '@app/models/orders/@type';
+import { Models } from '@app/models';
 import OrderService from '@app/services/orders';
 import { Params } from '@app/types';
 
-const orderService = new OrderService(OrderModel, 'order');
+const orderService = new OrderService(Models.OrderModel, 'order');
 
 const orderController = {
   // SEARCH PAGINATION
@@ -66,9 +65,10 @@ const orderController = {
   updateStatusOrder: async (req: Request, res: Response, next: NextFunction) => {
     const { orderId } = req.params;
     const { statusOrderRequest } = req.query;
+
     try {
       const { message } = await orderService.updateStatusOrder(
-        statusOrderRequest as StatusOrder,
+        statusOrderRequest as any,
         orderId?.toString() ?? '',
       );
       res.status(HttpStatusCode.OK).json(message);

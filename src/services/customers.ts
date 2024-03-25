@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME, SALT } from '@app/constants';
+import { FIELDS_NAME } from '@app/constants';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
 import CustomerModel from '@app/models/customers';
 import { Customer } from '@app/models/customers/@type';
 import CRUDService from '@app/services/crudService';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
-import { genSalt, hash } from 'bcrypt';
+import hashPassword from '@app/utils/hashPassword';
 import { Request } from 'express';
 import { Model } from 'mongoose';
 
@@ -36,8 +36,7 @@ class CustomerService extends CRUDService<Customer> {
     }
 
     if (dataUpdate?.password) {
-      const salt = await genSalt(SALT);
-      const passwordAfterHash = await hash(dataUpdate.password, salt);
+      const passwordAfterHash = await hashPassword(dataUpdate.password);
       dataUpdate.password = passwordAfterHash;
     }
 

@@ -1,6 +1,4 @@
-import { Schema, Document } from 'mongoose';
-import { Cart } from '../carts/@type';
-import { ProductVariants } from '../productVariants/@type';
+import { Document, Schema } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
 
@@ -186,4 +184,4 @@ interface Order extends Document {
   note?: string;
 }
 
-export { Order, StatusOrder, TypeOrder, OrderReceivingTime, StatusCheckout, PaymentMethod };
+export { Order, OrderReceivingTime, PaymentMethod, StatusCheckout, StatusOrder, TypeOrder };

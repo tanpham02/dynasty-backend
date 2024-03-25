@@ -1,6 +1,6 @@
 import { FIELDS_NAME } from '@app/constants';
 import customerAddressController from '@app/controllers/customerAddress';
-import { formDataParser } from '@app/middlewares/formDataParser';
+import { formDataParser } from '@app/utils/formDataParser';
 import { Router } from 'express';
 
 const router = Router();

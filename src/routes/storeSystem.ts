@@ -1,6 +1,6 @@
 import { FIELDS_NAME } from '@app/constants';
 import storeSystemController from '@app/controllers/storeSystem';
-import { formDataParser } from '@app/middlewares/formDataParser';
+import { formDataParser } from '@app/utils/formDataParser';
 import express from 'express';
 const router = express.Router();
 

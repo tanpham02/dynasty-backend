@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import userController from '@app/controllers/users';
-import { verifyTokenAndAuthenRole } from '@app/middlewares/verifyToken';
+import { verifyTokenAndRolePermission } from '@app/middlewares/verifyToken';
 import { uploadFileUser } from '@app/services/upload';
 
 const router = Router();
@@ -153,6 +153,6 @@ router.get('/:id', userController.getById);
  *              schema:
  *                 $ref: '#/components/schema/Users'
  */
-router.delete('/', verifyTokenAndAuthenRole, userController.delete);
+router.delete('/', verifyTokenAndRolePermission, userController.delete);
 
 export default router;

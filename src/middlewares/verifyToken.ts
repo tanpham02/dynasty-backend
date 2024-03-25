@@ -11,10 +11,10 @@ interface UserRequest extends Request {
 
 const verifyToken = (req: UserRequest, res: Response, next: NextFunction) => {
   const token = req?.headers?.authorization ?? '';
-  const { jwtAccessKey } = configApp();
+  const { JWT_ACCESS_KEY } = configApp();
   if (token) {
     const accessToken = token.split(' ')[1];
-    verify(accessToken, jwtAccessKey ?? '', (err, user) => {
+    verify(accessToken, JWT_ACCESS_KEY, (err, user) => {
       if (err) {
         return res.status(HttpStatusCode.FORBIDDEN).json('Token is not valid!');
       }
@@ -27,7 +27,7 @@ const verifyToken = (req: UserRequest, res: Response, next: NextFunction) => {
   }
 };
 
-const verifyTokenAndAuthenRole = (req: UserRequest, res: Response, next: NextFunction) => {
+const verifyTokenAndRolePermission = (req: UserRequest, res: Response, next: NextFunction) => {
   verifyToken(req, res, () => {
     if (req.user?.role !== Role.ADMIN) {
       res.status(HttpStatusCode.FORBIDDEN).json({ message: "You'er not allow delete this user" });
@@ -37,4 +37,4 @@ const verifyTokenAndAuthenRole = (req: UserRequest, res: Response, next: NextFun
   });
 };
 
-export { verifyToken, verifyTokenAndAuthenRole };
+export { verifyToken, verifyTokenAndRolePermission };

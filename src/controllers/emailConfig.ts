@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { FIELDS_NAME } from '@app/constants';
 import { HttpStatusCode } from '@app/exception/type';
-import EmailConfigModel from '@app/models/emailConfig';
+import { Models } from '@app/models';
 import EmailConfigService from '@app/services/emailConfig';
 import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const emailConfigService = new EmailConfigService(EmailConfigModel, 'email config');
+const emailConfigService = new EmailConfigService(Models.EmailConfigModel, 'email config');
 
 const emailConfigController = {
   // SEARCH

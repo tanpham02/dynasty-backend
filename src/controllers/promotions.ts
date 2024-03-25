@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Exception } from '@app/exception';
 import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import PromotionsModel from '@app/models/promotions';
+import { Models } from '@app/models';
 import PromotionService from '@app/services/promotions';
 import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const promoService = new PromotionService(PromotionsModel, 'promotions');
+const promoService = new PromotionService(Models.PromotionModel, 'promotions');
 const promotionController = {
   // SEARCH PAGINATION PROMOTIONS
   search: async (req: Request, res: Response) => {

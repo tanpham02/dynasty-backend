@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { NextFunction } from 'express';
-import https from 'https';
 
 const googleService = {
   getCustomerInfo: async (token: string, next: NextFunction) => {

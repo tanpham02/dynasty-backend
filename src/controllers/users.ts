@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { HttpStatusCode } from '@app/exception/type';
-import UserModel from '@app/models/users';
-import UserService from '@app/services/users';
-import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const userService = new UserService(UserModel, 'user');
+import { HttpStatusCode } from '@app/exception/type';
+import { Models } from '@app/models';
+import UserService from '@app/services/users';
+import { Params } from '@app/types';
+
+const userService = new UserService(Models.UserModel, 'user');
 
 const userController = {
   // SEARCH PAGINATION

@@ -1,8 +1,13 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import JWT from '@app/utils/jwt';
+import { compare } from 'bcrypt';
+import { NextFunction, Request, Response } from 'express';
+import { verify } from 'jsonwebtoken';
+
 import { configApp } from '@app/configs';
-import { FIELDS_NAME, MODE, SALT } from '@app/constants';
+import { FIELDS_NAME, MODE } from '@app/constants';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
 import CartModel from '@app/models/carts';
@@ -11,20 +16,13 @@ import CustomerModel from '@app/models/customers';
 import { Customer, CustomerType } from '@app/models/customers/@type';
 import UserModel from '@app/models/users';
 import User from '@app/models/users/@type';
-import { compare, genSalt, hash, hashSync } from 'bcrypt';
-import { NextFunction, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
-
-import FirebaseAdmin from 'firebase-admin';
-import { OAuth2Client } from 'google-auth-library';
-import googleService from './googleService';
-import CustomerService from './customers';
-import SMSService from './smsService';
 import { generateOtp } from '@app/utils/generateOtp';
-import { SMSType } from '@app/models/smsModel/@type';
-import JWT from '@app/middlewares/jwt';
+import hashPassword from '@app/utils/hashPassword';
+import CustomerService from './customers';
+import googleService from './googleService';
+import SMSService from './smsService';
 
-const { jwtRefreshKey } = configApp();
+const { JWT_REFRESH_KEY } = configApp();
 
 const authService = {
   // SIGNUP CUSTOMER
@@ -57,8 +55,7 @@ const authService = {
       throw exception;
     }
 
-    const salt = await genSalt(SALT);
-    const passwordAfterHash = await hash(customerSignupRequest.password, salt);
+    const passwordAfterHash = await hashPassword(customerSignupRequest.password);
     const newCustomer = new CustomerModel({
       ...customerSignupRequest,
       password: passwordAfterHash,
@@ -109,7 +106,6 @@ const authService = {
     }
   },
 
-  // SEND OTP TP CUSTOMER WHEN LOGIN WITH PHONE NUMBER
   sendOtpToCustomer: async (req: Request, res: Response) => {
     const request = req.body;
     const phoneNumber = request?.phoneNumber;
@@ -118,8 +114,7 @@ const authService = {
     if (phoneNumber) {
       const smsService = new SMSService(phoneNumber, otp);
 
-      const salt = await genSalt(SALT);
-      const pwAfterHash = await hash(phoneNumber, salt);
+      const pwAfterHash = await hashPassword(phoneNumber);
 
       const newCustomer = new CustomerModel({
         phoneNumber: phoneNumber,
@@ -209,8 +204,7 @@ const authService = {
     if (userInfo) {
       const customerByEmail = await customerService.getByEmail(userInfo.email);
       if (!customerByEmail) {
-        const salt = await genSalt(SALT);
-        const pwAfterHash = await hash(userInfo.email, salt);
+        const pwAfterHash = await hashPassword(userInfo.email);
         const newCustomer = new CustomerModel({
           fullName: userInfo.name,
           email: userInfo.email,
@@ -253,23 +247,27 @@ const authService = {
       throw exception;
     }
 
-    const newAccessTk = verify(refreshTokenCookie, jwtRefreshKey || '', (err: any, _user: any) => {
-      if (err) {
-        const exception = new Exception(req?.statusCode || 0, err?.message);
-        throw exception;
-      }
-      const userJwt = new JWT(_user._id, _user.role);
-      const newAccessToken = userJwt.generateAccessToken();
-      const newRefreshToken = userJwt.generateRefreshToken();
+    const newAccessTk = verify(
+      refreshTokenCookie,
+      JWT_REFRESH_KEY || '',
+      (err: any, _user: any) => {
+        if (err) {
+          const exception = new Exception(req?.statusCode || 0, err?.message);
+          throw exception;
+        }
+        const userJwt = new JWT(_user._id, _user.role);
+        const newAccessToken = userJwt.generateAccessToken();
+        const newRefreshToken = userJwt.generateRefreshToken();
 
-      res.cookie('refreshToken', newRefreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === MODE.PRODUCTION,
-        sameSite: true,
-      });
+        res.cookie('refreshToken', newRefreshToken, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === MODE.PRODUCTION,
+          sameSite: true,
+        });
 
-      return newAccessToken;
-    });
+        return newAccessToken;
+      },
+    );
     return {
       accessToken: newAccessTk,
     };
@@ -286,7 +284,7 @@ const authService = {
 
     const newAccessTk = verify(
       refreshTokenCookie,
-      jwtRefreshKey || '',
+      JWT_REFRESH_KEY || '',
       (err: any, _customer: any) => {
         if (err) {
           const exception = new Exception(req?.statusCode || 0, err?.message);
@@ -297,8 +295,8 @@ const authService = {
         const newRefreshToken = customerJwt.generateRefreshToken();
 
         res.cookie('refreshToken', newRefreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === MODE.PRODUCTION,
+          httpOnly: true, // The cookie only accessible by the web server
+          secure: process.env.NODE_ENV === MODE.PRODUCTION, //https
           sameSite: true,
         });
 

@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME } from '@app/constants';
-import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
-import CategoryModel from '@app/models/category';
+import { Models } from '@app/models';
 import CategoryService from '@app/services/category';
 import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const categoryService = new CategoryService(CategoryModel, 'category');
+const categoryService = new CategoryService(Models.CategoryModel, 'category');
 
 const categoryController = {
   // SEARCH ALL

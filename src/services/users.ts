@@ -1,18 +1,18 @@
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import User from '@app/models/users/@type';
-import CRUDService from './crudService';
-import { Model } from 'mongoose';
-import { Request } from 'express';
-import { genSalt, hash } from 'bcrypt';
-import { FIELDS_NAME, SALT } from '@app/constants';
+import { FIELDS_NAME } from '@app/constants';
+import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
 import UserModel from '@app/models/users';
-import { Exception } from '@app/exception';
+import User from '@app/models/users/@type';
+import { TypeUpload } from '@app/types';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
 import handleUploadFile from '@app/utils/handleUploadFile';
-import { TypeUpload } from '@app/types';
+import hashPassword from '@app/utils/hashPassword';
+import { Request } from 'express';
+import { Model } from 'mongoose';
+import CRUDService from './crudService';
 
 class UserService extends CRUDService<User> {
   constructor(model: Model<User>, nameService: string) {
@@ -50,8 +50,7 @@ class UserService extends CRUDService<User> {
       const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'password field is requirement');
       throw exception;
     }
-    const salt = await genSalt(SALT);
-    const passwordAfterHash = await hash(password, salt);
+    const passwordAfterHash = await hashPassword(password);
     const newUser = new this.model({
       ...user,
       password: passwordAfterHash,
@@ -101,8 +100,7 @@ class UserService extends CRUDService<User> {
     }
 
     if (newDataUpdate?.password) {
-      const salt = await genSalt(SALT);
-      const passwordAfterHash = await hash(newDataUpdate?.password, salt);
+      const passwordAfterHash = await hashPassword(newDataUpdate?.password);
       newDataUpdate.password = passwordAfterHash;
     }
 

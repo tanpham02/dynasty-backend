@@ -1,7 +1,7 @@
 import { FIELDS_NAME } from '@app/constants';
 import materialController from '@app/controllers/materials';
-import { formDataParser } from '@app/middlewares/formDataParser';
-import { verifyTokenAndAuthenRole } from '@app/middlewares/verifyToken';
+import { formDataParser } from '@app/utils/formDataParser';
+import { verifyTokenAndRolePermission } from '@app/middlewares/verifyToken';
 import { Router } from 'express';
 
 const router = Router();

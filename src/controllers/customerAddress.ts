@@ -1,10 +1,12 @@
 import { HttpStatusCode } from '@app/exception/type';
-import CustomerAddressModel from '@app/models/customerAddress';
+import { Models } from '@app/models';
 import CustomerAddressService from '@app/services/customerAddress';
-import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const customerAddressService = new CustomerAddressService(CustomerAddressModel, 'customer address');
+const customerAddressService = new CustomerAddressService(
+  Models.CustomerAddressModel,
+  'customer address',
+);
 
 const customerAddressController = {
   // GET CUSTOMER ADDRESS BY CUSTOMER ID

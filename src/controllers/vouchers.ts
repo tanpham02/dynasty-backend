@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Exception } from '@app/exception';
-import { HttpStatusCode, INTERNAL_SERVER_ERROR_MSG } from '@app/exception/type';
-import VoucherModel from '@app/models/vouchers';
-import VoucherService from '@app/services/vouchers';
-import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const voucherService = new VoucherService(VoucherModel, 'voucher');
+import { HttpStatusCode } from '@app/exception/type';
+import { Models } from '@app/models';
+import VoucherService from '@app/services/vouchers';
+import { Params } from '@app/types';
+
+const voucherService = new VoucherService(Models.VoucherModel, 'voucher');
 
 const voucherController = {
   // SEARCH PAGINATION VOUCHER

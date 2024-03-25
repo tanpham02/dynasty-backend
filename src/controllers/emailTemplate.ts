@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { FIELDS_NAME } from '@app/constants';
 import { HttpStatusCode } from '@app/exception/type';
-import EmailTemplateModel from '@app/models/emailTemplate';
+import { Models } from '@app/models';
 import EmailTemplateService from '@app/services/emailTemplate';
 import { NextFunction, Request, Response } from 'express';
 
-const emailTemplateService = new EmailTemplateService(EmailTemplateModel, 'email template');
+const emailTemplateService = new EmailTemplateService(Models.EmailTemplateModel, 'email template');
 
 const emailTemplateController = {
   // SEARCH

@@ -46,7 +46,7 @@ import {
   MAILER_URL,
   EMAIL_CONFIG_URL,
   EMAIL_TEMPLATE_URL,
-} from '@app/services/apiUrl';
+} from '@app/constants/apiUrl';
 
 export const routesMapping = (app: Application) => {
   const routesData = [

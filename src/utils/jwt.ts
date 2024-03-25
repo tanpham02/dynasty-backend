@@ -2,7 +2,7 @@
 import { Role } from '@app/models/users/@type';
 import { sign } from 'jsonwebtoken';
 import { configApp } from '@app/configs';
-const { jwtAccessKey, jwtRefreshKey } = configApp();
+const { JWT_ACCESS_KEY, JWT_REFRESH_KEY } = configApp();
 
 class JWT {
   private _id: string;
@@ -22,7 +22,7 @@ class JWT {
         id: this._id,
         role: this.role,
       },
-      jwtAccessKey ?? '',
+      JWT_ACCESS_KEY,
       {
         expiresIn: '7d',
       },
@@ -36,7 +36,7 @@ class JWT {
         id: this._id,
         role: this.role,
       },
-      jwtRefreshKey ?? '',
+      JWT_REFRESH_KEY,
       {
         expiresIn: '365d',
       },
