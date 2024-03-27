@@ -5,7 +5,9 @@ import { HttpStatusCode } from '@app/exception/type';
 import CustomerModel from '@app/models/customers';
 import { Customer } from '@app/models/customers/@type';
 import CRUDService from '@app/services/crudService';
+import { TypeUpload } from '@app/types';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
+import handleUploadFile from '@app/utils/handleUploadFile';
 import hashPassword from '@app/utils/hashPassword';
 import { Request } from 'express';
 import { Model } from 'mongoose';
@@ -17,7 +19,10 @@ class CustomerService extends CRUDService<Customer> {
 
   // UPDATE
   async updateOverriding(id: string, req: Request) {
-    const dataUpdate: Customer = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER]) || {};
+    const dataUpdate: Customer = req.body?.[FIELDS_NAME.CUSTOMER]
+      ? JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER])
+      : {};
+    const fileUpload = handleUploadFile(req, TypeUpload.ONE);
 
     const isCustomerAlreadyExist = await this.getById(id);
 
@@ -40,6 +45,10 @@ class CustomerService extends CRUDService<Customer> {
       dataUpdate.password = passwordAfterHash;
     }
 
+    if (fileUpload && fileUpload[0].length) {
+      dataUpdate.avatar = fileUpload[0];
+    }
+
     await this.model.findByIdAndUpdate(id, dataUpdate, { new: true });
     return { message: `Update ${this.nameService} success` };
   }
@@ -51,7 +60,9 @@ class CustomerService extends CRUDService<Customer> {
       model: 'CustomerAddress',
     });
 
-    return await customer;
+    const { password, ...remaining } = (await customer).toObject();
+
+    return remaining;
   }
 
   // GET BY ID

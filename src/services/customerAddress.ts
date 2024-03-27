@@ -17,7 +17,7 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
   async getAddressByCustomerId(customerId: string) {
     const customerAddress = await this.model.findOne({ customerId: customerId });
     if (!customerAddress) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Customer addres does not exist');
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Customer address does not exist');
       throw exception;
     }
     return customerAddress;

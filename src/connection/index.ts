@@ -32,9 +32,10 @@ const connection = async () => {
     const checkEmpty = await UserModel.find();
     if (Array.isArray(checkEmpty) && !checkEmpty.length) {
       const passwordEncryption = await hashPassword(seedData.password);
-      const newUser = new UserModel({ ...seedData, password: passwordEncryption });
+      seedData.password = passwordEncryption;
+      const newUser = new UserModel(seedData);
       await newUser.save();
-      console.log('created seed data');
+      console.log('Initialize seed data success');
     }
   } catch (err) {
     console.log(`Connect to MongoDB fail with ${err}`);

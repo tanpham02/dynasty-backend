@@ -1,4 +1,5 @@
 import customerController from '@app/controllers/customers';
+import { uploadFileCustomer } from '@app/services/upload';
 import { Router } from 'express';
 
 const router = Router();
@@ -90,7 +91,9 @@ router.get('/:id', customerController.getById);
  *                properties:
  *                   customerInfo:
  *                        $ref: '#/components/schema/Customers'
-
+ *                   file:
+ *                        type: string
+ *                        format: binary
  *     responses:
  *       200:
  *         description: OK
@@ -101,7 +104,7 @@ router.get('/:id', customerController.getById);
  */
 
 // UPDATE
-router.patch('/:id', customerController.update);
+router.patch('/:id', uploadFileCustomer, customerController.update);
 
 /**
  * @swagger

@@ -29,6 +29,8 @@ import { Customer, CustomerType } from './@type';
  *             type: string
  *         otp:
  *             type: string
+ *         avatar:
+ *             type: string
  *         orderIds:
  *             type: array
  *             items:
