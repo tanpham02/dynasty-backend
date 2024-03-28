@@ -1,12 +1,10 @@
-import { Models, model } from 'mongoose';
-import { Models, Types } from '@app/models';
-import CRUDService from './crudService';
+// import { model } from 'mongoose';
+// import CRUDService from './crudService';
+// import { Models, Types } from '@app/models';
 
-const { ProductFavorite } = Types;
-
-
-class ProductFavoriteService extends CRUDService<ProductFavorite> {
-  constructor(model:Models., serviceName: string) {
-    super(model, serviceName);
-  }
-}
+// class ProductFavoriteService extends CRUDService<Types.ProductFavorite> {
+// import { Models, Types } from '@app/models';
+//   constructor(model: Models.ProductFavoriteModel, serviceName: string) {
+//     super(model, serviceName);
+//   }
+// }
