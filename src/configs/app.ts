@@ -40,7 +40,7 @@ const configApp = () => {
     PORT: port,
     MONGO_URL: process.env.MONGO_URL || '',
     // APP_URL: `${process.env.BASE_URL}:${port}`,
-    APP_URL: process.env.BASE_URL,
+    APP_URL: process.env.BASE_URL || '',
     JWT_ACCESS_KEY: process.env.JWT_ACCESS_KEY || '',
     JWT_REFRESH_KEY: process.env.JWT_REFRESH_KEY || '',
     FRONT_END_URL: process.env.FRONTEND_URL || '',
