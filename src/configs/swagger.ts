@@ -27,6 +27,12 @@ const configSwagger = (app: Application) => {
         {
           url: 'http://localhost:1009',
         },
+        {
+          url: 'https://dynasty-ws.vtaan.id.vn',
+        },
+        {
+          url: 'http://103.163.118.88:2000',
+        },
       ],
 
       components: {

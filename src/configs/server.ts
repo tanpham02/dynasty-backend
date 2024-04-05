@@ -12,8 +12,8 @@ const { FRONT_END_URL } = configApp();
 const configServer = (app: Application) => {
   dotenv.config({ path: '.env.development' });
   const corsConfig = {
-    // origin: [FRONT_END_URL!, 'http://103.163.118.88:1311', 'http://localhost:1311'],
-    // optionsSuccessStatus: 200,
+    origin: [FRONT_END_URL!, 'http://103.163.118.88:1311', 'http://localhost:1311'],
+    optionsSuccessStatus: 200,
   };
   app.use(cors(corsConfig));
 
