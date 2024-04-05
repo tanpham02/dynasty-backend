@@ -25,10 +25,10 @@ const configSwagger = (app: Application) => {
       },
       servers: [
         {
-          url: 'http://localhost:1009',
+          url: 'https://dynasty-ws.vtaan.id.vn',
         },
         {
-          url: 'https://dynasty-ws.vtaan.id.vn',
+          url: 'http://localhost:1009',
         },
         {
           url: 'http://103.163.118.88:2000',

@@ -72,6 +72,33 @@ router.get('/:id', customerController.getById);
 
 /**
  * @swagger
+ * '/api/customers/customer-info':
+ *  post:
+ *     tags: [Customers]
+ *     summary: Find by access token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *          application/json:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   accessToken:
+ *                        type: string
+ *
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              type: Object
+ */
+
+// GET BY ACCESS TOKEN
+router.post('/customer-info', customerController.getCustomerInfo);
+
+/**
+ * @swagger
  * '/api/customers/{id}':
  *  patch:
  *     tags: [Customers]

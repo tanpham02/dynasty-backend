@@ -1,4 +1,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { Request } from 'express';
+import { Model } from 'mongoose';
+import { jwtDecode } from 'jwt-decode';
+
 import { FIELDS_NAME } from '@app/constants';
 import { Exception } from '@app/exception';
 import { HttpStatusCode } from '@app/exception/type';
@@ -9,8 +13,6 @@ import { TypeUpload } from '@app/types';
 import { comparingObjectId } from '@app/utils/comparingObjectId';
 import handleUploadFile from '@app/utils/handleUploadFile';
 import hashPassword from '@app/utils/hashPassword';
-import { Request } from 'express';
-import { Model } from 'mongoose';
 
 class CustomerService extends CRUDService<Customer> {
   constructor(model: Model<Customer>, nameService: string) {
@@ -65,7 +67,7 @@ class CustomerService extends CRUDService<Customer> {
     return remaining;
   }
 
-  // GET BY ID
+  // GET BY Email
   async getByEmail(email: string) {
     const customer = await this.model.findOne({ email });
     if (customer) {
@@ -74,6 +76,24 @@ class CustomerService extends CRUDService<Customer> {
       return customerRemaining;
     }
     return undefined;
+  }
+
+  // GET CUSTOMER INFO BY ACCESS TOKEN
+  async getCustomerInfoByAccessToken(token: string) {
+    if (token) {
+      const decoded: any = jwtDecode(token);
+
+      if (decoded && decoded.id) {
+        const response = await this.getById(decoded.id);
+
+        const { password, _id, ...customerRemaining } = response.toObject();
+
+        return customerRemaining;
+      }
+    } else {
+      const exception = new Exception(HttpStatusCode.UN_AUTHORIZED, "You're not authenticated");
+      throw exception;
+    }
   }
 }
 

@@ -49,6 +49,17 @@ const customerController = {
     }
   },
 
+  // GET BY ACCESS TOKEN
+  getCustomerInfo: async (req: Request, res: Response, next: NextFunction) => {
+    const { accessToken } = req.body;
+    try {
+      const customerInfo = await customerService.getCustomerInfoByAccessToken(accessToken);
+      res.status(HttpStatusCode.OK).json(customerInfo);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // DELETE
   delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
