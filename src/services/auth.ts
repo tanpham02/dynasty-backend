@@ -214,6 +214,7 @@ const authService = {
         });
 
         const response = await newCustomer.save();
+        await new CustomerAddressModel({ customerId: response._id }).save();
         const customerJwt = new JWT(response._id);
         const accessToken = customerJwt.generateAccessToken();
         const refreshToken = customerJwt.generateRefreshToken();

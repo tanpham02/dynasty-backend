@@ -25,7 +25,7 @@ const configSwagger = (app: Application) => {
       },
       servers: [
         {
-          url: `${APP_URL}`,
+          url: 'http://localhost:1009',
         },
       ],
 

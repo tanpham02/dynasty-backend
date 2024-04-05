@@ -78,34 +78,34 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
         throw exception;
       }
 
-      if (customerAddressDTO?.addressItem?.isDefault) {
-        customerAddressById.addressList.forEach((item) => {
-          (async () => {
-            await CustomerAddressModel.updateOne(
-              { 'addressList._id': item._id },
-              {
-                $set: {
-                  'addressList.$.isDefault': false,
-                },
-              },
-              {
-                new: true,
-              },
-            );
-          })();
-        });
-        await customerAddressById.updateOne(
-          {
-            $set: {
-              'addressList.$[inner]': customerAddressDTO?.addressItem,
-            },
-          },
-          {
-            arrayFilters: [{ 'inner._id': customerAddressItemId }],
-            new: true,
-          },
-        );
-      }
+      //   if (customerAddressDTO?.addressItem?.isDefault) {
+      //     customerAddressById.addressList.forEach((item) => {
+      //       (async () => {
+      //         await CustomerAddressModel.updateOne(
+      //           { 'addressList._id': item._id },
+      //           {
+      //             $set: {
+      //               'addressList.$.isDefault': false,
+      //             },
+      //           },
+      //           {
+      //             new: true,
+      //           },
+      //         );
+      //       })();
+      //     });
+      //     await customerAddressById.updateOne(
+      //       {
+      //         $set: {
+      //           'addressList.$[inner]': customerAddressDTO?.addressItem,
+      //         },
+      //       },
+      //       {
+      //         arrayFilters: [{ 'inner._id': customerAddressItemId }],
+      //         new: true,
+      //       },
+      //     );
+      //   }
 
       await customerAddressById.updateOne(
         {
@@ -118,6 +118,8 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
           new: true,
         },
       );
+
+      console.log('customerAddressDTO?.addressItem', customerAddressDTO?.addressItem);
 
       return { message: `Update ${this.nameService} success` };
     }
