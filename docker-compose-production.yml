@@ -1,7 +1,7 @@
 version: '3.7'
 services:
     dynasty_ws:
-        image: tanphamvan/dynasty_ws
+        image: phamvantan/dynasty-ws:1.0.0
         container_name: dynasty_ws
         restart: always
         build:
@@ -13,6 +13,8 @@ services:
             - .env.production
         networks:
             - dynasty_network
+        volumes:
+            - ./app-publics:/app/public/uploads
 
 networks:
     dynasty_network:
