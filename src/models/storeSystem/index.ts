@@ -29,6 +29,10 @@ import StoreSystem from './@type';
  *           type: number
  *         ward:
  *             type: string
+ *         latitude:
+ *           type: string
+ *         longitude:
+ *             type: string
  */
 
 const StoreSystemSchema = new Schema<StoreSystem>(
@@ -47,7 +51,7 @@ const StoreSystemSchema = new Schema<StoreSystem>(
       required: true,
     },
     cityId: {
-      type: Number,
+      type: String,
       required: true,
     },
     city: {
@@ -55,7 +59,7 @@ const StoreSystemSchema = new Schema<StoreSystem>(
       required: true,
     },
     districtId: {
-      type: Number,
+      type: String,
       required: true,
     },
     district: {
@@ -68,7 +72,15 @@ const StoreSystemSchema = new Schema<StoreSystem>(
     },
     wardId: {
       required: true,
-      type: Number,
+      type: String,
+    },
+    latitude: {
+      type: String,
+      required: true,
+    },
+    longitude: {
+      required: true,
+      type: String,
     },
   },
   { timestamps: true, versionKey: false },

@@ -1,3 +1,4 @@
+import { LocationBaseModel } from '@app/types';
 import { Document, Schema } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -54,15 +55,15 @@ import { Document, Schema } from 'mongoose';
  *              city:
  *                  type: string
  *              cityId:
- *                  type: number
+ *                  type: string
  *              district:
  *                  type: string
  *              districtId:
- *                  type: number
+ *                  type: string
  *              ward:
  *                  type: string
  *              wardId:
- *                  type: number
+ *                  type: string
  *              location:
  *                  type: string
  *              fullName:
@@ -75,16 +76,9 @@ import { Document, Schema } from 'mongoose';
 
  */
 
-interface CustomerAddress extends Document {
+interface CustomerAddress extends Document, LocationBaseModel {
   customerId?: Schema.Types.ObjectId;
   addressList: Array<{
-    city?: string;
-    cityId?: number;
-    district?: string;
-    districtId?: number;
-    ward?: string;
-    wardId?: number;
-    location?: string;
     fullName?: string;
     phoneNumber?: string;
     isDefault?: boolean;

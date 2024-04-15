@@ -8,7 +8,7 @@ services:
             context: .
             dockerfile: Dockerfile-production
         ports:
-            - 1009:1009
+            - 2000:2000
         env_file:
             - .env.production
         networks:

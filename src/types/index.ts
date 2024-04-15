@@ -55,6 +55,18 @@ interface BaseModel {
   slug?: string;
 }
 
+interface LocationBaseModel {
+  location?: string;
+  cityId?: string;
+  city?: string;
+  districtId?: string;
+  district?: string;
+  wardId?: string;
+  ward?: string;
+  latitude?: string;
+  longitude?: string;
+}
+
 enum TypeUpload {
   ONE = 'ONE',
   MULTIPLE = 'MULTIPLE',
@@ -62,4 +74,4 @@ enum TypeUpload {
 
 type SortOrderBy = -1 | 1;
 
-export { Params, Filter, BaseModel, SortOrderBy, TypeUpload };
+export { Params, Filter, BaseModel, SortOrderBy, TypeUpload, LocationBaseModel };

@@ -1,3 +1,4 @@
+import { LocationBaseModel } from '@app/types';
 import { Document } from 'mongoose';
 
 // SCHEMAS DESCRIPTION
@@ -16,29 +17,26 @@ import { Document } from 'mongoose';
  *         phone:
  *             type: string
  *         cityId:
- *           type: number
+ *           type: string
  *         city:
  *             type: string
  *         districtId:
- *           type: number
+ *           type: string
  *         district:
  *             type: string
  *         wardId:
- *           type: number
+ *           type: string
  *         ward:
+ *             type: string
+ *         latitude:
+ *           type: string
+ *         longitude:
  *             type: string
  */
 
-interface StoreSystem extends Document {
+interface StoreSystem extends Document, LocationBaseModel {
   name: string;
-  location: string;
   phone: string;
-  cityId: number;
-  city: string;
-  districtId: number;
-  district: string;
-  wardId: number;
-  ward: string;
 }
 
 export default StoreSystem;

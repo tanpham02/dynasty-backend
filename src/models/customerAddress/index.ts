@@ -20,15 +20,15 @@ import { CustomerAddress } from './@type';
  *              city:
  *                  type: string
  *              cityId:
- *                  type: number
+ *                  type: string
  *              district:
  *                  type: string
  *              districtId:
- *                  type: number
+ *                  type: string
  *              ward:
  *                  type: string
  *              wardId:
- *                  type: number
+ *                  type: string
  *              location:
  *                  type: string
  *              fullName:
@@ -52,19 +52,19 @@ const CustomerAddressSchema = new Schema<CustomerAddress>(
           type: String,
         },
         cityId: {
-          type: Number,
+          type: String,
         },
         district: {
           type: String,
         },
         districtId: {
-          type: Number,
+          type: String,
         },
         ward: {
           type: String,
         },
         wardId: {
-          type: Number,
+          type: String,
         },
         fullName: {
           type: String,
