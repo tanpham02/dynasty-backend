@@ -2,20 +2,17 @@
 import { FIELDS_NAME } from '@app/constants';
 import { HttpStatusCode } from '@app/exception/type';
 import { Models } from '@app/models';
-import StoreInformationService from '@app/services/storeInformation';
+import StoreConfigService from '@app/services/storeConfig';
 import { NextFunction, Request, Response } from 'express';
 
-const storeInformationService = new StoreInformationService(
-  Models.StoreInformationModel,
-  'store information',
-);
+// const storeConfigService = new StoreConfigService(Models.StoreConfigModel, 'store config');
 
-const storeInformationController = {
+const storeConfigController = {
   //SEARCH ALL
   searchAll: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const shopInformation = await storeInformationService.findAll();
-      res.status(HttpStatusCode.OK).json(shopInformation);
+      //   const shopConfig = await storeConfigService.findAll();
+      //   res.status(HttpStatusCode.OK).json(shopConfig);
     } catch (error) {
       next(error);
     }
@@ -24,11 +21,8 @@ const storeInformationController = {
   //CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const shopInformation = await storeInformationService.create(
-        req,
-        FIELDS_NAME.STORE_INFORMATION,
-      );
-      res.status(HttpStatusCode.OK).json(shopInformation);
+      //   const shopConfig = await storeConfigService.create(req, FIELDS_NAME.STORE_CONFIG);
+      //   res.status(HttpStatusCode.OK).json(shopConfig);
     } catch (error) {
       next(error);
     }
@@ -38,12 +32,8 @@ const storeInformationController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await storeInformationService.update(
-        id,
-        req,
-        FIELDS_NAME.STORE_INFORMATION,
-      );
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await storeConfigService.update(id, req, FIELDS_NAME.STORE_CONFIG);
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       next(error);
     }
@@ -53,8 +43,8 @@ const storeInformationController = {
   getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const shopInformation = await storeInformationService.getById(id);
-      res.status(HttpStatusCode.OK).json(shopInformation);
+      //   const shopConfig = await storeConfigService.getById(id);
+      //   res.status(HttpStatusCode.OK).json(shopConfig);
     } catch (error) {
       next(error);
     }
@@ -64,12 +54,12 @@ const storeInformationController = {
   delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
-      const { message } = await storeInformationService.delete(ids);
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await storeConfigService.delete(ids);
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }
   },
 };
 
-export default storeInformationController;
+export default storeConfigController;

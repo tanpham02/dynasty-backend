@@ -1,5 +1,3 @@
-import configApp from './app';
-import configSwagger from './swagger';
-import configServer from './server';
-
-export { configApp, configSwagger, configServer };
+export { default as configApp } from './app';
+export { default as configSwagger } from './swagger';
+export { default as configServer } from './server';

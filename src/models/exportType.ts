@@ -15,9 +15,7 @@ export * as ProductVariantType from './productVariants/@type';
 export * as PromotionType from './promotions/@type';
 // export * as SMSType from './smsModel/@type';
 // export * as StatisticType from './statistics/@type';
-export * as StoreConfigType from './storeConfig/@type';
-export * as StoreInformationType from './storeInformation/@type';
-export * as StoreSystemType from './storeSystem/@type';
-export * as TermAndPolicyType from './termAndPolicy/@type';
+
 export * as UserType from './users/@type';
 export * as VoucherType from './vouchers/@type';
+export * as StoresType from './stores/@type';

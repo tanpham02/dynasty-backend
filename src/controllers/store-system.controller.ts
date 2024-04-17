@@ -6,7 +6,7 @@ import StoreSystemService from '@app/services/storeSystem';
 import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const storeSystemService = new StoreSystemService(Models.StoreSystemModel, 'store system');
+// const storeSystemService = new StoreSystemService(Models.StoreSystemModel, 'store system');
 
 const storeSystemController = {
   //SEARCH PAGINATION
@@ -21,8 +21,8 @@ const storeSystemController = {
         districtId: Number(districtId),
         wardId: Number(wardId),
       };
-      const shopSystem = await storeSystemService.getPagination(params);
-      res.status(HttpStatusCode.OK).json(shopSystem);
+      //   const shopSystem = await storeSystemService.getPagination(params);
+      //   res.status(HttpStatusCode.OK).json(shopSystem);
     } catch (error) {
       next(error);
     }
@@ -31,8 +31,8 @@ const storeSystemController = {
   //CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const shopSystem = await storeSystemService.create(req, FIELDS_NAME.STORE_SYSTEM);
-      res.status(HttpStatusCode.OK).json(shopSystem);
+      //   const shopSystem = await storeSystemService.create(req, FIELDS_NAME.STORE_SYSTEM);
+      //   res.status(HttpStatusCode.OK).json(shopSystem);
     } catch (error) {
       console.log('🚀 ~ file: storeSystem.ts:36 ~ create: ~ error:', error);
       next(error);
@@ -43,8 +43,8 @@ const storeSystemController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await storeSystemService.update(id, req, FIELDS_NAME.STORE_SYSTEM);
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await storeSystemService.update(id, req, FIELDS_NAME.STORE_SYSTEM);
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       next(error);
     }
@@ -54,8 +54,8 @@ const storeSystemController = {
   getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const shopSystem = await storeSystemService.getById(id);
-      res.status(HttpStatusCode.OK).json(shopSystem);
+      //   const shopSystem = await storeSystemService.getById(id);
+      //   res.status(HttpStatusCode.OK).json(shopSystem);
     } catch (error) {
       next(error);
     }
@@ -65,8 +65,8 @@ const storeSystemController = {
   delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
-      const { message } = await storeSystemService.delete(ids);
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await storeSystemService.delete(ids);
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }

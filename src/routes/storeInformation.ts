@@ -1,4 +1,4 @@
-import storeInformationController from '@app/controllers/storeInformation';
+import storeInformationController from '@app/controllers/store-information.controller';
 import { uploadFileStoreInformation } from '@app/services/upload';
 import express from 'express';
 const router = express.Router();

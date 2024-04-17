@@ -16,7 +16,7 @@ const verifyToken = (req: UserRequest, res: Response, next: NextFunction) => {
     const accessToken = token.split(' ')[1];
     verify(accessToken, JWT_ACCESS_KEY, (err, user) => {
       if (err) {
-        return res.status(HttpStatusCode.FORBIDDEN).json('Token is not valid!');
+        return res.status(HttpStatusCode.FORBIDDEN).json('Token is invalid!');
       }
       res.setHeader('Authorization', token);
       req.user = user as User;

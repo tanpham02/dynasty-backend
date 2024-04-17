@@ -1,4 +1,4 @@
-import productController from '@app/controllers/products';
+import productController from '@app/controllers/products.controller';
 import { uploadFileProduct } from '@app/services/upload';
 
 import express from 'express';

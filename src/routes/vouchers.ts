@@ -1,4 +1,4 @@
-import voucherController from '@app/controllers/vouchers';
+import voucherController from '@app/controllers/vouchers.controller';
 import { Router } from 'express';
 const router = Router();
 

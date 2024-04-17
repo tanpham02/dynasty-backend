@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import userController from '@app/controllers/users';
+import userController from '@app/controllers/users.controller';
 import { verifyTokenAndRolePermission } from '@app/middlewares/verifyToken';
 import { uploadFileUser } from '@app/services/upload';
 

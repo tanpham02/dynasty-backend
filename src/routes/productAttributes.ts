@@ -1,5 +1,5 @@
 import { FIELDS_NAME } from '@app/constants';
-import { productAttributeController } from '@app/controllers/productAttributes';
+import { productAttributeController } from '@app/controllers';
 import { formDataParser } from '@app/utils/formDataParser';
 
 import express from 'express';

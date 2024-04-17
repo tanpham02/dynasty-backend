@@ -1,9 +1,9 @@
 import { Router } from 'express';
 
 import { FIELDS_NAME } from '@app/constants';
-import materialController from '@app/controllers/materials';
+import materialController from '@app/controllers/materials.controller';
 import { formDataParser } from '@app/utils/formDataParser';
-import emailTemplateController from '@app/controllers/emailTemplate';
+import emailTemplateController from '@app/controllers/email-template.controller';
 
 const router = Router();
 

@@ -1,4 +1,4 @@
-import comboPromotionsController from '@app/controllers/comboPromotions';
+import comboPromotionsController from '@app/controllers/combo-promotions.controller';
 import { Router } from 'express';
 
 const router = Router();

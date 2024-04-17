@@ -1,5 +1,5 @@
 import { FIELDS_NAME } from '@app/constants';
-import authController from '@app/controllers/auth';
+import authController from '@app/controllers/auth.controller';
 import { formDataParser } from '@app/utils/formDataParser';
 import { verifyToken } from '@app/middlewares/verifyToken';
 import { Router } from 'express';

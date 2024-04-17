@@ -1,4 +1,4 @@
-import customerController from '@app/controllers/customers';
+import customerController from '@app/controllers/customers.controller';
 import { uploadFileCustomer } from '@app/services/upload';
 import { Router } from 'express';
 

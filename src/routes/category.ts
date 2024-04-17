@@ -1,4 +1,4 @@
-import categoryController from '@app/controllers/category';
+import categoryController from '@app/controllers/category.controller';
 import { uploadFileCategory } from '@app/services/upload';
 import express from 'express';
 
@@ -11,6 +11,8 @@ const router = express.Router();
  * @swagger
  * '/api/category/search':
  *  get:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Category]
  *     summary: Search pagination
  *     parameters:

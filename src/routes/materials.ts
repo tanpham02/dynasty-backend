@@ -1,5 +1,5 @@
 import { FIELDS_NAME } from '@app/constants';
-import materialController from '@app/controllers/materials';
+import materialController from '@app/controllers/materials.controller';
 import { formDataParser } from '@app/utils/formDataParser';
 import { verifyTokenAndRolePermission } from '@app/middlewares/verifyToken';
 import { Router } from 'express';

@@ -3,4 +3,4 @@
     "ext": "ts,js,json",
     "ignore": [".git", "node_modules/", "build/"],
     "exec": "ts-node src/index.ts"
-  }
+}

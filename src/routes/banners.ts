@@ -1,4 +1,5 @@
-import bannerController from '@app/controllers/banners';
+import bannerController from '@app/controllers/banners.controller';
+import { verifyToken } from '@app/middlewares';
 import { uploadFileBanner } from '@app/services/upload';
 import { Router } from 'express';
 const router = Router();
@@ -7,6 +8,8 @@ const router = Router();
  * @swagger
  * '/api/banners/search':
  *  get:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Banners]
  *     summary: Search all
  *     responses:
@@ -19,7 +22,7 @@ const router = Router();
  */
 
 // SEARCH ALL
-router.get('/search', bannerController.searchAll);
+router.get('/search', verifyToken, bannerController.searchAll);
 
 /**
  * @swagger

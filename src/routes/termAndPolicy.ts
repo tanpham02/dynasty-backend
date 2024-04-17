@@ -1,5 +1,5 @@
 import { FIELDS_NAME } from '@app/constants';
-import termAndPolicyController from '@app/controllers/termAndPolicy';
+import termAndPolicyController from '@app/controllers/term-and-policy.controller';
 import { formDataParser } from '@app/utils/formDataParser';
 import express from 'express';
 const router = express.Router();

@@ -1,5 +1,5 @@
 import { FIELDS_NAME } from '@app/constants';
-import customerAddressController from '@app/controllers/customerAddress';
+import customerAddressController from '@app/controllers/customer-address.controller';
 import { formDataParser } from '@app/utils/formDataParser';
 import { Router } from 'express';
 

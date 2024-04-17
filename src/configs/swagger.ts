@@ -26,12 +26,15 @@ const configSwagger = (app: Application) => {
       servers: [
         {
           url: 'https://dynasty-ws.vtaan.id.vn',
+          description: 'Production server',
         },
         {
           url: 'http://localhost:1009',
+          description: 'Development server',
         },
         {
           url: 'http://103.163.118.88:2000',
+          description: 'Staging server',
         },
       ],
 
@@ -39,10 +42,12 @@ const configSwagger = (app: Application) => {
         securitySchemes: {
           bearerAuth: {
             type: 'http',
-            name: 'Authorization',
             scheme: 'bearer',
             in: 'header',
+            description: 'The token for authentication',
+            bearerFormat: 'JWT',
           },
+          // NOTE: Apply when security is specified
           security: [
             {
               bearerAuth: [],
@@ -50,8 +55,20 @@ const configSwagger = (app: Application) => {
           ],
         },
       },
+      // NOTE: Apply for security globally
+      //   security: [
+      //     {
+      //       bearerAuth: [],
+      //     },
+      //   ],
     },
-    apis: ['src/routes/*.ts', 'src/routes/**.ts', 'src/models/*/*.ts', 'src/models/*/**.ts'],
+    apis: [
+      'src/routes/*.ts',
+      'src/routes/**.ts',
+      'src/models/*/*.ts',
+      'src/models/*/**.ts',
+      'src/types/*.ts',
+    ],
   };
 
   const specs = swaggerJsdoc(options);

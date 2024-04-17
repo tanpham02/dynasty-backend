@@ -1,6 +1,7 @@
 version: '3.7'
 services:
     dynasty_ws:
+        platform: linux/amd64
         image: phamvantan/dynasty-ws:1.0.0
         container_name: dynasty_ws
         restart: always

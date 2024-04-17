@@ -5,14 +5,14 @@ import { Models } from '@app/models';
 import TermAndPolicyService from '@app/services/termAndPolicy';
 import { NextFunction, Request, Response } from 'express';
 
-const termAndPolicyService = new TermAndPolicyService(Models.TermAndPolicyModel, 'term and policy');
+// const termAndPolicyService = new TermAndPolicyService(Models.TermAndPolicyModel, 'term and policy');
 
 const termAndPolicyController = {
   //SEARCH ALL
   searchAll: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const termAndPolicy = await termAndPolicyService.findAll();
-      res.status(HttpStatusCode.OK).json(termAndPolicy);
+      //   const termAndPolicy = await termAndPolicyService.findAll();
+      //   res.status(HttpStatusCode.OK).json(termAndPolicy);
     } catch (error) {
       next(error);
     }
@@ -21,8 +21,8 @@ const termAndPolicyController = {
   //CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const termAndPolicy = await termAndPolicyService.create(req, FIELDS_NAME.TERM_AND_POLICY);
-      res.status(HttpStatusCode.OK).json(termAndPolicy);
+      //   const termAndPolicy = await termAndPolicyService.create(req, FIELDS_NAME.TERM_AND_POLICY);
+      //   res.status(HttpStatusCode.OK).json(termAndPolicy);
     } catch (error) {
       next(error);
     }
@@ -32,8 +32,8 @@ const termAndPolicyController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await termAndPolicyService.update(id, req, FIELDS_NAME.TERM_AND_POLICY);
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await termAndPolicyService.update(id, req, FIELDS_NAME.TERM_AND_POLICY);
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       next(error);
     }
@@ -43,8 +43,8 @@ const termAndPolicyController = {
   getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const termAndPolicy = await termAndPolicyService.getById(id);
-      res.status(HttpStatusCode.OK).json(termAndPolicy);
+      //   const termAndPolicy = await termAndPolicyService.getById(id);
+      //   res.status(HttpStatusCode.OK).json(termAndPolicy);
     } catch (error) {
       next(error);
     }
@@ -54,8 +54,8 @@ const termAndPolicyController = {
   delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
-      const { message } = await termAndPolicyService.delete(ids);
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await termAndPolicyService.delete(ids);
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }

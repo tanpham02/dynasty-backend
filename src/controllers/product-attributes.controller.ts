@@ -69,4 +69,4 @@ const productAttributeController = {
     }
   },
 };
-export { productAttributeController };
+export default productAttributeController;

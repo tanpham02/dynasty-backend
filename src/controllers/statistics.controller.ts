@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 
 const statisticService = new StatisticService();
 
-export const statisticController = {
+const statisticController = {
   customers: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await statisticService.customers(req);
@@ -22,3 +22,5 @@ export const statisticController = {
     }
   },
 };
+
+export default statisticController;

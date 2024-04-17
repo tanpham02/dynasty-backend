@@ -1,5 +1,5 @@
 import { formDataParser } from '@app/utils/formDataParser';
-import { productVariantController } from '../controllers/productVariants';
+import { productVariantController } from '../controllers/product-variants.controller';
 import { uploadFileProduct } from '@app/services/upload';
 
 import express from 'express';
