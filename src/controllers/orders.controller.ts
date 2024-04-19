@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
 
-import { HttpStatusCode } from '@app/exception/type';
-import { Models } from '@app/models';
-import OrderService from '@app/services/orders';
+import { HttpStatusCode } from '@app/types';
+import { OrderModel } from '@app/models';
+import OrderService from '@app/services/orders.service';
 import { Params } from '@app/types';
 
-const orderService = new OrderService(Models.OrderModel, 'order');
+const orderService = new OrderService(OrderModel, 'order');
 
 const orderController = {
   // SEARCH PAGINATION

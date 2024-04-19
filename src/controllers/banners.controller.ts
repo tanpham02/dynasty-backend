@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
 
-import { FIELDS_NAME } from '@app/constants';
-import { HttpStatusCode } from '@app/exception/type';
-import { Models } from '@app/models';
-import BannerService from '@app/services/banner';
-import { Params } from '@app/types';
+import { FIELDS_NAME } from '@app/constants/app';
+import { HttpStatusCode } from '@app/types';
+import { BannerModel } from '@app/models';
+import BannerService from '@app/services/banner.service';
+import { Params } from '@app/types/common.types';
 
-const bannerService = new BannerService(Models.BannerModel, 'banner');
+const bannerService = new BannerService(BannerModel, 'banner');
 
 const bannerController = {
   // SEARCH PAGINATION

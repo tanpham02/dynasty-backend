@@ -3,8 +3,8 @@ import 'module-alias/register';
 import mongoose, { ConnectOptions } from 'mongoose';
 
 import { configApp } from '@app/configs';
-import { UserModel } from '@app/models/exportModel';
-import hashPassword from '@app/utils/hashPassword';
+import { StaffModel } from '@app/models';
+import { hashPassword } from '@app/utils';
 
 interface ConnectOptionsCustom extends ConnectOptions {
   useNewUrlParser: boolean;
@@ -29,11 +29,11 @@ const connection = async () => {
   try {
     const connectMongo = await mongoose.connect(MONGO_URL, connectOptions);
     console.log(`Connect to MongoDB success with ${connectMongo.connection.host}`);
-    const checkEmpty = await UserModel.find();
+    const checkEmpty = await StaffModel.find();
     if (Array.isArray(checkEmpty) && !checkEmpty.length) {
       const passwordEncryption = await hashPassword(seedData.password);
       seedData.password = passwordEncryption;
-      const newUser = new UserModel(seedData);
+      const newUser = new StaffModel(seedData);
       await newUser.save();
       console.log('Initialize seed data success');
     }

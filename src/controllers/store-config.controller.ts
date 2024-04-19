@@ -1,8 +1,4 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME } from '@app/constants';
-import { HttpStatusCode } from '@app/exception/type';
-import { Models } from '@app/models';
-import StoreConfigService from '@app/services/storeConfig';
 import { NextFunction, Request, Response } from 'express';
 
 // const storeConfigService = new StoreConfigService(Models.StoreConfigModel, 'store config');

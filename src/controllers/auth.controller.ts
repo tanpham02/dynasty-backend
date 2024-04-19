@@ -1,12 +1,13 @@
-import { HttpStatusCode } from '@app/exception/type';
-import authService from '@app/services/auth';
 import { NextFunction, Request, Response } from 'express';
+
+import { HttpStatusCode } from '@app/types';
+import { AuthService } from '@app/services';
 
 const authController = {
   // SIGNUP CUSTOMER
   signup: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { message } = await authService.signup(req, res);
+      const { message } = await new AuthService().signup(req, res);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
@@ -16,7 +17,7 @@ const authController = {
   // LOGIN FOR USER
   loginUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await authService.loginUser(req, res);
+      const response = await new AuthService().loginUser(req, res);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       console.log('🚀 ~ file: auth.ts:27 ~ loginUser: ~ error:', error);
@@ -27,7 +28,7 @@ const authController = {
   // CUSTOMER LOGIN APP WITH PHONE NUMBER (OTP)
   sendOtpToCustomer: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await authService.sendOtpToCustomer(req, res);
+      const response = await new AuthService().sendOtpToCustomer(req, res);
       return res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       console.log('🚀 ~ error:', error);
@@ -38,7 +39,7 @@ const authController = {
   // VERIFY OTP AND COMPLETE LOGIN WITH PHONE NUMBER
   verifyOtpAndGetCustomer: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await authService.verifyOtpAndGetCustomer(req, res);
+      const response = await new AuthService().verifyOtpAndGetCustomer(req, res);
       return res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       console.log('🚀 ~ error:', error);
@@ -49,7 +50,7 @@ const authController = {
   // LOGIN WITH GOOGLE ACCOUNT
   loginWithGoogleAccount: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await authService.loginWithGoogleAccount(req, res, next);
+      const response = await new AuthService().loginWithGoogleAccount(req, res, next);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       console.log('🚀 ~ error:', error);
@@ -60,7 +61,7 @@ const authController = {
   // LOGIN FOR CUSTOMER
   loginCustomer: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await authService.loginCustomer(req, res);
+      const response = await new AuthService().loginCustomer(req, res);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       console.log('🚀 ~ file: auth.ts:41 ~ loginCustomer: ~ error:', error);
@@ -71,7 +72,7 @@ const authController = {
   // REQUEST REFRESH TOKEN FOR USER
   requestRefreshTokenForUser: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { accessToken } = await authService.requestRefreshTokenForUser(req, res);
+      const { accessToken } = await new AuthService().requestRefreshTokenForUser(req, res);
       res.status(HttpStatusCode.OK).json(accessToken);
     } catch (error) {
       console.log('🚀 ~ file: auth.ts:55 ~ requestRefreshTokenForUser: ~ error:', error);
@@ -82,7 +83,7 @@ const authController = {
   // REQUEST REFRESH TOKEN FOR CUSTOMER
   requestRefreshTokenForCustomer: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { accessToken } = await authService.requestRefreshTokenForCustomer(req, res);
+      const { accessToken } = await new AuthService().requestRefreshTokenForCustomer(req, res);
       res.status(HttpStatusCode.OK).json(accessToken);
     } catch (error) {
       console.log('🚀 ~ file: auth.ts:69 ~ requestRefreshTokenForCustomer: ~ error:', error);
@@ -93,7 +94,7 @@ const authController = {
   // LOGOUT
   logout: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { message } = await authService.logout(res);
+      const { message } = await new AuthService().logout(res);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Role } from '@app/models/users/@type';
+import { Role } from '@app/types/staff.type';
 import { sign } from 'jsonwebtoken';
 import { configApp } from '@app/configs';
 const { JWT_ACCESS_KEY, JWT_REFRESH_KEY } = configApp();
@@ -44,4 +44,4 @@ class JWT {
   }
 }
 
-export default JWT;
+export { JWT };

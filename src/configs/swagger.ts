@@ -1,11 +1,9 @@
-import { Application } from 'express';
-import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-import { configApp } from '@app/configs';
+import { Application } from 'express';
+import swaggerJsdoc from 'swagger-jsdoc';
 
 const configSwagger = (app: Application) => {
-  const { APP_URL } = configApp();
   const options = {
     definition: {
       openapi: '3.1.0',

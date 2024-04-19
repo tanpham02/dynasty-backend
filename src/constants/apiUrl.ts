@@ -1,61 +1,54 @@
+const combineApiUrl = (...urls: string[]) => urls.join('/');
+
 // AUTH
-export const AUTH_URL = '/api/auth';
+export const AUTH_URL = combineApiUrl('auth');
 
 // CATEGORY
-export const STATISTIC_URL = '/api/statistic';
+export const BANNERS_URL = combineApiUrl('banners');
 
 // CATEGORY
-export const BANNERS_URL = '/api/banners';
-
-// CATEGORY
-export const CATEGORY_URL = '/api/category';
+export const CATEGORY_URL = combineApiUrl('categories');
 
 // PRODUCT
-export const PRODUCT_URL = '/api/products';
-export const PRODUCT_ATTRIBUTE_URL = '/api/product-attributes';
-export const PRODUCT_VARIANT_URL = '/api/product-variants';
+export const PRODUCT_URL = combineApiUrl('products');
+export const PRODUCT_ATTRIBUTE_URL = combineApiUrl(`${PRODUCT_URL}`, 'attributes');
+export const PRODUCT_VARIANT_URL = combineApiUrl(`${PRODUCT_URL}`, 'variants');
 
 // STORE SYSTEM
-export const STORE_SYSTEM_URL = '/api/store-system';
+export const STORE_URL = combineApiUrl('stores');
 
 // STORE CONFIG
-export const STORE_CONFIG_URL = '/api/store-config';
-
-// STORE CONFIG
-export const STORE_INFORMATION_URL = '/api/store-information';
-
-// STORE CONFIG
-export const TERM_AND_POLICY_URL = '/api/term-and-policy';
+export const TERM_AND_POLICY_URL = combineApiUrl('term-and-policy');
 
 // COMBO PROMOTIONS
-export const COMBO_PROMOTIONS_URL = '/api/combo-promotions';
+export const COMBO_PROMOTIONS_URL = combineApiUrl('combo-promotions');
 
 //  PROMOTIONS
-export const PROMOTIONS_URL = '/api/promotions';
+export const PROMOTIONS_URL = combineApiUrl('promotions');
 
 // VOUCHER
-export const VOUCHER_URL = '/api/vouchers';
+export const VOUCHER_URL = combineApiUrl('vouchers');
 
-// USER
-export const USER_URL = '/api/users';
+// STAFF
+export const STAFF_URL = combineApiUrl('staff');
 
 // CUSTOMER
-export const CUSTOMER_URL = '/api/customers';
+export const CUSTOMER_URL = combineApiUrl('customers');
 
 // CART
-export const CART_URL = '/api/carts';
+export const CART_URL = combineApiUrl('carts');
 
 // ORDER
-export const ORDER_URL = '/api/orders';
+export const ORDER_URL = combineApiUrl('orders');
 
 // MATERIAL
-export const MATERIAL_URL = '/api/materials';
+export const MATERIAL_URL = combineApiUrl('materials');
 
 // MAILER
-export const MAILER_URL = '/api/mail';
+export const MAILER_URL = combineApiUrl('mailer');
 
 // EMAIL CONFIG
-export const EMAIL_CONFIG_URL = '/api/email-config';
+export const EMAIL_CONFIG_URL = combineApiUrl('email-config');
 
 // EMAIL CONFIG
-export const EMAIL_TEMPLATE_URL = '/api/email-template';
+export const EMAIL_TEMPLATE_URL = combineApiUrl('email-template');

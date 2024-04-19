@@ -1,16 +1,13 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME } from '@app/constants';
-import { HttpStatusCode } from '@app/exception/type';
-import { ProductType } from '@app/models/products/@type';
-import { Models } from '@app/models';
-import ProductVariantService from '@app/services/productVariants';
-import { Params } from '@app/types';
+import { FIELDS_NAME } from '@app/constants/app';
+import { HttpStatusCode } from '@app/types';
+import { ProductType } from '@app/types/products.type';
+import { ProductVariantModel } from '@app/models';
+import ProductVariantService from '@app/services/product-variants.service';
+import { Params } from '@app/types/common.types';
 import { NextFunction, Request, Response } from 'express';
 
-const productVariantService = new ProductVariantService(
-  Models.ProductVariantModel,
-  'product variant',
-);
+const productVariantService = new ProductVariantService(ProductVariantModel, 'product variant');
 
 const productVariantController = {
   //SEARCH PAGINATION
@@ -81,4 +78,4 @@ const productVariantController = {
   },
 };
 
-export { productVariantController };
+export default productVariantController;

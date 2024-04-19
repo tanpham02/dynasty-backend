@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { HttpStatusCode } from '@app/exception/type';
-import { Models } from '@app/models';
-import { ProductType } from '@app/models/products/@type';
-import ProductService from '@app/services/products';
-import { Params } from '@app/types';
+import { HttpStatusCode } from '@app/types';
+import { ProductModel } from '@app/models';
+import { ProductType } from '@app/types/products.type';
+import ProductService from '@app/services/products.service';
+import { Params } from '@app/types/common.types';
 import { NextFunction, Request, Response } from 'express';
 
-const productService = new ProductService(Models.ProductModel, 'product');
+const productService = new ProductService(ProductModel, 'product');
 
 const productController = {
   //SEARCH PAGINATION PRODUCT

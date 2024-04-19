@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME } from '@app/constants';
-import { HttpStatusCode } from '@app/exception/type';
-import { Models } from '@app/models';
-import StoreSystemService from '@app/services/storeSystem';
-import { Params } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
+
+import { Params } from '@app/types';
 
 // const storeSystemService = new StoreSystemService(Models.StoreSystemModel, 'store system');
 

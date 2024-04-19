@@ -1,77 +1,22 @@
-import { ProductStatus } from '@app/constants';
-import { CustomerType } from '@app/models/customers/@type';
-import { ProductType } from '@app/models/products/@type';
-import { Role } from '@app/models/users/@type';
+export * from './common.types';
+export * from './banner.type';
+export * from './carts.type';
+export * from './category.type';
+export * from './combo-promotions.type';
+export * from './customer-address.type';
+export * from './customers.type';
+export * from './email-config.type';
+export * from './email-template.type';
+export * from './materials.type';
+export * from './orders.type';
+export * from './product-attributes.type';
+export * from './product-favorite.type';
+export * from './products.type';
+export * from './product-variants.type';
+export * from './promotions.type';
+// export * from './smsModel/@type';
+// export * from './statistics/@type';
 
-interface Params {
-  pageIndex: number;
-  pageSize: number;
-  name?: string | any;
-  categoryId?: string;
-  cityId?: number;
-  districtId?: number;
-  wardId?: number;
-  types?: ProductType;
-  comboPromotionsId?: string;
-  productId?: string;
-  fullName?: string;
-  sortByField?: string;
-  from?: Date | string;
-  to?: Date | string;
-  role?: Role | string;
-  customerId?: string;
-  statusOrder?: string;
-  sort?: string;
-  parentId?: string;
-  customerType?: CustomerType | string;
-  isShowHomePage?: number;
-  isDefault?: string;
-}
-
-interface Filter {
-  name?: string | any;
-  customerId?: string;
-  categoryId?: string | any;
-  cityId?: number;
-  districtId?: number;
-  wardId?: number;
-  types?: ProductType | any;
-  comboPromotionsId?: string;
-  productIds?: string;
-  fullName?: string | any;
-  role?: Role | string;
-  createdAt?: any;
-  statusOrder?: string;
-  importDate?: any;
-  sort?: string;
-  parentId?: string;
-  customerType?: CustomerType | string;
-  isShowHomePage?: boolean;
-  isDefault?: boolean;
-}
-
-interface BaseModel {
-  status?: ProductStatus;
-  slug?: string;
-}
-
-interface LocationBaseModel {
-  location?: string;
-  cityId?: string;
-  city?: string;
-  districtId?: string;
-  district?: string;
-  wardId?: string;
-  ward?: string;
-  latitude?: string;
-  longitude?: string;
-}
-
-enum TypeUpload {
-  ONE = 'ONE',
-  MULTIPLE = 'MULTIPLE',
-}
-
-type SortOrderBy = -1 | 1;
-
-export { Params, Filter, BaseModel, SortOrderBy, TypeUpload, LocationBaseModel };
+export * from './staff.type';
+export * from './vouchers.type';
+export * from './stores.type';

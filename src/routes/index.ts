@@ -1,26 +1,22 @@
-import { default as categoryRouter } from './category';
-import { default as productRouter } from './products';
-import { default as comboPromotionsRouter } from './comboPromotions';
-import { default as promotionsRouter } from './promotions';
-import { default as voucherRouter } from './vouchers';
-import { default as userRouter } from './users';
-import { default as customerAddressRouter } from './customerAddress';
-import { default as customerRouter } from './customers';
-import { default as cartRouter } from './carts';
-import { default as authRouter } from './auth';
-import { default as orderRouter } from './orders';
-import { default as materialRouter } from './materials';
-import { default as productAttributeRoute } from './productAttributes';
-import { default as productVariantRoute } from './productVariants';
-import { default as bannerRoute } from './banners';
-import { default as storeSystemRoute } from './storeSystem';
-import { default as storeConfigRoute } from './storeConfig';
-import { default as storeInformationRoute } from './storeInformation';
-import { default as termAndPolicyRoute } from './termAndPolicy';
-import { default as statisticRoute } from './statistics';
-import { default as mailerRoute } from './mail';
-import { default as emailConfigRoute } from './emailConfig';
-import { default as emailTemplateRoute } from './emailTemplate';
+import { default as categoryRouter } from './category.route';
+import { default as productRouter } from './products.route';
+import { default as comboPromotionsRouter } from './combo-promotions.route';
+import { default as promotionsRouter } from './promotions.route';
+import { default as voucherRouter } from './vouchers.route';
+import { default as staffRouter } from './staff.route';
+import { default as customerAddressRouter } from './customer-address.route';
+import { default as customerRouter } from './customers.route';
+import { default as cartRouter } from './carts.route';
+import { default as authRouter } from './auth.route';
+import { default as orderRouter } from './orders.route';
+import { default as materialRouter } from './materials.route';
+import { default as productAttributeRoute } from './product-attributes.route';
+import { default as bannerRoute } from './banners.route';
+import { default as termAndPolicyRoute } from './term-and-policy.route';
+import { default as mailerRoute } from './mail.route';
+import { default as emailConfigRoute } from './email-config.route';
+import { default as emailTemplateRoute } from './email-template.route';
+import { default as productVariantRouter } from './product-variants.route';
 import { Application } from 'express';
 
 import {
@@ -30,7 +26,7 @@ import {
   PRODUCT_VARIANT_URL,
   COMBO_PROMOTIONS_URL,
   PROMOTIONS_URL,
-  USER_URL,
+  STAFF_URL,
   VOUCHER_URL,
   CUSTOMER_URL,
   CART_URL,
@@ -38,11 +34,7 @@ import {
   ORDER_URL,
   MATERIAL_URL,
   BANNERS_URL,
-  STORE_SYSTEM_URL,
-  STORE_CONFIG_URL,
-  STORE_INFORMATION_URL,
   TERM_AND_POLICY_URL,
-  STATISTIC_URL,
   MAILER_URL,
   EMAIL_CONFIG_URL,
   EMAIL_TEMPLATE_URL,
@@ -50,10 +42,6 @@ import {
 
 export const routesMapping = (app: Application) => {
   const routesData = [
-    {
-      path: STATISTIC_URL,
-      route: statisticRoute,
-    },
     {
       path: CATEGORY_URL,
       route: categoryRouter,
@@ -72,31 +60,19 @@ export const routesMapping = (app: Application) => {
     },
     {
       path: PRODUCT_VARIANT_URL,
-      route: productVariantRoute,
-    },
-    {
-      path: STORE_SYSTEM_URL,
-      route: storeSystemRoute,
-    },
-    {
-      path: STORE_INFORMATION_URL,
-      route: storeInformationRoute,
+      route: productVariantRouter,
     },
     {
       path: COMBO_PROMOTIONS_URL,
       route: comboPromotionsRouter,
     },
     {
-      path: STORE_CONFIG_URL,
-      route: storeConfigRoute,
-    },
-    {
       path: PROMOTIONS_URL,
       route: promotionsRouter,
     },
     {
-      path: USER_URL,
-      route: userRouter,
+      path: STAFF_URL,
+      route: staffRouter,
     },
     {
       path: VOUCHER_URL,
@@ -144,5 +120,5 @@ export const routesMapping = (app: Application) => {
     },
   ];
 
-  return routesData.map(({ path, route }) => app.use(path, route));
+  return routesData.map(({ path, route }) => app.use(`/api/${path}`, route));
 };

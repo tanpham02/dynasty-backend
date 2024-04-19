@@ -1,5 +1,6 @@
-import 'module-alias/register';
 import express, { Application } from 'express';
+import 'module-alias/register';
+
 import { configApp, configServer, configSwagger } from '@app/configs';
 import connection from '@app/connection';
 import { routesMapping } from './routes';
@@ -8,16 +9,16 @@ const app: Application = express();
 
 const { APP_URL, PORT } = configApp();
 
-// Connect DB
+// CONNECT DB
 connection();
 
-// Server Config
+// CONFIG SERVER
 configServer(app);
 
-// Swagger Config
+// CONFIG SWAGGER
 configSwagger(app);
 
-// Routes
+// ROUTES
 routesMapping(app);
 
 app.listen(PORT, () => {

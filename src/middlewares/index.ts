@@ -1,2 +1,2 @@
-export * from './errorHandler';
-export * from './verifyToken';
+export * from './error-handler';
+export * from './verify-token';

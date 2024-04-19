@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import dotenv from 'dotenv';
 import 'module-alias/register';
-import { MODE } from '@app/constants';
+
+import { MODE } from '@app/types';
 
 interface Config {
   PORT: number;
