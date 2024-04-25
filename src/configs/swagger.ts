@@ -1,7 +1,6 @@
-import swaggerUi from 'swagger-ui-express';
-
 import { Application } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 const configSwagger = (app: Application) => {
   const options = {
@@ -60,13 +59,7 @@ const configSwagger = (app: Application) => {
       //     },
       //   ],
     },
-    apis: [
-      'src/routes/*.ts',
-      'src/routes/**.ts',
-      'src/models/*/*.ts',
-      'src/models/*/**.ts',
-      'src/types/*.ts',
-    ],
+    apis: ['src/routes/*.ts', 'src/routes/**.ts', 'src/documentation/*.ts'],
   };
 
   const specs = swaggerJsdoc(options);

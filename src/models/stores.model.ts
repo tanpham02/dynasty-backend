@@ -64,6 +64,40 @@ const storeSchema = new Schema<Stores>(
         type: String,
       },
     },
+    emailConfig: {
+      username: {
+        type: String,
+        required: true,
+      },
+      password: {
+        type: String,
+        required: true,
+      },
+      mailServer: {
+        type: String,
+      },
+      port: {
+        type: Number,
+      },
+      isDefault: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    bankAccountConfig: {
+      bankCode: {
+        type: String,
+      },
+      bankNumber: {
+        type: String,
+      },
+      bankName: {
+        type: String,
+      },
+      bankBranch: {
+        type: String,
+      },
+    },
   },
   {
     timestamps: true,

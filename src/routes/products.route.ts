@@ -139,7 +139,7 @@ router.patch('/:id', uploadFileProduct, productController.update);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/Products'
  */
 
 // GET PRODUCT BY ID
@@ -165,7 +165,7 @@ router.get('/:id', productController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Product'
+ *                 $ref: '#/components/schema/Products'
  */
 // DELETE PRODUCT
 router.delete('/', productController.delete);

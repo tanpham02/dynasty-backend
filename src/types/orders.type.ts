@@ -17,7 +17,7 @@ import { Document, Schema } from 'mongoose';
  *              type: object
  *              properties:
  *                  product:
- *                     $ref: '#/components/schema/ProductVariant'
+ *                     $ref: '#/components/schema/ProductsVariant'
  *                  note:
  *                     type: string
  *                  productQuantities:

@@ -7,11 +7,11 @@ export { default as customerAddressController } from './customer-address.control
 export { default as customerController } from './customers.controller';
 export { default as emailConfigController } from './email-config.controller';
 export { default as emailTemplateController } from './email-template.controller';
-export { default as mailController } from './mail.controller';
+export { default as mailerController } from './mailer.controller';
 export { default as materialController } from './materials.controller';
 export { default as orderController } from './orders.controller';
 export { default as productAttributeController } from './product-attributes.controller';
-export { default as productFavoriteController } from './product-favourite.controller';
+export { default as productFavoriteController } from './product-favorite.controller';
 export { default as productVariantController } from './product-attributes.controller';
 export { default as productController } from './products.controller';
 export { default as promotionController } from './promotions.controller';

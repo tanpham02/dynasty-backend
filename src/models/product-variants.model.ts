@@ -2,19 +2,7 @@ import { Schema, model } from 'mongoose';
 import { ProductVariants } from '../types/product-variants.type';
 import { ProductSchema } from './products.model';
 
-// RESPONSE  DESCRIPTION
-/**
- * @swagger
- * components:
- *   schema:
- *     ProductVariant:
- *       type: object
- *       properties:
- *         parentId:
- *           type: string
- *         productItem:
- *           $ref: '#/components/schema/Product'
- */
+
 
 export const ProductVariantSchema = new Schema<ProductVariants>(
   {

@@ -106,7 +106,7 @@ router.patch(
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductAttribute'
+ *                 $ref: '#/components/schema/ProductsAttribute'
  */
 
 // GET BY ID
@@ -132,7 +132,7 @@ router.get('/:id', productAttributeController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductAttribute'
+ *                 $ref: '#/components/schema/ProductsAttribute'
  */
 // DELETE
 router.delete('/', productAttributeController.delete);

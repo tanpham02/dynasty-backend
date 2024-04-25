@@ -13,7 +13,7 @@ import { default as materialRouter } from './materials.route';
 import { default as productAttributeRoute } from './product-attributes.route';
 import { default as bannerRoute } from './banners.route';
 import { default as termAndPolicyRoute } from './term-and-policy.route';
-import { default as mailerRoute } from './mail.route';
+import { default as mailerRoute } from './mailer.route';
 import { default as emailConfigRoute } from './email-config.route';
 import { default as emailTemplateRoute } from './email-template.route';
 import { default as productVariantRouter } from './product-variants.route';

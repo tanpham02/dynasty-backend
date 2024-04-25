@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import express, { Application } from 'express';
 import morgan from 'morgan';
 
-import { errorHandler } from '@app/middlewares/error-handler';
+import { errorHandler } from '@app/middlewares';
 import { configApp } from '.';
 
 const { FRONT_END_URL } = configApp();

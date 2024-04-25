@@ -32,11 +32,28 @@ interface StoreInformation extends LocationBaseModel {
   taxCode?: string;
 }
 
+interface BankAccountConfig {
+  bankCode?: string;
+  bankNumber?: string;
+  bankName?: string;
+  bankBranch?: string;
+}
+
+interface EmailConfig {
+  username: string;
+  password: string;
+  mailServer: string; // SMTP
+  port: number; // 587
+  isDefault: boolean; // false
+}
+
 interface Stores extends Document {
   storeConfig?: StoreConfig;
   storeInformation?: StoreInformation;
   faqs?: FrequentlyAskedQuestions;
   termAndPolicy?: TermAndPolicy;
+  emailConfig?: EmailConfig;
+  bankAccountConfig?: BankAccountConfig;
 }
 
 export { Stores, StoreConfig, FrequentlyAskedQuestions, TermAndPolicy, StoreInformation };

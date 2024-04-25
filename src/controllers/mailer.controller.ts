@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { MailOptions } from 'nodemailer/lib/json-transport';
 
-import MailService from '@app/services/mailer.service';
+import { MailerService } from '@app/services';
 
-const mailController = {
+const mailerController = {
   sendMail: async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const mailOption: MailOptions = {
@@ -294,7 +294,7 @@ const mailController = {
         </html>`,
       };
 
-      const nodeMailer = new MailService(mailOption);
+      const nodeMailer = new MailerService(mailOption);
       const response = nodeMailer.sendMail();
 
       return res.json(response);
@@ -304,4 +304,4 @@ const mailController = {
   },
 };
 
-export default mailController;
+export default mailerController;

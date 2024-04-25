@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME } from '@app/constants/app';
-import { HttpStatusCode } from '@app/types';
-import { EmailTemplateModel } from '@app/models';
-import EmailTemplateService from '@app/services/email-template.service';
 import { NextFunction, Request, Response } from 'express';
+
+import { FIELDS_NAME } from '@app/constants';
+import { EmailTemplateModel } from '@app/models';
+import { EmailTemplateService } from '@app/services';
+import { HttpStatusCode } from '@app/types';
 
 const emailTemplateService = new EmailTemplateService(EmailTemplateModel, 'email template');
 

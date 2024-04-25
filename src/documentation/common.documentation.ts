@@ -12,13 +12,13 @@
  *              type: string
  *           city:
  *              type: string
- *           districtId:
- *              type: string
  *           district:
  *              type: string
- *           wardId:
+ *           districtId:
  *              type: string
  *           ward:
+ *              type: string
+ *           wardId:
  *              type: string
  *           latitude:
  *              type: string

@@ -1,31 +1,6 @@
 import { Schema, model } from 'mongoose';
 import ComboPromotions from '../types/combo-promotions.type';
 
-/**
- * @swagger
- * components:
- *   schema:
- *     ComboPromotions:
- *       type: object
- *       required:
- *         - name
- *         - price
- *       properties:
- *         name:
- *             type: string
- *         categoryId:
- *             type: string
- *         comboPrice:
- *             type: number
- *         image:
- *             type: string
- *         productId:
- *             type: array
- *             item:
- *                schema:
- *                    $ref: '#/components/schema/Product'
- */
-
 const ComboPromotionsSchema = new Schema<ComboPromotions>(
   {
     categoryId: {

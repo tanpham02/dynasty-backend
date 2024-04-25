@@ -1,6 +1,8 @@
 import { Schema, model } from 'mongoose';
 import { ProductFavorite } from '../types/product-favorite.type';
 
+
+
 const productFavoriteSchema = new Schema<ProductFavorite>(
   {
     customerId: {

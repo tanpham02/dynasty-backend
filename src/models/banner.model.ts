@@ -1,24 +1,6 @@
-import { Banner } from '@app/types';
 import { Schema, model } from 'mongoose';
 
-// SCHEMAS RESPONSE
-
-/**
- * @swagger
- * components:
- *   schema:
- *     Banners:
- *       type: object
- *       properties:
- *         name:
- *             type: string
- *         priority:
- *             type: number
- *         url:
- *             type: string
- *         redirect:
- *             type: string
- */
+import { Banner } from '@app/types';
 
 const BannerSchema = new Schema<Banner>(
   {

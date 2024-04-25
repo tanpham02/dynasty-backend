@@ -4,7 +4,6 @@ export { default as CategoryModel } from './category.model';
 export { default as ComboPromotionModel } from './combo-promotions.model';
 export { default as CustomerAddressModel } from './customer-address.model';
 export { default as CustomerModel } from './customers.model';
-export { default as EmailConfigModel } from './email-config.model';
 export { default as EmailTemplateModel } from './email-template.model';
 export { default as MaterialModel } from './materials.model';
 export { default as OrderModel } from './orders.model';

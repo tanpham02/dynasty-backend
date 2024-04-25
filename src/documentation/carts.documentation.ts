@@ -16,8 +16,7 @@
  *              type: object
  *              properties:
  *                  product:
- *                     $ref: '#/components/schema/Product'
- *                     description: This is field ObjectId (Use populate to retries data)
+ *                     $ref: '#/components/schema/Products'
  *                  note:
  *                     type: string
  *                  productQuantities:
@@ -37,7 +36,6 @@
  *       properties:
  *           product:
  *              type: string
- *              description: This is field ObjectId (Use populate to retries data)
  *           note:
  *              type: string
  *           productQuantities:

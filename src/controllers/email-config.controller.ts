@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME } from '@app/constants/app';
-import { HttpStatusCode } from '@app/types';
-import { EmailConfigModel } from '@app/models';
-import EmailConfigService from '@app/services/email-config.service';
-import { Params } from '@app/types/common.types';
 import { NextFunction, Request, Response } from 'express';
 
-const emailConfigService = new EmailConfigService(EmailConfigModel, 'email config');
+import { FIELDS_NAME } from '@app/constants';
+import { EmailConfigService } from '@app/services';
+import { HttpStatusCode, Params } from '@app/types';
+
+// const emailConfigService = new EmailConfigService(EmailConfigModel, 'email config');
 
 const emailConfigController = {
   // SEARCH
@@ -18,8 +17,8 @@ const emailConfigController = {
         pageSize: pageSize ? Number(pageSize) : 10,
         isDefault: isDefault?.toString(),
       };
-      const emailConfig = await emailConfigService.getPagination(params);
-      res.status(HttpStatusCode.OK).json(emailConfig);
+      //   const emailConfig = await emailConfigService.getPagination(params);
+      //   res.status(HttpStatusCode.OK).json(emailConfig);
     } catch (error) {
       next(error);
     }
@@ -29,8 +28,8 @@ const emailConfigController = {
   getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const emailConfig = await emailConfigService.getById(id);
-      res.status(HttpStatusCode.OK).json(emailConfig);
+      //   const emailConfig = await emailConfigService.getById(id);
+      //   res.status(HttpStatusCode.OK).json(emailConfig);
     } catch (error) {
       next(error);
     }
@@ -39,8 +38,8 @@ const emailConfigController = {
   // CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const emailConfig = await emailConfigService.create(req, FIELDS_NAME.EMAIL_CONFIG);
-      res.status(HttpStatusCode.OK).json(emailConfig);
+      //   const emailConfig = await emailConfigService.create(req, FIELDS_NAME.EMAIL_CONFIG);
+      //   res.status(HttpStatusCode.OK).json(emailConfig);
     } catch (error) {
       next(error);
     }
@@ -50,8 +49,8 @@ const emailConfigController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const response = await emailConfigService.update(id, req, FIELDS_NAME.EMAIL_CONFIG);
-      res.status(HttpStatusCode.OK).json(response);
+      //   const response = await emailConfigService.update(id, req, FIELDS_NAME.EMAIL_CONFIG);
+      //   res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
     }
@@ -61,8 +60,8 @@ const emailConfigController = {
   delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
-      const { message } = await emailConfigService.delete(ids);
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await emailConfigService.delete(ids);
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }

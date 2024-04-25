@@ -128,7 +128,7 @@ router.patch('/:id', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariant
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductVariant'
+ *                 $ref: '#/components/schema/ProductsVariant'
  */
 
 // GET BY ID
@@ -154,7 +154,7 @@ router.get('/:id', productVariantController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductVariant'
+ *                 $ref: '#/components/schema/ProductsVariant'
  */
 // DELETE
 router.delete('/', productVariantController.delete);

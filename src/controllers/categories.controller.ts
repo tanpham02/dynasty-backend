@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { HttpStatusCode } from '@app/types';
-import CategoryService from '@app/services/category.service';
-import { Params } from '@app/types/common.types';
 import { NextFunction, Request, Response } from 'express';
+
 import { CategoryModel } from '@app/models';
+import { CategoryService } from '@app/services';
+import { HttpStatusCode, Params } from '@app/types';
 
 const categoryService = new CategoryService(CategoryModel, 'category');
 

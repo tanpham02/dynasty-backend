@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import Exception from '@app/exception';
-import { HttpStatusCode } from '@app/types';
-import { CustomerModel } from '@app/models';
-import CustomerService from '@app/services/customers.service';
-import { Params } from '@app/types/common.types';
 import { NextFunction, Request, Response } from 'express';
+
+import { CustomerModel } from '@app/models';
+import { CustomerService } from '@app/services';
+import { HttpStatusCode, Params } from '@app/types';
 
 const customerService = new CustomerService(CustomerModel, 'customer');
 

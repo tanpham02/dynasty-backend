@@ -24,7 +24,7 @@ import { Schema, Document } from 'mongoose';
  *             type: array
  *             item:
  *                schema:
- *                    $ref: '#/components/schema/Product'
+ *                    $ref: '#/components/schema/Products'
  */
 
 interface ComboPromotions extends Document {

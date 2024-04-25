@@ -12,7 +12,7 @@ import { Product } from './products.type';
  *         parentId:
  *           type: string
  *         productItem:
- *           $ref: '#/components/schema/Product'
+ *           $ref: '#/components/schema/Products'
  */
 
 interface ProductVariants extends BaseModel {

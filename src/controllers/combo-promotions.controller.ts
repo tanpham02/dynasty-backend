@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { ComboPromotionModel } from '@app/models';
-import comboPromotionsService from '@app/services/combo-promotions.service';
 import { Params } from '@app/types/common.types';
+
+import { ComboPromotionModel } from '@app/models';
+import { ComboPromotionsService } from '@app/services';
 import { Request, Response } from 'express';
 
-const comboService = new comboPromotionsService(ComboPromotionModel, 'combo promotions');
+const comboService = new ComboPromotionsService(ComboPromotionModel, 'combo promotions');
 
 const comboPromotionsController = {
   // SEARCH PAGINATION COMBO PROMOTIONS

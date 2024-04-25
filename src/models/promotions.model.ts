@@ -1,28 +1,6 @@
 import { Schema, model } from 'mongoose';
 import { Promotion, PromotionsList } from '../types/promotions.type';
 
-// SCHEMAS RESPONSE
-
-/**
- * @swagger
- * components:
- *   schema:
- *     Promotions:
- *       type: object
- *       properties:
- *         name:
- *             type: string
- *         description:
- *             type: string
- *         banner:
- *             type: string
- *         promotionsList:
- *             type: array
- *             item:
- *                schema:
- *                    $ref: '#/components/schema/Product'
- */
-
 const PromotionSchemaList = new Schema<PromotionsList>(
   {
     name: {

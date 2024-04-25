@@ -1,7 +1,8 @@
-import { HttpStatusCode } from '@app/types';
-import { CustomerAddressModel } from '@app/models';
-import CustomerAddressService from '@app/services/customer-address.service';
 import { NextFunction, Request, Response } from 'express';
+
+import { CustomerAddressModel } from '@app/models';
+import { CustomerAddressService } from '@app/services';
+import { HttpStatusCode } from '@app/types';
 
 const customerAddressService = new CustomerAddressService(CustomerAddressModel, 'customer address');
 

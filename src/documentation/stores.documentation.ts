@@ -79,6 +79,44 @@
  *           - $ref: '#/components/schemas/LocationBase'
  */
 
+// NOTE: Back Account Config
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     BackAccountConfig:
+ *       type: object
+ *       properties:
+ *         bankCode:
+ *           type: string
+ *         bankNumber:
+ *           type: string
+ *         bankName:
+ *           type: string
+ *         bankBranch:
+ *           type: string
+ */
+
+// NOTE: Email Config
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     EmailConfig:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *         password:
+ *           type: string
+ *         mailServer:
+ *           type: string
+ *         port:
+ *           type: number
+ *         isDefault:
+ *           type: boolean
+ */
+
 // NOTE: Stores
 /**
  * @swagger
@@ -95,5 +133,9 @@
  *                $ref: '#/components/schemas/FrequentlyAskedQuestions'
  *            termAndPolicy:
  *                $ref: '#/components/schemas/TermAndPolicy'
+ *            emailConfig:
+ *                $ref: '#/components/schemas/EmailConfig'
+ *            bankAccountConfig:
+ *                $ref: '#/components/schemas/BackAccountConfig'
  *
  */

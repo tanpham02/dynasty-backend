@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
 
-import { HttpStatusCode } from '@app/types';
 import { CartModel } from '@app/models';
-import CartService from '@app/services/carts.service';
+import { CartService } from '@app/services';
+import { HttpStatusCode } from '@app/types';
 
 const cartService = new CartService(CartModel, 'carts');
 
