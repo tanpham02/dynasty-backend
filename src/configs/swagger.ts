@@ -2,7 +2,23 @@ import { Application } from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
+import { configApp } from '@app/configs';
+import { MODE } from '@app/types';
+
 const configSwagger = (app: Application) => {
+  let descServer = 'Development server';
+  switch (process.env.NODE_ENV) {
+    case MODE.STAGING:
+      descServer = 'Staging server';
+      break;
+    case MODE.PRODUCTION:
+      descServer = 'Production server';
+      break;
+
+    default:
+      break;
+  }
+
   const options = {
     definition: {
       openapi: '3.1.0',
@@ -22,16 +38,8 @@ const configSwagger = (app: Application) => {
       },
       servers: [
         {
-          url: 'https://dynasty-ws.vtaan.id.vn',
-          description: 'Production server',
-        },
-        {
-          url: 'http://localhost:1009',
-          description: 'Development server',
-        },
-        {
-          url: 'http://103.163.118.88:2000',
-          description: 'Staging server',
+          url: configApp().APP_URL,
+          description: descServer,
         },
       ],
 

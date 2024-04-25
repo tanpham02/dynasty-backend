@@ -14,10 +14,6 @@ node_modules
 .env.development
 .env.production
 .env.staging
-*.env
-*.env.development
-*.env.production
-*.env.staging
 dist
 dist-ssr
 build/
