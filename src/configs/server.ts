@@ -9,22 +9,29 @@ import { configApp } from '.';
 const { FRONT_END_URL } = configApp();
 
 const configServer = (app: Application) => {
+  // NOTE: CORS
   const corsConfig = {
     origin: FRONT_END_URL,
     optionsSuccessStatus: 200,
   };
   app.use(cors(corsConfig));
 
-  app.use(express.json()); // JSON OBJECT
-  app.use(express.urlencoded({ extended: true })); //FALSE: application/x-www-form-urlencoded | TRUE: combines the 2 above
+  // NOTE: PARSE REQUEST BODY
+  //   app.use(express.json()); // (JSON OBJECT)
+  app.use(express.urlencoded({ extended: true })); // (FORM DATA)
+  // The `extended: true`: parsing nested objects and arrays
+  // The `extended: false`: parsing not complex objects and arrays
 
+  //NOTE: POPULAR HTTP LOGGING LIBRARY
   app.use(morgan('dev'));
+
+  // NOTE: PARSE COOKIE
   app.use(cookieParser()); // retries value from cookie
 
-  // STATIC FILE
+  // NOTE: LOAD STATIC FILE
   app.use('/public', express.static('public'));
 
-  // GLOBAL ERROR - ERROR HANDLER
+  // NOTE: GLOBAL ERROR - ERROR HANDLER
   app.use(errorHandler);
 };
 

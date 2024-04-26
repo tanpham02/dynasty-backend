@@ -20,7 +20,7 @@ const router = Router();
  *                type: object
  *                properties:
  *                   customerSignupInfo:
- *                        $ref: '#/components/schema/Customers'
+ *                        $ref: '#/components/schemas/Customers'
  *     responses:
  *       200:
  *         description: Ok
@@ -55,7 +55,7 @@ router.post('/customer/signup', formDataParser(FIELDS_NAME.CUSTOMER_SIGNUP), aut
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schema/Users'
+ *                $ref: '#/components/schemas/Staff'
  */
 // LOGIN FOR USER
 router.post('/user/login', formDataParser(FIELDS_NAME.USER_LOGIN), authController.loginUser);
@@ -86,7 +86,7 @@ router.post('/user/login', formDataParser(FIELDS_NAME.USER_LOGIN), authControlle
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schema/Customers'
+ *                $ref: '#/components/schemas/Customers'
  */
 // LOGIN FOR CUSTOMER
 router.post(
@@ -123,7 +123,7 @@ router.post('/customer/login/phone-number/verify-otp', authController.verifyOtpA
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schema/Customers'
+ *                $ref: '#/components/schemas/Customers'
  */
 
 // LOGIN WITH GOOGLE ACCOUNT

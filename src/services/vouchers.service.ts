@@ -5,8 +5,8 @@ import { Request } from 'express';
 import { Status } from '@app/types';
 
 class VoucherService extends CRUDService<Voucher> {
-  constructor(model: Model<Voucher>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Voucher>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // CREATE VOUCHER

@@ -1,5 +1,5 @@
-import categoryController from '@app/controllers/categories.controller';
-import { uploadFileCategory } from '@app/services/upload';
+import categoryController from '@app/controllers/category.controller';
+// import { uploadFileCategory } from '@app/middlewares';
 import express from 'express';
 
 const router = express.Router();
@@ -96,7 +96,7 @@ router.get('/search-all', categoryController.searchAll);
  */
 
 // CREATE CATEGORY
-router.post('/', uploadFileCategory, categoryController.createCategory);
+// router.post('/', uploadFileCategory, categoryController.createCategory);
 
 /**
  * @swagger
@@ -134,7 +134,7 @@ router.post('/', uploadFileCategory, categoryController.createCategory);
  */
 
 // UPDATE CATEGORY
-router.patch('/:id', uploadFileCategory, categoryController.updateCategory);
+// router.patch('/:id', uploadFileCategory, categoryController.updateCategory);
 
 /**
  * @swagger

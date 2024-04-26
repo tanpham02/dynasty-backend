@@ -1,14 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { HttpStatusCode } from '@app/types';
 import { AuthService } from '@app/services';
+import { HttpStatusCode } from '@app/types';
 
 const authController = {
   // SIGNUP CUSTOMER
   signup: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { message } = await new AuthService().signup(req, res);
-      res.status(HttpStatusCode.OK).json(message);
+      const response = await new AuthService().signup(req, res);
+      res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
     }

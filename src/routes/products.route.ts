@@ -1,5 +1,5 @@
 import productController from '@app/controllers/products.controller';
-import { uploadFileProduct } from '@app/services/upload';
+// import { uploadFileProduct } from '@app/middlewares/uploads';
 
 import express from 'express';
 const router = express.Router();
@@ -79,7 +79,7 @@ router.get('/search', productController.search);
  */
 
 // CREATE PRODUCT
-router.post('/', uploadFileProduct, productController.create);
+// router.post('/', uploadFileProduct, productController.create);
 
 /**
  * @swagger
@@ -118,7 +118,7 @@ router.post('/', uploadFileProduct, productController.create);
  */
 
 // UPDATE PRODUCT
-router.patch('/:id', uploadFileProduct, productController.update);
+// router.patch('/:id', uploadFileProduct, productController.update);
 
 /**
  * @swagger

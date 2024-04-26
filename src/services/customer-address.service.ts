@@ -9,8 +9,8 @@ import { CustomerAddress, HttpStatusCode } from '@app/types';
 import CRUDService from './CRUD.service';
 
 class CustomerAddressService extends CRUDService<CustomerAddress> {
-  constructor(model: Model<CustomerAddress>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<CustomerAddress>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // GET CUSTOMER ADDRESS BY CUSTOMER ID
@@ -121,7 +121,7 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
 
       console.log('customerAddressDTO?.addressItem', customerAddressDTO?.addressItem);
 
-      return { message: `Update ${this.nameService} success` };
+      return { message: `Update ${this.serviceName} success` };
     }
   }
 
@@ -145,7 +145,7 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
         new: true,
       },
     );
-    return { message: `Delete ${this.nameService} success` };
+    return { message: `Delete ${this.serviceName} success` };
   }
 }
 

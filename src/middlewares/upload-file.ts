@@ -1,8 +1,9 @@
 import multer from 'multer';
+import path from 'path';
 
-const uploadImage = (destination: string) => {
+const uploadFile = (destination: string) => {
   const storage = multer.diskStorage({
-    destination: destination,
+    destination: `public/assets/images/${destination}`,
     filename: function (_req, file, cb) {
       return cb(null, file.originalname);
     },
@@ -11,4 +12,4 @@ const uploadImage = (destination: string) => {
   return multer({ storage });
 };
 
-export { uploadImage };
+export default uploadFile;

@@ -1,7 +1,7 @@
 export { default as authController } from './auth.controller';
 export { default as bannerController } from './banners.controller';
 export { default as cartController } from './carts.controller';
-export { default as categoryController } from './categories.controller';
+export { default as categoryController } from './category.controller';
 export { default as comboPromotionsController } from './combo-promotions.controller';
 export { default as customerAddressController } from './customer-address.controller';
 export { default as customerController } from './customers.controller';

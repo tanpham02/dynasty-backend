@@ -2,7 +2,7 @@
  * @swagger
  * components:
  *   schema:
- *     Users:
+ *     Staff:
  *       type: object
  *       required:
  *         - username

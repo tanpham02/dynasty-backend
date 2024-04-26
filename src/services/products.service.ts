@@ -10,8 +10,8 @@ import { HttpStatusCode, Product, ProductVariants, TypeUpload } from '@app/types
 import { comparingObjectId, generateUnsignedSlug, handleUploadFile } from '@app/utils';
 
 class ProductService extends CRUDService<Product> {
-  constructor(model: Model<Product>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Product>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // DELETE
@@ -44,20 +44,20 @@ class ProductService extends CRUDService<Product> {
       },
     );
 
-    return { message: `Delete ${this.nameService} success` };
+    return { message: `Delete ${this.serviceName} success` };
   }
 
   // CREATE
   async createOverriding(req: Request) {
-    const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
+    const listFileUploads = handleUploadFile(req);
 
     const productBodyRequest: Product = JSON.parse(req.body?.[FIELDS_NAME.PRODUCT]);
     const productVariantListIds: Schema.Types.ObjectId[] = [];
 
-    if (req.files && Number(req.files?.length) > 0) {
-      productBodyRequest.image = listFileUploads[0];
-      productBodyRequest.images = listFileUploads;
-    }
+    // if (req.files && Number(req.files?.length) > 0) {
+    //   productBodyRequest.image = listFileUploads[0];
+    //   productBodyRequest.images = listFileUploads;
+    // }
 
     const newProduct = new this.model({
       ...productBodyRequest,
@@ -65,56 +65,56 @@ class ProductService extends CRUDService<Product> {
     });
 
     const productAttributeList: any[] = productBodyRequest?.productAttributeList || [];
-    if (productAttributeList.length > 0) {
-      const newProductVariant: any[] = productAttributeList.map(
-        (attribute: {
-          productAttributeItem: {
-            attributeId: Schema.Types.ObjectId;
-            priceAdjustmentValue: number;
-          }[];
-          extendedName: string;
-          extendedValue: string;
-        }) => {
-          const attributeItemValid = newProduct?.productAttributeList?.find(
-            (item) => item.extendedValue === attribute?.extendedValue,
-          );
+    // if (productAttributeList.length > 0) {
+    //   const newProductVariant: any[] = productAttributeList.map(
+    //     (attribute: {
+    //       productAttributeItem: {
+    //         attributeId: Schema.Types.ObjectId;
+    //         priceAdjustmentValue: number;
+    //       }[];
+    //       extendedName: string;
+    //       extendedValue: string;
+    //     }) => {
+    //       const attributeItemValid = newProduct?.productAttributeList?.find(
+    //         (item) => item.extendedValue === attribute?.extendedValue,
+    //       );
 
-          let priceAdjustment = 0;
-          if (attributeItemValid) {
-            priceAdjustment = attribute.productAttributeItem.reduce((acc, next) => {
-              const result = acc + (next?.priceAdjustmentValue || 0);
-              return result;
-            }, 0);
-          }
+    //       let priceAdjustment = 0;
+    //       if (attributeItemValid) {
+    //         priceAdjustment = attribute.productAttributeItem.reduce((acc, next) => {
+    //           const result = acc + (next?.priceAdjustmentValue || 0);
+    //           return result;
+    //         }, 0);
+    //       }
 
-          return {
-            parentId: newProduct._id,
-            productItem: {
-              name: `${productBodyRequest.name} - ${attribute.extendedName}`,
-              description: productBodyRequest.description,
-              information: productBodyRequest.information,
-              price: productBodyRequest.price + priceAdjustment,
-              image: productBodyRequest?.image,
-              images: productBodyRequest?.images,
-              types: productBodyRequest?.types,
-              visible: productBodyRequest?.visible,
-              productAttributeList: [attributeItemValid],
-              slug: generateUnsignedSlug(`${productBodyRequest.name} - ${attribute.extendedName}`),
-            },
-          };
-        },
-      );
+    //       return {
+    //         parentId: newProduct._id,
+    //         productItem: {
+    //           name: `${productBodyRequest.name} - ${attribute.extendedName}`,
+    //           description: productBodyRequest.description,
+    //           information: productBodyRequest.information,
+    //           price: productBodyRequest.price + priceAdjustment,
+    //           image: productBodyRequest?.image,
+    //           images: productBodyRequest?.images,
+    //           types: productBodyRequest?.types,
+    //           visible: productBodyRequest?.visible,
+    //           productAttributeList: [attributeItemValid],
+    //           slug: generateUnsignedSlug(`${productBodyRequest.name} - ${attribute.extendedName}`),
+    //         },
+    //       };
+    //     },
+    //   );
 
-      for (let i = 0; i < newProductVariant.length; i++) {
-        const element = newProductVariant[i];
-        (async () => {
-          const newProductVariant = new ProductVariantModel(element);
-          productVariantListIds.push(newProductVariant._id);
-          await newProductVariant.save();
-        })();
-      }
-      newProduct.productsVariant = productVariantListIds;
-    }
+    //   for (let i = 0; i < newProductVariant.length; i++) {
+    //     const element = newProductVariant[i];
+    //     (async () => {
+    //       const newProductVariant = new ProductVariantModel(element);
+    //       productVariantListIds.push(newProductVariant._id);
+    //       await newProductVariant.save();
+    //     })();
+    //   }
+    //   newProduct.productsVariant = productVariantListIds;
+    // }
 
     const categoryId = productBodyRequest.categoryId;
     if (categoryId) {
@@ -147,33 +147,33 @@ class ProductService extends CRUDService<Product> {
 
   // UPDATE
   async updateOverriding(id: string, req: Request) {
-    const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
+    const listFileUploads = handleUploadFile(req);
     const productRequest: Product = req.body?.[FIELDS_NAME.PRODUCT]
       ? JSON.parse(req.body?.[FIELDS_NAME.PRODUCT])
       : {};
     let dataUpdate: any = {
       parentId: id,
     };
-    if (req.files && Number(req.files?.length) > 0) {
-      productRequest.image = listFileUploads[0];
-      productRequest.images = listFileUploads;
+    // if (req.files && Number(req.files?.length) > 0) {
+    //   productRequest.image = listFileUploads[0];
+    //   productRequest.images = listFileUploads;
 
-      const productVariants = ProductVariantModel.find({ parentId: id });
-      const updateImageProductVariant = async (item: ProductVariants) => {
-        await item.updateOne({
-          $set: {
-            'productItem.image': listFileUploads[0],
-            'productItem.images': listFileUploads,
-          },
-        });
-      };
+    //   const productVariants = ProductVariantModel.find({ parentId: id });
+    //   const updateImageProductVariant = async (item: ProductVariants) => {
+    //     await item.updateOne({
+    //       $set: {
+    //         'productItem.image': listFileUploads[0],
+    //         'productItem.images': listFileUploads,
+    //       },
+    //     });
+    //   };
 
-      if (productVariants) {
-        (await productVariants).forEach((item) => {
-          updateImageProductVariant(item);
-        });
-      }
-    }
+    //   if (productVariants) {
+    //     (await productVariants).forEach((item) => {
+    //       updateImageProductVariant(item);
+    //     });
+    //   }
+    // }
 
     if (productRequest?.price && !productRequest?.productAttributeList) {
       const productById = await this.getById(id);
@@ -265,7 +265,7 @@ class ProductService extends CRUDService<Product> {
     }
 
     await this.model.updateOne({ _id: id }, productRequest, { new: true });
-    return { message: `Update ${this.nameService} success` };
+    return { message: `Update ${this.serviceName} success` };
   }
 
   // GET BY ID

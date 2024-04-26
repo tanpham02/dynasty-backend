@@ -96,7 +96,7 @@ const orderController = {
   deleteOrder: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await orderService.deleteOne(id?.toString() || '');
+      const { message } = await orderService.delete(id);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);

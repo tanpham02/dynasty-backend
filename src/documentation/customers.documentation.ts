@@ -1,5 +1,3 @@
-// SCHEMAS DESCRIPTION
-
 /**
  * @swagger
  * components:

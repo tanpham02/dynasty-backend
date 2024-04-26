@@ -39,7 +39,7 @@ const bannerController = {
   // CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await bannerService.createOverriding(req, FIELDS_NAME.BANNER);
+      const response = await bannerService.createBanner(req);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       console.log('🚀 ~ file: banners.ts:37 ~ create: ~ error:', error);
@@ -51,7 +51,7 @@ const bannerController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const { message } = await bannerService.updateOverriding(id, req, FIELDS_NAME.BANNER);
+      const { message } = await bannerService.updateBanner(id, req);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       next(error);

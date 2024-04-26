@@ -5,8 +5,8 @@ import { Model } from 'mongoose';
 import { Request } from 'express';
 
 class ProductAttriButeService extends CRUDService<ProductAttribute> {
-  constructor(model: Model<ProductAttribute>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<ProductAttribute>, serviceName: string) {
+    super(model, serviceName);
   }
 }
 

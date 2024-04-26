@@ -1,5 +1,5 @@
 import customerController from '@app/controllers/customers.controller';
-import { uploadFileCustomer } from '@app/services/upload';
+// import { uploadFileCustomer } from '@app/middlewares/uploads';
 import { Router } from 'express';
 
 const router = Router();
@@ -131,7 +131,7 @@ router.post('/customer-info', customerController.getCustomerInfo);
  */
 
 // UPDATE
-router.patch('/:id', uploadFileCustomer, customerController.update);
+// router.patch('/:id', uploadFileCustomer, customerController.update);
 
 /**
  * @swagger

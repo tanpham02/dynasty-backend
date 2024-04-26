@@ -10,8 +10,8 @@ import { Category, HttpStatusCode, TypeUpload } from '@app/types';
 import { generateUnsignedSlug, handleUploadFile } from '@app/utils';
 
 class CategoryService extends CRUDService<Category> {
-  constructor(model: Model<Category>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Category>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // CREATE CATEGORY
@@ -20,7 +20,7 @@ class CategoryService extends CRUDService<Category> {
       ? JSON.parse(req?.body?.[FIELDS_NAME.CATEGORY])
       : {};
 
-    const fileUploads = handleUploadFile(req, TypeUpload.ONE);
+    const fileUploads = handleUploadFile(req);
 
     if (
       requestFormData?.childrenCategory &&
@@ -68,11 +68,11 @@ class CategoryService extends CRUDService<Category> {
       ? JSON.parse(req?.body?.[FIELDS_NAME.CATEGORY])
       : {};
 
-    const fileUploads = handleUploadFile(req, TypeUpload.ONE);
+    const fileUploads = handleUploadFile(req);
 
     const alreadyExist = await this.getById(id);
     if (!alreadyExist) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.nameService}!`);
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}!`);
       throw exception;
     }
 
@@ -115,7 +115,7 @@ class CategoryService extends CRUDService<Category> {
 
     await this.model.findByIdAndUpdate({ _id: id }, categoryDetail, { new: true });
 
-    return { message: `Update ${this.nameService} success` };
+    return { message: `Update ${this.serviceName} success` };
   }
 
   // GET BY ID
@@ -144,7 +144,7 @@ class CategoryService extends CRUDService<Category> {
       { $set: { categoryId: null } },
     );
 
-    return { message: `Delete ${this.nameService} success` };
+    return { message: `Delete ${this.serviceName} success` };
   }
 }
 

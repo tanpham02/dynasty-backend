@@ -3,82 +3,47 @@
 import { Request } from 'express';
 import { Model } from 'mongoose';
 
+import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
-import { Banner, HttpStatusCode, TypeUpload } from '@app/types';
-import { handleUploadFile } from '@app/utils';
 import { CRUDService } from '@app/services';
+import { Banner, HttpStatusCode } from '@app/types';
+import { handleUploadFile } from '@app/utils';
 
 class BannerService extends CRUDService<Banner> {
-  constructor(model: Model<Banner>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Banner>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // CREATE
-  async createOverriding(req: Request, fieldName: string) {
-    const requestBody = req.body?.[fieldName];
+  async createBanner(req: Request) {
+    const requestBody = req.body?.[FIELDS_NAME.BANNER]
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.BANNER])))
+      : {};
 
-    if (Array.isArray(requestBody) && requestBody.length > 0) {
-      let bannersDTO: Banner[] = requestBody.map((item: string) => JSON.parse(item));
-      (async () => {
-        bannersDTO
-          .map((banner) => banner)
-          .forEach(async (item, index) => {
-            if (req.files) {
-              const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
-              item.url = listFileUploads[index];
-            }
-            const newBanner = new this.model(item);
-            console.log('🚀 ~ BannerService ~ .forEach ~ newBanner:', newBanner);
-            await newBanner.save();
-          });
-      })();
-    } else {
-      const newData = JSON.parse(requestBody);
-
-      if (req.files) {
-        const listFileUploads = handleUploadFile(req, TypeUpload.MULTIPLE);
-        newData.url = listFileUploads[0];
-      }
-      const newBn = new this.model(newData);
-      await newBn.save();
+    if (req.file) {
+      requestBody.url = handleUploadFile(req);
     }
-
-    return { message: 'Add banner success' };
+    const newBanner = new this.model(requestBody);
+    return await newBanner.save();
   }
 
   // UPDATE
-  async updateOverriding(id: string, req: Request, fieldName: string) {
-    const files = req.files as Array<Request['file']>;
-
+  async updateBanner(id: string, req: Request) {
+    const requestBody = req.body?.[FIELDS_NAME.BANNER]
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.BANNER])))
+      : {};
     const banner = await this.getById(id);
-
-    if (!banner) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Banner not found');
-      throw exception;
-    }
-    let newData = { url: '' };
-
-    if (req.body?.[fieldName] && Object.keys(req.body[fieldName]).length > 0) {
-      newData = {
-        ...newData,
-        ...JSON.parse(req.body?.[fieldName]),
-        url: banner.url,
-      };
-    }
 
     if (!banner) {
       const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found banner');
       throw exception;
     }
+    const newData = requestBody;
 
-    if (files) {
-      const filesHandler = handleUploadFile(req, TypeUpload.MULTIPLE);
-      newData.url = filesHandler[0];
+    if (req.file) {
+      newData.url = handleUploadFile(req);
     }
-
-    await banner.updateOne(newData, { new: true });
-
-    return { message: 'Update banner success' };
+    return await banner.updateOne(newData, { new: true });
   }
 }
 

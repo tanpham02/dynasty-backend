@@ -12,8 +12,8 @@ import { HttpStatusCode, Staff, TypeUpload } from '@app/types';
 import { comparingObjectId, handleUploadFile, hashPassword } from '@app/utils';
 
 class StaffService extends CRUDService<Staff> {
-  constructor(model: Model<Staff>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Staff>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // CREATE
@@ -21,7 +21,7 @@ class StaffService extends CRUDService<Staff> {
     const { password, ...user }: Staff = req?.body?.[FIELDS_NAME.USER]
       ? JSON.parse(req?.body?.[FIELDS_NAME.USER])
       : {};
-    const avatars = handleUploadFile(req, TypeUpload.ONE);
+    const avatars = handleUploadFile(req);
 
     const existUser = await StaffModel.findOne({
       $or: [
@@ -64,7 +64,7 @@ class StaffService extends CRUDService<Staff> {
       ? JSON.parse(req?.body?.[FIELDS_NAME.USER])
       : {};
 
-    const avatars = handleUploadFile(req, TypeUpload.ONE);
+    const avatars = handleUploadFile(req);
 
     const isUserAlreadyExist = await StaffModel.findById(id);
     const existUser = await StaffModel.findOne({
@@ -102,7 +102,7 @@ class StaffService extends CRUDService<Staff> {
     }
 
     await this.model.findByIdAndUpdate(id, newDataUpdate, { new: true });
-    return { message: `Update ${this.nameService} success` };
+    return { message: `Update ${this.serviceName} success` };
   }
 
   // GET BY ID

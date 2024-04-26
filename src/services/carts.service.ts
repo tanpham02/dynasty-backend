@@ -9,8 +9,8 @@ import { Model } from 'mongoose';
 import CRUDService from './CRUD.service';
 
 class CartService extends CRUDService<Carts> {
-  constructor(model: Model<Carts>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Carts>, serviceName: string) {
+    super(model, serviceName);
   }
 
   /** ADD CART */

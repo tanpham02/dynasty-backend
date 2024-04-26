@@ -8,10 +8,10 @@ import { Request } from 'express';
 
 class CRUDService<T extends Document> {
   protected model: Model<T>;
-  protected nameService: string;
-  constructor(model: Model<T>, nameService: string) {
+  protected serviceName: string;
+  constructor(model: Model<T>, serviceName: string) {
     this.model = model;
-    this.nameService = nameService;
+    this.serviceName = serviceName;
   }
 
   // FIND ALL
@@ -176,8 +176,8 @@ class CRUDService<T extends Document> {
   }
 
   // CREATE
-  async create(req: Request, fieldName: string) {
-    const dataRequest = req?.body?.[fieldName] ? JSON.parse(req?.body?.[fieldName]) : {};
+  async create(req: Request) {
+    const dataRequest = req.body;
     const create = new this.model(dataRequest);
     return await create.save();
   }
@@ -186,61 +186,48 @@ class CRUDService<T extends Document> {
   async getById(id: string) {
     const response = await this.model.findById(id);
     if (!response) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `${this.nameService} not found!`);
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}`);
       throw exception;
     }
     return response;
   }
 
   // UPDATE
-  async update(id: string, req: Request, fieldName: string) {
-    const dataUpdate = req?.body?.[fieldName] ? JSON.parse(req?.body?.[fieldName]) : {};
-
+  async update(id: string, req: Request) {
+    const dataUpdate = req.body;
     const alreadyExist = await this.getById(id);
 
-    if (!Object.keys(fieldName).length) {
-      const exception = new Exception(HttpStatusCode.BAD_REQUEST, "Request body can't be empty");
-      throw exception;
+    if (!Object.keys(dataUpdate).length) {
+      throw new Exception(HttpStatusCode.BAD_REQUEST, "Request body can't be empty");
     }
 
     if (!alreadyExist) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.nameService}!`);
-      throw exception;
+      throw new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}!`);
     }
 
-    await this.model.findByIdAndUpdate({ _id: id }, dataUpdate, { new: true });
-
-    return { message: `Update ${this.nameService} success` };
+    return await this.model.findByIdAndUpdate({ _id: id }, dataUpdate, { new: true });
   }
 
-  // DELETE MULTIPLE
+  // DELETE
   async delete(ids: string[] | any) {
     if (!ids) {
       const exception = new Exception(HttpStatusCode.BAD_REQUEST, "ids field can't be empty");
       throw exception;
     }
 
-    await this.model.deleteMany({
-      _id: {
-        $in: ids, // $in operator: sẽ tìm bất kì những thằng nào trong database có _id match với nhứng thằng trong list id truyền vào ($in operator: nhận value[] or value)
-      },
-    });
-
-    return { message: `Delete ${this.nameService} success` };
-  }
-
-  // DELETE ONE
-  async deleteOne(id: string) {
-    if (!id) {
-      const exception = new Exception(HttpStatusCode.BAD_REQUEST, "id field can't be empty");
-      throw exception;
+    if (Array.isArray(ids)) {
+      await this.model.deleteMany({
+        _id: {
+          $in: ids, // $in operator: sẽ tìm bất kì những thằng nào trong database có _id match với những thằng trong list ids truyền vào ($in operator: nhận value[] or value)
+        },
+      });
+    } else {
+      await this.model.deleteOne({
+        _id: ids,
+      });
     }
 
-    await this.model.deleteOne({
-      _id: id,
-    });
-
-    return { message: `Delete ${this.nameService} success` };
+    return { message: `Delete ${this.serviceName} success` };
   }
 }
 

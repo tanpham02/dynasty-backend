@@ -5,8 +5,8 @@ import { Model } from 'mongoose';
 import CRUDService from './CRUD.service';
 
 class ComboPromotionsService extends CRUDService<ComboPromotions> {
-  constructor(model: Model<ComboPromotions>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<ComboPromotions>, serviceName: string) {
+    super(model, serviceName);
   }
 
   async createOverriding(req: Request) {
@@ -24,7 +24,7 @@ class ComboPromotionsService extends CRUDService<ComboPromotions> {
       return await combo.save();
     } catch (error) {
       console.log(error);
-      throw new Error(`Error occur when create ${this.nameService} with error ${error}`);
+      throw new Error(`Error occur when create ${this.serviceName} with error ${error}`);
     }
   }
 
@@ -37,10 +37,10 @@ class ComboPromotionsService extends CRUDService<ComboPromotions> {
           $pull: { comboPromotionsId: { $in: ids } },
         },
       );
-      return { message: `Delete ${this.nameService} success` };
+      return { message: `Delete ${this.serviceName} success` };
     } catch (error) {
       console.log(error);
-      throw new Error(`Error occur when create ${this.nameService} with error ${error}`);
+      throw new Error(`Error occur when create ${this.serviceName} with error ${error}`);
     }
   }
 }

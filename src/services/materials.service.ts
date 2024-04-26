@@ -9,8 +9,8 @@ import Exception from '@app/exception';
 import { comparingObjectId } from '@app/utils/comparing-objectId.util';
 
 class MaterialService extends CRUDService<Material> {
-  constructor(model: Model<Material>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Material>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // CREATE MATERIAL

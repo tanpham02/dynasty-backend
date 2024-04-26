@@ -6,7 +6,7 @@ root = true
 [*] # apply all
 indent_style = space # kiểu thụt vào đầu dòng (space => nên chọn, tab)
 indent_size = 4 # hiểu đó là số cột muốn thụt vào đầu dòng
-end_of_line = lf # kiểu xuống dòng (2 kiểu thường dùng: lf => nên dùng bà crlf)
+end_of_line = lf # kiểu xuống dòng
 charset = utf-8 # kiểu encoding
 trim_trailing_whitespace = true # loại bỏ các khoảng trẳng dư thừa ở cuối dòng (nên dùng để clean code)
 insert_final_newline = false # tạo ra 1 dòng trống ở cuối file (nên dùng cho dễ đọc code)

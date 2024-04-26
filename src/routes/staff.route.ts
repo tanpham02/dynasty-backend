@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { staffController } from '@app/controllers';
 import { verifyTokenAndRolePermission } from '@app/middlewares/verify-token';
-import { uploadFileUser } from '@app/services/upload';
+// import { uploadFileUser } from '@app/middlewares/uploads';
 
 const router = Router();
 
@@ -72,7 +72,7 @@ router.get('/search', staffController.search);
  */
 
 // CREATE
-router.post('/', uploadFileUser, staffController.create);
+// router.post('/', uploadFileUser, staffController.create);
 
 /**
  * @swagger
@@ -107,7 +107,7 @@ router.post('/', uploadFileUser, staffController.create);
  *                 $ref: '#/components/schema/Users'
  */
 // UPDATE
-router.patch('/:id', uploadFileUser, staffController.update);
+// router.patch('/:id', uploadFileUser, staffController.update);
 
 /**
  * @swagger

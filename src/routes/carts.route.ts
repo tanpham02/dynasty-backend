@@ -6,8 +6,10 @@ const router = Router();
  * @swagger
  * '/api/carts/{customerId}':
  *  post:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Carts]
- *     summary: Add cart
+ *     summary: Add to cart
  *     parameters:
  *       - in: path
  *         name: customerId
@@ -26,7 +28,7 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Carts'
+ *                 $ref: '#/components/schemas/Carts'
  */
 
 // ADD CART
@@ -36,6 +38,8 @@ router.post('/:customerId', cartController.addCart);
  * @swagger
  * '/api/carts/{customerId}':
  *  patch:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Carts]
  *     summary: Update cart
  *     parameters:
@@ -56,7 +60,7 @@ router.post('/:customerId', cartController.addCart);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Carts'
+ *                 $ref: '#/components/schemas/Carts'
  */
 
 // UPDATE CART
@@ -66,6 +70,8 @@ router.patch('/:customerId', cartController.updateCart);
  * @swagger
  * '/api/carts/{customerId}':
  *  delete:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Carts]
  *     summary: Delete cart
  *     parameters:
@@ -86,7 +92,7 @@ router.patch('/:customerId', cartController.updateCart);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Carts'
+ *                 $ref: '#/components/schemas/Carts'
  */
 
 // DELETE CART
@@ -96,6 +102,8 @@ router.delete('/:customerId', cartController.deleteCart);
  * @swagger
  * '/api/carts/{customerId}':
  *  get:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Carts]
  *     summary: Get cart by customerId
  *     parameters:
@@ -111,7 +119,7 @@ router.delete('/:customerId', cartController.deleteCart);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Carts'
+ *                 $ref: '#/components/schemas/Carts'
  */
 
 // GET CART BY ID

@@ -15,8 +15,8 @@ import CRUDService from './CRUD.service';
 // const voucherService = new VoucherService(VoucherModel, 'voucher');
 
 class OrderService extends CRUDService<Order> {
-  constructor(model: Model<Order>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Order>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // SEARCH PAGINATION

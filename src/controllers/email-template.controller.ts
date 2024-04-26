@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
 
-import { FIELDS_NAME } from '@app/constants';
 import { EmailTemplateModel } from '@app/models';
 import { EmailTemplateService } from '@app/services';
 import { HttpStatusCode } from '@app/types';
@@ -22,7 +21,7 @@ const emailTemplateController = {
   // CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const emailConfig = await emailTemplateService.create(req, FIELDS_NAME.EMAIL_TEMPLATE);
+      const emailConfig = await emailTemplateService.create(req);
       res.status(HttpStatusCode.OK).json(emailConfig);
     } catch (error) {
       next(error);
@@ -44,7 +43,7 @@ const emailTemplateController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const response = await emailTemplateService.update(id, req, FIELDS_NAME.EMAIL_TEMPLATE);
+      const response = await emailTemplateService.update(id, req);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
@@ -55,7 +54,7 @@ const emailTemplateController = {
   deleteOne: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await emailTemplateService.deleteOne(id);
+      const { message } = await emailTemplateService.delete(id);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);

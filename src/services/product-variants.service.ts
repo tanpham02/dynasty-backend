@@ -10,8 +10,8 @@ import { ProductVariants } from '@app/types/product-variants.type';
 import { generateUnsignedSlug } from '@app/utils';
 
 class ProductVariantService extends CRUDService<ProductVariants> {
-  constructor(model: Model<ProductVariants>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<ProductVariants>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // UPDATE
@@ -26,7 +26,7 @@ class ProductVariantService extends CRUDService<ProductVariants> {
     }
 
     if (!alreadyExist) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.nameService}!`);
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}!`);
       throw exception;
     }
 
@@ -36,7 +36,7 @@ class ProductVariantService extends CRUDService<ProductVariants> {
 
     await this.model.findByIdAndUpdate({ _id: id }, dataUpdate, { new: true });
 
-    return { message: `Update ${this.nameService} success` };
+    return { message: `Update ${this.serviceName} success` };
   }
 
   // DELETE

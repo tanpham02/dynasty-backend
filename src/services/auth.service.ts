@@ -32,7 +32,7 @@ class AuthService {
 
     if (existCustomer) {
       if (existCustomer?.phoneNumber === customerSignupRequest?.phoneNumber) {
-        const exception = new Exception(HttpStatusCode.CONFLICT, 'Phone number already exist');
+        const exception = new Exception(HttpStatusCode.CONFLICT, 'Phone number already exists');
         throw exception;
       }
       if (existCustomer?.email === customerSignupRequest?.email) {
@@ -42,23 +42,24 @@ class AuthService {
     }
 
     if (!customerSignupRequest?.password) {
-      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'password field is requirement');
+      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'password field required');
       throw exception;
     }
 
     const passwordAfterHash = await hashPassword(customerSignupRequest.password);
+
     const newCustomer = new CustomerModel({
       ...customerSignupRequest,
       password: passwordAfterHash,
     });
 
-    await newCustomer.save();
+    const { password, ...remainingCustomer } = await newCustomer.save();
 
     const newCart = new CartModel({ customerId: newCustomer._id });
     const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
     await newCustomerAddress.save();
     await newCart.save();
-    return { message: 'Đăng ký thành công' };
+    return remainingCustomer;
   }
 
   // LOGIN FOR USER

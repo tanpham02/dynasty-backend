@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { FIELDS_NAME } from '@app/constants/app';
-import { HttpStatusCode } from '@app/types';
 import { ProductAttributeModel } from '@app/models';
 import ProductAttriButeService from '@app/services/product-attributes.service';
+import { HttpStatusCode } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
 const productAttributeService = new ProductAttriButeService(
@@ -24,7 +23,7 @@ const productAttributeController = {
   // CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await productAttributeService.create(req, FIELDS_NAME.PRODUCT_ATTRIBUTE);
+      const result = await productAttributeService.create(req);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       console.log('🚀 ~ file: productAttribute.ts:36 ~ create: ~ error:', error);
@@ -36,12 +35,8 @@ const productAttributeController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const { message } = await productAttributeService.update(
-        id,
-        req,
-        FIELDS_NAME.PRODUCT_ATTRIBUTE,
-      );
-      res.status(HttpStatusCode.OK).json(message);
+      const response = await productAttributeService.update(id, req);
+      res.status(HttpStatusCode.OK).json(response);
     } catch (error: any) {
       next(error);
     }

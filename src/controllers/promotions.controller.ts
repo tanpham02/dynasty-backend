@@ -27,7 +27,7 @@ const promotionController = {
   // CREATE PROMOTIONS
   create: async (req: Request, res: Response) => {
     try {
-      const newPromotion = await promoService.create(req, '');
+      const newPromotion = await promoService.create(req);
       res.status(HttpStatusCode.OK).json(newPromotion);
     } catch (error) {
       console.log('🚀 ~ file: promotions.ts:30 ~ create: ~ error:', error);
@@ -39,8 +39,8 @@ const promotionController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await promoService.update(id, req, '');
-      res.status(HttpStatusCode.OK).json(message);
+      const response = await promoService.update(id, req);
+      res.status(HttpStatusCode.OK).json(response);
     } catch (error: any) {
       next(error);
     }

@@ -7,12 +7,12 @@ import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { CustomerModel } from '@app/models';
 import { CRUDService } from '@app/services';
-import { Customers, HttpStatusCode, TypeUpload } from '@app/types';
+import { Customers, HttpStatusCode } from '@app/types';
 import { comparingObjectId, handleUploadFile, hashPassword } from '@app/utils';
 
 class CustomerService extends CRUDService<Customers> {
-  constructor(model: Model<Customers>, nameService: string) {
-    super(model, nameService);
+  constructor(model: Model<Customers>, serviceName: string) {
+    super(model, serviceName);
   }
 
   // UPDATE
@@ -20,7 +20,7 @@ class CustomerService extends CRUDService<Customers> {
     const dataUpdate: Customers = req.body?.[FIELDS_NAME.CUSTOMER]
       ? JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER])
       : {};
-    const fileUpload = handleUploadFile(req, TypeUpload.ONE);
+    const fileUpload = handleUploadFile(req);
 
     const isCustomerAlreadyExist = await this.getById(id);
 
@@ -29,12 +29,12 @@ class CustomerService extends CRUDService<Customers> {
     });
 
     if (!isCustomerAlreadyExist) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `${this.nameService} not found`);
+      const exception = new Exception(HttpStatusCode.NOT_FOUND, `${this.serviceName} not found`);
       throw exception;
     }
 
     if (existCustomer && !comparingObjectId(existCustomer._id, id)) {
-      const exception = new Exception(HttpStatusCode.CONFLICT, `${this.nameService} already exist`);
+      const exception = new Exception(HttpStatusCode.CONFLICT, `${this.serviceName} already exist`);
       throw exception;
     }
 
@@ -48,7 +48,7 @@ class CustomerService extends CRUDService<Customers> {
     }
 
     await this.model.findByIdAndUpdate(id, dataUpdate, { new: true });
-    return { message: `Update ${this.nameService} success` };
+    return { message: `Update ${this.serviceName} success` };
   }
 
   // GET BY ID
