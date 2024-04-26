@@ -1,4 +1,5 @@
-import { Schema, Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
+import { BaseModel } from './common.types';
 
 // SCHEMAS DESCRIPTION
 
@@ -21,17 +22,17 @@ import { Schema, Document } from 'mongoose';
  *             type: array
  *             item:
  *                schema:
- *                    $ref: '#/components/schema/Products'
+ *                    $ref: '#/components/schemas/Products'
  */
 
-interface Promotion extends Document {
+interface Promotion extends BaseModel {
   name?: string;
   description?: string;
   banner?: string;
   promotionsList?: PromotionsList[];
 }
 
-interface PromotionsList extends Document {
+interface PromotionsList extends BaseModel {
   name?: string;
   description?: string;
   productIsPurchasedId?: Schema.Types.ObjectId;

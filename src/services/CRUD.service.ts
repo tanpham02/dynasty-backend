@@ -159,22 +159,6 @@ class CRUDService<T extends Document> {
     return result;
   }
 
-  // SEARCH PAGINATION (EXCLUDE PASSWORD)
-  async getPaginationExcludePw(params: Params) {
-    const getDataPagination = await this.getPagination(params);
-    const result = {
-      ...getDataPagination,
-      data:
-        getDataPagination.data.length > 0
-          ? getDataPagination.data.map((item: T) => {
-              const { password, ...remainingUser } = item.toObject();
-              return remainingUser;
-            })
-          : [],
-    };
-    return result;
-  }
-
   // CREATE
   async create(req: Request) {
     const dataRequest = req.body;
@@ -195,17 +179,37 @@ class CRUDService<T extends Document> {
   // UPDATE
   async update(id: string, req: Request) {
     const dataUpdate = req.body;
-    const alreadyExist = await this.getById(id);
+    const stores = (await this.model.findById(id)) as any;
 
     if (!Object.keys(dataUpdate).length) {
       throw new Exception(HttpStatusCode.BAD_REQUEST, "Request body can't be empty");
     }
 
-    if (!alreadyExist) {
-      throw new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}!`);
+    if (!stores) {
+      throw new Exception(HttpStatusCode.NOT_FOUND, `${this.serviceName} not found!`);
     }
 
-    return await this.model.findByIdAndUpdate({ _id: id }, dataUpdate, { new: true });
+    Object.keys(dataUpdate).forEach((key) => {
+      if (
+        dataUpdate[key] !== undefined &&
+        Object.keys(dataUpdate[key]).length < 0 &&
+        stores[key] !== dataUpdate[key]
+      ) {
+        stores[key] = dataUpdate[key];
+      } else if (typeof dataUpdate[key] === 'object') {
+        Object.keys(dataUpdate[key]).forEach((childrenKey) => {
+          if (
+            dataUpdate[key][childrenKey] !== undefined &&
+            stores[key][childrenKey] !== dataUpdate[key][childrenKey]
+          ) {
+            stores[key][childrenKey] = dataUpdate[key][childrenKey];
+          }
+        });
+      }
+    });
+
+    return await stores.save();
+    return {};
   }
 
   // DELETE

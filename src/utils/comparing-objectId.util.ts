@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-const comparingObjectId = (requestId: any, recordId: any) => {
-  if (requestId && recordId) {
+const comparingObjectId = (requestId: string, recordId: string) => {
+  if (Boolean(requestId) && Boolean(recordId)) {
     if (new Object(recordId).valueOf().toString() === new Object(requestId).valueOf().toString()) {
       return true;
     }

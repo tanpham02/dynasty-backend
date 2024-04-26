@@ -113,8 +113,6 @@
  *           type: string
  *         port:
  *           type: number
- *         isDefault:
- *           type: boolean
  */
 
 // NOTE: Stores

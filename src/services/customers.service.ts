@@ -7,12 +7,28 @@ import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { CustomerModel } from '@app/models';
 import { CRUDService } from '@app/services';
-import { Customers, HttpStatusCode } from '@app/types';
+import { Customers, HttpStatusCode, Params } from '@app/types';
 import { comparingObjectId, handleUploadFile, hashPassword } from '@app/utils';
 
 class CustomerService extends CRUDService<Customers> {
   constructor(model: Model<Customers>, serviceName: string) {
     super(model, serviceName);
+  }
+
+  // GET PAGINATION EXCLUDE PASSWORD
+  async getPaginationExcludePassword(params: Params) {
+    const getDataPagination = await this.getPagination(params);
+    const result = {
+      ...getDataPagination,
+      data:
+        getDataPagination.data.length > 0
+          ? getDataPagination.data.map((item: Customers) => {
+              const { password, ...remainingUser } = item.toObject();
+              return remainingUser;
+            })
+          : [],
+    };
+    return result;
   }
 
   // UPDATE

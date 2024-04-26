@@ -15,7 +15,7 @@ export const PRODUCT_ATTRIBUTE_URL = combineApiUrl(`${PRODUCT_URL}`, 'attributes
 export const PRODUCT_VARIANT_URL = combineApiUrl(`${PRODUCT_URL}`, 'variants');
 
 // STORE SYSTEM
-export const STORE_URL = combineApiUrl('stores');
+export const STORE_SYSTEM_URL = combineApiUrl('store-systems');
 
 // STORE CONFIG
 export const TERM_AND_POLICY_URL = combineApiUrl('term-and-policy');
@@ -52,3 +52,6 @@ export const EMAIL_CONFIG_URL = combineApiUrl('email-config');
 
 // EMAIL CONFIG
 export const EMAIL_TEMPLATE_URL = combineApiUrl('email-template');
+
+// STORES CONFIG
+export const STORES_URL = combineApiUrl('stores');

@@ -18,7 +18,7 @@ const customerController = {
         fullName: fullName?.toString(),
         customerType: customerType?.toString(),
       };
-      const result = await customerService.getPaginationExcludePw(params);
+      const result = await customerService.getPaginationExcludePassword(params);
 
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {

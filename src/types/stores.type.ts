@@ -1,7 +1,6 @@
-import { LocationBaseModel } from '@app/types/common.types';
-import { Document } from 'mongoose';
+import { BaseModel, LocationBaseModel } from '@app/types';
 
-interface StoreConfig {
+interface StoreConfig extends BaseModel {
   feeShip?: number;
   transferContent?: string;
   reasonOrderCancel?: string[];
@@ -11,18 +10,18 @@ interface StoreConfig {
   };
 }
 
-interface FrequentlyAskedQuestions {
+interface FrequentlyAskedQuestions extends BaseModel {
   question?: string;
   answer?: string;
 }
 
-interface TermAndPolicy {
+interface TermAndPolicy extends BaseModel {
   deliveryPolicy?: string;
   privatePolicy?: string;
   termAndCondition?: string;
 }
 
-interface StoreInformation extends LocationBaseModel {
+interface StoreInformation extends LocationBaseModel, BaseModel {
   brandStore?: string; // Câu chuyện thương hiệu
   logo?: string; // logo cửa hàng
   name?: string;
@@ -32,22 +31,21 @@ interface StoreInformation extends LocationBaseModel {
   taxCode?: string;
 }
 
-interface BankAccountConfig {
+interface BankAccountConfig extends BaseModel {
   bankCode?: string;
   bankNumber?: string;
   bankName?: string;
   bankBranch?: string;
 }
 
-interface EmailConfig {
-  username: string;
-  password: string;
+interface EmailConfig extends BaseModel {
+  username?: string;
+  password?: string;
   mailServer: string; // SMTP
   port: number; // 587
-  isDefault: boolean; // false
 }
 
-interface Stores extends Document {
+interface Stores extends BaseModel {
   storeConfig?: StoreConfig;
   storeInformation?: StoreInformation;
   faqs?: FrequentlyAskedQuestions;
@@ -56,4 +54,4 @@ interface Stores extends Document {
   bankAccountConfig?: BankAccountConfig;
 }
 
-export { Stores, StoreConfig, FrequentlyAskedQuestions, TermAndPolicy, StoreInformation };
+export { FrequentlyAskedQuestions, StoreConfig, StoreInformation, Stores, TermAndPolicy };

@@ -17,7 +17,7 @@ const configServer = (app: Application) => {
   app.use(cors(corsConfig));
 
   // NOTE: PARSE REQUEST BODY
-  //   app.use(express.json()); // (JSON OBJECT)
+  app.use(express.json()); // (JSON OBJECT)
   app.use(express.urlencoded({ extended: true })); // (FORM DATA)
   // The `extended: true`: parsing nested objects and arrays
   // The `extended: false`: parsing not complex objects and arrays

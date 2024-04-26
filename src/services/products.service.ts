@@ -279,14 +279,14 @@ class ProductService extends CRUDService<Product> {
             'attributeList._id': attributeItem.attributeId,
           });
 
-          if (attribute) {
-            const attributeChild = attribute.attributeList?.find((item: any) =>
-              comparingObjectId(item._id, attributeItem.attributeId),
-            );
-            if (attributeChild) {
-              attributeItem.attributeId = JSON.stringify(attributeChild) as any;
-            }
-          }
+          //   if (attribute) {
+          //     const attributeChild = attribute.attributeList?.find((item: any) =>
+          //       comparingObjectId(item._id, attributeItem.attributeId),
+          //     );
+          //     if (attributeChild) {
+          //       attributeItem.attributeId = JSON.stringify(attributeChild) as any;
+          //     }
+          //   }
         }
       }
     }

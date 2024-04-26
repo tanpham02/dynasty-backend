@@ -99,7 +99,7 @@ enum ProductVariantBaseType {
   EXTREME_SAUSAGE_CHEESE = 'EXTREME_SAUSAGE_CHEESE', // Viền pho mai xúc xích
 }
 
-interface Product extends BaseModel, Document {
+interface Product extends BaseModel {
   name: string;
   slug?: string;
   description?: string;

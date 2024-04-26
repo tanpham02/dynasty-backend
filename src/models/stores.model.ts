@@ -67,21 +67,15 @@ const storeSchema = new Schema<Stores>(
     emailConfig: {
       username: {
         type: String,
-        required: true,
       },
       password: {
         type: String,
-        required: true,
       },
       mailServer: {
         type: String,
       },
       port: {
         type: Number,
-      },
-      isDefault: {
-        type: Boolean,
-        default: false,
       },
     },
     bankAccountConfig: {

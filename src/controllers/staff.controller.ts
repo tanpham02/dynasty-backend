@@ -22,7 +22,7 @@ const staffController = {
     };
 
     try {
-      const result = await staffService.getPaginationExcludePw(params);
+      const result = await staffService.getPaginationExcludePassword(params);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error: any) {
       next(error);
@@ -32,7 +32,7 @@ const staffController = {
   // CREATE USER
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await staffService.createOverriding(req);
+      const result = await staffService.createStaff(req);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       next(error);
@@ -43,7 +43,7 @@ const staffController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await staffService.updateOverriding(id?.toString()!, req);
+      const { message } = await staffService.updateStaff(id?.toString()!, req);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error: any) {
       console.log('🚀 ~ file: staff.ts:49 ~ update: ~ error:', error);

@@ -16,6 +16,7 @@ export { default as productVariantController } from './product-attributes.contro
 export { default as productController } from './products.controller';
 export { default as promotionController } from './promotions.controller';
 export { default as storeConfigController } from './store-config.controller';
+export { default as storeController } from './stores.controller';
 export { default as storeInformationController } from './store-information.controller';
 export { default as storeSystemController } from './store-system.controller';
 export { default as termAndPolicyController } from './term-and-policy.controller';

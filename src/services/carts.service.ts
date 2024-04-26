@@ -23,47 +23,47 @@ class CartService extends CRUDService<Carts> {
       throw exception;
     }
 
-    if (cartRecord?.products && cartRecord.products?.length > 0) {
-      const productItemMatching = cartRecord.products.find((productItemRecord: any) =>
-        comparingObjectId(cartRequestBody.product, productItemRecord.product),
-      );
+    // if (cartRecord?.products && cartRecord.products?.length > 0) {
+    //   const productItemMatching = cartRecord.products.find((productItemRecord: any) =>
+    //     comparingObjectId(cartRequestBody.product, productItemRecord.product),
+    //   );
 
-      if (comparingObjectId(productItemMatching?.product, cartRequestBody.product)) {
-        const quantity = cartRequestBody.productQuantities + productItemMatching?.productQuantities;
-        (async () => {
-          await this.model.updateOne(
-            {
-              'products.product': cartRequestBody.product,
-            },
-            {
-              $set: {
-                'products.$.productQuantities': quantity,
-                'products.$.note': cartRequestBody?.note || productItemMatching?.note,
-              },
-            },
-            { new: true },
-          );
-        })();
-      } else {
-        (async () => {
-          await cartRecord?.updateOne(
-            {
-              $push: { products: cartRequestBody },
-            },
-            { new: true },
-          );
-        })();
-      }
-    } else {
-      (async () => {
-        await cartRecord?.updateOne(
-          {
-            $push: { products: cartRequestBody },
-          },
-          { new: true },
-        );
-      })();
-    }
+    //   if (comparingObjectId(productItemMatching?.product, cartRequestBody.product)) {
+    //     const quantity = cartRequestBody.productQuantities + productItemMatching?.productQuantities;
+    //     (async () => {
+    //       await this.model.updateOne(
+    //         {
+    //           'products.product': cartRequestBody.product,
+    //         },
+    //         {
+    //           $set: {
+    //             'products.$.productQuantities': quantity,
+    //             'products.$.note': cartRequestBody?.note || productItemMatching?.note,
+    //           },
+    //         },
+    //         { new: true },
+    //       );
+    //     })();
+    //   } else {
+    //     (async () => {
+    //       await cartRecord?.updateOne(
+    //         {
+    //           $push: { products: cartRequestBody },
+    //         },
+    //         { new: true },
+    //       );
+    //     })();
+    //   }
+    // } else {
+    //   (async () => {
+    //     await cartRecord?.updateOne(
+    //       {
+    //         $push: { products: cartRequestBody },
+    //       },
+    //       { new: true },
+    //     );
+    //   })();
+    // }
   }
 
   /** UPDATE CART */
