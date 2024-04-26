@@ -1,5 +1,5 @@
 import storeInformationController from '@app/controllers/store-information.controller';
-import { uploadFileStoreInformation } from '@app/middlewares/uploads';
+// import { uploadFileStoreInformation } from '@app/middlewares/uploads';
 import express from 'express';
 const router = express.Router();
 
@@ -47,7 +47,7 @@ router.get('/search-all', storeInformationController.searchAll);
  */
 
 // CREATE
-router.post('/', uploadFileStoreInformation, storeInformationController.create);
+// router.post('/', uploadFileStoreInformation, storeInformationController.create);
 
 /**
  * @swagger
@@ -80,7 +80,7 @@ router.post('/', uploadFileStoreInformation, storeInformationController.create);
  */
 
 // UPDATE
-router.patch('/:id', uploadFileStoreInformation, storeInformationController.update);
+// router.patch('/:id', uploadFileStoreInformation, storeInformationController.update);
 
 /**
  * @swagger

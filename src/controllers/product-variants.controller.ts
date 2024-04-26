@@ -32,7 +32,7 @@ const productVariantController = {
   // CREATE
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const result = await productVariantService.create(req, FIELDS_NAME.PRODUCT_VARIANT);
+      const result = await productVariantService.create(req);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       console.log('🚀 ~ file: productAttribute.ts:36 ~ create: ~ error:', error);
