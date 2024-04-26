@@ -15,7 +15,7 @@ services:
         networks:
             - dynasty_network
         volumes:
-            - ./data-uploads:/app/public/uploads
+            - ./data-volumes:/app/public/assets
 
 networks:
     dynasty_network:
