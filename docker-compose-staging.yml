@@ -12,12 +12,13 @@ services:
         # depends_on:
         #     - mongo_db
         #     - mongo_express
+        env_file:
+            - .env.staging
         networks:
             - dynasty_network
             # - mongodb-docker
         volumes:
-            # - mongo-db-data:/data/db
-            - ./file-upload:/app/public
+            - ./data-volumes:/app/public/assets
 
     # mongo_db:
     #     image: mongo
