@@ -65,6 +65,7 @@ interface Filter {
 
 interface BaseModel extends Document {
   status?: Status;
+  _id?: string;
 }
 
 interface LocationBaseModel {
