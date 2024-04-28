@@ -41,5 +41,4 @@
  *                enum:
  *                   - ACTIVE
  *                   - INACTIVE
- *                   - INCOMING
  */
