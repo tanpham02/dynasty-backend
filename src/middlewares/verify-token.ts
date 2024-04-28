@@ -1,24 +1,26 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { configApp } from '@app/configs';
-import { HttpStatusCode, Role, Staff } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 
+import { configApp } from '@app/configs';
+import { HttpStatusCode, Role, Staff } from '@app/types';
+
 interface StaffRequest extends Request {
-  user?: Staff;
+  staff?: Staff;
 }
 
 const verifyToken = (req: StaffRequest, res: Response, next: NextFunction) => {
   const token = req?.headers?.authorization ?? '';
+  console.log('🚀 ~ verifyToken ~ token:', token);
   const { STAFF_JWT_ACCESS_KEY } = configApp();
   if (token) {
     const accessToken = token.split(' ')[1];
-    verify(accessToken, STAFF_JWT_ACCESS_KEY, (err, user) => {
+    verify(accessToken, STAFF_JWT_ACCESS_KEY, (err, staff) => {
       if (err) {
         return res.status(HttpStatusCode.FORBIDDEN).json('Token is invalid!');
       }
       res.setHeader('Authorization', token);
-      req.user = user as Staff;
+      req.staff = staff as Staff;
       next();
     });
   } else {
@@ -28,8 +30,8 @@ const verifyToken = (req: StaffRequest, res: Response, next: NextFunction) => {
 
 const verifyTokenAndRolePermission = (req: StaffRequest, res: Response, next: NextFunction) => {
   verifyToken(req, res, () => {
-    if (req.user?.role !== Role.ADMIN) {
-      res.status(HttpStatusCode.FORBIDDEN).json({ message: "You'er not allow delete this user" });
+    if (req.staff?.role === Role.ADMIN) {
+      res.status(HttpStatusCode.FORBIDDEN).json({ message: "You're not allow delete this staff" });
     } else {
       next();
     }

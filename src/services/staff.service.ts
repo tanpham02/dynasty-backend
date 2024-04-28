@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request } from 'express';
 import { Model } from 'mongoose';
 
@@ -6,7 +7,7 @@ import Exception from '@app/exception';
 import { StaffModel } from '@app/models';
 import { CRUDService } from '@app/services';
 import { HttpStatusCode, Params, Staff } from '@app/types';
-import { comparingObjectId, handleUploadFile, hashPassword } from '@app/utils';
+import { handleUploadFile, hashPassword, comparingObjectId } from '@app/utils';
 
 class StaffService extends CRUDService<Staff> {
   constructor(model: Model<Staff>, serviceName: string) {
@@ -29,57 +30,59 @@ class StaffService extends CRUDService<Staff> {
     return result;
   }
 
-  // BUG
   // CREATE
   async createStaff(req: Request) {
-    // const { password, ...user }: Staff = req?.body?.[FIELDS_NAME.USER]
-    //   ? JSON.parse(req?.body?.[FIELDS_NAME.USER])
-    //   : {};
-    const avatars = handleUploadFile(req);
-
-    const existUser = await StaffModel.findOne({
-      //   $or: [
-      //     { username: user?.username },
-      //     { phoneNumber: user?.phoneNumber },
-      //     { email: user?.email },
-      //   ],
-    });
-
-    if (existUser) {
-      const exception = new Exception(
-        HttpStatusCode.CONFLICT,
-        'Username or phoneNumber or email already exist',
-      );
-      throw exception;
-    }
-
-    // if (avatars[0]) {
-    //   user.image = avatars[0];
-    // }
-
-    // if (!password) {
-    //   const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'password field is requirement');
-    //   throw exception;
-    // }
-    // const passwordAfterHash = await hashPassword(password);
-    // const newUser = new this.model({
-    //   ...user,
-    //   password: passwordAfterHash,
-    // });
-    // await newUser.save();
-
-    // const { password: pw, ...remainingUser } = newUser.toObject();
-    // return remainingUser;
-  }
-
-  // BUG
-  // UPDATE
-  async updateStaff(id: string, req: Request) {
-    const dataUpdate: Staff = JSON.parse(req?.body?.[FIELDS_NAME.USER]) as Staff;
+    const staffRequestBody = req.body?.[FIELDS_NAME.STAFF]
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.STAFF])))
+      : {};
 
     const avatar = handleUploadFile(req);
 
-    const isUserAlreadyExist = await StaffModel.findById(id);
+    const existStaff = await StaffModel.findOne({
+      $or: [
+        { username: staffRequestBody?.username },
+        { phoneNumber: staffRequestBody?.phoneNumber },
+        { email: staffRequestBody?.email },
+      ],
+    });
+
+    if (existStaff) {
+      throw new Exception(
+        HttpStatusCode.CONFLICT,
+        'Username or phoneNumber or email already exist',
+      );
+    }
+
+    const newStaff = new StaffModel(staffRequestBody);
+
+    if (avatar) {
+      newStaff.$set('image', avatar);
+    }
+
+    if (!staffRequestBody?.password) {
+      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'password field is requirement');
+      throw exception;
+    }
+    const passwordAfterHash = await hashPassword(staffRequestBody.password);
+    if (passwordAfterHash) {
+      newStaff.$set('password', passwordAfterHash);
+    }
+
+    await newStaff.save();
+
+    const { password: pw, ...remainingStaff } = newStaff.toObject();
+    return remainingStaff;
+  }
+
+  // UPDATE
+  async updateStaff(id: string, req: Request) {
+    const dataUpdate: any = req.body?.[FIELDS_NAME.STAFF]
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.STAFF])))
+      : {};
+
+    const avatar = handleUploadFile(req);
+
+    const staffAlreadyExist = (await StaffModel.findById(id)) as any;
     const existUser = await StaffModel.findOne({
       $or: [
         { username: dataUpdate?.username },
@@ -87,41 +90,38 @@ class StaffService extends CRUDService<Staff> {
         { email: dataUpdate?.email },
       ],
     });
-    let newDataUpdate: any = {};
 
-    if (!isUserAlreadyExist) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Staff not found');
-      throw exception;
+    if (!staffAlreadyExist) {
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'Staff not found');
     }
 
-    // if (
-    //   existUser &&
-    //   Boolean(isUserAlreadyExist) &&
-    //   Boolean(existUser?._id) &&
-    //   Boolean(isUserAlreadyExist?._id) &&
-    //   comparingObjectId(existUser._id, isUserAlreadyExist._id)
-    // ) {
-    //   const exception = new Exception(HttpStatusCode.CONFLICT, 'Staff information already exist');
-    //   throw exception;
-    // }
-
-    if (Object.keys(dataUpdate).length > 0) {
-      newDataUpdate = {
-        ...dataUpdate,
-      };
+    if (
+      existUser &&
+      Boolean(existUser?._id) &&
+      Boolean(staffAlreadyExist?._id) &&
+      !comparingObjectId(existUser._id, staffAlreadyExist._id!)
+    ) {
+      throw new Exception(
+        HttpStatusCode.CONFLICT,
+        'Username or phoneNumber or email already exist',
+      );
     }
 
-    if (Boolean(avatar) && Boolean(avatar?.[0])) {
-      newDataUpdate.image = avatar[0];
+    Object.keys(dataUpdate).forEach((key) => {
+      if (dataUpdate[key] !== undefined && staffAlreadyExist[key] !== dataUpdate[key]) {
+        staffAlreadyExist[key] = dataUpdate[key];
+      }
+    });
+
+    if (avatar) {
+      staffAlreadyExist.image = avatar;
     }
 
-    // if (Boolean(newDataUpdate?.password)) {
-    //   const passwordAfterHash = await hashPassword(newDataUpdate?.password);
-    //   newDataUpdate.password = passwordAfterHash;
-    // }
+    if (staffAlreadyExist?.password) {
+      staffAlreadyExist.password = await hashPassword(staffAlreadyExist.password);
+    }
 
-    await this.model.findByIdAndUpdate(id, newDataUpdate, { new: true });
-    return { message: `Update ${this.serviceName} success` };
+    return await staffAlreadyExist.updateOne(staffAlreadyExist, { new: true });
   }
 
   // GET BY ID

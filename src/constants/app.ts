@@ -11,7 +11,7 @@ const FIELDS_NAME = {
   USER_LOGIN: 'userLoginInfo',
   CUSTOMER_LOGIN: 'customerLoginInfo',
   CATEGORY: 'categoryInfo',
-  USER: 'userInfo',
+  STAFF: 'staffInfo',
   CUSTOMER: 'customerInfo',
   CUSTOMER_ADDRESS: 'customerAddressInfo',
   PRODUCT: 'productInfo',

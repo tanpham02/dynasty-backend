@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 import { StaffModel } from '@app/models';
 import { StaffService } from '@app/services';
 import { HttpStatusCode } from '@app/types';
-import { Params } from '@app/types/common.types';
+import { Params } from '@app/types';
 
 const staffService = new StaffService(StaffModel, 'staff');
 
@@ -43,8 +43,8 @@ const staffController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await staffService.updateStaff(id?.toString()!, req);
-      res.status(HttpStatusCode.OK).json(message);
+      const staff = await staffService.updateStaff(id?.toString()!, req);
+      res.status(HttpStatusCode.OK).json(staff);
     } catch (error: any) {
       console.log('🚀 ~ file: staff.ts:49 ~ update: ~ error:', error);
       next();

@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
 import { staffController } from '@app/controllers';
-import { verifyTokenAndRolePermission } from '@app/middlewares/verify-token';
-// import { uploadFileUser } from '@app/middlewares/uploads';
+import { verifyToken, verifyTokenAndRolePermission } from '@app/middlewares';
+import { uploadFile } from '@app/middlewares';
 
 const router = Router();
 
@@ -38,7 +38,7 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Users'
+ *                 $ref: '#/components/schemas/Staff'
  */
 
 // SEARCH PAGINATION
@@ -48,8 +48,10 @@ router.get('/search', staffController.search);
  * @swagger
  * '/api/staff':
  *  post:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Staff]
- *     summary: Create user
+ *     summary: Create staff
  *     requestBody:
  *       required: true
  *       content:
@@ -57,8 +59,8 @@ router.get('/search', staffController.search);
  *             schema:
  *                type: object
  *                properties:
- *                   userInfo:
- *                        $ref: '#/components/schema/Users'
+ *                   staffInfo:
+ *                        $ref: '#/components/schemas/Staff'
  *                   file:
  *                        type: string
  *                        format: binary
@@ -68,16 +70,18 @@ router.get('/search', staffController.search);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Users'
+ *                 $ref: '#/components/schemas/Staff'
  */
 
 // CREATE
-// router.post('/', uploadFileUser, staffController.create);
+router.post('/', verifyToken, uploadFile('staff').single('file'), staffController.create);
 
 /**
  * @swagger
  * '/api/staff/{id}':
  *  patch:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Staff]
  *     summary: Update user
  *     parameters:
@@ -93,8 +97,8 @@ router.get('/search', staffController.search);
  *             schema:
  *                type: object
  *                properties:
- *                   userInfo:
- *                        $ref: '#/components/schema/Users'
+ *                   staffInfo:
+ *                        $ref: '#/components/schemas/Staff'
  *                   file:
  *                        type: string
  *                        format: binary
@@ -104,15 +108,22 @@ router.get('/search', staffController.search);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Users'
+ *                 $ref: '#/components/schemas/Staff'
  */
 // UPDATE
-// router.patch('/:id', uploadFileUser, staffController.update);
+router.patch(
+  '/:id',
+  verifyTokenAndRolePermission,
+  uploadFile('staff').single('file'),
+  staffController.update,
+);
 
 /**
  * @swagger
  * '/api/staff/{id}':
  *  get:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Staff]
  *     summary: Get user by id
  *     parameters:
@@ -127,18 +138,20 @@ router.get('/search', staffController.search);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Users'
+ *                 $ref: '#/components/schemas/Staff'
  */
 
 // GET BY ID
-router.get('/:id', staffController.getById);
+router.get('/:id', verifyToken, staffController.getById);
 
 /**
  * @swagger
  * '/api/staff':
  *  delete:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Staff]
- *     summary: Delete user
+ *     summary: Delete staff
  *     parameters:
  *       - in: query
  *         name: ids
@@ -152,7 +165,7 @@ router.get('/:id', staffController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Users'
+ *                 $ref: '#/components/schemas/Staff'
  */
 router.delete('/', verifyTokenAndRolePermission, staffController.delete);
 
