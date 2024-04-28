@@ -1,24 +1,25 @@
 import { Application } from 'express';
 
-import { default as authRouter } from './auth.route';
-import { default as bannerRoute } from './banners.route';
-import { default as cartRouter } from './carts.route';
-import { default as categoryRouter } from './category.route';
-import { default as comboPromotionsRouter } from './combo-promotions.route';
-import { default as customerAddressRouter } from './customer-address.route';
-import { default as customerRouter } from './customers.route';
-import { default as emailConfigRoute } from './email-config.route';
-import { default as emailTemplateRoute } from './email-template.route';
-import { default as mailerRoute } from './mailer.route';
-import { default as materialRouter } from './materials.route';
-import { default as orderRouter } from './orders.route';
-import { default as productAttributeRoute } from './product-attributes.route';
-import { default as productVariantRouter } from './product-variants.route';
-import { default as productRouter } from './products.route';
-import { default as promotionsRouter } from './promotions.route';
-import { default as staffRouter } from './staff.route';
-import { default as storeConfigRoute } from './store-config.route';
-import { default as voucherRouter } from './vouchers.route';
+import authRouter from './auth.route';
+import bannerRoute from './banners.route';
+import cartRouter from './carts.route';
+import categoryRouter from './category.route';
+import comboPromotionsRouter from './combo-promotions.route';
+import customerAddressRouter from './customer-address.route';
+import customerRouter from './customers.route';
+import emailConfigRoute from './email-config.route';
+import emailTemplateRoute from './email-template.route';
+import mailerRoute from './mailer.route';
+import materialRouter from './materials.route';
+import orderRouter from './orders.route';
+import productAttributeRoute from './product-attributes.route';
+import productVariantRouter from './product-variants.route';
+import productRouter from './products.route';
+import promotionsRouter from './promotions.route';
+import staffRouter from './staff.route';
+import storeConfigRoute from './store-config.route';
+import storeSystemRoute from './store-system.route';
+import voucherRouter from './vouchers.route';
 
 import {
   AUTH_URL,
@@ -37,7 +38,8 @@ import {
   PRODUCT_VARIANT_URL,
   PROMOTIONS_URL,
   STAFF_URL,
-  STORES_URL,
+  STORE_CONFIG_URL,
+  STORE_SYSTEM_URL,
   VOUCHER_URL,
 } from '@app/constants/apiUrl';
 
@@ -103,7 +105,6 @@ export const routesMapping = (app: Application) => {
       path: MATERIAL_URL,
       route: materialRouter,
     },
-
     {
       path: MAILER_URL,
       route: mailerRoute,
@@ -117,8 +118,12 @@ export const routesMapping = (app: Application) => {
       route: emailTemplateRoute,
     },
     {
-      path: STORES_URL,
+      path: STORE_CONFIG_URL,
       route: storeConfigRoute,
+    },
+    {
+      path: STORE_SYSTEM_URL,
+      route: storeSystemRoute,
     },
   ];
 

@@ -209,7 +209,6 @@ class CRUDService<T extends Document> {
     });
 
     return await stores.save();
-    return {};
   }
 
   // DELETE

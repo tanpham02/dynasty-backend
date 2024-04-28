@@ -70,19 +70,14 @@ interface BaseModel extends Document {
 
 interface LocationBaseModel {
   location?: string;
-  cityId?: string;
   city?: string;
-  districtId?: string;
+  cityId?: string;
   district?: string;
-  wardId?: string;
+  districtId?: string;
   ward?: string;
+  wardId?: string;
   latitude?: string;
   longitude?: string;
-}
-
-enum TypeUpload {
-  ONE = 'ONE',
-  MULTIPLE = 'MULTIPLE',
 }
 
 enum HttpStatusCode {
@@ -98,14 +93,4 @@ enum HttpStatusCode {
 
 type SortOrderBy = -1 | 1;
 
-export {
-  BaseModel,
-  Filter,
-  LocationBaseModel,
-  MODE,
-  Params,
-  SortOrderBy,
-  Status,
-  TypeUpload,
-  HttpStatusCode,
-};
+export { BaseModel, Filter, LocationBaseModel, MODE, Params, SortOrderBy, Status, HttpStatusCode };

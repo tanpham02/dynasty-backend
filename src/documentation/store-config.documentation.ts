@@ -60,6 +60,10 @@
  *   schemas:
  *     StoreInformation:
  *       type: object
+ *       required:
+ *         - name
+ *         - phoneNumber
+ *         - email
  *       properties:
  *          brandStore:
  *             type: string
@@ -86,6 +90,10 @@
  *   schemas:
  *     BackAccountConfig:
  *       type: object
+ *       required:
+ *         - bankName
+ *         - bankCode
+ *         - bankNumber
  *       properties:
  *         bankCode:
  *           type: string
@@ -104,6 +112,9 @@
  *   schemas:
  *     EmailConfig:
  *       type: object
+ *       required:
+ *         - username
+ *         - password
  *       properties:
  *         username:
  *           type: string
@@ -115,12 +126,14 @@
  *           type: number
  */
 
-// NOTE: Stores
+// NOTE: Store Config
 /**
  * @swagger
  * components:
  *   schemas:
  *      StoreConfig:
+ *         allOf:
+ *           - $ref: '#/components/schemas/BaseModel'
  *         type: object
  *         properties:
  *            storeSetting:

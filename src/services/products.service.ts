@@ -6,8 +6,8 @@ import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { CategoryModel, ProductAttributeModel, ProductVariantModel } from '@app/models';
 import { CRUDService } from '@app/services';
-import { HttpStatusCode, Product, ProductVariants, TypeUpload } from '@app/types';
-import { comparingObjectId, generateUnsignedSlug, handleUploadFile } from '@app/utils';
+import { HttpStatusCode, Product } from '@app/types';
+import { generateUnsignedSlug, handleUploadFile } from '@app/utils';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, serviceName: string) {

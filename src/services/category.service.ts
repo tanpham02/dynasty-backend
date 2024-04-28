@@ -6,7 +6,7 @@ import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { ProductModel } from '@app/models';
 import { CRUDService } from '@app/services';
-import { Category, HttpStatusCode, TypeUpload } from '@app/types';
+import { Category, HttpStatusCode } from '@app/types';
 import { generateUnsignedSlug, handleUploadFile } from '@app/utils';
 
 class CategoryService extends CRUDService<Category> {

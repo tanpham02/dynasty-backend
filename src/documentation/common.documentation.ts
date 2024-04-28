@@ -25,3 +25,21 @@
  *           longitude:
  *              type: string
  */
+
+// NOTE: Base Model
+/**
+ * @swagger
+ * components:
+ *    schemas:
+ *       BaseModel:
+ *          type: object
+ *          properties:
+ *             _id:
+ *                type: string
+ *             status:
+ *                type: string
+ *                enum:
+ *                   - ACTIVE
+ *                   - INACTIVE
+ *                   - INCOMING
+ */

@@ -2,10 +2,10 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { StoreConfigModel } from '@app/models';
-import { StoreService } from '@app/services';
+import { StoreConfigService } from '@app/services';
 import { HttpStatusCode } from '@app/types';
 
-const storeConfigService = new StoreService(StoreConfigModel, 'store config');
+const storeConfigService = new StoreConfigService(StoreConfigModel, 'store config');
 
 const storeConfigController = {
   // GET STORE CONFIG

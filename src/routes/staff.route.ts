@@ -10,7 +10,7 @@ const router = Router();
  * @swagger
  * '/api/staff/search':
  *  get:
- *     tags: [Users]
+ *     tags: [Staff]
  *     summary: Search pagination
  *     parameters:
  *      - name: fullName
@@ -48,7 +48,7 @@ router.get('/search', staffController.search);
  * @swagger
  * '/api/staff':
  *  post:
- *     tags: [Users]
+ *     tags: [Staff]
  *     summary: Create user
  *     requestBody:
  *       required: true
@@ -78,7 +78,7 @@ router.get('/search', staffController.search);
  * @swagger
  * '/api/staff/{id}':
  *  patch:
- *     tags: [Users]
+ *     tags: [Staff]
  *     summary: Update user
  *     parameters:
  *       - in: path
@@ -113,7 +113,7 @@ router.get('/search', staffController.search);
  * @swagger
  * '/api/staff/{id}':
  *  get:
- *     tags: [Users]
+ *     tags: [Staff]
  *     summary: Get user by id
  *     parameters:
  *       - in: path
@@ -137,7 +137,7 @@ router.get('/:id', staffController.getById);
  * @swagger
  * '/api/staff':
  *  delete:
- *     tags: [Users]
+ *     tags: [Staff]
  *     summary: Delete user
  *     parameters:
  *       - in: query

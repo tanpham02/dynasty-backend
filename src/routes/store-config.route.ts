@@ -6,7 +6,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * '/api/stores':
+ * '/api/store-config':
  *  get:
  *     tags: [Store Config]
  *     summary: Get store config
@@ -24,7 +24,7 @@ router.get('/', storeConfigController.getStoreConfig);
 
 /**
  * @swagger
- * '/api/stores/{id}':
+ * '/api/store-config/{id}':
  *  patch:
  *     security:
  *       - bearerAuth: []
@@ -56,7 +56,7 @@ router.patch('/:id', storeConfigController.update);
 
 /**
  * @swagger
- * '/api/stores/':
+ * '/api/store-config/':
  *  delete:
  *     security:
  *       - bearerAuth: []

@@ -17,3 +17,4 @@ export * from './promotions.type';
 export * from './staff.type';
 export * from './store-config.type';
 export * from './vouchers.type';
+export * from './store-system';

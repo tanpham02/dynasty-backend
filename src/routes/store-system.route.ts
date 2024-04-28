@@ -1,7 +1,9 @@
-import { FIELDS_NAME } from '@app/constants/app';
-import storeSystemController from '@app/controllers/store-system.controller';
-import { formDataParser } from '@app/utils/form-data-parser.util';
 import express from 'express';
+
+import { FIELDS_NAME } from '@app/constants';
+import { storeSystemController } from '@app/controllers';
+import { formDataParser } from '@app/utils';
+
 const router = express.Router();
 
 /**
@@ -41,7 +43,7 @@ const router = express.Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Store System'
+ *                 $ref: '#/components/schemas/StoreSystem'
  */
 
 //SEARCH PAGINATION
@@ -51,17 +53,16 @@ router.get('/search', storeSystemController.search);
  * @swagger
  * '/api/store-system':
  *  post:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Store System]
  *     summary: Create
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   storeSystemInfo:
- *                        $ref: '#/components/schema/Store System'
+ *                 $ref: '#/components/schemas/StoreSystem'
 
  *     responses:
  *       200:
@@ -69,7 +70,7 @@ router.get('/search', storeSystemController.search);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Store System'
+ *                 $ref: '#/components/schemas/StoreSystem'
  */
 
 // CREATE
@@ -79,6 +80,8 @@ router.post('/', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemController
  * @swagger
  * '/api/store-system/{id}':
  *  patch:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Store System]
  *     summary: Update
  *     parameters:
@@ -90,19 +93,16 @@ router.post('/', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemController
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   storeSystemInfo:
- *                        $ref: '#/components/schema/Store System'
+ *                 $ref: '#/components/schemas/StoreSystem'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Store System'
+ *                 $ref: '#/components/schemas/StoreSystem'
  */
 
 // UPDATE
@@ -112,6 +112,8 @@ router.patch('/:id', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemContro
  * @swagger
  * '/api/store-system/{id}':
  *  get:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Store System]
  *     summary: Get by id
  *     parameters:
@@ -126,7 +128,7 @@ router.patch('/:id', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemContro
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Store System'
+ *                 $ref: '#/components/schemas/StoreSystem'
  */
 
 // GET  BY ID
@@ -136,6 +138,8 @@ router.get('/:id', storeSystemController.getById);
  * @swagger
  * '/api/store-system/':
  *  delete:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Store System]
  *     summary: Delete
  *     parameters:
@@ -152,7 +156,7 @@ router.get('/:id', storeSystemController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Store System'
+ *                 $ref: '#/components/schemas/StoreSystem'
  */
 
 // DELETE
