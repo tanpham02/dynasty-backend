@@ -11,7 +11,7 @@ const { FRONT_END_URL } = configApp();
 const configServer = (app: Application) => {
   // NOTE: CORS
   const corsConfig = {
-    origin: FRONT_END_URL,
+    origin: [FRONT_END_URL, 'http://localhost:1311'],
     optionsSuccessStatus: 200,
   };
   app.use(cors(corsConfig));
