@@ -3,7 +3,7 @@ import 'module-alias/register';
 import mongoose, { ConnectOptions } from 'mongoose';
 
 import { configApp } from '@app/configs';
-import { StaffModel } from '@app/models';
+import { StaffModel, StoreConfigModel } from '@app/models';
 import { hashPassword } from '@app/utils';
 
 interface ConnectOptionsCustom extends ConnectOptions {
@@ -29,13 +29,19 @@ const connection = async () => {
   try {
     const connectMongo = await mongoose.connect(MONGO_URL, connectOptions);
     console.log(`Connect to MongoDB success with ${connectMongo.connection.host}`);
-    const checkEmpty = await StaffModel.find();
-    if (Array.isArray(checkEmpty) && !checkEmpty.length) {
+    const isExistStaff = await StaffModel.find();
+    const isExistStoreConfig = await StoreConfigModel.find();
+    if (Array.isArray(isExistStaff) && !isExistStaff.length) {
       const passwordEncryption = await hashPassword(seedData.password);
       seedData.password = passwordEncryption;
       const newUser = new StaffModel(seedData);
       await newUser.save();
-      console.log('Initialize seed data success');
+      console.log('Initialize seed staff data success');
+    }
+    if (Array.isArray(isExistStoreConfig) && !isExistStoreConfig.length) {
+      const newStoreConfig = new StoreConfigModel();
+      await newStoreConfig.save();
+      console.log('Initialize seed store config data success');
     }
   } catch (err) {
     console.log(`Connect to MongoDB fail with ${err}`);

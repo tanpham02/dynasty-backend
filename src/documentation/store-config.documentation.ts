@@ -1,9 +1,9 @@
-// NOTE: Store Config
+// NOTE: Store Setting
 /**
  * @swagger
  * components:
  *   schemas:
- *     StoreConfig:
+ *     StoreSetting:
  *       type: object
  *       properties:
  *         feeShip:
@@ -120,11 +120,11 @@
  * @swagger
  * components:
  *   schemas:
- *      Stores:
+ *      StoreConfig:
  *         type: object
  *         properties:
- *            storeConfig:
- *                $ref: '#/components/schemas/StoreConfig'
+ *            storeSetting:
+ *                $ref: '#/components/schemas/StoreSetting'
  *            storeInformation:
  *                $ref: '#/components/schemas/StoreInformation'
  *            faqs:

@@ -16,4 +16,4 @@ export { default as PromotionModel } from './promotions.model';
 // export { default as StatisticModel } from './statistics';
 export { default as StaffModel } from './staff.model';
 export { default as VoucherModel } from './vouchers.model';
-export { default as StoreModel } from './stores.model';
+export { default as StoreConfigModel } from './store-config.model';

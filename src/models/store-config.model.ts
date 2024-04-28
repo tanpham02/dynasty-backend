@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
-import { Stores } from '../types/stores.type';
+import { StoreConfig } from '../types/store-config.type';
 
-const storeSchema = new Schema<Stores>(
+const storeConfigSchema = new Schema<StoreConfig>(
   {
-    storeConfig: {
+    storeSetting: {
       feeShip: {
         type: Number,
       },
@@ -42,6 +42,33 @@ const storeSchema = new Schema<Stores>(
         type: String,
       },
       taxCode: {
+        type: String,
+      },
+      location: {
+        type: String,
+      },
+      cityId: {
+        type: String,
+      },
+      city: {
+        type: String,
+      },
+      districtId: {
+        type: String,
+      },
+      district: {
+        type: String,
+      },
+      wardId: {
+        type: String,
+      },
+      ward: {
+        type: String,
+      },
+      latitude: {
+        type: String,
+      },
+      longitude: {
         type: String,
       },
     },
@@ -99,5 +126,5 @@ const storeSchema = new Schema<Stores>(
   },
 );
 
-const StoreModel = model('stores', storeSchema);
-export default StoreModel;
+const StoreConfigModel = model('StoreConfig', storeConfigSchema);
+export default StoreConfigModel;

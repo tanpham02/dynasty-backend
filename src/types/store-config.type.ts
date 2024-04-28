@@ -1,6 +1,6 @@
 import { BaseModel, LocationBaseModel } from '@app/types';
 
-interface StoreConfig extends BaseModel {
+interface StoreSetting extends BaseModel {
   feeShip?: number;
   transferContent?: string;
   reasonOrderCancel?: string[];
@@ -45,8 +45,8 @@ interface EmailConfig extends BaseModel {
   port: number; // 587
 }
 
-interface Stores extends BaseModel {
-  storeConfig?: StoreConfig;
+interface StoreConfig extends BaseModel {
+  storeSetting?: StoreSetting;
   storeInformation?: StoreInformation;
   faqs?: FrequentlyAskedQuestions;
   termAndPolicy?: TermAndPolicy;
@@ -54,4 +54,4 @@ interface Stores extends BaseModel {
   bankAccountConfig?: BankAccountConfig;
 }
 
-export { FrequentlyAskedQuestions, StoreConfig, StoreInformation, Stores, TermAndPolicy };
+export { FrequentlyAskedQuestions, StoreSetting, StoreInformation, StoreConfig, TermAndPolicy };

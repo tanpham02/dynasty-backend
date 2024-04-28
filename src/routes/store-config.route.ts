@@ -1,59 +1,33 @@
-import { FIELDS_NAME } from '@app/constants/app';
-import storeConfigController from '@app/controllers/store-config.controller';
-import { formDataParser } from '@app/utils/form-data-parser.util';
 import express from 'express';
+
+import { storeConfigController } from '@app/controllers';
+
 const router = express.Router();
 
 /**
  * @swagger
- * '/api/store-config/search-all':
+ * '/api/stores':
  *  get:
  *     tags: [Store Config]
- *     summary: Search all
+ *     summary: Get store config
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Store Config'
+ *                 $ref: '#/components/schemas/StoreConfig'
  */
 
 //SEARCH ALL
-router.get('/search-all', storeConfigController.searchAll);
+router.get('/', storeConfigController.getStoreConfig);
 
 /**
  * @swagger
- * '/api/store-config':
- *  post:
- *     tags: [Store Config]
- *     summary: Create
- *     requestBody:
- *       required: true
- *       content:
- *          multipart/form-data:
- *             schema:
- *                type: object
- *                properties:
- *                   storeConfigInfo:
- *                        $ref: '#/components/schema/Store Config'
-
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Store Config'
- */
-
-// CREATE
-router.post('/', formDataParser(FIELDS_NAME.STORE_CONFIG), storeConfigController.create);
-
-/**
- * @swagger
- * '/api/store-config/{id}':
+ * '/api/stores/{id}':
  *  patch:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Store Config]
  *     summary: Update
  *     parameters:
@@ -65,52 +39,27 @@ router.post('/', formDataParser(FIELDS_NAME.STORE_CONFIG), storeConfigController
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   storeConfigInfo:
- *                        $ref: '#/components/schema/Store Config'
+ *                $ref: '#/components/schemas/StoreConfig'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Store Config'
+ *                 $ref: '#/components/schemas/StoreConfig'
  */
 
 // UPDATE
-router.patch('/:id', formDataParser(FIELDS_NAME.STORE_CONFIG), storeConfigController.update);
+router.patch('/:id', storeConfigController.update);
 
 /**
  * @swagger
- * '/api/store-config/{id}':
- *  get:
- *     tags: [Store Config]
- *     summary: Get by id
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: string
- *         required: true
- *     responses:
- *       200:
- *         description: OK
- *         content:
- *          application/json:
- *              schema:
- *                 $ref: '#/components/schema/Store Config'
- */
-
-// GET  BY ID
-router.get('/:id', storeConfigController.getById);
-
-/**
- * @swagger
- * '/api/store-config/':
+ * '/api/stores/':
  *  delete:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Store Config]
  *     summary: Delete
  *     parameters:
@@ -127,7 +76,7 @@ router.get('/:id', storeConfigController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Store Config'
+ *                 $ref: '#/components/schemas/StoreConfig'
  */
 
 // DELETE

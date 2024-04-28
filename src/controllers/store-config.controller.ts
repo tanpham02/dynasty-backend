@@ -1,24 +1,18 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
 
-// const storeConfigService = new StoreConfigService(Models.StoreConfigModel, 'store config');
+import { StoreConfigModel } from '@app/models';
+import { StoreService } from '@app/services';
+import { HttpStatusCode } from '@app/types';
+
+const storeConfigService = new StoreService(StoreConfigModel, 'store config');
 
 const storeConfigController = {
-  //SEARCH ALL
-  searchAll: async (req: Request, res: Response, next: NextFunction) => {
+  // GET STORE CONFIG
+  getStoreConfig: async (_req: Request, res: Response, next: NextFunction) => {
     try {
-      //   const shopConfig = await storeConfigService.findAll();
-      //   res.status(HttpStatusCode.OK).json(shopConfig);
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  //CREATE
-  create: async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      //   const shopConfig = await storeConfigService.create(req, FIELDS_NAME.STORE_CONFIG);
-      //   res.status(HttpStatusCode.OK).json(shopConfig);
+      const shopConfig = await storeConfigService.findAll();
+      res.status(HttpStatusCode.OK).json(shopConfig);
     } catch (error) {
       next(error);
     }
@@ -28,20 +22,9 @@ const storeConfigController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      //   const { message } = await storeConfigService.update(id, req, FIELDS_NAME.STORE_CONFIG);
-      //   res.status(HttpStatusCode.OK).json(message);
+      const stores = await storeConfigService.update(id, req);
+      res.status(HttpStatusCode.OK).json(stores);
     } catch (error: any) {
-      next(error);
-    }
-  },
-
-  //GET BY ID
-  getById: async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.params;
-    try {
-      //   const shopConfig = await storeConfigService.getById(id);
-      //   res.status(HttpStatusCode.OK).json(shopConfig);
-    } catch (error) {
       next(error);
     }
   },
@@ -50,8 +33,8 @@ const storeConfigController = {
   delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
-      //   const { message } = await storeConfigService.delete(ids);
-      //   res.status(HttpStatusCode.OK).json(message);
+      const { message } = await storeConfigService.delete(ids);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }

@@ -17,8 +17,7 @@ import { default as productVariantRouter } from './product-variants.route';
 import { default as productRouter } from './products.route';
 import { default as promotionsRouter } from './promotions.route';
 import { default as staffRouter } from './staff.route';
-import { default as storesRoute } from './stores.route';
-import { default as termAndPolicyRoute } from './term-and-policy.route';
+import { default as storeConfigRoute } from './store-config.route';
 import { default as voucherRouter } from './vouchers.route';
 
 import {
@@ -39,7 +38,6 @@ import {
   PROMOTIONS_URL,
   STAFF_URL,
   STORES_URL,
-  TERM_AND_POLICY_URL,
   VOUCHER_URL,
 } from '@app/constants/apiUrl';
 
@@ -105,10 +103,7 @@ export const routesMapping = (app: Application) => {
       path: MATERIAL_URL,
       route: materialRouter,
     },
-    {
-      path: TERM_AND_POLICY_URL,
-      route: termAndPolicyRoute,
-    },
+
     {
       path: MAILER_URL,
       route: mailerRoute,
@@ -123,7 +118,7 @@ export const routesMapping = (app: Application) => {
     },
     {
       path: STORES_URL,
-      route: storesRoute,
+      route: storeConfigRoute,
     },
   ];
 
