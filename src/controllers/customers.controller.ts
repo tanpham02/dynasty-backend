@@ -30,8 +30,8 @@ const customerController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await customerService.updateOverriding(id, req);
-      res.status(HttpStatusCode.OK).json(message);
+      const customer = await customerService.updateCustomer(id, req);
+      res.status(HttpStatusCode.OK).json(customer);
     } catch (error) {
       next(error);
     }
@@ -41,7 +41,7 @@ const customerController = {
   getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const customerById = await customerService.getByIdOverriding(id);
+      const customerById = await customerService.getByIdCustomer(id);
       res.status(HttpStatusCode.OK).json(customerById);
     } catch (error) {
       next(error);

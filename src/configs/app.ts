@@ -7,8 +7,10 @@ import { MODE } from '@app/types';
 interface Config {
   PORT: number;
   MONGO_URL: string;
-  JWT_ACCESS_KEY: string;
-  JWT_REFRESH_KEY: string;
+  STAFF_JWT_ACCESS_KEY: string;
+  STAFF_JWT_REFRESH_KEY: string;
+  CUSTOMER_JWT_ACCESS_KEY: string;
+  CUSTOMER_JWT_REFRESH_KEY: string;
   APP_URL: string;
   FRONT_END_URL: string;
   MAIL_USERNAME: string;
@@ -41,8 +43,10 @@ const configApp = () => {
     PORT: port,
     MONGO_URL: process.env.MONGO_URL || '',
     APP_URL: process.env.BASE_URL || '',
-    JWT_ACCESS_KEY: process.env.JWT_ACCESS_KEY || '',
-    JWT_REFRESH_KEY: process.env.JWT_REFRESH_KEY || '',
+    STAFF_JWT_ACCESS_KEY: process.env.STAFF_JWT_ACCESS_KEY || '',
+    STAFF_JWT_REFRESH_KEY: process.env.STAFF_JWT_REFRESH_KEY || '',
+    CUSTOMER_JWT_ACCESS_KEY: process.env.CUSTOMER_JWT_ACCESS_KEY || '',
+    CUSTOMER_JWT_REFRESH_KEY: process.env.CUSTOMER_JWT_REFRESH_KEY || '',
     FRONT_END_URL: process.env.FRONTEND_URL || '',
     MAIL_APPLICATION_PASSWORD: process.env.MAIL_APPLICATION_PASSWORD || '',
     MAIL_USERNAME: process.env.MAIL_USERNAME || '',

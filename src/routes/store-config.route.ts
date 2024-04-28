@@ -1,6 +1,7 @@
 import express from 'express';
 
 import { storeConfigController } from '@app/controllers';
+import { verifyToken } from '@app/middlewares';
 
 const router = express.Router();
 
@@ -52,7 +53,7 @@ router.get('/', storeConfigController.getStoreConfig);
  */
 
 // UPDATE
-router.patch('/:id', storeConfigController.update);
+router.patch('/:id', verifyToken, storeConfigController.update);
 
 /**
  * @swagger
@@ -80,6 +81,6 @@ router.patch('/:id', storeConfigController.update);
  */
 
 // DELETE
-router.delete('/', storeConfigController.delete);
+router.delete('/', verifyToken, storeConfigController.delete);
 
 export default router;

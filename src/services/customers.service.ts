@@ -32,9 +32,9 @@ class CustomerService extends CRUDService<Customers> {
   }
 
   // UPDATE
-  async updateOverriding(id: string, req: Request) {
+  async updateCustomer(id: string, req: Request) {
     const dataUpdate: Customers = req.body?.[FIELDS_NAME.CUSTOMER]
-      ? JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER])
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.CUSTOMER])))
       : {};
     const fileUpload = handleUploadFile(req);
 
@@ -59,16 +59,15 @@ class CustomerService extends CRUDService<Customers> {
       dataUpdate.password = passwordAfterHash;
     }
 
-    if (fileUpload && fileUpload[0].length) {
-      dataUpdate.avatar = fileUpload[0];
+    if (fileUpload) {
+      dataUpdate.avatar = fileUpload;
     }
 
-    await this.model.findByIdAndUpdate(id, dataUpdate, { new: true });
-    return { message: `Update ${this.serviceName} success` };
+    return await this.model.findByIdAndUpdate(id, dataUpdate, { new: true });
   }
 
   // GET BY ID
-  async getByIdOverriding(id: string) {
+  async getByIdCustomer(id: string) {
     const customer = (await this.getById(id)).populate({
       path: 'customerAddressId',
       model: 'CustomerAddress',

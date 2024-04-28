@@ -6,44 +6,40 @@ import { NextFunction, Request, Response } from 'express';
 import { verify } from 'jsonwebtoken';
 
 import { configApp } from '@app/configs';
-import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { CartModel, CustomerAddressModel, CustomerModel, StaffModel } from '@app/models';
 import { GoogleService, SMSService, StaffService } from '@app/services';
 import { CustomerType, Customers, HttpStatusCode, MODE, Staff } from '@app/types';
 import { JWT, generateOtp, hashPassword } from '@app/utils';
 
-const { JWT_REFRESH_KEY } = configApp();
+const { STAFF_JWT_REFRESH_KEY, CUSTOMER_JWT_REFRESH_KEY } = configApp();
 
 class AuthService {
   // SIGNUP CUSTOMER
-  async signup(req: Request, __res: Response) {
-    const customerSignupRequest: Customers = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_SIGNUP]);
+  async signup(req: Request) {
+    const customerSignupRequest: Customers = req.body;
     const existCustomer = await CustomerModel.findOne({
       $or: [
         {
-          phoneNumber: customerSignupRequest?.phoneNumber,
+          email: customerSignupRequest?.email,
         },
         {
-          email: customerSignupRequest?.email,
+          phoneNumber: customerSignupRequest?.phoneNumber,
         },
       ],
     });
 
     if (existCustomer) {
       if (existCustomer?.phoneNumber === customerSignupRequest?.phoneNumber) {
-        const exception = new Exception(HttpStatusCode.CONFLICT, 'Phone number already exists');
-        throw exception;
+        throw new Exception(HttpStatusCode.CONFLICT, 'Phone number already exists');
       }
       if (existCustomer?.email === customerSignupRequest?.email) {
-        const exception = new Exception(HttpStatusCode.CONFLICT, 'Email already exists');
-        throw exception;
+        throw new Exception(HttpStatusCode.CONFLICT, 'Email already exists');
       }
     }
 
     if (!customerSignupRequest?.password) {
-      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'password field required');
-      throw exception;
+      throw new Exception(HttpStatusCode.BAD_REQUEST, 'password field required');
     }
 
     const passwordAfterHash = await hashPassword(customerSignupRequest.password);
@@ -53,34 +49,32 @@ class AuthService {
       password: passwordAfterHash,
     });
 
-    const { password, ...remainingCustomer } = await newCustomer.save();
-
     const newCart = new CartModel({ customerId: newCustomer._id });
     const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
     await newCustomerAddress.save();
     await newCart.save();
+    newCustomer.$set('customerAddressId', newCustomerAddress._id);
+    const { password, ...remainingCustomer } = (await newCustomer.save()).toObject();
     return remainingCustomer;
   }
 
-  // LOGIN FOR USER
-  async loginUser(req: Request, res: Response) {
-    const { username, password }: Staff = JSON.parse(req.body?.[FIELDS_NAME.USER_LOGIN]);
-    const user = await StaffModel.findOne({ username: username });
+  // LOGIN FOR STAFF
+  async loginStaff(req: Request, res: Response) {
+    const { username, password }: Staff = req.body;
+    const staff = await StaffModel.findOne({ username: username });
 
-    if (!user) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'username does not exist');
-      throw exception;
+    if (!staff) {
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'username does not exist');
     }
-    if (password && user?.password) {
-      const validPassword = await compare(password, user?.password);
+    if (password && staff?.password) {
+      const validPassword = await compare(password, staff?.password);
 
       if (!validPassword) {
-        const exception = new Exception(HttpStatusCode.UN_AUTHORIZED, 'Wrong password');
-        throw exception;
+        throw new Exception(HttpStatusCode.UN_AUTHORIZED, 'Wrong password');
       }
 
-      if (user && validPassword) {
-        const userJwt = new JWT(user._id, user.role);
+      if (staff && validPassword) {
+        const userJwt = new JWT(staff._id, staff.role);
         const accessToken = userJwt.generateAccessToken();
         const refreshToken = userJwt.generateRefreshToken();
         res.cookie('refreshToken', refreshToken, {
@@ -88,9 +82,9 @@ class AuthService {
           secure: process.env.NODE_ENV === MODE.PRODUCTION, // should turn on when run on environment production
           sameSite: true,
         });
-        const { password, ...remainingUser } = user.toObject();
+        const { password, ...remainingStaff } = staff.toObject();
         return {
-          user: remainingUser,
+          user: remainingStaff,
           accessToken,
           refreshToken, // run on environment development
         };
@@ -98,6 +92,7 @@ class AuthService {
     }
   }
 
+  // SEND OTP
   async sendOtpToCustomer(req: Request, res: Response) {
     const request = req.body;
     const phoneNumber = request?.phoneNumber;
@@ -127,11 +122,6 @@ class AuthService {
       const smsService = new SMSService(phoneNumber, otp);
       const customer = await smsService.verifyOtpAndGetCustomer();
 
-      if (!customer) {
-        const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'OTP is wrong or invalid!');
-        throw exception;
-      }
-
       const { password, ...customerRemaining }: any = customer?.toObject();
 
       const jwt = new JWT(customer?._id);
@@ -139,31 +129,24 @@ class AuthService {
       const accessToken = jwt.generateAccessToken();
       const refreshToken = jwt.generateRefreshToken();
 
-      await CustomerModel.updateOne({ _id: customer._id }, { $set: { otp: null } });
-
       return { customerInfo: customerRemaining, accessToken, refreshToken };
     }
   }
 
   // LOGIN FOR CUSTOMER
   async loginCustomer(req: Request, res: Response) {
-    const { phoneNumber, password }: Customers = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_LOGIN]);
+    const { phoneNumber, password }: Customers = req.body;
 
     const customer = await CustomerModel.findOne({ phoneNumber: phoneNumber });
 
     if (!customer) {
-      const exception = new Exception(
-        HttpStatusCode.NOT_FOUND,
-        'Not found customer with this phone number',
-      );
-      throw exception;
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'Not found customer with this phone number');
     }
     if (password && customer?.password) {
       const validPassword = await compare(password, customer?.password);
 
       if (!validPassword) {
-        const exception = new Exception(HttpStatusCode.UN_AUTHORIZED, 'Wrong password');
-        throw exception;
+        throw new Exception(HttpStatusCode.UN_AUTHORIZED, 'Wrong password');
       }
 
       if (customer && validPassword) {
@@ -231,73 +214,67 @@ class AuthService {
     }
   }
 
-  // REQUEST REFRESH TOKEN FOR USER
-  async requestRefreshTokenForUser(req: Request, res: Response) {
-    const refreshTokenCookie = req.cookies?.refreshToken || '';
+  // REQUEST REFRESH TOKEN FOR STAFF
+  async requestRefreshTokenForStaff(req: Request, res: Response) {
+    let newAccessToken;
+    let newRefreshToken;
+    const refreshToken = req.body?.refreshToken;
 
-    if (!refreshTokenCookie) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, "You're not authenticated");
-      throw exception;
+    if (!refreshToken) {
+      throw new Exception(HttpStatusCode.UN_AUTHORIZED, "You're not authenticated");
     }
 
-    const newAccessTk = verify(
-      refreshTokenCookie,
-      JWT_REFRESH_KEY || '',
-      (err: any, _user: any) => {
-        if (err) {
-          const exception = new Exception(req?.statusCode || 0, err?.message);
-          throw exception;
-        }
-        const userJwt = new JWT(_user._id, _user.role);
-        const newAccessToken = userJwt.generateAccessToken();
-        const newRefreshToken = userJwt.generateRefreshToken();
+    verify(refreshToken, STAFF_JWT_REFRESH_KEY || '', (err: any, _staff: any) => {
+      if (err) {
+        throw new Exception(req?.statusCode || HttpStatusCode.BAD_REQUEST, err?.message);
+      }
+      const staffJwt = new JWT(_staff._id, _staff.role);
+      newAccessToken = staffJwt.generateAccessToken();
+      newRefreshToken = staffJwt.generateRefreshToken();
 
-        res.cookie('refreshToken', newRefreshToken, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === MODE.PRODUCTION,
-          sameSite: true,
-        });
-
-        return newAccessToken;
-      },
-    );
+      res.cookie('refreshToken', newRefreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === MODE.PRODUCTION,
+        sameSite: true,
+      });
+    });
     return {
-      accessToken: newAccessTk,
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
     };
   }
 
   // REQUEST REFRESH TOKEN FOR CUSTOMER
   async requestRefreshTokenForCustomer(req: Request, res: Response) {
-    const refreshTokenCookie = req.cookies?.refreshToken || '';
+    let newAccessToken;
+    let newRefreshToken;
+    const refreshToken = req.body?.refreshToken;
 
-    if (!refreshTokenCookie) {
+    if (!refreshToken) {
       const exception = new Exception(HttpStatusCode.NOT_FOUND, "You're not authenticated");
       throw exception;
     }
 
-    const newAccessTk = verify(
-      refreshTokenCookie,
-      JWT_REFRESH_KEY || '',
-      (err: any, _customer: any) => {
-        if (err) {
-          const exception = new Exception(req?.statusCode || 0, err?.message);
-          throw exception;
-        }
-        const customerJwt = new JWT(_customer._id);
-        const newAccessToken = customerJwt.generateAccessToken();
-        const newRefreshToken = customerJwt.generateRefreshToken();
+    verify(refreshToken, CUSTOMER_JWT_REFRESH_KEY || '', (err: any, _customer: any) => {
+      if (err) {
+        const exception = new Exception(
+          req?.statusCode || HttpStatusCode.BAD_REQUEST,
+          err?.message,
+        );
+        throw exception;
+      }
+      const customerJwt = new JWT(_customer._id);
+      newAccessToken = customerJwt.generateAccessToken();
+      newRefreshToken = customerJwt.generateRefreshToken();
 
-        res.cookie('refreshToken', newRefreshToken, {
-          httpOnly: true, // The cookie only accessible by the web server
-          secure: process.env.NODE_ENV === MODE.PRODUCTION, //https
-          sameSite: true,
-        });
+      res.cookie('refreshToken', newRefreshToken, {
+        httpOnly: true, // The cookie only accessible by the web server
+        secure: process.env.NODE_ENV === MODE.PRODUCTION, //https
+        sameSite: true,
+      });
+    });
 
-        return newAccessToken;
-      },
-    );
-
-    return { accessToken: newAccessTk };
+    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   }
 
   // LOGOUT

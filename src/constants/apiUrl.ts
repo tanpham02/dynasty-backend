@@ -31,6 +31,7 @@ export const STAFF_URL = combineApiUrl('staff');
 
 // CUSTOMER
 export const CUSTOMER_URL = combineApiUrl('customers');
+export const CUSTOMER_ADDRESS_URL = combineApiUrl(`${CUSTOMER_URL}`, 'customer-address');
 
 // CART
 export const CART_URL = combineApiUrl('carts');

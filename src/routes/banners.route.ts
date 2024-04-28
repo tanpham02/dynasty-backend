@@ -1,7 +1,7 @@
-import { bannerController } from '@app/controllers';
-import { verifyToken } from '@app/middlewares';
-import { uploadFile } from '@app/middlewares';
 import { Router } from 'express';
+
+import { bannerController } from '@app/controllers';
+import { uploadFile, verifyToken } from '@app/middlewares';
 
 const router = Router();
 
@@ -21,7 +21,7 @@ const router = Router();
  */
 
 // SEARCH ALL
-router.get('/search', verifyToken, bannerController.searchAll);
+router.get('/search', bannerController.searchAll);
 
 /**
  * @swagger
@@ -54,7 +54,7 @@ router.get('/search', verifyToken, bannerController.searchAll);
  */
 
 // CREATE
-router.post('/', uploadFile('banners').single('file'), bannerController.create);
+router.post('/', verifyToken, uploadFile('banners').single('file'), bannerController.create);
 
 /**
  * @swagger
@@ -92,7 +92,7 @@ router.post('/', uploadFile('banners').single('file'), bannerController.create);
  */
 
 // UPDATE VOUCHER
-router.patch('/:id', uploadFile('banners').single('file'), bannerController.update);
+router.patch('/:id', verifyToken, uploadFile('banners').single('file'), bannerController.update);
 
 /**
  * @swagger
@@ -118,7 +118,7 @@ router.patch('/:id', uploadFile('banners').single('file'), bannerController.upda
  */
 
 // GET BY ID
-router.get('/:id', bannerController.getById);
+router.get('/:id', verifyToken, bannerController.getById);
 
 /**
  * @swagger
@@ -145,6 +145,6 @@ router.get('/:id', bannerController.getById);
  */
 
 // DELETE
-router.delete('/', bannerController.delete);
+router.delete('/', verifyToken, bannerController.delete);
 
 export default router;

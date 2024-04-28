@@ -2,11 +2,10 @@
 import { Request } from 'express';
 import { Model } from 'mongoose';
 
-import { FIELDS_NAME } from '@app/constants/app';
 import Exception from '@app/exception';
-import { CustomerAddressModel } from '@app/models';
 import { CustomerAddress, HttpStatusCode } from '@app/types';
 import CRUDService from './CRUD.service';
+import { CustomerAddressModel } from '@app/models';
 
 class CustomerAddressService extends CRUDService<CustomerAddress> {
   constructor(model: Model<CustomerAddress>, serviceName: string) {
@@ -17,129 +16,99 @@ class CustomerAddressService extends CRUDService<CustomerAddress> {
   async getAddressByCustomerId(customerId: string) {
     const customerAddress = await this.model.findOne({ customerId: customerId });
     if (!customerAddress) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Customer address does not exist');
-      throw exception;
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'Customer address does not exist');
+    }
+    return customerAddress;
+  }
+
+  // GET CUSTOMER ADDRESS ITEM
+  async getCustomerAddressItem(addressItemId: string) {
+    const customerAddress = await this.model.findOne({ 'addressList._id': addressItemId });
+    if (!customerAddress) {
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'Customer address does not exist');
     }
     return customerAddress;
   }
 
   // ADD CUSTOMER ADDRESS ITEM
   async addCustomerAddressItem(req: Request) {
-    const customerAddressDTO = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_ADDRESS]);
+    const customerAddressRequestBody = req.body || {};
+
     const customerAddress = await this.model.findOne({
-      customerId: customerAddressDTO?.customerId,
+      customerId: customerAddressRequestBody?.customerId,
     });
 
     if (!customerAddress) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Customer address does not exist');
-      throw exception;
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'Customer address does not exist');
     }
 
-    if (customerAddressDTO?.addressItem?.isDefault) {
-      customerAddress.addressList.forEach((item) => {
-        (async () => {
-          await CustomerAddressModel.updateOne(
-            { 'addressList._id': item._id },
-            {
-              $set: {
-                'addressList.$.isDefault': false,
-              },
-            },
-            {
-              new: true,
-            },
-          );
-        })();
-      });
-    }
-
-    await customerAddress.updateOne(
-      { $push: { addressList: customerAddressDTO?.addressItem } },
-      { new: true },
+    return await customerAddress.updateOne(
+      {
+        $push: {
+          addressList: customerAddressRequestBody?.addressItem,
+        },
+      },
+      {
+        new: true,
+      },
     );
-
-    return { message: 'Add address item success' };
   }
 
   // UPDATE CUSTOMER ADDRESS ITEM
-  async updateCustomerAddressItem(customerAddressItemId: string, req: Request) {
-    const customerAddressDTO = JSON.parse(req.body?.[FIELDS_NAME.CUSTOMER_ADDRESS]);
+  async updateCustomerAddressItem(req: Request, addressItemId: string) {
+    const customerAddressRequestBody = req.body || {};
 
-    if (customerAddressDTO.customerId) {
+    if (customerAddressRequestBody?.customerId) {
       const customerAddressById = await this.getAddressByCustomerId(
-        String(customerAddressDTO.customerId),
+        String(customerAddressRequestBody.customerId),
       );
 
       if (!customerAddressById) {
-        const exception = new Exception(
-          HttpStatusCode.NOT_FOUND,
-          'Customer address does not exist',
-        );
-        throw exception;
+        throw new Exception(HttpStatusCode.NOT_FOUND, "Customer address does't exist");
       }
 
-      //   if (customerAddressDTO?.addressItem?.isDefault) {
-      //     customerAddressById.addressList.forEach((item) => {
-      //       (async () => {
-      //         await CustomerAddressModel.updateOne(
-      //           { 'addressList._id': item._id },
-      //           {
-      //             $set: {
-      //               'addressList.$.isDefault': false,
-      //             },
-      //           },
-      //           {
-      //             new: true,
-      //           },
-      //         );
-      //       })();
-      //     });
-      //     await customerAddressById.updateOne(
-      //       {
-      //         $set: {
-      //           'addressList.$[inner]': customerAddressDTO?.addressItem,
-      //         },
-      //       },
-      //       {
-      //         arrayFilters: [{ 'inner._id': customerAddressItemId }],
-      //         new: true,
-      //       },
-      //     );
-      //   }
-
-      await customerAddressById.updateOne(
-        {
-          $set: {
-            'addressList.$[inner]': customerAddressDTO?.addressItem,
-          },
-        },
-        {
-          arrayFilters: [{ 'inner._id': customerAddressItemId }],
-          new: true,
-        },
+      const addressItem: any = customerAddressById.addressList.find(
+        (item) => item._id == addressItemId,
       );
 
-      console.log('customerAddressDTO?.addressItem', customerAddressDTO?.addressItem);
-
-      return { message: `Update ${this.serviceName} success` };
+      if (addressItemId && addressItem && customerAddressRequestBody.addressItem) {
+        Object.keys(customerAddressRequestBody.addressItem).forEach((key) => {
+          if (
+            customerAddressRequestBody.addressItem[key] !== undefined &&
+            addressItem[key] !== customerAddressRequestBody.addressItem[key]
+          ) {
+            addressItem[key] = customerAddressRequestBody.addressItem[key];
+          }
+        });
+        return await customerAddressById.updateOne(
+          {
+            $set: {
+              'addressList.$[item]': addressItem,
+            },
+          },
+          {
+            arrayFilters: [{ 'item._id': addressItemId }],
+            new: true,
+          },
+        );
+      } else {
+        throw new Exception(HttpStatusCode.NOT_FOUND, "Customer address item does't exist");
+      }
     }
   }
 
   // DELETE CUSTOMER ADDRESS ITEM
-  async deleteCustomerAddressItem(customerAddressItemId: string) {
-    const customerAddressItem = await this.model.findOne({
-      'addressList._id': customerAddressItemId,
-    });
-    if (!customerAddressItem) {
-      const exception = new Exception(
-        HttpStatusCode.NOT_FOUND,
-        'Customer address item does not exist',
-      );
-      throw exception;
-    }
-    await customerAddressItem.updateOne(
+  async deleteCustomerAddressItem(customerId: string, addressItemIds: string[] | any) {
+    await CustomerAddressModel.updateMany(
+      { customerId: customerId },
       {
-        $pull: { addressList: { _id: customerAddressItemId } },
+        $pull: {
+          addressList: {
+            _id: {
+              $in: addressItemIds,
+            },
+          },
+        },
       },
       {
         new: true,

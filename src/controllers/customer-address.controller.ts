@@ -18,6 +18,18 @@ const customerAddressController = {
     }
   },
 
+  // GET CUSTOMER ADDRESS ITEM
+  getCustomerAddressItem: async (req: Request, res: Response, next: NextFunction) => {
+    const { addressItemId } = req.params;
+    try {
+      const customerAddressItem =
+        await customerAddressService.getCustomerAddressItem(addressItemId);
+      res.status(HttpStatusCode.OK).json(customerAddressItem);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // ADD CUSTOMER ADDRESS ITEM
   addCustomerAddressItem: async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -30,13 +42,9 @@ const customerAddressController = {
 
   // UPDATE CUSTOMER ADDRESS ITEM
   updateCustomerAddressItem: async (req: Request, res: Response, next: NextFunction) => {
-    const { customerAddressItemId } = req.params;
+    const { addressItemId } = req.params;
     try {
-      const response = await customerAddressService.updateCustomerAddressItem(
-        customerAddressItemId,
-        req,
-      );
-
+      const response = await customerAddressService.updateCustomerAddressItem(req, addressItemId);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
@@ -45,10 +53,12 @@ const customerAddressController = {
 
   // DELETE CUSTOMER ADDRESS ITEM
   deleteCustomerAddressItem: async (req: Request, res: Response, next: NextFunction) => {
-    const { customerAddressItemId } = req.params;
+    const { addressItemIds, customerId } = req.query;
     try {
-      const { message } =
-        await customerAddressService.deleteCustomerAddressItem(customerAddressItemId);
+      const { message } = await customerAddressService.deleteCustomerAddressItem(
+        String(customerId),
+        addressItemIds,
+      );
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);

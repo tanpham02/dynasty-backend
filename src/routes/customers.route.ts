@@ -1,5 +1,5 @@
 import customerController from '@app/controllers/customers.controller';
-// import { uploadFileCustomer } from '@app/middlewares/uploads';
+import { uploadFile, verifyToken } from '@app/middlewares';
 import { Router } from 'express';
 
 const router = Router();
@@ -39,7 +39,7 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Customers'
+ *                 $ref: '#/components/schemas/Customers'
  */
 
 // SEARCH PAGINATION
@@ -49,6 +49,8 @@ router.get('/search', customerController.search);
  * @swagger
  * '/api/customers/{id}':
  *  get:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Customers]
  *     summary: Find by id
  *     parameters:
@@ -64,16 +66,18 @@ router.get('/search', customerController.search);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Customers'
+ *                 $ref: '#/components/schemas/Customers'
  */
 
 // GET BY ID
-router.get('/:id', customerController.getById);
+router.get('/:id', verifyToken, customerController.getById);
 
 /**
  * @swagger
  * '/api/customers/customer-info':
  *  post:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Customers]
  *     summary: Find by access token
  *     requestBody:
@@ -95,12 +99,14 @@ router.get('/:id', customerController.getById);
  */
 
 // GET BY ACCESS TOKEN
-router.post('/customer-info', customerController.getCustomerInfo);
+router.post('/customer-info', verifyToken, customerController.getCustomerInfo);
 
 /**
  * @swagger
  * '/api/customers/{id}':
  *  patch:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Customers]
  *     summary: Update customer
  *     parameters:
@@ -117,7 +123,7 @@ router.post('/customer-info', customerController.getCustomerInfo);
  *                type: object
  *                properties:
  *                   customerInfo:
- *                        $ref: '#/components/schema/Customers'
+ *                        $ref: '#/components/schemas/Customers'
  *                   file:
  *                        type: string
  *                        format: binary
@@ -127,16 +133,23 @@ router.post('/customer-info', customerController.getCustomerInfo);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Customers'
+ *                 $ref: '#/components/schemas/Customers'
  */
 
 // UPDATE
-// router.patch('/:id', uploadFileCustomer, customerController.update);
+router.patch(
+  '/:id',
+  verifyToken,
+  uploadFile('customers').single('file'),
+  customerController.update,
+);
 
 /**
  * @swagger
  * '/api/customers':
  *  delete:
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Customers]
  *     summary: Delete customer
  *     parameters:
@@ -152,10 +165,10 @@ router.post('/customer-info', customerController.getCustomerInfo);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Customers'
+ *                 $ref: '#/components/schemas/Customers'
  */
 
 // DELETE CUSTOMER
-router.delete('/', customerController.delete);
+router.delete('/', verifyToken, customerController.delete);
 
 export default router;

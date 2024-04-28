@@ -27,6 +27,7 @@ import {
   CART_URL,
   CATEGORY_URL,
   COMBO_PROMOTIONS_URL,
+  CUSTOMER_ADDRESS_URL,
   CUSTOMER_URL,
   EMAIL_CONFIG_URL,
   EMAIL_TEMPLATE_URL,
@@ -86,7 +87,7 @@ export const routesMapping = (app: Application) => {
       route: customerRouter,
     },
     {
-      path: CUSTOMER_URL,
+      path: CUSTOMER_ADDRESS_URL,
       route: customerAddressRouter,
     },
     {

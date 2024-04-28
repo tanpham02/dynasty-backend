@@ -1,6 +1,6 @@
-import { Schema, model } from 'mongoose';
+import { Schema, Types, model } from 'mongoose';
 
-import { CustomerAddress } from '../types/customer-address.type';
+import { CustomerAddress } from '@app/types';
 
 const CustomerAddressSchema = new Schema<CustomerAddress>(
   {

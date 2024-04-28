@@ -10,10 +10,10 @@ interface StaffRequest extends Request {
 
 const verifyToken = (req: StaffRequest, res: Response, next: NextFunction) => {
   const token = req?.headers?.authorization ?? '';
-  const { JWT_ACCESS_KEY } = configApp();
+  const { STAFF_JWT_ACCESS_KEY } = configApp();
   if (token) {
     const accessToken = token.split(' ')[1];
-    verify(accessToken, JWT_ACCESS_KEY, (err, user) => {
+    verify(accessToken, STAFF_JWT_ACCESS_KEY, (err, user) => {
       if (err) {
         return res.status(HttpStatusCode.FORBIDDEN).json('Token is invalid!');
       }

@@ -2,7 +2,9 @@
 import { https } from 'follow-redirects';
 
 import { configApp } from '@app/configs';
+import Exception from '@app/exception';
 import CustomerModel from '@app/models/customers.model';
+import { HttpStatusCode } from '@app/types';
 
 const { INFO_BIP_API_KEY, INFO_BIP_HOST } = configApp();
 
@@ -70,6 +72,17 @@ class SMSService {
       otp: this.otp,
       phoneNumber: this.phoneNumber,
     });
+
+    if (!customer) {
+      throw new Exception(HttpStatusCode.BAD_REQUEST, 'OTP is wrong or invalid!');
+    }
+
+    await customer.updateOne({
+      $set: {
+        otp: null,
+      },
+    });
+
     return customer;
   }
 }

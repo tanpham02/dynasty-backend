@@ -2,7 +2,7 @@
  * @swagger
  * components:
  *   schemas:
- *     CustomerAddressDTO:
+ *     CustomerAddressRequest:
  *       type: object
  *       properties:
  *         customerId:

@@ -1,8 +1,7 @@
 import express from 'express';
 
-import { FIELDS_NAME } from '@app/constants';
 import { storeSystemController } from '@app/controllers';
-import { formDataParser } from '@app/utils';
+import { verifyToken } from '@app/middlewares';
 
 const router = express.Router();
 
@@ -74,7 +73,7 @@ router.get('/search', storeSystemController.search);
  */
 
 // CREATE
-router.post('/', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemController.create);
+router.post('/', verifyToken, storeSystemController.create);
 
 /**
  * @swagger
@@ -106,7 +105,7 @@ router.post('/', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemController
  */
 
 // UPDATE
-router.patch('/:id', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemController.update);
+router.patch('/:id', verifyToken, storeSystemController.update);
 
 /**
  * @swagger
@@ -132,7 +131,7 @@ router.patch('/:id', formDataParser(FIELDS_NAME.STORE_SYSTEM), storeSystemContro
  */
 
 // GET  BY ID
-router.get('/:id', storeSystemController.getById);
+router.get('/:id', verifyToken, storeSystemController.getById);
 
 /**
  * @swagger
@@ -160,6 +159,6 @@ router.get('/:id', storeSystemController.getById);
  */
 
 // DELETE
-router.delete('/', storeSystemController.delete);
+router.delete('/', verifyToken, storeSystemController.delete);
 
 export default router;

@@ -7,7 +7,7 @@ const authController = {
   // SIGNUP CUSTOMER
   signup: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await new AuthService().signup(req, res);
+      const response = await new AuthService().signup(req);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
@@ -15,12 +15,12 @@ const authController = {
   },
 
   // LOGIN FOR USER
-  loginUser: async (req: Request, res: Response, next: NextFunction) => {
+  loginStaff: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await new AuthService().loginUser(req, res);
+      const response = await new AuthService().loginStaff(req, res);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
-      console.log('🚀 ~ file: auth.ts:27 ~ loginUser: ~ error:', error);
+      console.log('🚀 ~ file: auth.ts:27 ~ loginStaff: ~ error:', error);
       next(error);
     }
   },
@@ -69,11 +69,11 @@ const authController = {
     }
   },
 
-  // REQUEST REFRESH TOKEN FOR USER
-  requestRefreshTokenForUser: async (req: Request, res: Response, next: NextFunction) => {
+  // REQUEST REFRESH TOKEN FOR STAFF
+  requestRefreshTokenForStaff: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { accessToken } = await new AuthService().requestRefreshTokenForUser(req, res);
-      res.status(HttpStatusCode.OK).json(accessToken);
+      const newToken = await new AuthService().requestRefreshTokenForStaff(req, res);
+      res.status(HttpStatusCode.OK).json(newToken);
     } catch (error) {
       console.log('🚀 ~ file: auth.ts:55 ~ requestRefreshTokenForUser: ~ error:', error);
       next(error);
@@ -83,8 +83,8 @@ const authController = {
   // REQUEST REFRESH TOKEN FOR CUSTOMER
   requestRefreshTokenForCustomer: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { accessToken } = await new AuthService().requestRefreshTokenForCustomer(req, res);
-      res.status(HttpStatusCode.OK).json(accessToken);
+      const newToken = await new AuthService().requestRefreshTokenForCustomer(req, res);
+      res.status(HttpStatusCode.OK).json(newToken);
     } catch (error) {
       console.log('🚀 ~ file: auth.ts:69 ~ requestRefreshTokenForCustomer: ~ error:', error);
       next(error);

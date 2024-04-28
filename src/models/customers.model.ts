@@ -9,6 +9,7 @@ const CustomerSchema = new Schema<Customers>(
   {
     phoneNumber: {
       type: String,
+      required: true,
     },
     avatar: {
       type: String,
@@ -18,12 +19,10 @@ const CustomerSchema = new Schema<Customers>(
     },
     email: {
       type: String,
-      unique: true,
     },
     password: {
       type: String,
       minlength: 6,
-      required: true,
     },
     birthday: {
       type: Date,
