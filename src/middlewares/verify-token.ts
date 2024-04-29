@@ -29,8 +29,10 @@ const verifyToken = (req: StaffRequest, res: Response, next: NextFunction) => {
 
 const verifyTokenAndRolePermission = (req: StaffRequest, res: Response, next: NextFunction) => {
   verifyToken(req, res, () => {
-    if (req.staff?.role === Role.ADMIN) {
-      res.status(HttpStatusCode.FORBIDDEN).json({ message: "You're not allow delete this staff" });
+    if (req.staff?.role !== Role.ADMIN) {
+      res
+        .status(HttpStatusCode.FORBIDDEN)
+        .json({ message: "You're not allow edit or delete this staff" });
     } else {
       next();
     }
