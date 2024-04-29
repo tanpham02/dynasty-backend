@@ -104,7 +104,7 @@ interface Product extends BaseModel {
   slug?: string;
   description?: string;
   information?: string;
-  categoryId?: Schema.Types.ObjectId;
+  categoryId?: string;
   price: number;
   oldPrice?: number; // Don't need to care
   image?: string;
@@ -117,11 +117,11 @@ interface Product extends BaseModel {
     extendedName?: string; // Nhỏ 6” - Dày
     extendedValue?: string; // nho_day
     productAttributeItem: Array<{
-      attributeId?: Schema.Types.ObjectId;
+      attributeId?: string;
       priceAdjustmentValue?: number; // 80000
     }>;
   }[];
-  productsVariant?: Schema.Types.ObjectId[];
+  productsVariant?: string[];
 }
 
 export { Product, ProductType, ProductVariantSizeType, ProductVariantBaseType };

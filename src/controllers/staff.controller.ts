@@ -12,13 +12,14 @@ const staffService = new StaffService(StaffModel, 'staff');
 const staffController = {
   // SEARCH PAGINATION
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, fullName, role } = req.query;
+    const { pageIndex = 0, pageSize = 10, fullName, role, sortBy } = req.query;
 
     const params: Params = {
-      pageIndex: pageIndex ? Number(pageIndex) : 0,
-      pageSize: pageSize ? Number(pageSize) : 10,
       fullName: fullName?.toString(),
       role: role?.toString(),
+      pageIndex: Number(pageIndex),
+      pageSize: Number(pageSize),
+      sortBy: sortBy?.toString(),
     };
 
     try {

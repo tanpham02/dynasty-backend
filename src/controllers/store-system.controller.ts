@@ -10,15 +10,16 @@ const storeSystemService = new StoreSystemService(StoreSystemModel, 'store syste
 const storeSystemController = {
   //SEARCH PAGINATION
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name, cityId, districtId, wardId } = req.query;
+    const { pageIndex = 0, pageSize = 10, name, cityId, districtId, wardId, sortBy } = req.query;
     try {
       const params: Params = {
-        pageIndex: pageIndex ? Number(pageIndex) : 0,
-        pageSize: pageSize ? Number(pageSize) : 10,
         name: name?.toString(),
         cityId: Number(cityId),
         districtId: Number(districtId),
         wardId: Number(wardId),
+        pageIndex: Number(pageIndex),
+        pageSize: Number(pageSize),
+        sortBy: sortBy?.toString(),
       };
       const storeSystem = await storeSystemService.getPagination(params);
       res.status(HttpStatusCode.OK).json(storeSystem);

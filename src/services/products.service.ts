@@ -6,8 +6,8 @@ import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { CategoryModel, ProductAttributeModel, ProductVariantModel } from '@app/models';
 import { CRUDService } from '@app/services';
-import { HttpStatusCode, Product } from '@app/types';
-import { generateUnsignedSlug, handleUploadFile } from '@app/utils';
+import { HttpStatusCode, Product, ProductVariants } from '@app/types';
+import { comparingObjectId, generateUnsignedSlug, handleUploadFile } from '@app/utils';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, serviceName: string) {
@@ -15,7 +15,7 @@ class ProductService extends CRUDService<Product> {
   }
 
   // DELETE
-  async deleteOverriding(ids?: string[] | string | any) {
+  async deleteProduct(ids?: string[] | string | any) {
     if (ids && Array.from(ids).length < 0) {
       const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
       throw exception;
@@ -48,16 +48,18 @@ class ProductService extends CRUDService<Product> {
   }
 
   // CREATE
-  async createOverriding(req: Request) {
-    const listFileUploads = handleUploadFile(req);
+  async createProduct(req: Request) {
+    const fileUpload = handleUploadFile(req);
 
-    const productBodyRequest: Product = JSON.parse(req.body?.[FIELDS_NAME.PRODUCT]);
-    const productVariantListIds: Schema.Types.ObjectId[] = [];
+    const productBodyRequest: Product = req.body?.[FIELDS_NAME.PRODUCT]
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.PRODUCT])))
+      : {};
+    const productVariantListIds: string[] = [];
 
-    // if (req.files && Number(req.files?.length) > 0) {
-    //   productBodyRequest.image = listFileUploads[0];
-    //   productBodyRequest.images = listFileUploads;
-    // }
+    if (fileUpload) {
+      productBodyRequest.image = fileUpload;
+      productBodyRequest.images = [fileUpload];
+    }
 
     const newProduct = new this.model({
       ...productBodyRequest,
@@ -65,56 +67,56 @@ class ProductService extends CRUDService<Product> {
     });
 
     const productAttributeList: any[] = productBodyRequest?.productAttributeList || [];
-    // if (productAttributeList.length > 0) {
-    //   const newProductVariant: any[] = productAttributeList.map(
-    //     (attribute: {
-    //       productAttributeItem: {
-    //         attributeId: Schema.Types.ObjectId;
-    //         priceAdjustmentValue: number;
-    //       }[];
-    //       extendedName: string;
-    //       extendedValue: string;
-    //     }) => {
-    //       const attributeItemValid = newProduct?.productAttributeList?.find(
-    //         (item) => item.extendedValue === attribute?.extendedValue,
-    //       );
+    if (productAttributeList.length > 0) {
+      const newProductVariant: any[] = productAttributeList.map(
+        (attribute: {
+          productAttributeItem: {
+            attributeId: Schema.Types.ObjectId;
+            priceAdjustmentValue: number;
+          }[];
+          extendedName: string;
+          extendedValue: string;
+        }) => {
+          const attributeItemValid = newProduct?.productAttributeList?.find(
+            (item) => item.extendedValue === attribute?.extendedValue,
+          );
 
-    //       let priceAdjustment = 0;
-    //       if (attributeItemValid) {
-    //         priceAdjustment = attribute.productAttributeItem.reduce((acc, next) => {
-    //           const result = acc + (next?.priceAdjustmentValue || 0);
-    //           return result;
-    //         }, 0);
-    //       }
+          let priceAdjustment = 0;
+          if (attributeItemValid) {
+            priceAdjustment = attribute.productAttributeItem.reduce((acc, next) => {
+              const result = acc + (next?.priceAdjustmentValue || 0);
+              return result;
+            }, 0);
+          }
 
-    //       return {
-    //         parentId: newProduct._id,
-    //         productItem: {
-    //           name: `${productBodyRequest.name} - ${attribute.extendedName}`,
-    //           description: productBodyRequest.description,
-    //           information: productBodyRequest.information,
-    //           price: productBodyRequest.price + priceAdjustment,
-    //           image: productBodyRequest?.image,
-    //           images: productBodyRequest?.images,
-    //           types: productBodyRequest?.types,
-    //           visible: productBodyRequest?.visible,
-    //           productAttributeList: [attributeItemValid],
-    //           slug: generateUnsignedSlug(`${productBodyRequest.name} - ${attribute.extendedName}`),
-    //         },
-    //       };
-    //     },
-    //   );
+          return {
+            parentId: newProduct._id,
+            productItem: {
+              name: `${productBodyRequest.name} - ${attribute.extendedName}`,
+              description: productBodyRequest.description,
+              information: productBodyRequest.information,
+              price: productBodyRequest.price + priceAdjustment,
+              image: productBodyRequest?.image,
+              images: productBodyRequest?.images,
+              types: productBodyRequest?.types,
+              visible: productBodyRequest?.visible,
+              productAttributeList: [attributeItemValid],
+              slug: generateUnsignedSlug(`${productBodyRequest.name} - ${attribute.extendedName}`),
+            },
+          };
+        },
+      );
 
-    //   for (let i = 0; i < newProductVariant.length; i++) {
-    //     const element = newProductVariant[i];
-    //     (async () => {
-    //       const newProductVariant = new ProductVariantModel(element);
-    //       productVariantListIds.push(newProductVariant._id);
-    //       await newProductVariant.save();
-    //     })();
-    //   }
-    //   newProduct.productsVariant = productVariantListIds;
-    // }
+      for (let i = 0; i < newProductVariant.length; i++) {
+        const element = newProductVariant[i];
+        (async () => {
+          const newProductVariant = new ProductVariantModel(element);
+          productVariantListIds.push(newProductVariant._id);
+          await newProductVariant.save();
+        })();
+      }
+      newProduct.productsVariant = productVariantListIds;
+    }
 
     const categoryId = productBodyRequest.categoryId;
     if (categoryId) {
@@ -146,34 +148,35 @@ class ProductService extends CRUDService<Product> {
   }
 
   // UPDATE
-  async updateOverriding(id: string, req: Request) {
-    const listFileUploads = handleUploadFile(req);
+  async updateProduct(id: string, req: Request) {
+    const fileUpload = handleUploadFile(req);
+
     const productRequest: Product = req.body?.[FIELDS_NAME.PRODUCT]
-      ? JSON.parse(req.body?.[FIELDS_NAME.PRODUCT])
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.PRODUCT])))
       : {};
     let dataUpdate: any = {
       parentId: id,
     };
-    // if (req.files && Number(req.files?.length) > 0) {
-    //   productRequest.image = listFileUploads[0];
-    //   productRequest.images = listFileUploads;
+    if (fileUpload) {
+      productRequest.image = fileUpload;
+      productRequest.images = [fileUpload];
 
-    //   const productVariants = ProductVariantModel.find({ parentId: id });
-    //   const updateImageProductVariant = async (item: ProductVariants) => {
-    //     await item.updateOne({
-    //       $set: {
-    //         'productItem.image': listFileUploads[0],
-    //         'productItem.images': listFileUploads,
-    //       },
-    //     });
-    //   };
+      const productVariants = ProductVariantModel.find({ parentId: id });
+      const updateImageProductVariant = async (item: ProductVariants) => {
+        await item.updateOne({
+          $set: {
+            'productItem.image': fileUpload,
+            'productItem.images': [fileUpload],
+          },
+        });
+      };
 
-    //   if (productVariants) {
-    //     (await productVariants).forEach((item) => {
-    //       updateImageProductVariant(item);
-    //     });
-    //   }
-    // }
+      if (productVariants) {
+        (await productVariants).forEach((item) => {
+          updateImageProductVariant(item);
+        });
+      }
+    }
 
     if (productRequest?.price && !productRequest?.productAttributeList) {
       const productById = await this.getById(id);
@@ -264,12 +267,11 @@ class ProductService extends CRUDService<Product> {
       productRequest.slug = generateUnsignedSlug(productRequest.name);
     }
 
-    await this.model.updateOne({ _id: id }, productRequest, { new: true });
-    return { message: `Update ${this.serviceName} success` };
+    return await this.model.updateOne({ _id: id }, productRequest, { new: true });
   }
 
   // GET BY ID
-  async getByIdOverriding(id: string) {
+  async getByIdProduct(id: string) {
     const result = await this.getById(id);
 
     if (result && result.productAttributeList && result.productAttributeList?.length > 0) {
@@ -279,14 +281,15 @@ class ProductService extends CRUDService<Product> {
             'attributeList._id': attributeItem.attributeId,
           });
 
-          //   if (attribute) {
-          //     const attributeChild = attribute.attributeList?.find((item: any) =>
-          //       comparingObjectId(item._id, attributeItem.attributeId),
-          //     );
-          //     if (attributeChild) {
-          //       attributeItem.attributeId = JSON.stringify(attributeChild) as any;
-          //     }
-          //   }
+          if (attribute) {
+            const attributeChild = attribute.attributeList?.find(
+              (item: any) =>
+                attributeItem.attributeId && comparingObjectId(item._id, attributeItem.attributeId),
+            );
+            if (attributeChild) {
+              attributeItem.attributeId = JSON.stringify(attributeChild) as any;
+            }
+          }
         }
       }
     }

@@ -1,22 +1,23 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { HttpStatusCode } from '@app/types';
-import { MaterialModel } from '@app/models';
-import MaterialService from '@app/services/materials.service';
-import { Params } from '@app/types/common.types';
 import { NextFunction, Request, Response } from 'express';
+
+import { MaterialModel } from '@app/models';
+import { MaterialService } from '@app/services';
+import { HttpStatusCode, Params } from '@app/types';
 
 const materialService = new MaterialService(MaterialModel, 'material');
 
 const materialController = {
   // SEARCH PAGINATION
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, from, to } = req.query;
+    const { pageIndex = 0, pageSize = 10, from, to, sortBy } = req.query;
     try {
       const params: Params = {
         from: from?.toString(),
         to: to?.toString(),
-        pageIndex: pageIndex ? Number(pageIndex) : 0,
-        pageSize: pageSize ? Number(pageSize) : 10,
+        pageIndex: Number(pageIndex),
+        pageSize: Number(pageSize),
+        sortBy: sortBy?.toString(),
       };
       const material = await materialService.getPagination(params);
       res.status(HttpStatusCode.OK).json(material);
@@ -28,7 +29,7 @@ const materialController = {
   // CREATE MATERIAL
   createMaterial: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const newMaterial = await materialService.createOverriding(req);
+      const newMaterial = await materialService.createMaterial(req);
       res.status(HttpStatusCode.OK).json(newMaterial);
     } catch (error) {
       next(500);
@@ -39,7 +40,7 @@ const materialController = {
   updateMaterial: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const material = await materialService.updateOverriding(id, req);
+      const material = await materialService.updateMaterial(id, req);
       res.status(HttpStatusCode.OK).json(material);
     } catch (error) {
       next(error);
@@ -61,7 +62,7 @@ const materialController = {
   delete: async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      await materialService.deleteOverriding(id);
+      await materialService.deleteMaterial(id);
       res.status(200).json({ message: 'Delete material success' });
     } catch (error) {
       res.status(500).json(error);

@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { HttpStatusCode } from '@app/types';
-import { ProductModel } from '@app/models';
-import { ProductType } from '@app/types/products.type';
-import ProductService from '@app/services/products.service';
-import { Params } from '@app/types/common.types';
 import { NextFunction, Request, Response } from 'express';
+
+import { ProductModel } from '@app/models';
+import { ProductService } from '@app/services';
+import { HttpStatusCode, Params, ProductType } from '@app/types';
 
 const productService = new ProductService(ProductModel, 'product');
 
 const productController = {
   //SEARCH PAGINATION PRODUCT
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name, categoryId, types } = req.query;
+    const { pageIndex = 0, pageSize = 10, name, categoryId, types, sortBy } = req.query;
     try {
       const params: Params = {
-        pageIndex: pageIndex ? Number(pageIndex) : 0,
-        pageSize: pageSize ? Number(pageSize) : 10,
         name: name?.toString(),
         categoryId: categoryId?.toString(),
         types: types as ProductType,
+        pageIndex: Number(pageIndex),
+        pageSize: Number(pageSize),
+        sortBy: sortBy?.toString(),
       };
       const product = await productService.getPagination(params);
       res.status(HttpStatusCode.OK).json(product);
@@ -30,7 +30,7 @@ const productController = {
   //CREATE PRODUCT
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const product = await productService.createOverriding(req);
+      const product = await productService.createProduct(req);
       res.status(HttpStatusCode.OK).json(product);
     } catch (error) {
       next(error);
@@ -41,8 +41,8 @@ const productController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const { message } = await productService.updateOverriding(id, req);
-      res.status(HttpStatusCode.OK).json(message);
+      const response = await productService.updateProduct(id, req);
+      res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
     }
@@ -52,7 +52,7 @@ const productController = {
   getById: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const product = await productService.getByIdOverriding(id);
+      const product = await productService.getByIdProduct(id);
       res.status(HttpStatusCode.OK).json(product);
     } catch (error) {
       next(error);
@@ -63,7 +63,7 @@ const productController = {
   delete: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
-      const { message } = await productService.deleteOverriding(ids);
+      const { message } = await productService.deleteProduct(ids);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);

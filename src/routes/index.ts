@@ -7,7 +7,6 @@ import categoryRouter from './category.route';
 import comboPromotionsRouter from './combo-promotions.route';
 import customerAddressRouter from './customer-address.route';
 import customerRouter from './customers.route';
-import emailConfigRoute from './email-config.route';
 import emailTemplateRoute from './email-template.route';
 import mailerRoute from './mailer.route';
 import materialRouter from './materials.route';
@@ -109,10 +108,6 @@ export const routesMapping = (app: Application) => {
     {
       path: MAILER_URL,
       route: mailerRoute,
-    },
-    {
-      path: EMAIL_CONFIG_URL,
-      route: emailConfigRoute,
     },
     {
       path: EMAIL_TEMPLATE_URL,

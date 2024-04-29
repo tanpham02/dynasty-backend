@@ -1,9 +1,8 @@
 import { Router } from 'express';
 
-import { FIELDS_NAME } from '@app/constants/app';
-import materialController from '@app/controllers/materials.controller';
-import { formDataParser } from '@app/utils/form-data-parser.util';
-import emailTemplateController from '@app/controllers/email-template.controller';
+import { FIELDS_NAME } from '@app/constants';
+import { emailTemplateController } from '@app/controllers';
+import { formDataParser } from '@app/utils';
 
 const router = Router();
 
@@ -34,23 +33,20 @@ router.get('/search-all', emailTemplateController.searchAll);
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   emailTemplateInfo:
- *                        $ref: '#/components/schema/EmailTemplate'
+ *                  $ref: '#/components/schemas/EmailTemplate'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/EmailTemplate'
+ *                 $ref: '#/components/schemas/EmailTemplate'
  */
 
 // CREATE
-router.post('/', formDataParser(FIELDS_NAME.EMAIL_TEMPLATE), emailTemplateController.create);
+router.post('/', emailTemplateController.create);
 
 /**
  * @swagger
@@ -67,12 +63,9 @@ router.post('/', formDataParser(FIELDS_NAME.EMAIL_TEMPLATE), emailTemplateContro
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   emailTemplateInfo:
- *                        $ref: '#/components/schema/EmailTemplate'
+ *                   $ref: '#/components/schemas/EmailTemplate'
  *
  *     responses:
  *       200:
@@ -80,7 +73,7 @@ router.post('/', formDataParser(FIELDS_NAME.EMAIL_TEMPLATE), emailTemplateContro
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/EmailTemplate'
+ *                 $ref: '#/components/schemas/EmailTemplate'
  */
 
 // GET BY ID
@@ -105,7 +98,7 @@ router.patch('/:id', formDataParser(FIELDS_NAME.EMAIL_TEMPLATE), emailTemplateCo
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/EmailTemplate'
+ *                 $ref: '#/components/schemas/EmailTemplate'
  */
 
 // GET BY ID
@@ -130,7 +123,7 @@ router.get('/:id', emailTemplateController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/EmailTemplate'
+ *                 $ref: '#/components/schemas/EmailTemplate'
  */
 
 // DELETE

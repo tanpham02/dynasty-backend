@@ -37,7 +37,7 @@ class CRUDService<T extends Document> {
       from,
       to,
       role,
-      sort,
+      sortBy,
       parentId,
       customerId,
       statusOrder,
@@ -130,13 +130,17 @@ class CRUDService<T extends Document> {
       filter.isDefault = Boolean(Number(isDefault));
     }
 
-    if (sort) {
-      const arraySorts = sort.split(', ');
-      sortFieldName = arraySorts
-        .map((item) => ({
-          [`${item.split(':')?.[0].toString()}`]: `${item.split(':')?.[1] as any}`,
-        }))
-        .reduce((acc: any, next: any) => Object.assign(acc, next), {});
+    if (sortBy) {
+      if (Array.isArray(sortBy) && sortBy.length > 0) {
+        sortFieldName = sortBy.map((item) => {
+          const key = item.split(':')[0];
+          const asc = item.split(':')[1];
+
+          return [key, asc];
+        });
+      } else if (typeof sortBy === 'string') {
+        sortFieldName = [[sortBy.split(':')[0], sortBy.split(':')[1]]];
+      }
     }
 
     const data = await this.model
@@ -170,8 +174,7 @@ class CRUDService<T extends Document> {
   async getById(id: string) {
     const response = await this.model.findById(id);
     if (!response) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}`);
-      throw exception;
+      throw new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}`);
     }
     return response;
   }

@@ -1,5 +1,6 @@
-import comboPromotionsController from '@app/controllers/combo-promotions.controller';
 import { Router } from 'express';
+
+import { comboPromotionsController } from '@app/controllers';
 
 const router = Router();
 
@@ -18,14 +19,9 @@ const router = Router();
  *        in: query
  *        schema:
  *          type: string
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *      - $ref: '#/components/parameters/PageIndex'
+ *      - $ref: '#/components/parameters/PageSize'
+ *      - $ref: '#/components/parameters/SortBy'
  *     responses:
  *       200:
  *         description: OK

@@ -1,5 +1,5 @@
-import productController from '@app/controllers/products.controller';
-// import { uploadFileProduct } from '@app/middlewares/uploads';
+import { productController } from '@app/controllers';
+import { uploadFile } from '@app/middlewares';
 
 import express from 'express';
 const router = express.Router();
@@ -26,22 +26,16 @@ const router = express.Router();
  *           items:
  *              type: string
  *              enum: [NORMAL, NEW, BEST_SELLER, DELICIOUS_MUST_TRY, VEGETARIAN, SPICY, UNIQUE]
- *        explode: false
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *      - $ref: '#/components/parameters/PageIndex'
+ *      - $ref: '#/components/parameters/PageSize'
+ *      - $ref: '#/components/parameters/SortBy'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Product'
+ *                 $ref: '#/components/schemas/Products'
  */
 
 //SEARCH PAGINATION PRODUCT
@@ -63,23 +57,21 @@ router.get('/search', productController.search);
  *                type: object
  *                properties:
  *                   productInfo:
- *                         $ref: '#/components/schemas/Product'
- *                   files:
- *                        type: array
- *                        items:
- *                           type: string
- *                           format: binary
+ *                         $ref: '#/components/schemas/Products'
+ *                   file:
+ *                         type: string
+ *                         format: binary
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Product'
+ *                 $ref: '#/components/schemas/Products'
  */
 
 // CREATE PRODUCT
-// router.post('/', uploadFileProduct, productController.create);
+router.post('/', uploadFile('product').single('file'), productController.create);
 
 /**
  * @swagger
@@ -102,23 +94,21 @@ router.get('/search', productController.search);
  *                type: object
  *                properties:
  *                   productInfo:
- *                         $ref: '#/components/schemas/Product'
- *                   files:
- *                        type: array
- *                        items:
- *                           type: string
- *                           format: binary
+ *                         $ref: '#/components/schemas/Products'
+ *                   file:
+ *                         type: string
+ *                         format: binary
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Product'
+ *                 $ref: '#/components/schemas/Products'
  */
 
 // UPDATE PRODUCT
-// router.patch('/:id', uploadFileProduct, productController.update);
+router.patch('/:id', uploadFile('product').single('file'), productController.update);
 
 /**
  * @swagger
@@ -139,7 +129,7 @@ router.get('/search', productController.search);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Products'
+ *                 $ref: '#/components/schemas/Products'
  */
 
 // GET PRODUCT BY ID
@@ -165,7 +155,7 @@ router.get('/:id', productController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Products'
+ *                 $ref: '#/components/schemas/Products'
  */
 // DELETE PRODUCT
 router.delete('/', productController.delete);

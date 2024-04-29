@@ -15,12 +15,12 @@ class CategoryService extends CRUDService<Category> {
   }
 
   // CREATE CATEGORY
-  async createOverriding(req: Request) {
-    const requestFormData = req?.body?.[FIELDS_NAME.CATEGORY]
-      ? JSON.parse(req?.body?.[FIELDS_NAME.CATEGORY])
+  async createCategory(req: Request) {
+    const requestFormData = req.body?.[FIELDS_NAME.CATEGORY]
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.CATEGORY])))
       : {};
 
-    const fileUploads = handleUploadFile(req);
+    const fileUpload = handleUploadFile(req);
 
     if (
       requestFormData?.childrenCategory &&
@@ -40,8 +40,8 @@ class CategoryService extends CRUDService<Category> {
       slug: generateUnsignedSlug(requestFormData?.name),
     });
 
-    if (fileUploads.length) {
-      newCategory.set('avatar', fileUploads[0]);
+    if (fileUpload) {
+      newCategory.set('avatar', fileUpload);
     }
 
     const productIds = newCategory?.products;
@@ -63,15 +63,15 @@ class CategoryService extends CRUDService<Category> {
   }
 
   // UPDATE CATEGORy
-  async updateOverriding(id: string, req: Request) {
+  async updateCategory(id: string, req: Request) {
     const requestFormData = req?.body?.[FIELDS_NAME.CATEGORY]
-      ? JSON.parse(req?.body?.[FIELDS_NAME.CATEGORY])
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.CATEGORY])))
       : {};
 
-    const fileUploads = handleUploadFile(req);
+    const fileUpload = handleUploadFile(req);
 
-    const alreadyExist = await this.getById(id);
-    if (!alreadyExist) {
+    const isAlreadyExist = await this.getById(id);
+    if (!isAlreadyExist) {
       const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}!`);
       throw exception;
     }
@@ -98,7 +98,7 @@ class CategoryService extends CRUDService<Category> {
     };
 
     if (req.file) {
-      categoryDetail.avatar = fileUploads[0];
+      categoryDetail.avatar = fileUpload;
     }
 
     if (requestFormData?.name) {
@@ -113,18 +113,15 @@ class CategoryService extends CRUDService<Category> {
       { $set: { categoryId: id } },
     );
 
-    await this.model.findByIdAndUpdate({ _id: id }, categoryDetail, { new: true });
-
-    return { message: `Update ${this.serviceName} success` };
+    return await this.model.findByIdAndUpdate({ _id: id }, categoryDetail, { new: true });
   }
 
   // GET BY ID
   async getCategoryById(id: string) {
-    const category = await this.model
-      .findOne({
-        $or: [{ _id: id }, { 'childrenCategory.category._id': id }],
-      })
-      .populate(['products', `childrenCategory.category.products`]);
+    const category = (await this.getById(id)).populate([
+      'products',
+      `childrenCategory.category.products`,
+    ]);
 
     if (!category) {
       const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found category');
@@ -135,8 +132,8 @@ class CategoryService extends CRUDService<Category> {
   }
 
   // DELETE CATEGORY
-  async deleteOverriding(ids: string[] | string | any) {
-    await this.model.deleteMany({ _id: { $in: ids } });
+  async deleteCategory(ids: string[] | string | any) {
+    await this.delete(ids);
     await ProductModel.updateMany(
       {
         categoryId: { $in: ids },

@@ -1,7 +1,8 @@
-import { FIELDS_NAME } from '@app/constants/app';
-import orderController from '@app/controllers/orders.controller';
-import { formDataParser } from '@app/utils/form-data-parser.util';
 import { Router } from 'express';
+
+import { FIELDS_NAME } from '@app/constants';
+import { orderController } from '@app/controllers';
+import { formDataParser } from '@app/utils';
 
 const router = Router();
 
@@ -37,21 +38,16 @@ const router = Router();
  *              - SUCCESS
  *              - WAITING_FOR_DELIVERING
  *              - WAITING_FOR_PAYMENT
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *      - $ref: '#/components/parameters/PageIndex'
+ *      - $ref: '#/components/parameters/PageSize'
+ *      - $ref: '#/components/parameters/SortBy'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Orders'
+ *                 $ref: '#/components/schemas/Orders'
  */
 
 // SEARCH PAGINATION CATEGORY
@@ -74,7 +70,7 @@ router.get('/search', orderController.searchPagination);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Orders'
+ *                 $ref: '#/components/schemas/Orders'
  */
 
 // GET BY ID
@@ -127,7 +123,7 @@ router.post('/checkout', formDataParser(FIELDS_NAME.ORDER), orderController.chec
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Orders'
+ *                 $ref: '#/components/schemas/Orders'
  */
 
 // RE-ORDER
@@ -154,7 +150,7 @@ router.post('/re-order/:orderId', orderController.reorder);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Orders'
+ *                 $ref: '#/components/schemas/Orders'
  */
 
 // UPDATE STATUS ORDER
@@ -181,7 +177,7 @@ router.patch('/update-status-order/:orderId', orderController.updateStatusOrder)
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Orders'
+ *                 $ref: '#/components/schemas/Orders'
  */
 
 // CANCEL ORDER
@@ -204,7 +200,7 @@ router.patch('/cancel-order/:orderId', orderController.requestCancelOrder);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Orders'
+ *                 $ref: '#/components/schemas/Orders'
  */
 
 // DELETE ORDER

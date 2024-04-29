@@ -11,15 +11,15 @@ const customerController = {
   // SEARCH PAGINATION
   search: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { pageIndex, pageSize, fullName, customerType } = req.query;
+      const { pageIndex = 0, pageSize = 10, fullName, customerType, sortBy } = req.query;
       const params: Params = {
-        pageIndex: pageIndex ? Number(pageIndex) : 0,
-        pageSize: pageSize ? Number(pageSize) : 10,
         fullName: fullName?.toString(),
         customerType: customerType?.toString(),
+        pageIndex: Number(pageIndex),
+        pageSize: Number(pageSize),
+        sortBy: sortBy?.toString(),
       };
       const result = await customerService.getPaginationExcludePassword(params);
-
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       next(error);

@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
 
-import { HttpStatusCode } from '@app/types';
 import { VoucherModel } from '@app/models';
-import VoucherService from '@app/services/vouchers.service';
-import { Params } from '@app/types/common.types';
+import { VoucherService } from '@app/services';
+import { HttpStatusCode, Params } from '@app/types';
 
 const voucherService = new VoucherService(VoucherModel, 'voucher');
 
 const voucherController = {
   // SEARCH PAGINATION VOUCHER
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name } = req.query;
+    const { pageIndex = 0, pageSize = 10, name, sortBy } = req.query;
     try {
       const params: Params = {
-        pageIndex: pageIndex ? Number(pageIndex) : 0,
-        pageSize: pageSize ? Number(pageSize) : 10,
         name: name?.toString(),
+        pageIndex: Number(pageIndex),
+        pageSize: Number(pageSize),
+        sortBy: sortBy?.toString(),
       };
       const voucher = await voucherService.getPagination(params);
       res.status(HttpStatusCode.OK).json(voucher);

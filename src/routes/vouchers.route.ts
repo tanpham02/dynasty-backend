@@ -1,4 +1,4 @@
-import voucherController from '@app/controllers/vouchers.controller';
+import { voucherController } from '@app/controllers';
 import { Router } from 'express';
 const router = Router();
 
@@ -13,14 +13,9 @@ const router = Router();
  *        in: query
  *        schema:
  *          type: string
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *      - $ref: '#/components/parameters/PageIndex'
+ *      - $ref: '#/components/parameters/PageSize'
+ *      - $ref: '#/components/parameters/SortBy'
  *     responses:
  *       200:
  *         description: OK

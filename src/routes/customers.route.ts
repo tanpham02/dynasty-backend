@@ -1,6 +1,7 @@
-import customerController from '@app/controllers/customers.controller';
-import { uploadFile, verifyToken } from '@app/middlewares';
 import { Router } from 'express';
+
+import { customerController } from '@app/controllers';
+import { uploadFile, verifyToken } from '@app/middlewares';
 
 const router = Router();
 
@@ -11,7 +12,7 @@ const router = Router();
  *     tags: [Customers]
  *     summary: Search pagination
  *     parameters:
- *      - name: fullName
+ *      - name: searchText
  *        in: query
  *        schema:
  *          type: integer($int32)
@@ -24,14 +25,9 @@ const router = Router();
  *            - EXIST
  *            - POTENTIAL
  *            - BUY_THE_MOST_ORDERS
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *      - $ref: '#/components/parameters/PageIndex'
+ *      - $ref: '#/components/parameters/PageSize'
+ *      - $ref: '#/components/parameters/SortBy'
  *
  *     responses:
  *       200:

@@ -11,7 +11,6 @@ interface StaffRequest extends Request {
 
 const verifyToken = (req: StaffRequest, res: Response, next: NextFunction) => {
   const token = req?.headers?.authorization ?? '';
-  console.log('🚀 ~ verifyToken ~ token:', token);
   const { STAFF_JWT_ACCESS_KEY } = configApp();
   if (token) {
     const accessToken = token.split(' ')[1];

@@ -21,13 +21,13 @@ const bannerController = {
 
   // SEARCH PAGINATION
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name, sort } = req.query;
+    const { pageIndex = 0, pageSize = 10, name, sortBy } = req.query;
     try {
       const params: Params = {
-        pageIndex: pageIndex ? Number(pageIndex) : 0,
-        pageSize: pageSize ? Number(pageSize) : 10,
-        name: name?.toString(),
-        sort: sort?.toString(),
+        pageIndex: Number(pageIndex),
+        pageSize: Number(pageSize),
+        name: String(name),
+        sortBy: String(sortBy),
       };
       const banner = await bannerService.getPagination(params);
       res.status(HttpStatusCode.OK).json(banner);

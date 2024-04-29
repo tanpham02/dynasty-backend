@@ -11,17 +11,18 @@ const orderService = new OrderService(OrderModel, 'order');
 const orderController = {
   // SEARCH PAGINATION
   searchPagination: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, customerId, from, to, statusOrder } = req.query;
+    const { pageIndex = 0, pageSize = 10, customerId, from, to, statusOrder, sortBy } = req.query;
     const params: Params = {
-      pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
-      pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
       customerId: customerId?.toString(),
       from: from?.toString(),
       to: to?.toString(),
       statusOrder: statusOrder?.toString(),
+      pageIndex: Number(pageIndex),
+      pageSize: Number(pageSize),
+      sortBy: sortBy?.toString(),
     };
     try {
-      const order = await orderService.getPaginationOverriding(params);
+      const order = await orderService.getPagination(params);
       res.status(HttpStatusCode.OK).json(order);
     } catch (error) {
       next(error);

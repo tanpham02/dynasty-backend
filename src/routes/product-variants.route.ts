@@ -28,15 +28,9 @@ const router = express.Router();
  *           items:
  *              type: string
  *              enum: [NORMAL, NEW, BEST_SELLER, DELICIOUS_MUST_TRY, VEGETARIAN, SPICY, UNIQUE]
- *        explode: false
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *      - $ref: '#/components/parameters/PageIndex'
+ *      - $ref: '#/components/parameters/PageSize'
+ *      - $ref: '#/components/parameters/SortBy'
  *     responses:
  *       200:
  *         description: OK
@@ -57,12 +51,9 @@ router.get('/search', productVariantController.searchAll);
  *     summary: Create
  *     requestBody:
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   productVariantInfo:
- *                         $ref: '#/components/schemas/ProductVariant'
+ *                  $ref: '#/components/schemas/ProductVariant'
  *     responses:
  *       200:
  *         description: OK
@@ -73,7 +64,7 @@ router.get('/search', productVariantController.searchAll);
  */
 
 // CREATE
-router.post('/', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariantController.create);
+router.post('/', productVariantController.create);
 
 /**
  * @swagger
@@ -91,12 +82,9 @@ router.post('/', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariantCont
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   productVariantInfo:
- *                         $ref: '#/components/schemas/ProductVariant'
+ *                   $ref: '#/components/schemas/ProductVariant'
  *     responses:
  *       200:
  *         description: OK
@@ -107,7 +95,7 @@ router.post('/', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariantCont
  */
 
 // UPDATE
-router.patch('/:id', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariantController.update);
+router.patch('/:id', productVariantController.update);
 
 /**
  * @swagger
@@ -128,7 +116,7 @@ router.patch('/:id', formDataParser(FIELDS_NAME.PRODUCT_VARIANT), productVariant
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductsVariant'
+ *                 $ref: '#/components/schemas/ProductVariant'
  */
 
 // GET BY ID
@@ -154,7 +142,7 @@ router.get('/:id', productVariantController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductsVariant'
+ *                 $ref: '#/components/schemas/ProductVariant'
  */
 // DELETE
 router.delete('/', productVariantController.delete);

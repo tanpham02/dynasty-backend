@@ -10,12 +10,12 @@ const comboService = new ComboPromotionsService(ComboPromotionModel, 'combo prom
 const comboPromotionsController = {
   // SEARCH PAGINATION COMBO PROMOTIONS
   search: async (req: Request, res: Response) => {
-    const { pageIndex, pageSize, name, categoryId } = req.query;
+    const { pageIndex = 0, pageSize = 10, name, categoryId } = req.query;
     try {
       const params: Params = {
-        pageIndex: pageIndex ? Number(pageIndex) : 0,
-        pageSize: pageSize ? Number(pageSize) : 10,
-        name: name,
+        pageIndex: Number(pageIndex),
+        pageSize: Number(pageSize),
+        name: String(name),
         categoryId: categoryId?.toString(),
       };
       //   const comboPromotions = await comboService.getPagination(params);

@@ -1,8 +1,6 @@
-import { FIELDS_NAME } from '@app/constants/app';
-import materialController from '@app/controllers/materials.controller';
-import { formDataParser } from '@app/utils/form-data-parser.util';
-import { verifyTokenAndRolePermission } from '@app/middlewares/verify-token';
 import { Router } from 'express';
+
+import { materialController } from '@app/controllers';
 
 const router = Router();
 
@@ -23,21 +21,16 @@ const router = Router();
  *        schema:
  *          type: string
  *        description: VD 2023-10-15 23:59:00
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *      - $ref: '#/components/parameters/PageIndex'
+ *      - $ref: '#/components/parameters/PageSize'
+ *      - $ref: '#/components/parameters/SortBy'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Materials'
+ *                 $ref: '#/components/schemas/Materials'
  */
 
 // SEARCH PAGINATION
@@ -52,23 +45,20 @@ router.get('/search', materialController.search);
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   materialInfo:
- *                        $ref: '#/components/schema/Materials'
+ *                  $ref: '#/components/schemas/Materials'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Materials'
+ *                 $ref: '#/components/schemas/Materials'
  */
 
 // CREATE MATERIAL
-router.post('/', formDataParser(FIELDS_NAME.MATERIAL), materialController.createMaterial);
+router.post('/', materialController.createMaterial);
 
 /**
  * @swagger
@@ -85,12 +75,9 @@ router.post('/', formDataParser(FIELDS_NAME.MATERIAL), materialController.create
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   materialInfo:
- *                        $ref: '#/components/schema/Materials'
+ *                  $ref: '#/components/schemas/Materials'
  *
  *     responses:
  *       200:
@@ -98,11 +85,11 @@ router.post('/', formDataParser(FIELDS_NAME.MATERIAL), materialController.create
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Materials'
+ *                 $ref: '#/components/schemas/Materials'
  */
 
 // GET BY ID
-router.patch('/:id', formDataParser(FIELDS_NAME.MATERIAL), materialController.updateMaterial);
+router.patch('/:id', materialController.updateMaterial);
 
 /**
  * @swagger
@@ -123,7 +110,7 @@ router.patch('/:id', formDataParser(FIELDS_NAME.MATERIAL), materialController.up
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Materials'
+ *                 $ref: '#/components/schemas/Materials'
  */
 
 // GET BY ID
@@ -148,7 +135,7 @@ router.get('/:id', materialController.getMaterialById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Materials'
+ *                 $ref: '#/components/schemas/Materials'
  */
 
 // DELETE MATERIAL

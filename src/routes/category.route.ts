@@ -1,43 +1,28 @@
-import categoryController from '@app/controllers/category.controller';
-// import { uploadFileCategory } from '@app/middlewares';
 import express from 'express';
 
-const router = express.Router();
+import { categoryController } from '@app/controllers';
+import { uploadFile } from '@app/middlewares';
 
-// *     security:
-// *       - bearerAuth: []
+const router = express.Router();
 
 /**
  * @swagger
  * '/api/categories/search':
  *  get:
- *     security:
- *       - bearerAuth: []
  *     tags: [Category]
  *     summary: Search pagination
  *     parameters:
- *      - name: name
- *        in: query
- *        schema:
- *          type: string
- *      - name: sort
- *        in: query
- *        schema:
- *          type: string
- *        description: Allow value 1 | -1
- *      - name: isShowHomePage
- *        in: query
- *        schema:
- *          type: number
- *        description: Allow value 1 | 0
- *      - name: pageIndex
- *        in: query
- *        schema:
- *          type: integer($int32)
- *      - name: pageSize
- *        in: query
- *        schema:
- *          type: integer($int32)
+ *       - in: query
+ *         name: name
+ *         schema:
+ *            type: string
+ *       - in: query
+ *         name: isShowHomePage
+ *         schema:
+ *            type: boolean
+ *       - $ref: '#/components/parameters/PageIndex'
+ *       - $ref: '#/components/parameters/PageSize'
+ *       - $ref: '#/components/parameters/SortBy'
  *     responses:
  *       200:
  *         description: OK
@@ -96,7 +81,7 @@ router.get('/search-all', categoryController.searchAll);
  */
 
 // CREATE CATEGORY
-// router.post('/', uploadFileCategory, categoryController.createCategory);
+router.post('/', uploadFile('category').single('file'), categoryController.createCategory);
 
 /**
  * @swagger
@@ -119,7 +104,7 @@ router.get('/search-all', categoryController.searchAll);
  *                type: object
  *                properties:
  *                   categoryInfo:
- *                        $ref: '#/components/schema/Category'
+ *                        $ref: '#/components/schemas/Category'
  *                   file:
  *                        type: string
  *                        format: binary
@@ -130,11 +115,11 @@ router.get('/search-all', categoryController.searchAll);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schemas/Category'
  */
 
 // UPDATE CATEGORY
-// router.patch('/:id', uploadFileCategory, categoryController.updateCategory);
+router.patch('/:id', uploadFile('category').single('file'), categoryController.updateCategory);
 
 /**
  * @swagger
@@ -155,7 +140,7 @@ router.get('/search-all', categoryController.searchAll);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schemas/Category'
  */
 
 // GET BY ID CATEGORY
@@ -181,7 +166,7 @@ router.get('/:id', categoryController.getCategoryById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/Category'
+ *                 $ref: '#/components/schemas/Category'
  */
 // DELETE CATEGORY
 router.delete('/', categoryController.deleteCategory);

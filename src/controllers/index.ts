@@ -5,7 +5,6 @@ export { default as categoryController } from './category.controller';
 export { default as comboPromotionsController } from './combo-promotions.controller';
 export { default as customerAddressController } from './customer-address.controller';
 export { default as customerController } from './customers.controller';
-export { default as emailConfigController } from './email-config.controller';
 export { default as emailTemplateController } from './email-template.controller';
 export { default as mailerController } from './mailer.controller';
 export { default as materialController } from './materials.controller';

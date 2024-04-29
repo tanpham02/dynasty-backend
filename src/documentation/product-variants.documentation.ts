@@ -1,7 +1,7 @@
 /**
  * @swagger
  * components:
- *   schema:
+ *   schemas:
  *     ProductVariant:
  *       type: object
  *       properties:

@@ -19,22 +19,6 @@ class OrderService extends CRUDService<Order> {
     super(model, serviceName);
   }
 
-  // SEARCH PAGINATION
-  async getPaginationOverriding(params: Params) {
-    const { data, ...remaining } = await this.getPagination(params);
-
-    const dataCustom = data
-      .sort(
-        (a, b) => new Date(b?.createdAt ?? '').getTime() - new Date(a?.createdAt ?? '').getTime(),
-      )
-      .filter((item) => item.statusCheckout === StatusCheckout.ORDER_CONFIRMATION);
-
-    return {
-      ...remaining,
-      data: dataCustom,
-    };
-  }
-
   // GET ORDER BY ID
   async getOrderById(orderId: string) {
     const order = await this.model.findById(orderId).then((res) =>

@@ -20,13 +20,13 @@ const categoryController = {
 
   // SEARCH PAGINATION CATEGORY
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex, pageSize, name, sort, isShowHomePage } = req.query;
+    const { pageIndex = 0, pageSize = 10, name, sortBy, isShowHomePage } = req.query;
     const params: Params = {
-      pageIndex: pageIndex ? parseInt(pageIndex.toString()) : 0,
-      pageSize: pageSize ? parseInt(pageSize.toString()) : 10,
       name: name?.toString(),
-      sort: sort?.toString(),
-      isShowHomePage: Number(isShowHomePage),
+      isShowHomePage: isShowHomePage ? Number(JSON.parse(String(isShowHomePage))) : undefined,
+      pageIndex: Number(pageIndex),
+      pageSize: Number(pageSize),
+      sortBy: sortBy?.toString(),
     };
 
     try {
@@ -40,7 +40,7 @@ const categoryController = {
   // CREATE CATEGORY
   createCategory: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const category = await categoryService.createOverriding(req);
+      const category = await categoryService.createCategory(req);
       res.status(HttpStatusCode.OK).json(category);
     } catch (error) {
       next(error);
@@ -51,7 +51,7 @@ const categoryController = {
   updateCategory: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const response = await categoryService.updateOverriding(id, req);
+      const response = await categoryService.updateCategory(id, req);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
@@ -73,7 +73,7 @@ const categoryController = {
   deleteCategory: async (req: Request, res: Response, next: NextFunction) => {
     const { ids } = req.query;
     try {
-      const { message } = await categoryService.deleteOverriding(ids);
+      const { message } = await categoryService.deleteCategory(ids);
       res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);

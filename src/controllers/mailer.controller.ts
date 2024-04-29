@@ -4,14 +4,15 @@ import { MailOptions } from 'nodemailer/lib/json-transport';
 import { MailerService } from '@app/services';
 
 const mailerController = {
-  sendMail: async (_req: Request, res: Response, next: NextFunction) => {
+  sendMail: async (req: Request, res: Response, next: NextFunction) => {
+    const requestBody = req.body;
     try {
       const mailOption: MailOptions = {
         from: {
           name: 'Dynasty Pizza',
           address: 'phamvantan1311@gmail.com',
         },
-        to: ['mydungvo2002@gmail.com', 'quanhavo005@gmail.com'],
+        to: requestBody.to,
         subject: 'Reset password',
 
         html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -6,6 +6,13 @@ const MAILER = {
   PORT: 587,
 };
 
+const TYPE_SORT = { ASC: 'asc', DESC: 'desc' };
+
+const KEY_SORT = {
+  [TYPE_SORT.ASC]: 1,
+  [TYPE_SORT.DESC]: -1,
+};
+
 const FIELDS_NAME = {
   CUSTOMER_SIGNUP: 'customerSignupInfo',
   USER_LOGIN: 'userLoginInfo',
@@ -29,4 +36,4 @@ const FIELDS_NAME = {
 };
 export const INTERNAL_SERVER_ERROR_MSG = 'Internal Server Error';
 
-export { FIELDS_NAME, SALT, MAILER };
+export { FIELDS_NAME, SALT, MAILER, TYPE_SORT, KEY_SORT };

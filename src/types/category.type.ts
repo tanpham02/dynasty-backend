@@ -1,4 +1,4 @@
-import { BaseModel } from '@app/types/common.types';
+import { BaseModel } from '@app/types';
 
 interface Category extends BaseModel {
   _id?: string;
@@ -16,4 +16,5 @@ interface ChildCategory {
   parentId?: string;
   category?: Category[];
 }
+
 export { Category, ChildCategory };

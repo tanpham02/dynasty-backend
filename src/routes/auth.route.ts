@@ -1,8 +1,7 @@
-import { FIELDS_NAME } from '@app/constants/app';
-import authController from '@app/controllers/auth.controller';
-import { formDataParser } from '@app/utils/form-data-parser.util';
-import { verifyToken } from '@app/middlewares/verify-token';
 import { Router } from 'express';
+
+import { authController } from '@app/controllers';
+import { verifyToken } from '@app/middlewares';
 
 const router = Router();
 

@@ -1,8 +1,7 @@
-import { FIELDS_NAME } from '@app/constants/app';
-import customerAddressController from '@app/controllers/customer-address.controller';
-import { verifyToken } from '@app/middlewares';
-import { formDataParser } from '@app/utils/form-data-parser.util';
 import { Router } from 'express';
+
+import { customerAddressController } from '@app/controllers';
+import { verifyToken } from '@app/middlewares';
 
 const router = Router();
 

@@ -19,7 +19,7 @@ enum Status {
 interface Params {
   pageIndex: number;
   pageSize: number;
-  name?: string | any;
+  name?: string;
   categoryId?: string;
   cityId?: number;
   districtId?: number;
@@ -34,7 +34,7 @@ interface Params {
   role?: Role | string;
   customerId?: string;
   statusOrder?: string;
-  sort?: string;
+  sortBy?: string;
   parentId?: string;
   customerType?: CustomerType | string;
   isShowHomePage?: number;

@@ -1,5 +1,6 @@
-import cartController from '@app/controllers/carts.controller';
 import { Router } from 'express';
+
+import { cartController } from '@app/controllers';
 const router = Router();
 
 /**

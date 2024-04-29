@@ -1,8 +1,7 @@
-import { FIELDS_NAME } from '@app/constants/app';
-import { productAttributeController } from '@app/controllers';
-import { formDataParser } from '@app/utils/form-data-parser.util';
-
 import express from 'express';
+
+import { productAttributeController } from '@app/controllers';
+
 const router = express.Router();
 
 /**
@@ -31,12 +30,9 @@ router.get('/search-all', productAttributeController.searchAll);
  *     summary: Create
  *     requestBody:
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   productAttributeInfo:
- *                         $ref: '#/components/schemas/ProductAttribute'
+ *                   $ref: '#/components/schemas/ProductAttribute'
  *     responses:
  *       200:
  *         description: OK
@@ -47,7 +43,7 @@ router.get('/search-all', productAttributeController.searchAll);
  */
 
 // CREATE
-router.post('/', formDataParser(FIELDS_NAME.PRODUCT_ATTRIBUTE), productAttributeController.create);
+router.post('/', productAttributeController.create);
 
 /**
  * @swagger
@@ -65,12 +61,9 @@ router.post('/', formDataParser(FIELDS_NAME.PRODUCT_ATTRIBUTE), productAttribute
  *     requestBody:
  *       required: true
  *       content:
- *          multipart/form-data:
+ *          application/json:
  *             schema:
- *                type: object
- *                properties:
- *                   productAttributeInfo:
- *                         $ref: '#/components/schemas/ProductAttribute'
+ *                  $ref: '#/components/schemas/ProductAttribute'
  *     responses:
  *       200:
  *         description: OK
@@ -81,11 +74,7 @@ router.post('/', formDataParser(FIELDS_NAME.PRODUCT_ATTRIBUTE), productAttribute
  */
 
 // UPDATE
-router.patch(
-  '/:id',
-  formDataParser(FIELDS_NAME.PRODUCT_ATTRIBUTE),
-  productAttributeController.update,
-);
+router.patch('/:id', productAttributeController.update);
 
 /**
  * @swagger
@@ -106,7 +95,7 @@ router.patch(
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductsAttribute'
+ *                 $ref: '#/components/schemas/ProductAttribute'
  */
 
 // GET BY ID
@@ -132,7 +121,7 @@ router.get('/:id', productAttributeController.getById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schema/ProductsAttribute'
+ *                 $ref: '#/components/schemas/ProductAttribute'
  */
 // DELETE
 router.delete('/', productAttributeController.delete);

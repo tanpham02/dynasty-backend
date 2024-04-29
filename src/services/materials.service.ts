@@ -14,8 +14,8 @@ class MaterialService extends CRUDService<Material> {
   }
 
   // CREATE MATERIAL
-  async createOverriding(req: Request) {
-    const bodyRequest: Material = JSON.parse(req.body?.[FIELDS_NAME.MATERIAL]);
+  async createMaterial(req: Request) {
+    const bodyRequest: Material = req.body;
     try {
       const totalPrice = bodyRequest.materialInfo?.reduce((acc: any, next) => {
         if (next && next.price && next.quantity) {
@@ -31,8 +31,8 @@ class MaterialService extends CRUDService<Material> {
   }
 
   // UPDATE MATERIAL
-  async updateOverriding(id: string, req: Request) {
-    const bodyRequest: Material = JSON.parse(req.body?.[FIELDS_NAME.MATERIAL]);
+  async updateMaterial(id: string, req: Request) {
+    const bodyRequest: Material = req.body;
     const materialDetail = await this.getById(id);
 
     if (!materialDetail) {
@@ -52,7 +52,7 @@ class MaterialService extends CRUDService<Material> {
   }
 
   // DELETE MATERIAL
-  async deleteOverriding(materialId: string) {
+  async deleteMaterial(materialId: string) {
     const material = await this.model.findOne({
       $or: [{ _id: materialId }, { 'materialInfo._id': materialId }],
     });
