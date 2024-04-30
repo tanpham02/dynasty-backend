@@ -13,7 +13,7 @@ const storeConfigSchema = new Schema<StoreConfig>(
       reasonOrderCancel: {
         type: [String],
       },
-      hotlineSupport: {
+      hotline: {
         type: String,
       },
     },
