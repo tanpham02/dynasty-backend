@@ -12,7 +12,7 @@ const storeConfigController = {
   getStoreConfig: async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const shopConfig = await storeConfigService.findAll();
-      res.status(HttpStatusCode.OK).json(shopConfig);
+      res.status(HttpStatusCode.OK).json(shopConfig.length > 0 ? shopConfig[0] : 0);
     } catch (error) {
       next(error);
     }
@@ -22,7 +22,7 @@ const storeConfigController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const stores = await storeConfigService.update(id, req);
+      const stores = await storeConfigService.updateConfig(req, id);
       res.status(HttpStatusCode.OK).json(stores);
     } catch (error: any) {
       next(error);
