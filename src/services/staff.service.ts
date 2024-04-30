@@ -126,8 +126,14 @@ class StaffService extends CRUDService<Staff> {
       );
     }
 
+    const ignoreKey = ['password', 'image'];
+
     Object.keys(dataUpdate).forEach((key) => {
-      if (dataUpdate[key] !== undefined && staffAlreadyExist[key] !== dataUpdate[key]) {
+      if (
+        !ignoreKey.includes(key) &&
+        dataUpdate[key] !== undefined &&
+        staffAlreadyExist[key] !== dataUpdate[key]
+      ) {
         staffAlreadyExist[key] = dataUpdate[key];
       }
     });
@@ -136,8 +142,8 @@ class StaffService extends CRUDService<Staff> {
       staffAlreadyExist.image = avatar;
     }
 
-    if (staffAlreadyExist?.password) {
-      staffAlreadyExist.password = await hashPassword(staffAlreadyExist.password);
+    if (dataUpdate?.password) {
+      staffAlreadyExist.password = await hashPassword(dataUpdate.password);
     }
 
     return await staffAlreadyExist.updateOne(staffAlreadyExist, { new: true });
