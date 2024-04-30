@@ -4,8 +4,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { StaffModel } from '@app/models';
 import { StaffService } from '@app/services';
-import { HttpStatusCode } from '@app/types';
-import { Params } from '@app/types';
+import { HttpStatusCode, Params } from '@app/types';
 
 const staffService = new StaffService(StaffModel, 'staff');
 
@@ -34,6 +33,16 @@ const staffController = {
   create: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const result = await staffService.createStaff(req);
+      res.status(HttpStatusCode.OK).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // CHECK MATCH OLD PASSWORD WHEN CHANGE PASSWORD
+  checkMatchOldPassword: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const result = await staffService.checkMatchOldPassword(req);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error) {
       next(error);

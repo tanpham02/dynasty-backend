@@ -32,19 +32,19 @@ const StaffSchema = new Schema<Staff>(
       type: String,
     },
     cityId: {
-      type: Number,
+      type: String,
     },
     district: {
       type: String,
     },
     districtId: {
-      type: Number,
+      type: String,
     },
     ward: {
       type: String,
     },
     wardId: {
-      type: Number,
+      type: String,
     },
     password: {
       type: String,

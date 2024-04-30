@@ -164,4 +164,30 @@ router.get('/:id', verifyToken, staffController.getById);
  */
 router.delete('/', verifyTokenAndRolePermission, staffController.delete);
 
+/**
+ * @swagger
+ * '/api/staff/check-match-old-password':
+ *  post:
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Staff]
+ *     summary: CHECK MATCH OLD PASSWORD WHEN CHANGE PASSWORD
+ *     requestBody:
+ *        required: true
+ *        content:
+ *           application/json:
+ *               schema:
+ *                   type: object
+ *                   properties:
+ *                       _id:
+ *                          type: string
+ *                       password:
+ *                          type: string
+ *
+ *     responses:
+ *       200:
+ *         description: OK
+ */
+router.post('/check-match-old-password', verifyToken, staffController.checkMatchOldPassword);
+
 export default router;

@@ -7,8 +7,8 @@ import Exception from '@app/exception';
 import { StaffModel } from '@app/models';
 import { CRUDService } from '@app/services';
 import { HttpStatusCode, Params, Staff } from '@app/types';
-import { handleUploadFile, hashPassword, comparingObjectId } from '@app/utils';
-
+import { comparingObjectId, handleUploadFile, hashPassword } from '@app/utils';
+import { compare } from 'bcrypt';
 class StaffService extends CRUDService<Staff> {
   constructor(model: Model<Staff>, serviceName: string) {
     super(model, serviceName);
@@ -28,6 +28,25 @@ class StaffService extends CRUDService<Staff> {
           : [],
     };
     return result;
+  }
+
+  // CHECK MATCH OLD PASSWORD WHEN CHANGE PASSWORD
+  async checkMatchOldPassword(req: Request) {
+    const requestBody: Staff = req.body;
+
+    if (requestBody._id) {
+      const staff = await this.getById(requestBody._id);
+
+      if (!staff) {
+        throw new Exception(HttpStatusCode.NOT_FOUND, 'Not found staff with this id');
+      }
+
+      return (
+        requestBody.password &&
+        staff.password &&
+        (await compare(requestBody.password, staff.password))
+      );
+    }
   }
 
   // CREATE

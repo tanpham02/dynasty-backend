@@ -14,11 +14,11 @@ interface Staff extends BaseModel {
   email?: string;
   location?: string;
   city: string;
-  cityId: number;
+  cityId: string;
   district: string;
-  districtId: number;
+  districtId: string;
   ward: string;
-  wardId: number;
+  wardId: string;
   password?: string;
   role?: Role;
   image?: string;
