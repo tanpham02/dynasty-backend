@@ -195,7 +195,7 @@ class CRUDService<T extends Document> {
     Object.keys(dataUpdate).forEach((key) => {
       if (
         dataUpdate[key] !== undefined &&
-        Object.keys(dataUpdate[key]).length < 0 &&
+        (typeof dataUpdate[key] === 'string' || Object.keys(dataUpdate[key]).length < 0) &&
         stores[key] !== dataUpdate[key]
       ) {
         stores[key] = dataUpdate[key];

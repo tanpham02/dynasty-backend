@@ -4,10 +4,7 @@ interface StoreSetting extends BaseModel {
   feeShip?: number;
   transferContent?: string;
   reasonOrderCancel?: string[];
-  hotlineSupport?: {
-    order?: string;
-    customerCareHotline?: string;
-  };
+  hotlineSupport?: string;
 }
 
 interface FrequentlyAskedQuestions extends BaseModel {

@@ -14,12 +14,7 @@ const storeConfigSchema = new Schema<StoreConfig>(
         type: [String],
       },
       hotlineSupport: {
-        order: {
-          type: String,
-        },
-        customerCareHotline: {
-          type: String,
-        },
+        type: String,
       },
     },
     storeInformation: {
