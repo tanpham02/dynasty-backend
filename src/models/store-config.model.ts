@@ -5,7 +5,7 @@ const storeConfigSchema = new Schema<StoreConfig>(
   {
     storeSetting: {
       feeShip: {
-        type: Number,
+        type: String,
       },
       transferContent: {
         type: String,
@@ -34,6 +34,9 @@ const storeConfigSchema = new Schema<StoreConfig>(
         type: String,
       },
       phoneNumber: {
+        type: String,
+      },
+      description: {
         type: String,
       },
       taxCode: {
@@ -67,14 +70,16 @@ const storeConfigSchema = new Schema<StoreConfig>(
         type: String,
       },
     },
-    faqs: {
-      question: {
-        type: String,
+    faqs: [
+      {
+        question: {
+          type: String,
+        },
+        answer: {
+          type: String,
+        },
       },
-      answer: {
-        type: String,
-      },
-    },
+    ],
     termAndPolicy: {
       deliveryPolicy: {
         type: String,

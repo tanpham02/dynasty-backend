@@ -1,7 +1,7 @@
 import { BaseModel, LocationBaseModel } from '@app/types';
 
 interface StoreSetting extends BaseModel {
-  feeShip?: number;
+  feeShip?: string;
   transferContent?: string;
   reasonOrderCancel?: string[];
   hotline?: string;
@@ -45,7 +45,7 @@ interface EmailConfig extends BaseModel {
 interface StoreConfig extends BaseModel {
   storeSetting?: StoreSetting;
   storeInformation?: StoreInformation;
-  faqs?: FrequentlyAskedQuestions;
+  faqs?: FrequentlyAskedQuestions[];
   termAndPolicy?: TermAndPolicy;
   emailConfig?: EmailConfig;
   bankAccountConfig?: BankAccountConfig;
