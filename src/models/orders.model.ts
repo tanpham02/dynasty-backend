@@ -1,24 +1,15 @@
-import moment from 'moment';
 import { Schema, model } from 'mongoose';
 
-import { TIME_ZONE_VIET_NAME } from '@app/utils/date.util';
-import {
-  Order,
-  OrderReceivingTime,
-  PaymentMethod,
-  StatusCheckout,
-  StatusOrder,
-  TypeOrder,
-} from '../types/orders.type';
+import { OrderReceivingTime, OrderStatus, OrderType, Orders, PaymentMethods } from '@app/types';
+import { timeByLocalTimeZone } from '@app/utils';
 
-
-const OrderSchema = new Schema<Order>(
+const OrderSchema = new Schema<Orders>(
   {
     customerId: {
       type: Schema.Types.ObjectId,
       ref: 'Customer',
     },
-    productsFromCart: [
+    products: [
       {
         product: {
           type: Schema.Types.ObjectId,
@@ -27,21 +18,7 @@ const OrderSchema = new Schema<Order>(
         note: {
           type: String,
         },
-        productQuantities: {
-          type: Number,
-        },
-      },
-    ],
-    productsWhenTheCustomerIsNotLoggedIn: [
-      {
-        product: {
-          type: Schema.Types.ObjectId,
-          ref: 'ProductVariant',
-        },
-        note: {
-          type: String,
-        },
-        productQuantities: {
+        quantity: {
           type: Number,
         },
       },
@@ -49,12 +26,9 @@ const OrderSchema = new Schema<Order>(
     shipFee: {
       type: Number,
     },
-    totalAmountBeforeUsingDiscount: {
-      type: Number,
-    },
-    statusOrder: {
+    orderStatus: {
       type: String,
-      enum: StatusOrder,
+      enum: OrderStatus,
     },
     fullName: {
       type: String,
@@ -69,73 +43,59 @@ const OrderSchema = new Schema<Order>(
       type: String,
     },
     cityId: {
-      type: Number,
+      type: String,
     },
     district: {
       type: String,
     },
     districtId: {
-      type: Number,
+      type: String,
     },
     ward: {
       type: String,
     },
     wardId: {
-      type: Number,
-    },
-    typeOrder: {
       type: String,
-      enum: TypeOrder,
+    },
+    orderType: {
+      type: String,
+      enum: OrderType,
     },
     orderReceivingTime: {
       type: String,
       enum: OrderReceivingTime,
     },
-    dateTimeOrderReceive: {
+    orderReceivingTimeAt: {
       type: Date,
     },
     voucherId: {
       type: Schema.Types.ObjectId,
       ref: 'Voucher',
     },
-    orderAtStore: {
+    storeId: {
       type: Schema.Types.ObjectId,
-      ref: 'ShopSystem',
+      ref: 'StoreSystem',
     },
-    reasonOrderCancel: {
+    reasonCancel: {
       type: String,
-    },
-    totalOrder: {
-      type: Number,
-    },
-    statusCheckout: {
-      type: String,
-      enum: StatusCheckout,
     },
     paymentMethod: {
       type: String,
-      enum: PaymentMethod,
-    },
-    createdAt: {
-      type: Date,
-      default: moment.tz(Date.now(), TIME_ZONE_VIET_NAME),
-    },
-    updatedAt: {
-      type: Date,
-      default: moment.tz(Date.now(), TIME_ZONE_VIET_NAME),
+      enum: PaymentMethods,
     },
     note: {
       type: String,
     },
+    subTotal: {
+      type: Number,
+    },
+    total: {
+      type: Number,
+    },
   },
   {
     timestamps: {
-      currentTime() {
-        const now = new Date();
-        const strictUTC = moment(now).utc(true);
-        const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
-        return Number(dayAdjustment);
-      },
+      currentTime: () => timeByLocalTimeZone(),
     },
     versionKey: false,
   },

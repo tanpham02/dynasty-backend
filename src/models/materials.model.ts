@@ -1,14 +1,12 @@
-import moment from 'moment';
 import { Schema, model } from 'mongoose';
 
-import { TIME_ZONE_VIET_NAME } from '@app/utils/date.util';
-import { Material } from '../types/materials.type';
+import { Material } from '@app/types';
+import { timeByLocalTimeZone } from '@app/utils';
 
 const MaterialSchema = new Schema<Material>(
   {
     importDate: {
       type: Date,
-      default: moment().tz('Asia/Ho_Chi_Minh'),
     },
     materialInfo: [
       {
@@ -32,12 +30,7 @@ const MaterialSchema = new Schema<Material>(
   },
   {
     timestamps: {
-      currentTime() {
-        const now = new Date();
-        const strictUTC = moment(now).utc(true);
-        const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
-        return Number(dayAdjustment);
-      },
+      currentTime: () => timeByLocalTimeZone(),
     },
     versionKey: false,
   },

@@ -55,8 +55,8 @@ const orderController = {
     const { orderId } = req.params;
     const { customerId } = req.query;
     try {
-      await orderService.reorder(orderId, customerId?.toString() || '', req);
-      res.status(HttpStatusCode.OK).json('Add product in reorder to cart success');
+      //   await orderService.reorder(orderId, customerId?.toString() || '', req);
+      //   res.status(HttpStatusCode.OK).json('Add product in reorder to cart success');
     } catch (error) {
       next(error);
     }
@@ -68,11 +68,11 @@ const orderController = {
     const { statusOrderRequest } = req.query;
 
     try {
-      const { message } = await orderService.updateStatusOrder(
-        statusOrderRequest as any,
-        orderId?.toString() ?? '',
-      );
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await orderService.updateStatusOrder(
+      //     statusOrderRequest as any,
+      //     orderId?.toString() ?? '',
+      //   );
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }
@@ -83,11 +83,11 @@ const orderController = {
     const { orderId } = req.params;
     const { reason } = req.query;
     try {
-      const { message } = await orderService.cancelOrder(
-        orderId?.toString() || '',
-        reason?.toString() || '',
-      );
-      res.status(HttpStatusCode.OK).json(message);
+      //   const { message } = await orderService.cancelOrder(
+      //     orderId?.toString() || '',
+      //     reason?.toString() || '',
+      //   );
+      //   res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }

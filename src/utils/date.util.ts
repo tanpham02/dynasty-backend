@@ -51,3 +51,11 @@ export const parserUTC7 = (cb: moment.Moment, format: string): string => {
   const parse = cb.utc(true).format(format);
   return parse;
 };
+
+export const timeByLocalTimeZone = (time?: string | Date) => {
+  const currentDate = new Date();
+  const timezoneOffset = currentDate.getTimezoneOffset();
+  return new Date(
+    (time ? new Date(time).getTime() : new Date().getTime()) - timezoneOffset * 60 * 1000,
+  );
+};

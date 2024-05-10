@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Model } from 'mongoose';
-import { Material } from '@app/types/materials.type';
-import CRUDService from './CRUD.service';
-import { Request } from 'express';
-import { FIELDS_NAME } from '@app/constants/app';
-import { HttpStatusCode } from '@app/types';
 import Exception from '@app/exception';
-import { comparingObjectId } from '@app/utils/comparing-objectId.util';
+import { Request } from 'express';
+import { Model } from 'mongoose';
+
+import { CRUDService } from '@app/services';
+import { HttpStatusCode, Material } from '@app/types';
+import { comparingObjectId, timeByLocalTimeZone } from '@app/utils';
 
 class MaterialService extends CRUDService<Material> {
   constructor(model: Model<Material>, serviceName: string) {
@@ -22,7 +21,11 @@ class MaterialService extends CRUDService<Material> {
           return acc + next.price * next.quantity;
         }
       }, 0);
-      const newMaterial = new this.model({ ...bodyRequest, totalPrice });
+      const newMaterial = new this.model({
+        ...bodyRequest,
+        totalPrice,
+        importDate: timeByLocalTimeZone(bodyRequest.importDate),
+      });
       await newMaterial.save();
       return newMaterial;
     } catch (error) {
@@ -46,6 +49,11 @@ class MaterialService extends CRUDService<Material> {
     }, 0);
 
     const dateUpdate = { ...bodyRequest, totalPrice };
+
+    if (bodyRequest?.importDate) {
+      dateUpdate.importDate = timeByLocalTimeZone(bodyRequest.importDate);
+    }
+
     await materialDetail.updateOne(dateUpdate, { new: true });
 
     return { message: 'Update materia success' };

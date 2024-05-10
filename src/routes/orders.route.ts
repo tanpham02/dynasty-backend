@@ -84,12 +84,9 @@ router.get('/:id', orderController.getById);
  *     summary: Checkout
  *     requestBody:
  *       content:
- *          multipart/form-data:
- *             schema:
- *                type: object
- *                properties:
- *                   orderInfo:
- *                        $ref: '#/components/schemas/Orders'
+ *          application/json:
+ *              schema:
+ *                  $ref: '#/components/schemas/Orders'
  *     responses:
  *       200:
  *         description: OK
@@ -100,7 +97,7 @@ router.get('/:id', orderController.getById);
  */
 
 // CHECKOUT
-router.post('/checkout', formDataParser(FIELDS_NAME.ORDER), orderController.checkout);
+router.post('/checkout', orderController.checkout);
 
 /**
  * @swagger

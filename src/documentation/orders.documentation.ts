@@ -6,29 +6,24 @@
  *       type: object
  *       properties:
  *          customerId:
- *              $ref: '#/components/schema/Customers'
- *          productsFromCart:
- *              $ref: '#/components/schema/Carts'
- *          productsWhenTheCustomerIsNotLoggedIn:
+ *              $ref: '#/components/schemas/Customers'
+ *          products:
  *              type: array
  *              items:
- *                type: string
- *          _id:
- *              type: string
+ *                type: object
+ *                properties:
+ *                  product:
+ *                      type: string
+ *                  note:
+ *                      type: string
+ *                  quantity:
+ *                      type: number
  *          shipFee:
  *              type: number
- *          totalAmountBeforeUsingDiscount:
- *              type: number
- *          statusOrder:
+ *          orderStatus:
  *              type: string
- *              enum:
- *                 - PENDING
- *                 - DELIVERING
- *                 - SUCCESS
- *                 - CANCELED
- *                 - WAITING_FOR_DELIVERING
- *                 - WAITING_FOR_PAYMENT
- *              default: 'WAITING_FOR_PAYMENT'
+ *              enum: [PENDING, DELIVERING, SUCCESS, CANCELED, WAITING_FOR_DELIVERING, WAITING_FOR_PAYMENT]
+ *              default: 'PENDING'
  *          fullName:
  *              type: string
  *          phoneNumber:
@@ -38,52 +33,42 @@
  *          city:
  *              type: string
  *          cityId:
- *              type: number
+ *              type: string
  *          district:
  *              type: string
  *          districtId:
- *              type: number
+ *              type: string
  *          ward:
  *              type: string
  *          wardId:
- *              type: number
- *          typeOrder:
  *              type: string
- *              enum:
- *                 - ORDER_TO_PICK_UP
- *                 - ORDER_DELIVERING
- *              default: 'ORDER_DELIVERING'
+ *          orderType:
+ *              type: string
+ *              enum: [PICK_UP, DELIVERY]
+ *              default: 'DELIVERY'
  *          paymentMethod:
  *              type: string
- *              enum:
- *                 - PAYMENT_ON_DELIVERY
- *                 - MONO
- *                 - ATM_CARD
- *                 - SHOPEE_PAY
- *                 - ZALO_PAY
- *              default: 'PAYMENT_ON_DELIVERY'
- *          statusCheckout:
- *              type: string
- *              enum:
- *                 - VERIFY_INFORMATION
- *                 - ORDER_CONFIRMATION
- *              default: 'VERIFY_INFORMATION'
+ *              enum: [CASH, MOMO, ATM_CARD, SHOPEE_PAY, ZALO_PAY]
+ *              default: 'CASH'
  *          orderReceivingTime:
  *              type: string
- *              enum:
- *                 - NOW
- *                 - SELECT_DATE_TIME
+ *              enum: [NOW, SELECT_DATE_TIME]
  *              default: 'NOW'
- *          dateTimeOrderReceive:
+ *          orderReceivingTimeAt:
  *             type: string
+ *             format: date-time
  *          voucherId:
  *              type: string
- *              description: references to the document Voucher
- *          orderAtStore:
+ *          storeId:
  *              type: string
- *              description: references to the document Shop Store
- *          reasonOrderCancel:
+ *          shipperId:
  *              type: string
- *          totalOrder:
+ *          reasonCancel:
+ *              type: string
+ *          note:
+ *              type: string
+ *          subTotal:
+ *              type: number
+ *          total:
  *              type: number
  */
