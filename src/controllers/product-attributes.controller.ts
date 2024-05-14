@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { ProductAttributeModel } from '@app/models';
-import ProductAttriButeService from '@app/services/product-attributes.service';
+import { ProductAttributeService } from '@app/services';
 import { HttpStatusCode } from '@app/types';
 import { NextFunction, Request, Response } from 'express';
 
-const productAttributeService = new ProductAttriButeService(
+const productAttributeService = new ProductAttributeService(
   ProductAttributeModel,
   'product attribute',
 );
@@ -35,7 +35,7 @@ const productAttributeController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
-      const response = await productAttributeService.update(id, req);
+      const response = await productAttributeService.updatePutMethod(req, id);
       res.status(HttpStatusCode.OK).json(response);
     } catch (error: any) {
       next(error);

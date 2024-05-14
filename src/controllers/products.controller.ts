@@ -41,8 +41,8 @@ const productController = {
   update: async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
     try {
-      const response = await productService.updateProduct(id, req);
-      res.status(HttpStatusCode.OK).json(response);
+      //   const response = await productService.updateProduct(id, req);
+      //   res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
     }

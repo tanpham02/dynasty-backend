@@ -1,4 +1,3 @@
-import { Document, Schema } from 'mongoose';
 import { BaseModel, LocationBaseModel } from './common.types';
 
 enum OrderStatus {
@@ -52,4 +51,4 @@ interface Orders extends BaseModel, LocationBaseModel {
   total?: number;
 }
 
-export { Orders, OrderReceivingTime, PaymentMethods, OrderStatus, OrderType };
+export { OrderReceivingTime, OrderStatus, OrderType, Orders, PaymentMethods };

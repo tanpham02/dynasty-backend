@@ -19,7 +19,6 @@
  *          type: array
  *          items:
  *            type: string
- *
  *        childrenCategory:
  *          type: object
  *          properties:
@@ -36,7 +35,4 @@
  *          type: number
  *        visible:
  *          type: boolean
- *        isShowHomePage:
- *          type: boolean
- *          default: true
  */

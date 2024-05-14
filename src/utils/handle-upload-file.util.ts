@@ -4,7 +4,7 @@ const handleUploadFile = (req: Request) => {
   let result: string = '';
   const file = req.file;
   if (file && Object.keys(file).length > 0) {
-    const path = `${file.destination}/${file.filename}`;
+    const path = `/${file.destination}/${file.filename}`;
     result = path;
   }
 

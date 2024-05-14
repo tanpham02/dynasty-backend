@@ -9,7 +9,7 @@ export const ProductAttributeSchema = new Schema<ProductAttribute>(
     },
     attributeList: [
       {
-        name: {
+        label: {
           type: String,
         },
         value: {

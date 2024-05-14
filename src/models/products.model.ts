@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
-import { Product, ProductType } from '../types/products.type';
-import { Status } from '@app/types';
+
+import { Product, ProductType, Status } from '@app/types';
 
 const ProductSchema = new Schema<Product>(
   {
@@ -48,34 +48,14 @@ const ProductSchema = new Schema<Product>(
       type: Boolean,
       default: true,
     },
-    attributeMapping: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'ProductAttribute',
-      },
-    ],
     productAttributeList: [
       {
-        extendedName: {
-          type: String,
+        extendedIds: {
+          type: [String],
         },
-        extendedValue: {
-          type: String,
+        priceAdjustmentValue: {
+          type: Number,
         },
-        productAttributeItem: [
-          {
-            attributeId: {
-              type: String,
-            },
-            // attributeId: {
-            //   type: Schema.Types.ObjectId,
-            //   ref: 'ProductAttribute',
-            // },
-            priceAdjustmentValue: {
-              type: Number,
-            },
-          },
-        ],
       },
     ],
     productsVariant: [

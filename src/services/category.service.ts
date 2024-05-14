@@ -16,7 +16,7 @@ class CategoryService extends CRUDService<Category> {
 
   // CREATE CATEGORY
   async createCategory(req: Request) {
-    const requestFormData = req.body?.[FIELDS_NAME.CATEGORY]
+    const requestFormData: Category = req.body?.[FIELDS_NAME.CATEGORY]
       ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.CATEGORY])))
       : {};
 
@@ -26,23 +26,23 @@ class CategoryService extends CRUDService<Category> {
       requestFormData?.childrenCategory &&
       Object.keys(requestFormData.childrenCategory).length > 0
     ) {
-      const childCategory = requestFormData?.childrenCategory;
-      const resultChild = childCategory.category?.map((item: any) => ({
+      const childCategoryRequestBody = requestFormData?.childrenCategory;
+      const childrenCategory = childCategoryRequestBody.category?.map((item: any) => ({
         ...item,
         slug: generateUnsignedSlug(item.name),
       }));
 
-      childCategory.category = resultChild as unknown as any;
+      childCategoryRequestBody.category = childrenCategory;
+    }
+
+    if (fileUpload) {
+      requestFormData.avatar = fileUpload;
     }
 
     const newCategory = new this.model({
       ...requestFormData,
       slug: generateUnsignedSlug(requestFormData?.name),
     });
-
-    if (fileUpload) {
-      newCategory.set('avatar', fileUpload);
-    }
 
     const productIds = newCategory?.products;
     const childrenCategory = newCategory?.childrenCategory;
@@ -71,41 +71,35 @@ class CategoryService extends CRUDService<Category> {
     const fileUpload = handleUploadFile(req);
 
     const isAlreadyExist = await this.getById(id);
-    if (!isAlreadyExist) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}!`);
-      throw exception;
-    }
+    if (!isAlreadyExist)
+      throw new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}!`);
 
     if (
       requestFormData?.childrenCategory &&
       Object.keys(requestFormData.childrenCategory).length > 0
     ) {
-      const childCategory = requestFormData?.childrenCategory;
+      const childCategoryRequestBody = requestFormData?.childrenCategory;
 
-      if (childCategory) {
-        const resultChild = childCategory.category?.map((item: any) => ({
+      if (childCategoryRequestBody) {
+        const childrenCategory = childCategoryRequestBody.category?.map((item: any) => ({
           ...item,
           slug: generateUnsignedSlug(item?.name),
         }));
 
-        childCategory.category = resultChild as unknown as any;
-        childCategory.parentId = new Object(requestFormData.childrenCategory.parentId);
+        childCategoryRequestBody.category = childrenCategory;
+        childCategoryRequestBody.parentId = new Object(requestFormData.childrenCategory.parentId);
       }
     }
 
-    const categoryDetail = {
-      ...requestFormData,
-    };
-
     if (req.file) {
-      categoryDetail.avatar = fileUpload;
+      requestFormData.avatar = fileUpload;
     }
 
     if (requestFormData?.name) {
-      categoryDetail.slug = generateUnsignedSlug(requestFormData.name);
+      requestFormData.slug = generateUnsignedSlug(requestFormData.name);
     }
 
-    const productIds = categoryDetail?.products;
+    const productIds = requestFormData?.products;
     await ProductModel.updateMany(
       {
         _id: { $in: productIds },
@@ -113,7 +107,7 @@ class CategoryService extends CRUDService<Category> {
       { $set: { categoryId: id } },
     );
 
-    return await this.model.findByIdAndUpdate({ _id: id }, categoryDetail, { new: true });
+    return await this.model.findByIdAndUpdate({ _id: id }, requestFormData, { new: true });
   }
 
   // GET BY ID
@@ -123,10 +117,8 @@ class CategoryService extends CRUDService<Category> {
       `childrenCategory.category.products`,
     ]);
 
-    if (!category) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found category');
-      throw exception;
-    }
+    if (!category)
+      throw new Exception(HttpStatusCode.NOT_FOUND, `Not found category with id ${id}`);
 
     return category;
   }

@@ -46,10 +46,6 @@ import { BaseModel } from '@app/types/common.types';
  *                 - VEGETARIAN
  *                 - SPICY
  *                 - UNIQUE
- *         attributeMapping:
- *           type: array
- *           items:
- *             type: string
  *         productAttributeList:
  *           type: array
  *           items:
@@ -86,17 +82,9 @@ enum ProductType {
   UNIQUE = 'UNIQUE', // độc đáo
 }
 
-enum ProductVariantSizeType {
-  SMALL = 'SMALL', // Nhỏ 6”
-  MEDIUM = 'MEDIUM', // Vừa 9”
-  LARGE = 'LARGE', // Lớn 12”
-}
-
-enum ProductVariantBaseType {
-  PAN = 'PAN', // Dày
-  CRISPY_THIN = 'CRISPY_THIN', // Mỏng giòn
-  EXTREME_CHEESE = 'EXTREME_CHEESE', // Viền pho mai
-  EXTREME_SAUSAGE_CHEESE = 'EXTREME_SAUSAGE_CHEESE', // Viền pho mai xúc xích
+interface ProductAttributeItem {
+  extendedIds: string[];
+  priceAdjustmentValue: number;
 }
 
 interface Product extends BaseModel {
@@ -112,16 +100,8 @@ interface Product extends BaseModel {
   types?: ProductType[];
   orderQuantity?: number;
   visible?: boolean;
-  attributeMapping?: [string];
-  productAttributeList?: {
-    extendedName?: string; // Nhỏ 6” - Dày
-    extendedValue?: string; // nho_day
-    productAttributeItem: Array<{
-      attributeId?: string;
-      priceAdjustmentValue?: number; // 80000
-    }>;
-  }[];
+  productAttributeList?: ProductAttributeItem[];
   productsVariant?: string[];
 }
 
-export { Product, ProductType, ProductVariantSizeType, ProductVariantBaseType };
+export { Product, ProductType, ProductAttributeItem };

@@ -1,8 +1,7 @@
-import { BaseModel } from '@app/types/common.types';
+import { BaseModel } from '@app/types';
 
-interface ProductAttributeItem {
-  name?: string;
-  value?: string;
+interface ProductAttributeItem extends BaseModel {
+  label?: string;
 }
 interface ProductAttribute extends BaseModel {
   name?: string;

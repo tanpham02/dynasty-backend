@@ -5,7 +5,7 @@
  *     ProductAttribute:
  *       type: object
  *       required:
- *         - name
+ *         - label
  *       properties:
  *         name:
  *           type: string
@@ -14,8 +14,6 @@
  *           items:
  *              type: object
  *              properties:
- *                  name:
- *                     type: string
- *                  value:
+ *                  label:
  *                     type: string
  */

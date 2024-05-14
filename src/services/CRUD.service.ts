@@ -42,7 +42,6 @@ class CRUDService<T extends Document> {
       customerId,
       statusOrder,
       customerType,
-      isShowHomePage,
       isDefault,
     } = params;
 
@@ -122,10 +121,6 @@ class CRUDService<T extends Document> {
       filter.customerType = customerType;
     }
 
-    if (isShowHomePage || isShowHomePage === 0) {
-      filter.isShowHomePage = Boolean(isShowHomePage);
-    }
-
     if (isDefault) {
       filter.isDefault = Boolean(Number(isDefault));
     }
@@ -179,7 +174,7 @@ class CRUDService<T extends Document> {
     return response;
   }
 
-  // UPDATE
+  // UPDATE - PATCH
   async update(id: string, req: Request) {
     const dataUpdate = req.body;
     const stores = (await this.model.findById(id)) as any;
@@ -212,6 +207,16 @@ class CRUDService<T extends Document> {
     });
 
     return await stores.save();
+  }
+
+  // UPDATE - PUT
+  async updatePutMethod(req: Request, id: string) {
+    const attributeById = await this.model.findById(id);
+
+    if (!attributeById)
+      throw new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName} with id ${id}`);
+
+    return await attributeById.updateOne(req.body, { new: true });
   }
 
   // DELETE

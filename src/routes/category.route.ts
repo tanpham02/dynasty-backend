@@ -16,10 +16,6 @@ const router = express.Router();
  *         name: name
  *         schema:
  *            type: string
- *       - in: query
- *         name: isShowHomePage
- *         schema:
- *            type: boolean
  *       - $ref: '#/components/parameters/PageIndex'
  *       - $ref: '#/components/parameters/PageSize'
  *       - $ref: '#/components/parameters/SortBy'
@@ -86,7 +82,7 @@ router.post('/', uploadFile('category').single('file'), categoryController.creat
 /**
  * @swagger
  * '/api/categories/{id}':
- *  patch:
+ *  put:
  *     tags: [Category]
  *     summary: Update category
  *     parameters:
@@ -119,7 +115,7 @@ router.post('/', uploadFile('category').single('file'), categoryController.creat
  */
 
 // UPDATE CATEGORY
-router.patch('/:id', uploadFile('category').single('file'), categoryController.updateCategory);
+router.put('/:id', uploadFile('category').single('file'), categoryController.updateCategory);
 
 /**
  * @swagger

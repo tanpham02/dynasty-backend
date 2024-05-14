@@ -20,10 +20,9 @@ const categoryController = {
 
   // SEARCH PAGINATION CATEGORY
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex = 0, pageSize = 10, name, sortBy, isShowHomePage } = req.query;
+    const { pageIndex = 0, pageSize = 10, name, sortBy } = req.query;
     const params: Params = {
       name: name?.toString(),
-      isShowHomePage: isShowHomePage ? Number(JSON.parse(String(isShowHomePage))) : undefined,
       pageIndex: Number(pageIndex),
       pageSize: Number(pageSize),
       sortBy: sortBy?.toString(),

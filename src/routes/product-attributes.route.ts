@@ -48,7 +48,7 @@ router.post('/', productAttributeController.create);
 /**
  * @swagger
  * '/api/products/attributes/{id}':
- *  patch:
+ *  put:
  *     tags: [Product Attributes]
  *     summary: Update
  *     parameters:
@@ -74,7 +74,7 @@ router.post('/', productAttributeController.create);
  */
 
 // UPDATE
-router.patch('/:id', productAttributeController.update);
+router.put('/:id', productAttributeController.update);
 
 /**
  * @swagger

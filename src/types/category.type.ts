@@ -1,13 +1,11 @@
 import { BaseModel } from '@app/types';
 
 interface Category extends BaseModel {
-  _id?: string;
   name: string;
   childrenCategory?: ChildCategory;
   products?: string[];
   priority?: number;
   visible?: boolean;
-  isShowHomePage?: boolean;
   avatar?: string;
   slug?: string;
 }

@@ -37,7 +37,6 @@ interface Params {
   sortBy?: string;
   parentId?: string;
   customerType?: CustomerType | string;
-  isShowHomePage?: number;
   isDefault?: string;
 }
 

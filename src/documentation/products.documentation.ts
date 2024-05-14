@@ -42,7 +42,7 @@
  *                 - VEGETARIAN
  *                 - SPICY
  *                 - UNIQUE
- *         attributeMapping:
+ *         attributes:
  *           type: array
  *           items:
  *             type: string
@@ -51,19 +51,12 @@
  *           items:
  *              type: object
  *              properties:
- *                extendedName:
- *                   type: string
- *                extendedValue:
- *                   type: string
- *                productAttributeItem:
+ *                extendedIds:
  *                   type: array
  *                   items:
- *                      type: object
- *                      properties:
- *                          attributeId:
- *                             type: string
- *                          priceAdjustmentValue:
- *                             type: number
+ *                      type: string
+ *                priceAdjustmentValue:
+ *                   type: number
  *         productsVariant:
  *           type: array
  *           items:

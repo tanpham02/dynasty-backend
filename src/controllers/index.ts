@@ -11,7 +11,7 @@ export { default as materialController } from './materials.controller';
 export { default as orderController } from './orders.controller';
 export { default as productAttributeController } from './product-attributes.controller';
 export { default as productFavoriteController } from './product-favorite.controller';
-export { default as productVariantController } from './product-attributes.controller';
+export { default as productVariantController } from './product-variants.controller';
 export { default as productController } from './products.controller';
 export { default as promotionController } from './promotions.controller';
 export { default as storeConfigController } from './store-config.controller';

@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-import { Status } from '@app/types';
-import { Category, ChildCategory } from '../types/category.type';
+import { Category, ChildCategory, Status } from '@app/types';
 
 const CategorySchema = new Schema<Category>(
   {
@@ -29,10 +28,6 @@ const CategorySchema = new Schema<Category>(
     },
     visible: {
       type: Boolean,
-    },
-    isShowHomePage: {
-      type: Boolean,
-      default: true,
     },
     slug: {
       type: String,
