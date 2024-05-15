@@ -76,7 +76,7 @@ router.post('/', uploadFile('product').single('file'), productController.create)
 /**
  * @swagger
  * '/api/products/{id}':
- *  patch:
+ *  put:
  *     tags: [Products]
  *     summary: Update product
  *     parameters:
@@ -108,7 +108,7 @@ router.post('/', uploadFile('product').single('file'), productController.create)
  */
 
 // UPDATE PRODUCT
-router.patch('/:id', uploadFile('product').single('file'), productController.update);
+router.put('/:id', uploadFile('product').single('file'), productController.update);
 
 /**
  * @swagger

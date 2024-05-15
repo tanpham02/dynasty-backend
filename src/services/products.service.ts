@@ -16,20 +16,20 @@ class ProductService extends CRUDService<Product> {
 
   // DELETE
   async deleteProduct(ids?: string[] | string | any) {
-    console.log('🚀 ~ ProductService ~ deleteProduct ~ ids:', ids);
     const idsValue = Array.isArray(ids) ? ids : [ids];
-    if (ids && Array.from(ids).length < 0) {
-      const exception = new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
-      throw exception;
-    }
+    if (ids && Array.from(ids).length < 0)
+      throw new Exception(HttpStatusCode.BAD_REQUEST, 'ids field is required');
 
-    await this.model.deleteMany({ _id: { $in: idsValue } });
+    await this.model.deleteMany({ _id: { $in: idsValue } }, { new: true });
+
+    await ProductVariantModel.deleteMany({ parentId: { $in: idsValue } }, { new: true });
 
     await CategoryModel.updateMany(
       {
         products: { $in: idsValue },
       },
       { $pull: { products: { $in: idsValue } } },
+      { new: true },
     );
 
     await CategoryModel.updateMany(
@@ -110,7 +110,7 @@ class ProductService extends CRUDService<Product> {
           images: productBodyRequest?.images,
           types: productBodyRequest?.types,
           visible: productBodyRequest?.visible,
-          productAttributeList: [],
+          productAttributeList: productBodyRequest.productAttributeList![index],
           slug: generateUnsignedSlug(
             `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`,
           ),
@@ -164,153 +164,192 @@ class ProductService extends CRUDService<Product> {
   }
 
   // UPDATE
-  //   async updateProduct(id: string, req: Request) {
-  //     const fileUpload = handleUploadFile(req);
+  async updateProduct(id: string, req: Request) {
+    const fileUpload = handleUploadFile(req);
 
-  //     const productRequest: Product = req.body?.[FIELDS_NAME.PRODUCT]
-  //       ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.PRODUCT])))
-  //       : {};
-  //     let dataUpdate: any = {
-  //       parentId: id,
-  //     };
-  //     if (fileUpload) {
-  //       productRequest.image = fileUpload;
-  //       productRequest.images = [fileUpload];
+    const productBodyRequest: Product = req.body?.[FIELDS_NAME.PRODUCT]
+      ? JSON.parse(JSON.parse(JSON.stringify(req.body?.[FIELDS_NAME.PRODUCT])))
+      : {};
 
-  //       const productVariants = ProductVariantModel.find({ parentId: id });
-  //       const updateImageProductVariant = async (item: ProductVariants) => {
-  //         await item.updateOne({
-  //           $set: {
-  //             'productItem.image': fileUpload,
-  //             'productItem.images': [fileUpload],
-  //           },
-  //         });
-  //       };
+    const productVariantListIds: string[] = [];
 
-  //       if (productVariants) {
-  //         (await productVariants).forEach((item) => {
-  //           updateImageProductVariant(item);
-  //         });
-  //       }
-  //     }
+    if (fileUpload) {
+      productBodyRequest.image = fileUpload;
+      productBodyRequest.images = [fileUpload];
 
-  //     if (productRequest?.price && !productRequest?.productAttributeList) {
-  //       const productById = await this.getById(id);
-  //       if (productById && productById?.productsVariant) {
-  //         if (productById.price !== productRequest?.price) {
-  //           for (let i = 0; i < productById.productsVariant.length; i++) {
-  //             const productVariantObjectId = productById.productsVariant[i];
-  //             (async () => {
-  //               const productVariantById = await ProductVariantModel.findById(productVariantObjectId);
-  //               const priceAdjustment =
-  //                 productVariantById?.productItem?.productAttributeList?.[0].productAttributeItem.reduce(
-  //                   (acc, next) => {
-  //                     return acc + (next?.priceAdjustmentValue || 0);
-  //                   },
-  //                   0,
-  //                 );
-  //               if (productVariantById) {
-  //                 await productVariantById.updateOne({
-  //                   $set: {
-  //                     'productItem.price': productRequest.price + (priceAdjustment || 0),
-  //                   },
-  //                 });
-  //               }
-  //             })();
-  //           }
-  //         }
-  //       }
-  //     }
+      await ProductVariantModel.updateMany(
+        { parentId: id },
+        {
+          $set: {
+            'productItem.image': fileUpload,
+            'productItem.images': [fileUpload],
+          },
+        },
+        { new: true },
+      );
+    }
 
-  //     if (
-  //       productRequest?.productAttributeList &&
-  //       Array.from(productRequest.productAttributeList).length > 0
-  //     ) {
-  //       const attributeValid: any[] = [];
-  //       for (let i = 0; i < productRequest?.productAttributeList.length; i++) {
-  //         const element: any = productRequest?.productAttributeList[i];
+    const calculatePriceProductVariant = async (productVariant: ProductVariants) => {
+      await productVariant.updateOne(
+        {
+          $set: {
+            'productItem.price':
+              productBodyRequest.price +
+              (productVariant.productItem!.productAttributeList![0].priceAdjustmentValue || 0),
+          },
+        },
+        { new: true },
+      );
+    };
 
-  //         const productVariantMatch = await ProductVariantModel.findOne({
-  //           'productItem.productAttributeList._id': element?._id,
-  //         });
+    if (productBodyRequest?.price) {
+      if (
+        productBodyRequest?.productAttributeList &&
+        productBodyRequest.productAttributeList.length > 0
+      ) {
+        const attributes = await ProductAttributeModel.find();
 
-  //         if (productVariantMatch) {
-  //           const priceAdjustment = Array.from(element?.productAttributeItem).reduce(
-  //             (acc: any, next: any) => {
-  //               return acc + (next?.priceAdjustmentValue || 0);
-  //             },
-  //             0,
-  //           ) as any;
+        const mapExtendedIdsToExtendDisplayName = (extendedIds: string[]) => {
+          const extendedName: string[] = [];
+          extendedIds.map((id) => {
+            for (const category of attributes) {
+              for (const attribute of category.attributeList!) {
+                if (attribute._id?.toString() === id) {
+                  extendedName.push(attribute.label!);
+                }
+              }
+            }
+            return null;
+          });
+          return extendedName.filter((item) => item !== null);
+        };
 
-  //           productVariantMatch.productItem?.productAttributeList?.forEach((item) => {
-  //             if (item.extendedValue === element?.extendedValue) {
-  //               attributeValid.push(element);
-  //             }
-  //           });
+        const groupedAttributes = productBodyRequest.productAttributeList.map((attrList) => {
+          const { extendedIds, priceAdjustmentValue = 0 } = attrList;
 
-  //           dataUpdate = {
-  //             ...dataUpdate,
-  //             parentId: id,
-  //             productItem: {
-  //               ...productRequest,
-  //               name: `${
-  //                 productRequest?.name || productVariantMatch.productItem?.name.split('-')[0].trim()
-  //               } - ${element?.extendedName}`,
-  //               price:
-  //                 (productRequest?.price || productVariantMatch.productItem?.price) +
-  //                 (priceAdjustment || 0),
-  //               slug: generateUnsignedSlug(
-  //                 `${
-  //                   productRequest?.name || productVariantMatch.productItem?.name.split('-')[0].trim()
-  //                 } - ${element.extendedName}`,
-  //               ),
-  //               productAttributeList: attributeValid,
-  //             },
-  //           };
+          return {
+            extendedDisplayName: mapExtendedIdsToExtendDisplayName(extendedIds).join(' - '),
+            extendedIds,
+            priceAdjustmentValue: priceAdjustmentValue,
+          };
+        });
 
-  //           await ProductVariantModel.updateOne(
-  //             { 'productItem.productAttributeList._id': element?._id },
-  //             dataUpdate,
-  //             {
-  //               new: true,
-  //             },
-  //           );
-  //         }
-  //       }
-  //     }
+        const productVariants: any[] = groupedAttributes.map((groupedAttribute, index) => ({
+          parentId: id,
+          productItem: {
+            name: `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`,
+            description: productBodyRequest.description,
+            information: productBodyRequest.information,
+            price: Number(productBodyRequest.price) + groupedAttribute.priceAdjustmentValue,
+            types: productBodyRequest?.types,
+            visible: productBodyRequest?.visible,
+            productAttributeList: [],
+            slug: generateUnsignedSlug(
+              `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`,
+            ),
+          },
+        }));
 
-  //     if (productRequest?.name) {
-  //       productRequest.slug = generateUnsignedSlug(productRequest.name);
-  //     }
+        const createNewProductVariant = async (productVariant: ProductVariants) => {
+          const newProductVariant = new ProductVariantModel(productVariant);
+          productVariantListIds.push(newProductVariant._id);
+          await newProductVariant.save();
+        };
 
-  //     return await this.model.updateOne({ _id: id }, productRequest, { new: true });
-  //   }
+        for (let i = 0; i < productVariants.length; i++) {
+          createNewProductVariant(productVariants[i]);
+        }
+        productBodyRequest.productsVariant = productVariantListIds;
+      } else {
+        const productVariants = await ProductVariantModel.find({ parentId: id });
+
+        if (productVariants && productVariants.length > 0) {
+          for (const productVariant of productVariants) {
+            calculatePriceProductVariant(productVariant);
+          }
+        }
+      }
+    }
+
+    if (productBodyRequest?.categoryId) {
+      // Cha
+      await CategoryModel.updateMany(
+        { _id: { $ne: productBodyRequest.categoryId } },
+        {
+          $pull: {
+            products: id,
+          },
+        },
+        { new: true },
+      );
+      await CategoryModel.updateOne(
+        { _id: productBodyRequest.categoryId },
+        {
+          $push: {
+            products: id,
+          },
+        },
+        { new: true },
+      );
+
+      // Con
+      //   await CategoryModel.updateOne(
+      //     { 'childrenCategory.category._id': { $ne: productBodyRequest.categoryId } },
+      //     {
+      //       $pull: {
+      //         'childrenCategory.category.$[item].products': id,
+      //       },
+      //     },
+      //     {
+      //       arrayFilters: [
+      //         {
+      //           'item._id': id,
+      //         },
+      //       ],
+      //       new: true,
+      //       multi: true,
+      //     },
+      //   );
+
+      // BUG
+
+      const childCategory = await CategoryModel.findOne({
+        'childrenCategory.category._id': productBodyRequest._id,
+      });
+      if (childCategory) {
+        await childCategory.updateOne(
+          {
+            $push: {
+              childrenCategory: {
+                'category.$[item].products': id,
+              },
+            },
+          },
+          {
+            arrayFilters: [
+              {
+                'item._id': productBodyRequest._id,
+              },
+            ],
+            new: true,
+          },
+        );
+      }
+      console.log('🚀 ~ ProductService ~ updateProduct ~ childCategory:', childCategory);
+    }
+
+    if (productBodyRequest?.name) {
+      productBodyRequest.slug = generateUnsignedSlug(productBodyRequest.name);
+    }
+
+    return await this.model.updateOne({ _id: id }, productBodyRequest, { new: true });
+  }
 
   // GET BY ID
   async getByIdProduct(id: string) {
-    // const result = await this.getById(id);
+    const result = await this.getById(id);
 
-    // if (result && result.productAttributeList && result.productAttributeList?.length > 0) {
-    //   for (const item of result.productAttributeList) {
-    //     for (const attributeItem of item.productAttributeItem) {
-    //       const attribute = await ProductAttributeModel.findOne({
-    //         'attributeList._id': attributeItem.attributeId,
-    //       });
-
-    //       if (attribute) {
-    //         const attributeChild = attribute.attributeList?.find(
-    //           (item: any) =>
-    //             attributeItem.attributeId && comparingObjectId(item._id, attributeItem.attributeId),
-    //         );
-    //         if (attributeChild) {
-    //           attributeItem.attributeId = JSON.stringify(attributeChild) as any;
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
-
-    return (await this.getById(id)).populate([
+    return result.populate([
       {
         path: 'categoryId',
         model: 'Category',

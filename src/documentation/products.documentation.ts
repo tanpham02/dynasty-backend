@@ -42,10 +42,6 @@
  *                 - VEGETARIAN
  *                 - SPICY
  *                 - UNIQUE
- *         attributes:
- *           type: array
- *           items:
- *             type: string
  *         productAttributeList:
  *           type: array
  *           items:
