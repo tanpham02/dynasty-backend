@@ -12,6 +12,7 @@ import mailerRoute from './mailer.route';
 import materialRouter from './materials.route';
 import orderRouter from './orders.route';
 import productAttributeRoute from './product-attributes.route';
+import productFavoriteRouter from './product-favorite.route';
 import productVariantRouter from './product-variants.route';
 import productRouter from './products.route';
 import promotionsRouter from './promotions.route';
@@ -28,12 +29,12 @@ import {
   COMBO_PROMOTIONS_URL,
   CUSTOMER_ADDRESS_URL,
   CUSTOMER_URL,
-  EMAIL_CONFIG_URL,
   EMAIL_TEMPLATE_URL,
   MAILER_URL,
   MATERIAL_URL,
   ORDER_URL,
   PRODUCT_ATTRIBUTE_URL,
+  PRODUCT_FAVORITE_URL,
   PRODUCT_URL,
   PRODUCT_VARIANT_URL,
   PROMOTIONS_URL,
@@ -64,6 +65,10 @@ export const routesMapping = (app: Application) => {
     {
       path: PRODUCT_VARIANT_URL,
       route: productVariantRouter,
+    },
+    {
+      path: PRODUCT_FAVORITE_URL,
+      route: productFavoriteRouter,
     },
     {
       path: COMBO_PROMOTIONS_URL,

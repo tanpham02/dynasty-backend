@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request } from 'express';
 import { Model } from 'mongoose';
+import { compare } from 'bcrypt';
 
 import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
@@ -8,7 +9,6 @@ import { StaffModel } from '@app/models';
 import { CRUDService } from '@app/services';
 import { HttpStatusCode, Params, Staff } from '@app/types';
 import { comparingObjectId, handleUploadFile, hashPassword } from '@app/utils';
-import { compare } from 'bcrypt';
 class StaffService extends CRUDService<Staff> {
   constructor(model: Model<Staff>, serviceName: string) {
     super(model, serviceName);

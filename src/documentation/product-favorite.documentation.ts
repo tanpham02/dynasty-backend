@@ -1,16 +1,16 @@
 /**
  * @swagger
  * components:
- *   schema:
+ *   schemas:
  *     ProductFavorite:
  *       type: object
  *       required:
  *         - name
  *       properties:
  *         customerId:
- *             $ref: '#/components/schema/Customers'
+ *             $ref: '#/components/schemas/Customers'
  *         products:
  *             type: array
  *             items:
- *                $ref: '#/components/schema/Products'
+ *                $ref: '#/components/schemas/Products'
  */

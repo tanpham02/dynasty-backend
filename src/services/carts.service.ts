@@ -3,7 +3,6 @@ import { Request } from 'express';
 import { Model } from 'mongoose';
 
 import Exception from '@app/exception';
-import { CartModel } from '@app/models';
 import { CRUDService } from '@app/services';
 import { CartProduct, Carts, HttpStatusCode } from '@app/types';
 import { comparingObjectId } from '@app/utils';

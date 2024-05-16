@@ -1,4 +1,4 @@
-export * from './comparing-objectId.util';
+export * from './object-id.util';
 export * from './date.util';
 export * from './form-data-parser.util';
 export * from './generate-otp.util';

@@ -13,6 +13,7 @@ export const CATEGORY_URL = combineApiUrl('categories');
 export const PRODUCT_URL = combineApiUrl('products');
 export const PRODUCT_ATTRIBUTE_URL = combineApiUrl(`${PRODUCT_URL}`, 'attributes');
 export const PRODUCT_VARIANT_URL = combineApiUrl(`${PRODUCT_URL}`, 'variants');
+export const PRODUCT_FAVORITE_URL = combineApiUrl(`${PRODUCT_URL}`, 'favorite');
 
 // STORE SYSTEM
 export const STORE_SYSTEM_URL = combineApiUrl('store-system');

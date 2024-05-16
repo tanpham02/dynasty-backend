@@ -7,7 +7,13 @@ import { verify } from 'jsonwebtoken';
 
 import { configApp } from '@app/configs';
 import Exception from '@app/exception';
-import { CartModel, CustomerAddressModel, CustomerModel, StaffModel } from '@app/models';
+import {
+  CartModel,
+  CustomerAddressModel,
+  CustomerModel,
+  ProductFavoriteModel,
+  StaffModel,
+} from '@app/models';
 import { GoogleService, SMSService, StaffService } from '@app/services';
 import { CustomerType, Customers, HttpStatusCode, MODE, Staff } from '@app/types';
 import { JWT, generateOtp, hashPassword } from '@app/utils';
@@ -51,6 +57,8 @@ class AuthService {
 
     const newCart = new CartModel({ customerId: newCustomer._id });
     const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
+    const newProductFavorite = new ProductFavoriteModel({ customerId: newCustomer._id });
+    await newProductFavorite.save();
     await newCustomerAddress.save();
     await newCart.save();
     newCustomer.$set('customerAddressId', newCustomerAddress._id);

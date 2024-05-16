@@ -1,7 +1,6 @@
-import { Document } from 'mongoose';
-import { Product } from './products.type';
+import { BaseModel, Product } from '@app/types';
 
-interface ProductFavorite extends Document {
+interface ProductFavorite extends BaseModel {
   customerId?: string;
   products?: Product[];
 }
