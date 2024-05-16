@@ -17,12 +17,12 @@ const CartSchema = new Schema<Carts>(
         note: {
           type: String,
         },
-        productQuantities: {
+        quantity: {
           type: Number,
         },
       },
     ],
-    quantities: {
+    quantity: {
       type: Number,
     },
     total: {

@@ -1,22 +1,16 @@
 import { BaseModel } from './common.types';
 
-interface CartProduct {
+interface CartProduct extends BaseModel {
   product?: string;
   note?: string;
-  productQuantities: number;
+  quantity?: number;
 }
 
 interface Carts extends BaseModel {
   customerId?: string;
   products?: CartProduct[];
-  quantities?: number;
+  quantity?: number;
   total?: number;
 }
 
-enum ActionType {
-  ADD = 'ADD',
-  UPDATE = 'UPDATE',
-  DELETE = 'DELETE',
-}
-
-export { Carts, ActionType };
+export { Carts, CartProduct };

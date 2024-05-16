@@ -8,34 +8,33 @@ import { HttpStatusCode } from '@app/types';
 const cartService = new CartService(CartModel, 'carts');
 
 const cartController = {
-  // ADD CART
-  addCart: async (req: Request, res: Response, next: NextFunction) => {
+  // ADD OR UPDATE CART ITEM
+  addOrUpdateCartItem: async (req: Request, res: Response, next: NextFunction) => {
     const { customerId } = req.params;
     try {
-      await cartService.addCartItem(customerId, req);
-      res.status(HttpStatusCode.OK).json({ message: 'Add cart successfully' });
+      const response = await cartService.addOrUpdateCartItem(customerId, req);
+      res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
     }
   },
 
-  // UPDATE CART
-  updateCart: async (req: Request, res: Response, next: NextFunction) => {
-    const { customerId } = req.params;
-    try {
-      await cartService.updateCartITem(customerId, req);
-      res.status(HttpStatusCode.OK).json({ message: 'Update cart successfully' });
-    } catch (error) {
-      next(error);
-    }
-  },
+  //   // UPDATE CART
+  //   updateCart: async (req: Request, res: Response, next: NextFunction) => {
+  //     const { customerId } = req.params;
+  //     try {
+  //       await cartService.updateCartITem(customerId, req);
+  //       res.status(HttpStatusCode.OK).json({ message: 'Update cart successfully' });
+  //     } catch (error) {
+  //       next(error);
+  //     }
+  //   },
 
   // DELETE CART
   deleteCart: async (req: Request, res: Response, next: NextFunction) => {
-    const { customerId } = req.params;
-    const { productId } = req.query;
+    const { cartItemId, customerId } = req.query;
     try {
-      await cartService.deleteCartItem(customerId as string, productId?.toString() || '');
+      await cartService.deleteCartItem(String(customerId), String(cartItemId));
       res.status(HttpStatusCode.OK).json({ message: 'Delete cart successfully' });
     } catch (error) {
       next(error);

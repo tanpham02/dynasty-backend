@@ -15,13 +15,15 @@
  *           items:
  *              type: object
  *              properties:
+ *                  _id:
+ *                     type: string
  *                  product:
  *                     $ref: '#/components/schema/Products'
  *                  note:
  *                     type: string
- *                  productQuantities:
+ *                  quantity:
  *                     type: number
- *         quantities:
+ *         quantity:
  *           type: number
  *         total:
  *           type: number
@@ -34,10 +36,12 @@
  *     CartDTO:
  *       type: object
  *       properties:
+ *           _id:
+ *              type: string
  *           product:
  *              type: string
  *           note:
  *              type: string
- *           productQuantities:
+ *           quantity:
  *              type: number
  */

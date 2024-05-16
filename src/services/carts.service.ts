@@ -1,141 +1,75 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import Exception from '@app/exception';
-import { HttpStatusCode } from '@app/types';
-import CartModel from '@app/models/carts.model';
-import { Carts } from '@app/types';
-import { comparingObjectId } from '@app/utils/comparing-objectId.util';
 import { Request } from 'express';
 import { Model } from 'mongoose';
-import CRUDService from './CRUD.service';
+
+import Exception from '@app/exception';
+import { CartModel } from '@app/models';
+import { CRUDService } from '@app/services';
+import { CartProduct, Carts, HttpStatusCode } from '@app/types';
+import { comparingObjectId } from '@app/utils';
 
 class CartService extends CRUDService<Carts> {
   constructor(model: Model<Carts>, serviceName: string) {
     super(model, serviceName);
   }
 
-  /** ADD CART */
-  async addCartItem(customerId: string, req: Request) {
+  /** ADD OR UPDATE CART ITEM */
+  async addOrUpdateCartItem(customerId: string, req: Request) {
     const cartRecord = await this.model.findOne({ customerId: customerId });
-    const cartRequestBody = req.body;
+    const cartRequestBody: CartProduct = req.body;
 
-    if (!cartRecord) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found with customer id');
-      throw exception;
-    }
+    if (!cartRecord)
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'Not found carts with customer id');
 
-    // if (cartRecord?.products && cartRecord.products?.length > 0) {
-    //   const productItemMatching = cartRecord.products.find((productItemRecord: any) =>
-    //     comparingObjectId(cartRequestBody.product, productItemRecord.product),
-    //   );
+    if (cartRecord?.products && cartRequestBody) {
+      const cartItemMatching = cartRecord.products.find((productItemRecord: any) =>
+        comparingObjectId(cartRequestBody._id!, productItemRecord._id),
+      );
 
-    //   if (comparingObjectId(productItemMatching?.product, cartRequestBody.product)) {
-    //     const quantity = cartRequestBody.productQuantities + productItemMatching?.productQuantities;
-    //     (async () => {
-    //       await this.model.updateOne(
-    //         {
-    //           'products.product': cartRequestBody.product,
-    //         },
-    //         {
-    //           $set: {
-    //             'products.$.productQuantities': quantity,
-    //             'products.$.note': cartRequestBody?.note || productItemMatching?.note,
-    //           },
-    //         },
-    //         { new: true },
-    //       );
-    //     })();
-    //   } else {
-    //     (async () => {
-    //       await cartRecord?.updateOne(
-    //         {
-    //           $push: { products: cartRequestBody },
-    //         },
-    //         { new: true },
-    //       );
-    //     })();
-    //   }
-    // } else {
-    //   (async () => {
-    //     await cartRecord?.updateOne(
-    //       {
-    //         $push: { products: cartRequestBody },
-    //       },
-    //       { new: true },
-    //     );
-    //   })();
-    // }
-  }
-
-  /** UPDATE CART */
-  async updateCartITem(customerId: string, req: Request) {
-    const cartRecord = await this.model.findOne({ customerId: customerId });
-    const cartRequestBody = req.body;
-
-    if (!cartRecord) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found with customer id');
-      throw exception;
-    }
-
-    const handleUpdateCartItem = async (cartRecord: any) => {
-      if (comparingObjectId(cartRequestBody.product, cartRecord.product)) {
-        if (cartRequestBody.productQuantities) {
-          await this.model.updateOne(
-            {
-              customerId: customerId,
-              'products.product': cartRecord.product,
-            },
-            {
-              $set: {
-                'products.$.productQuantities': cartRequestBody.productQuantities,
-                'products.$.note': cartRequestBody?.note || cartRecord?.note,
-              },
-            },
-            { new: true },
-          );
-        } else {
-          await CartModel?.updateOne(
-            {
-              customerId: customerId,
-              'products.product': cartRecord.product,
-            },
-            {
-              $pull: {
-                products: { product: cartRequestBody.product },
-              },
-            },
-            { new: true },
-          );
-        }
+      if (!cartItemMatching) {
+        return await this.model.updateOne(
+          {
+            customerId: customerId,
+          },
+          { $push: { products: cartRequestBody } },
+          { new: true },
+        );
       }
-    };
 
-    cartRecord?.products?.find((productItemRecord: any) => handleUpdateCartItem(productItemRecord));
+      const dataUpdate: CartProduct = cartRequestBody;
+      return await this.model.findOneAndUpdate(
+        { 'products._id': dataUpdate._id },
+        {
+          $set: {
+            'products.$.note': cartRequestBody?.note ?? cartItemMatching.note,
+            'products.$.quantity': (cartRequestBody?.quantity || 1) + cartItemMatching.quantity!,
+          },
+        },
+        {
+          new: true,
+        },
+      );
+    }
   }
 
   /** DELETE CART */
-  async deleteCartItem(customerId: string, productId: string) {
-    const productItem = await this.model.findOne({
-      'products.product': productId,
+  async deleteCartItem(customerId: string, cartItemId: string) {
+    const cartItem = await this.model.findOne({
+      'products._id': cartItemId,
     });
-    const cartByCustomerId = await this.model.findOne({ customerId: customerId });
+    const cartsByCustomerId = await this.model.findOne({ customerId: customerId });
 
-    if (!cartByCustomerId) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found cart with customer id');
-      throw exception;
-    }
-    if (!productItem) {
-      const exception = new Exception(
-        HttpStatusCode.NOT_FOUND,
-        'Not found product item with product id',
-      );
-      throw exception;
-    }
-    await CartModel.updateOne(
-      { customerId: customerId },
+    if (!cartsByCustomerId)
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'Not found cart with customer id');
+
+    if (!cartItem)
+      throw new Exception(HttpStatusCode.NOT_FOUND, 'Not found product item with product id');
+
+    await cartItem.updateOne(
       {
         $pull: {
           products: {
-            product: productId,
+            _id: cartItemId,
           },
         },
       },
@@ -144,20 +78,19 @@ class CartService extends CRUDService<Carts> {
   }
 
   async getCartByCustomerId(customerId: string) {
-    const cart = await this.model.findOne({ customerId: customerId });
-    if (!cart) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Cart not found');
-      throw exception;
-    }
+    const carts = await this.model.findOne({ customerId: customerId });
+    if (!carts) throw new Exception(HttpStatusCode.NOT_FOUND, 'Cart not found');
 
-    const cartResponse = await cart.populate('products.product');
-    if (cart?.products && cart.products.length) {
+    const cartResponse = await carts.populate('products.product');
+
+    if (carts?.products && carts.products.length) {
       const total = cartResponse.products?.reduce((acc: any, next: any) => {
         const item = next?.product as unknown as any;
-        return acc + item?.productItem?.price * next?.productQuantities;
+        return acc + item?.productItem?.price * next?.quantity;
       }, 0);
       cartResponse.total = total || 0;
     }
+    cartResponse.quantity = carts.products?.length;
     return cartResponse;
   }
 
