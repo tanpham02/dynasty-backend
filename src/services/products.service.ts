@@ -293,49 +293,49 @@ class ProductService extends CRUDService<Product> {
       );
 
       // Con
-      //   await CategoryModel.updateOne(
-      //     { 'childrenCategory.category._id': { $ne: productBodyRequest.categoryId } },
-      //     {
-      //       $pull: {
-      //         'childrenCategory.category.$[item].products': id,
-      //       },
-      //     },
-      //     {
-      //       arrayFilters: [
-      //         {
-      //           'item._id': id,
-      //         },
-      //       ],
-      //       new: true,
-      //       multi: true,
-      //     },
-      //   );
-
-      // BUG
-
-      const childCategory = await CategoryModel.findOne({
-        'childrenCategory.category._id': productBodyRequest._id,
+      const childrenCategoryNotEquals = await CategoryModel.find({
+        _id: productBodyRequest.categoryId,
       });
-      if (childCategory) {
-        await childCategory.updateOne(
-          {
-            $push: {
-              childrenCategory: {
-                'category.$[item].products': id,
-              },
-            },
-          },
-          {
-            arrayFilters: [
-              {
-                'item._id': productBodyRequest._id,
-              },
-            ],
-            new: true,
-          },
-        );
+
+      if (childrenCategoryNotEquals && childrenCategoryNotEquals.length) {
+        for (const category of childrenCategoryNotEquals) {
+          if (
+            category?.childrenCategory &&
+            Object.keys(category.childrenCategory).length > 0 &&
+            category.childrenCategory?.category
+          ) {
+            for (const cate of category.childrenCategory.category) {
+              await category.updateOne(
+                {
+                  $pull: {
+                    'childrenCategory.category.$[item].products': id,
+                  },
+                },
+                {
+                  arrayFilters: [
+                    {
+                      'item._id': cate._id,
+                    },
+                  ],
+                  new: true,
+                },
+              );
+            }
+          }
+        }
       }
-      console.log('🚀 ~ ProductService ~ updateProduct ~ childCategory:', childCategory);
+
+      await CategoryModel.updateOne(
+        { 'childrenCategory.category._id': productBodyRequest.categoryId },
+        {
+          $push: {
+            'childrenCategory.category.$.products': id,
+          },
+        },
+        {
+          new: true,
+        },
+      );
     }
 
     if (productBodyRequest?.name) {
