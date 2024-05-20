@@ -158,7 +158,7 @@ router.patch('/update-order-status', orderController.updateStatusOrder);
  * '/api/orders/cancel-order':
  *  patch:
  *     tags: [Orders]
- *     summary: Request
+ *     summary: Cancel order
  *     parameters:
  *      - name: orderId
  *        in: query
