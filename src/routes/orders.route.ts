@@ -101,13 +101,13 @@ router.post('/checkout', orderController.checkout);
 
 /**
  * @swagger
- * '/api/orders/re-order/{orderId}':
+ * '/api/orders/re-order':
  *  post:
  *     tags: [Orders]
  *     summary: Re-order
  *     parameters:
  *      - name: orderId
- *        in: path
+ *        in: query
  *        schema:
  *          type: string
  *      - name: customerId
@@ -124,20 +124,20 @@ router.post('/checkout', orderController.checkout);
  */
 
 // RE-ORDER
-router.post('/re-order/:orderId', orderController.reorder);
+router.post('/re-order', orderController.reorder);
 
 /**
  * @swagger
- * '/api/orders/update-status-order/{orderId}':
+ * '/api/orders/update-order-status':
  *  patch:
  *     tags: [Orders]
  *     summary: Update status order
  *     parameters:
  *      - name: orderId
- *        in: path
+ *        in: query
  *        schema:
  *          type: string
- *      - name: statusOrderRequest
+ *      - name: orderStatus
  *        in: query
  *        schema:
  *          type: string
@@ -151,17 +151,17 @@ router.post('/re-order/:orderId', orderController.reorder);
  */
 
 // UPDATE STATUS ORDER
-router.patch('/update-status-order/:orderId', orderController.updateStatusOrder);
+router.patch('/update-order-status', orderController.updateStatusOrder);
 
 /**
  * @swagger
- * '/api/orders/cancel-order/{orderId}':
+ * '/api/orders/cancel-order':
  *  patch:
  *     tags: [Orders]
  *     summary: Request
  *     parameters:
  *      - name: orderId
- *        in: path
+ *        in: query
  *        schema:
  *          type: string
  *      - name: reason
@@ -178,7 +178,7 @@ router.patch('/update-status-order/:orderId', orderController.updateStatusOrder)
  */
 
 // CANCEL ORDER
-router.patch('/cancel-order/:orderId', orderController.requestCancelOrder);
+router.patch('/cancel-order', orderController.requestCancelOrder);
 
 /**
  * @swagger

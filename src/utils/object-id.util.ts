@@ -1,16 +1,10 @@
 import { Schema } from 'mongoose';
 
-const comparingObjectId = (requestId: string, recordId: string) => {
-  if (Boolean(requestId) && Boolean(recordId)) {
-    if (new Object(recordId).valueOf().toString() === new Object(requestId).valueOf().toString()) {
-      return true;
-    }
-    return false;
-  }
-};
-
-const convertObjectIdToString = (_id: Schema.Types.ObjectId) => {
+const convertObjectIdToString = (_id: Schema.Types.ObjectId | string) => {
   return new Object(_id).valueOf().toString();
 };
+
+const comparingObjectId = (requestId: string, recordId: string) =>
+  requestId && recordId && convertObjectIdToString(recordId) === convertObjectIdToString(requestId);
 
 export { comparingObjectId, convertObjectIdToString };

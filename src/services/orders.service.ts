@@ -3,9 +3,10 @@
 import { Request } from 'express';
 import { Model } from 'mongoose';
 
-import { OrderModel, ProductVariantModel, StoreConfigModel } from '@app/models';
-import { CRUDService } from '@app/services';
-import { OrderStatus, OrderType, Orders } from '@app/types';
+import Exception from '@app/exception';
+import { CartModel, OrderModel, ProductVariantModel, StoreConfigModel } from '@app/models';
+import { CRUDService, CartService } from '@app/services';
+import { HttpStatusCode, OrderStatus, OrderType, Orders } from '@app/types';
 import { timeByLocalTimeZone } from '@app/utils';
 
 class OrderService extends CRUDService<Orders> {
@@ -70,19 +71,6 @@ class OrderService extends CRUDService<Orders> {
       );
     }, 0);
 
-    // này t lấy list productIds t for rồi t lấy được cái product item xong t tính ra cái giá
-    // thấy được không m
-    // if (orderRequestBody?.products && orderRequestBody.products.length > 0) {
-    //   for (let i = 0; i < orderRequestBody.products.length; i++) {
-    //     const productVariantItem = await ProductVariantModel.findById(
-    //       orderRequestBody.products[i].product,
-    //     );
-    //     if (productVariantItem?.productItem) {
-    //       subTotal += productVariantItem.productItem.price * orderRequestBody.products[i].quantity!;
-    //     }
-    //   }
-    // }
-
     newOrder = {
       ...newOrder,
       subTotal,
@@ -96,56 +84,53 @@ class OrderService extends CRUDService<Orders> {
   }
 
   //RE-ORDER
-  //   async reorder(orderId: string, customerId: string, req: Request) {
-  //     const orderDetail = await this.getOrderById(orderId).then((res) =>
-  //       res?.depopulate('productsFromCart.product'),
-  //     );
+  async reorder(orderId: string, customerId: string, req: Request) {
+    const orderDetail = await this.model.findById(orderId);
 
-  //     // if (orderDetail && orderDetail.productsFromCart) {
-  //     //   for (let i = 0; i < orderDetail.productsFromCart.length; i++) {
-  //     //     const element = orderDetail.productsFromCart[i];
-  //     //     req.body = element;
-  //     //     // await cartService.addCartItem(customerId, req);
-  //     //   }
-  //     // }
-  //     return orderDetail;
-  //   }
+    if (!orderDetail)
+      throw new Exception(HttpStatusCode.NOT_FOUND, `Not found order item with id ${orderId}`);
 
-  // UPDATE STATUS ORDER
-  //   async updateStatusOrder(status: OrderStatus, orderId: string) {
-  //     const orderDetail = await this.getById(orderId);
+    const productIds = orderDetail.products;
+    if (orderDetail && productIds) {
+      for (const productId of productIds) {
+        req.body = productId;
+        await new CartService(CartModel, 'carts').addOrUpdateCartItem(customerId, req);
+      }
+    }
+    return {
+      message: 'OK',
+    };
+  }
 
-  //     if (!orderDetail) {
-  //       const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found order');
-  //       throw exception;
-  //     }
+  //   UPDATE STATUS ORDER
+  async updateStatusOrder(status: string, orderId: string) {
+    const orderDetail = await this.getById(orderId);
 
-  //     await this.model.findOneAndUpdate({ _id: orderId }, { $set: { statusOrder: status } });
-  //     return {
-  //       message: 'Update status order success',
-  //     };
-  //   }
+    if (!orderDetail) throw new Exception(HttpStatusCode.NOT_FOUND, 'Not found order');
+
+    await this.model.findOneAndUpdate({ _id: orderId }, { $set: { orderStatus: status } });
+    return {
+      message: 'Update status order success',
+    };
+  }
 
   // CANCEL ORDER
-  //   async cancelOrder(orderId: string, reason: string) {
-  //     const orderDetail = await this.getById(orderId);
+  async cancelOrder(orderId: string, reason: string) {
+    const orderDetail = await this.getById(orderId);
 
-  //     if (!orderDetail) {
-  //       const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Not found order');
-  //       throw exception;
-  //     }
+    if (!orderDetail) throw new Exception(HttpStatusCode.NOT_FOUND, 'Not found order');
 
-  //     await this.model.findOneAndUpdate(
-  //       {
-  //         _id: orderId,
-  //       },
-  //       {
-  //         $set: { reasonOrderCancel: reason, statusOrder: OrderStatus.CANCELED },
-  //       },
-  //       { new: true },
-  //     );
-  //     return { message: 'Handling...' };
-  //   }
+    await this.model.findOneAndUpdate(
+      {
+        _id: orderId,
+      },
+      {
+        $set: { reasonCancel: reason, orderStatus: OrderStatus.CANCELED },
+      },
+      { new: true },
+    );
+    return { message: 'Handling...' };
+  }
 }
 
 export default OrderService;

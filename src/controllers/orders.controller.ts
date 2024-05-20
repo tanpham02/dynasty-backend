@@ -52,11 +52,10 @@ const orderController = {
 
   // RE-ORDER
   reorder: async (req: Request, res: Response, next: NextFunction) => {
-    const { orderId } = req.params;
-    const { customerId } = req.query;
+    const { customerId, orderId } = req.query;
     try {
-      //   await orderService.reorder(orderId, customerId?.toString() || '', req);
-      //   res.status(HttpStatusCode.OK).json('Add product in reorder to cart success');
+      const { message } = await orderService.reorder(String(orderId), String(customerId), req);
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }
@@ -64,15 +63,14 @@ const orderController = {
 
   // UPDATE STATUS ORDER
   updateStatusOrder: async (req: Request, res: Response, next: NextFunction) => {
-    const { orderId } = req.params;
-    const { statusOrderRequest } = req.query;
+    const { orderStatus, orderId } = req.query;
 
     try {
-      //   const { message } = await orderService.updateStatusOrder(
-      //     statusOrderRequest as any,
-      //     orderId?.toString() ?? '',
-      //   );
-      //   res.status(HttpStatusCode.OK).json(message);
+      const { message } = await orderService.updateStatusOrder(
+        String(orderStatus),
+        String(orderId),
+      );
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }
@@ -80,14 +78,10 @@ const orderController = {
 
   // CANCEL ORDER
   requestCancelOrder: async (req: Request, res: Response, next: NextFunction) => {
-    const { orderId } = req.params;
-    const { reason } = req.query;
+    const { reason, orderId } = req.query;
     try {
-      //   const { message } = await orderService.cancelOrder(
-      //     orderId?.toString() || '',
-      //     reason?.toString() || '',
-      //   );
-      //   res.status(HttpStatusCode.OK).json(message);
+      const { message } = await orderService.cancelOrder(String(orderId), String(reason));
+      res.status(HttpStatusCode.OK).json(message);
     } catch (error) {
       next(error);
     }
