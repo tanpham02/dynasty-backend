@@ -5,8 +5,12 @@
  *     ProductAttribute:
  *       type: object
  *       required:
- *         - label
+ *         - name
+ *         - categoryId
  *       properties:
+ *         categoryId:
+ *              schema:
+ *                  $ref: '#/components/schemas/Category'
  *         name:
  *           type: string
  *         attributeList:

@@ -11,9 +11,10 @@ const productAttributeService = new ProductAttributeService(
 
 const productAttributeController = {
   // SEARCH ALL
-  searchAll: async (__req: Request, res: Response, next: NextFunction) => {
+  searchAll: async (req: Request, res: Response, next: NextFunction) => {
+    const searchQuery = { ...req.query };
     try {
-      const result = await productAttributeService.findAll();
+      const result = await productAttributeService.findAll(searchQuery);
       res.status(HttpStatusCode.OK).json(result);
     } catch (error: any) {
       next(error);

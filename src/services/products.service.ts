@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request } from 'express';
-import { Model, Schema } from 'mongoose';
+import { Model } from 'mongoose';
 
 import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { CategoryModel, ProductAttributeModel, ProductVariantModel } from '@app/models';
 import { CRUDService } from '@app/services';
-import { Category, HttpStatusCode, Product, ProductVariants } from '@app/types';
-import { comparingObjectId, generateUnsignedSlug, handleUploadFile } from '@app/utils';
+import { HttpStatusCode, Product, ProductVariants } from '@app/types';
+import { generateUnsignedSlug, handleUploadFile } from '@app/utils';
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, serviceName: string) {
@@ -90,32 +90,42 @@ class ProductService extends CRUDService<Product> {
       };
 
       const groupedAttributes = productBodyRequest.productAttributeList.map((attrList) => {
-        const { extendedIds, priceAdjustmentValue = 0 } = attrList;
+        const { extendedIds = [], priceAdjustmentValues = [] } = attrList;
 
         return {
-          extendedDisplayName: mapExtendedIdsToExtendDisplayName(extendedIds).join(' - '),
+          extendedDisplayName:
+            extendedIds && extendedIds.length > 0
+              ? mapExtendedIdsToExtendDisplayName(extendedIds).join(' - ')
+              : undefined,
           extendedIds,
-          priceAdjustmentValue: priceAdjustmentValue,
+          priceAdjustmentValues,
         };
       });
 
-      const productVariants: any[] = groupedAttributes.map((groupedAttribute, index) => ({
-        parentId: newProduct._id,
-        productItem: {
-          name: `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`,
-          description: productBodyRequest.description,
-          information: productBodyRequest.information,
-          price: Number(productBodyRequest.price) + groupedAttribute.priceAdjustmentValue,
-          image: productBodyRequest?.image,
-          images: productBodyRequest?.images,
-          types: productBodyRequest?.types,
-          visible: productBodyRequest?.visible,
-          productAttributeList: productBodyRequest.productAttributeList![index],
-          slug: generateUnsignedSlug(
-            `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`,
-          ),
-        },
-      }));
+      const productVariants: any[] = groupedAttributes.map((groupedAttribute, index) => {
+        const priceAdjustment =
+          groupedAttribute.priceAdjustmentValues.length > 0
+            ? groupedAttribute.priceAdjustmentValues.reduce((acc, next) => acc + (next ?? 0), 0)
+            : 0;
+        const productVariantName = groupedAttribute.extendedDisplayName
+          ? `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`
+          : productBodyRequest.name;
+        return {
+          parentId: newProduct._id,
+          productItem: {
+            name: productVariantName,
+            description: productBodyRequest.description,
+            information: productBodyRequest.information,
+            price: Number(productBodyRequest.price) + priceAdjustment,
+            image: productBodyRequest?.image,
+            images: productBodyRequest?.images,
+            types: productBodyRequest?.types,
+            visible: productBodyRequest?.visible,
+            productAttributeList: productBodyRequest.productAttributeList![index],
+            slug: generateUnsignedSlug(productVariantName),
+          },
+        };
+      });
 
       const createNewProductVariant = async (productVariant: ProductVariants) => {
         const newProductVariant = new ProductVariantModel(productVariant);
@@ -190,12 +200,17 @@ class ProductService extends CRUDService<Product> {
     }
 
     const calculatePriceProductVariant = async (productVariant: ProductVariants) => {
+      const priceAdjustment = productVariant.productItem!.productAttributeList![0]
+        .priceAdjustmentValues
+        ? productVariant.productItem!.productAttributeList![0].priceAdjustmentValues.reduce(
+            (acc, next) => acc + (next ?? 0),
+            0,
+          )
+        : 0;
       await productVariant.updateOne(
         {
           $set: {
-            'productItem.price':
-              productBodyRequest.price +
-              (productVariant.productItem!.productAttributeList![0].priceAdjustmentValue || 0),
+            'productItem.price': Number(productBodyRequest.price) + priceAdjustment,
           },
         },
         { new: true },
@@ -225,30 +240,40 @@ class ProductService extends CRUDService<Product> {
         };
 
         const groupedAttributes = productBodyRequest.productAttributeList.map((attrList) => {
-          const { extendedIds, priceAdjustmentValue = 0 } = attrList;
+          const { extendedIds = [], priceAdjustmentValues = [] } = attrList;
 
           return {
-            extendedDisplayName: mapExtendedIdsToExtendDisplayName(extendedIds).join(' - '),
+            extendedDisplayName:
+              extendedIds && extendedIds.length > 0
+                ? mapExtendedIdsToExtendDisplayName(extendedIds).join(' - ')
+                : undefined,
             extendedIds,
-            priceAdjustmentValue: priceAdjustmentValue,
+            priceAdjustmentValues,
           };
         });
 
-        const productVariants: any[] = groupedAttributes.map((groupedAttribute, index) => ({
-          parentId: id,
-          productItem: {
-            name: `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`,
-            description: productBodyRequest.description,
-            information: productBodyRequest.information,
-            price: Number(productBodyRequest.price) + groupedAttribute.priceAdjustmentValue,
-            types: productBodyRequest?.types,
-            visible: productBodyRequest?.visible,
-            productAttributeList: [],
-            slug: generateUnsignedSlug(
-              `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`,
-            ),
-          },
-        }));
+        const productVariants: any[] = groupedAttributes.map((groupedAttribute, index) => {
+          const priceAdjustment =
+            groupedAttribute.priceAdjustmentValues.length > 0
+              ? groupedAttribute.priceAdjustmentValues.reduce((acc, next) => acc + (next ?? 0), 0)
+              : 0;
+          const productVariantName = groupedAttribute.extendedDisplayName
+            ? `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`
+            : productBodyRequest.name;
+          return {
+            parentId: id,
+            productItem: {
+              name: productVariantName,
+              description: productBodyRequest.description,
+              information: productBodyRequest.information,
+              price: Number(productBodyRequest.price) + priceAdjustment,
+              types: productBodyRequest?.types,
+              visible: productBodyRequest?.visible,
+              productAttributeList: [],
+              slug: generateUnsignedSlug(productVariantName),
+            },
+          };
+        });
 
         const createNewProductVariant = async (productVariant: ProductVariants) => {
           const newProductVariant = new ProductVariantModel(productVariant);

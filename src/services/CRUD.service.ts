@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { Request } from 'express';
 import { Document, Model } from 'mongoose';
 
 import Exception from '@app/exception';
-import { HttpStatusCode } from '@app/types';
-import { Filter, Params } from '@app/types/common.types';
-import { Request } from 'express';
+import { Filter, HttpStatusCode, Params } from '@app/types';
 
 class CRUDService<T extends Document> {
   protected model: Model<T>;
@@ -15,8 +14,10 @@ class CRUDService<T extends Document> {
   }
 
   // FIND ALL
-  async findAll() {
-    const getAll = await this.model.find();
+  async findAll(searchQuery?: Record<string, any>) {
+    const getAll = await this.model.find(
+      searchQuery && Object.keys(searchQuery).length > 0 ? searchQuery : ({} as any),
+    );
     return getAll;
   }
 

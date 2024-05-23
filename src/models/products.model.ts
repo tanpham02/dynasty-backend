@@ -53,8 +53,8 @@ const ProductSchema = new Schema<Product>(
         extendedIds: {
           type: [String],
         },
-        priceAdjustmentValue: {
-          type: Number,
+        priceAdjustmentValues: {
+          type: [Number],
         },
       },
     ],

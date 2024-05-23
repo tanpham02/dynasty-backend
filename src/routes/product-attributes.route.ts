@@ -9,7 +9,13 @@ const router = express.Router();
  * '/api/products/attributes/search-all':
  *  get:
  *     tags: [Product Attributes]
- *     summary: Search all
+ *     summary: Search all by category id
+ *     parameters:
+ *       - in: query
+ *         name: categoryId
+ *         schema:
+ *           type: string
+ *         required: true
  *     responses:
  *       200:
  *         description: OK

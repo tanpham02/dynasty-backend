@@ -18,7 +18,7 @@
  *                  _id:
  *                     type: string
  *                  product:
- *                     $ref: '#/components/schema/Products'
+ *                     $ref: '#/components/schemas/Products'
  *                  note:
  *                     type: string
  *                  quantity:

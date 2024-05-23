@@ -4,7 +4,8 @@ interface ProductAttributeItem extends BaseModel {
   label?: string;
 }
 interface ProductAttribute extends BaseModel {
-  name?: string;
+  categoryId: string;
+  name: string;
   attributeList?: ProductAttributeItem[];
 }
 

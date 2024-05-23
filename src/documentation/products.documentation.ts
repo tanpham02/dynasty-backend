@@ -51,8 +51,10 @@
  *                   type: array
  *                   items:
  *                      type: string
- *                priceAdjustmentValue:
- *                   type: number
+ *                priceAdjustmentValues:
+ *                   type: array
+ *                   items:
+ *                      type: number
  *         productsVariant:
  *           type: array
  *           items:
