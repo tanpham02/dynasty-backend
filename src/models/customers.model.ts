@@ -1,15 +1,11 @@
-import moment from 'moment';
-import 'moment-timezone';
 import { Schema, model } from 'mongoose';
 
 import { CustomerType, Customers, Status } from '@app/types';
-import { TIME_ZONE_VIET_NAME } from '@app/utils/date.util';
 
 const CustomerSchema = new Schema<Customers>(
   {
     phoneNumber: {
       type: String,
-      required: true,
     },
     avatar: {
       type: String,
@@ -50,14 +46,7 @@ const CustomerSchema = new Schema<Customers>(
   },
   {
     versionKey: false,
-    timestamps: {
-      currentTime() {
-        const now = new Date();
-        const strictUTC = moment(now).utc(true);
-        const dayAdjustment = strictUTC.clone().tz(TIME_ZONE_VIET_NAME);
-        return Number(dayAdjustment);
-      },
-    },
+    timestamps: true,
   },
 );
 
