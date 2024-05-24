@@ -14,7 +14,7 @@ import {
   ProductFavoriteModel,
   StaffModel,
 } from '@app/models';
-import { GoogleService, SMSService, StaffService } from '@app/services';
+import { CustomerService, GoogleService, SMSService, StaffService } from '@app/services';
 import { CustomerType, Customers, HttpStatusCode, MODE, Staff } from '@app/types';
 import { JWT, generateOtp, hashPassword } from '@app/utils';
 
@@ -180,12 +180,12 @@ class AuthService {
   async loginWithGoogleAccount(req: Request, res: Response, next: NextFunction) {
     const { accessToken } = req.body;
 
-    const staffService = new StaffService(StaffModel, 'staff');
+    const customerService = new CustomerService(CustomerModel, 'customer');
 
     const userInfo = await new GoogleService().getCustomerInfo(accessToken, next);
 
     if (userInfo) {
-      const customerByEmail = await staffService.getByEmail(userInfo.email);
+      const customerByEmail = await customerService.getByEmail(userInfo.email);
       if (!customerByEmail) {
         const pwAfterHash = await hashPassword(userInfo.email);
         const newCustomer = new CustomerModel({
