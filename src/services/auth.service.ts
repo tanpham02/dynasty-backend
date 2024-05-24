@@ -178,11 +178,11 @@ class AuthService {
 
   // LOGIN WITH GOOGLE ACCOUNT
   async loginWithGoogleAccount(req: Request, res: Response, next: NextFunction) {
-    const { accessToken } = req.body;
+    const { accessToken: accessTokenBody } = req.body;
 
     const customerService = new CustomerService(CustomerModel, 'customer');
 
-    const userInfo = await new GoogleService().getCustomerInfo(accessToken, next);
+    const userInfo = await new GoogleService().getCustomerInfo(accessTokenBody, next);
 
     if (userInfo) {
       const customerByEmail = await customerService.getByEmail(userInfo.email);
