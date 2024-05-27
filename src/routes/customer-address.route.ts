@@ -9,8 +9,6 @@ const router = Router();
  * @swagger
  * '/api/customers/customer-address/{customerId}':
  *  get:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers Address]
  *     summary: Find by id
  *     parameters:
@@ -30,14 +28,12 @@ const router = Router();
  */
 
 // GET CUSTOMER ADDRESS BY ID
-router.get('/:customerId', verifyToken, customerAddressController.getCustomerAddressByCustomerId);
+router.get('/:customerId', customerAddressController.getCustomerAddressByCustomerId);
 
 /**
  * @swagger
  * '/api/customers/customer-address/{addressItemId}':
  *  get:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers Address]
  *     summary: Get customer address item
  *     parameters:
@@ -56,14 +52,12 @@ router.get('/:customerId', verifyToken, customerAddressController.getCustomerAdd
  */
 
 // GET CUSTOMER ADDRESS ITEM
-router.get('/:addressItemId', verifyToken, customerAddressController.getCustomerAddressItem);
+router.get('/:addressItemId', customerAddressController.getCustomerAddressItem);
 
 /**
  * @swagger
  * '/api/customers/customer-address':
  *  post:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers Address]
  *     summary: Add customer address item
  *     requestBody:
@@ -82,14 +76,12 @@ router.get('/:addressItemId', verifyToken, customerAddressController.getCustomer
  */
 
 // ADD CUSTOMER ADDRESS ITEM
-router.post('/', verifyToken, customerAddressController.addCustomerAddressItem);
+router.post('/', customerAddressController.addCustomerAddressItem);
 
 /**
  * @swagger
  * '/api/customers/customer-address/{addressItemId}':
  *  patch:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers Address]
  *     summary: Update customer address item
  *     parameters:
@@ -115,14 +107,12 @@ router.post('/', verifyToken, customerAddressController.addCustomerAddressItem);
  */
 
 // UPDATE CUSTOMER ADDRESS ITEM
-router.patch('/:addressItemId', verifyToken, customerAddressController.updateCustomerAddressItem);
+router.patch('/:addressItemId', customerAddressController.updateCustomerAddressItem);
 
 /**
  * @swagger
  * '/api/customers/customer-address':
  *  delete:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers Address]
  *     summary: Delete item address
  *     parameters:
@@ -149,6 +139,6 @@ router.patch('/:addressItemId', verifyToken, customerAddressController.updateCus
  */
 
 // DELETE CUSTOMER ADDRESS ITEM
-router.delete('/', verifyToken, customerAddressController.deleteCustomerAddressItem);
+router.delete('/', customerAddressController.deleteCustomerAddressItem);
 
 export default router;

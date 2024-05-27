@@ -45,8 +45,6 @@ router.get('/search', customerController.search);
  * @swagger
  * '/api/customers/{id}':
  *  get:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers]
  *     summary: Find by id
  *     parameters:
@@ -66,14 +64,12 @@ router.get('/search', customerController.search);
  */
 
 // GET BY ID
-router.get('/:id', verifyToken, customerController.getById);
+router.get('/:id', customerController.getById);
 
 /**
  * @swagger
  * '/api/customers/customer-info':
  *  post:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers]
  *     summary: Find by access token
  *     requestBody:
@@ -95,14 +91,12 @@ router.get('/:id', verifyToken, customerController.getById);
  */
 
 // GET BY ACCESS TOKEN
-router.post('/customer-info', verifyToken, customerController.getCustomerInfo);
+router.post('/customer-info', customerController.getCustomerInfo);
 
 /**
  * @swagger
  * '/api/customers/{id}':
  *  patch:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers]
  *     summary: Update customer
  *     parameters:
@@ -133,19 +127,12 @@ router.post('/customer-info', verifyToken, customerController.getCustomerInfo);
  */
 
 // UPDATE
-router.patch(
-  '/:id',
-  verifyToken,
-  uploadFile('customers').single('file'),
-  customerController.update,
-);
+router.patch('/:id', uploadFile('customers').single('file'), customerController.update);
 
 /**
  * @swagger
  * '/api/customers':
  *  delete:
- *     security:
- *       - bearerAuth: []
  *     tags: [Customers]
  *     summary: Delete customer
  *     parameters:
@@ -165,6 +152,6 @@ router.patch(
  */
 
 // DELETE CUSTOMER
-router.delete('/', verifyToken, customerController.delete);
+router.delete('/', customerController.delete);
 
 export default router;
