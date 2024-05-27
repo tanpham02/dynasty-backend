@@ -97,6 +97,7 @@ class ProductService extends CRUDService<Product> {
             extendedIds && extendedIds.length > 0
               ? mapExtendedIdsToExtendDisplayName(extendedIds).join(' - ')
               : undefined,
+          extendedNames: mapExtendedIdsToExtendDisplayName(extendedIds),
           extendedIds,
           priceAdjustmentValues,
         };
@@ -247,6 +248,7 @@ class ProductService extends CRUDService<Product> {
               extendedIds && extendedIds.length > 0
                 ? mapExtendedIdsToExtendDisplayName(extendedIds).join(' - ')
                 : undefined,
+            extendedNames: mapExtendedIdsToExtendDisplayName(extendedIds),
             extendedIds,
             priceAdjustmentValues,
           };

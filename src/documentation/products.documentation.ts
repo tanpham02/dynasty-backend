@@ -51,6 +51,10 @@
  *                   type: array
  *                   items:
  *                      type: string
+ *                extendedNames:
+ *                   type: array
+ *                   items:
+ *                      type: string
  *                priceAdjustmentValues:
  *                   type: array
  *                   items:

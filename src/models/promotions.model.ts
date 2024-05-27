@@ -14,7 +14,6 @@ const PromotionSchemaList = new Schema<PromotionsList>(
       type: Schema.Types.ObjectId,
       ref: 'Product',
     },
-
     productDonatedId: {
       type: Schema.Types.ObjectId,
       ref: 'Product',

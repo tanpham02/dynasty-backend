@@ -12,7 +12,9 @@ enum ProductType {
 
 interface ProductAttributeItem {
   extendedIds?: string[];
+  extendedNames?: string[];
   priceAdjustmentValues?: number[];
+
 }
 
 interface Product extends BaseModel {

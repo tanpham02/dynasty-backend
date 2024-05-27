@@ -53,6 +53,9 @@ const ProductSchema = new Schema<Product>(
         extendedIds: {
           type: [String],
         },
+        extendedNames: {
+          type: [String],
+        },
         priceAdjustmentValues: {
           type: [Number],
         },
