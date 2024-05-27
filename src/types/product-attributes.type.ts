@@ -1,12 +1,12 @@
 import { BaseModel } from '@app/types';
 
-interface ProductAttributeItem extends BaseModel {
+interface AttributeItem extends BaseModel {
   label?: string;
 }
 interface ProductAttribute extends BaseModel {
   categoryId: string;
   name: string;
-  attributeList?: ProductAttributeItem[];
+  attributeList?: AttributeItem[];
 }
 
-export { ProductAttribute };
+export { ProductAttribute, AttributeItem };

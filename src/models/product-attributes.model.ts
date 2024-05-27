@@ -1,9 +1,14 @@
 import { Schema, model } from 'mongoose';
-import { ProductAttribute } from '../types/product-attributes.type';
+
+import { ProductAttribute } from '@app/types';
 
 export const ProductAttributeSchema = new Schema<ProductAttribute>(
   {
     name: {
+      type: String,
+      required: true,
+    },
+    categoryId: {
       type: String,
       required: true,
     },
