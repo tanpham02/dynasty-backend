@@ -63,82 +63,94 @@ class ProductService extends CRUDService<Product> {
       productBodyRequest.images = [fileUpload];
     }
 
+    if (!productBodyRequest?.productAttributeList) {
+      productBodyRequest.haveProductVariant = false;
+    }
+
     const newProduct = new this.model({
       ...productBodyRequest,
       slug: generateUnsignedSlug(productBodyRequest?.name),
     });
 
-    if (
-      productBodyRequest?.productAttributeList &&
-      productBodyRequest.productAttributeList.length > 0
-    ) {
-      const attributes = await ProductAttributeModel.find();
+    const attributes = await ProductAttributeModel.find();
 
-      const mapExtendedIdsToExtendDisplayName = (extendedIds: string[]) => {
-        const extendedName: string[] = [];
-        extendedIds.map((id) => {
-          for (const category of attributes) {
-            for (const attribute of category.attributeList!) {
-              if (attribute._id?.toString() === id) {
-                extendedName.push(attribute.label!);
-              }
+    const mapExtendedIdsToExtendDisplayName = (extendedIds: string[]) => {
+      const extendedName: string[] = [];
+      extendedIds.map((id) => {
+        for (const category of attributes) {
+          for (const attribute of category.attributeList!) {
+            if (attribute._id?.toString() === id) {
+              extendedName.push(attribute.label!);
             }
           }
-          return null;
-        });
-        return extendedName.filter((item) => item !== null);
-      };
-
-      const groupedAttributes = productBodyRequest.productAttributeList.map((attrList) => {
-        const { extendedIds = [], priceAdjustmentValues = [] } = attrList;
-
-        return {
-          extendedDisplayName:
-            extendedIds && extendedIds.length > 0
-              ? mapExtendedIdsToExtendDisplayName(extendedIds).join(' - ')
-              : undefined,
-          extendedNames: mapExtendedIdsToExtendDisplayName(extendedIds),
-          extendedIds,
-          priceAdjustmentValues,
-        };
+        }
+        return null;
       });
+      return extendedName.filter((item) => item !== null);
+    };
 
-      const productVariants: any[] = groupedAttributes.map((groupedAttribute, index) => {
-        const priceAdjustment =
-          groupedAttribute.priceAdjustmentValues.length > 0
-            ? groupedAttribute.priceAdjustmentValues.reduce((acc, next) => acc + (next ?? 0), 0)
-            : 0;
-        const productVariantName = groupedAttribute.extendedDisplayName
-          ? `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`
-          : productBodyRequest.name;
-        return {
-          parentId: newProduct._id,
-          productItem: {
-            name: productVariantName,
-            description: productBodyRequest.description,
-            information: productBodyRequest.information,
-            price: Number(productBodyRequest.price) + priceAdjustment,
-            image: productBodyRequest?.image,
-            images: productBodyRequest?.images,
-            types: productBodyRequest?.types,
-            visible: productBodyRequest?.visible,
-            productAttributeList: productBodyRequest.productAttributeList![index],
-            slug: generateUnsignedSlug(productVariantName),
-          },
-        };
-      });
+    const groupedAttributes: any[] = productBodyRequest.productAttributeList
+      ? productBodyRequest.productAttributeList?.map((attrList) => {
+          const { extendedIds = [], priceAdjustmentValues = [] } = attrList;
 
-      const createNewProductVariant = async (productVariant: ProductVariants) => {
-        const newProductVariant = new ProductVariantModel(productVariant);
-        productVariantListIds.push(newProductVariant._id);
-        await newProductVariant.save();
+          return {
+            extendedDisplayName:
+              extendedIds && extendedIds.length > 0
+                ? mapExtendedIdsToExtendDisplayName(extendedIds).join(' - ')
+                : undefined,
+            extendedNames: mapExtendedIdsToExtendDisplayName(extendedIds),
+            extendedIds,
+            priceAdjustmentValues,
+          };
+        })
+      : [{}];
+
+    const productVariants: any = groupedAttributes.map((groupedAttribute, index) => {
+      const priceAdjustment =
+        groupedAttribute?.priceAdjustmentValues?.length > 0
+          ? groupedAttribute.priceAdjustmentValues.reduce(
+              (acc: any, next: any) => acc + (next ?? 0),
+              0,
+            )
+          : 0;
+      const productVariantName = groupedAttribute?.extendedDisplayName
+        ? `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`
+        : productBodyRequest.name;
+      return {
+        parentId: newProduct._id,
+        productItem: {
+          name: productVariantName,
+          description: productBodyRequest?.description,
+          information: productBodyRequest?.information,
+          price: Number(productBodyRequest.price) + priceAdjustment,
+          image: productBodyRequest?.image,
+          images: productBodyRequest?.images,
+          types: productBodyRequest?.types,
+          visible: productBodyRequest?.visible || false,
+          productAttributeList:
+            productBodyRequest?.productAttributeList &&
+            productBodyRequest.productAttributeList?.length > 0 &&
+            Object.keys(productBodyRequest.productAttributeList[0]).length > 0 &&
+            productBodyRequest.productAttributeList[0].extendedIds!.length > 0
+              ? productBodyRequest.productAttributeList[index]
+              : [],
+          slug: generateUnsignedSlug(productVariantName),
+          haveProductVariant: productBodyRequest.haveProductVariant,
+        },
       };
+    });
 
-      for (let i = 0; i < productVariants.length; i++) {
-        createNewProductVariant(productVariants[i]);
-      }
-      newProduct.productsVariant = productVariantListIds;
+    const createNewProductVariant = async (productVariant: ProductVariants) => {
+      const newProductVariant = new ProductVariantModel(productVariant);
+      newProductVariant.productItem?.productAttributeList?.push(newProductVariant._id as any);
+      productVariantListIds.push(newProductVariant._id);
+      await newProductVariant.save();
+    };
+
+    for (let i = 0; i < productVariants.length; i++) {
+      createNewProductVariant(productVariants[i]);
     }
+    newProduct.productsVariant = productVariantListIds;
 
     const categoryId = productBodyRequest?.categoryId;
 
@@ -221,7 +233,8 @@ class ProductService extends CRUDService<Product> {
     if (productBodyRequest?.price) {
       if (
         productBodyRequest?.productAttributeList &&
-        productBodyRequest.productAttributeList.length > 0
+        productBodyRequest.productAttributeList.length > 0 &&
+        productBodyRequest.haveProductVariant
       ) {
         const attributes = await ProductAttributeModel.find();
 
@@ -256,12 +269,16 @@ class ProductService extends CRUDService<Product> {
 
         const productVariants: any[] = groupedAttributes.map((groupedAttribute, index) => {
           const priceAdjustment =
-            groupedAttribute.priceAdjustmentValues.length > 0
-              ? groupedAttribute.priceAdjustmentValues.reduce((acc, next) => acc + (next ?? 0), 0)
+            groupedAttribute?.priceAdjustmentValues?.length > 0
+              ? groupedAttribute.priceAdjustmentValues.reduce(
+                  (acc: any, next: any) => acc + (next ?? 0),
+                  0,
+                )
               : 0;
-          const productVariantName = groupedAttribute.extendedDisplayName
+          const productVariantName = groupedAttribute?.extendedDisplayName
             ? `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`
             : productBodyRequest.name;
+
           return {
             parentId: id,
             productItem: {
@@ -273,6 +290,7 @@ class ProductService extends CRUDService<Product> {
               visible: productBodyRequest?.visible,
               productAttributeList: [],
               slug: generateUnsignedSlug(productVariantName),
+              haveProductVariant: productBodyRequest.haveProductVariant,
             },
           };
         });

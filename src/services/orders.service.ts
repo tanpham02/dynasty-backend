@@ -61,7 +61,7 @@ class OrderService extends CRUDService<Orders> {
 
     const productVariants = await ProductVariantModel.find({
       _id: {
-        $id: productVariantIds,
+        $in: productVariantIds,
       },
     });
 

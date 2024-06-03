@@ -65,4 +65,6 @@
  *              type: string
  *         visible:
  *           type: boolean
+ *         haveProductVariant:
+ *           type: boolean
  */

@@ -70,6 +70,10 @@ const ProductSchema = new Schema<Product>(
     slug: {
       type: String,
     },
+    haveProductVariant: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     versionKey: false,

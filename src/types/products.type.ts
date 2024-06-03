@@ -14,7 +14,6 @@ interface ProductAttributeItem {
   extendedIds?: string[];
   extendedNames?: string[];
   priceAdjustmentValues?: number[];
-
 }
 
 interface Product extends BaseModel {
@@ -32,6 +31,7 @@ interface Product extends BaseModel {
   visible?: boolean;
   productAttributeList?: ProductAttributeItem[];
   productsVariant?: string[];
+  haveProductVariant?: boolean;
 }
 
 export { Product, ProductAttributeItem, ProductType };
