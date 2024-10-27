@@ -36,4 +36,12 @@ const FIELDS_NAME = {
 };
 export const INTERNAL_SERVER_ERROR_MSG = 'Internal Server Error';
 
+export enum BROAD_CAST_CHANNEL_KEYS {
+  SOCKET_SERVICE = 'SOCKET_SERVICE',
+}
+
+export enum EVENT_KEYS {
+  CREATE_ORDER = 'order:create',
+}
+
 export { FIELDS_NAME, SALT, MAILER, TYPE_SORT, KEY_SORT };

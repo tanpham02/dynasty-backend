@@ -1,20 +1,19 @@
 import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import cors, { CorsOptions } from 'cors';
 import express, { Application } from 'express';
 import morgan from 'morgan';
+import helmet from 'helmet';
 
 import { errorHandler } from '@app/middlewares';
 import { configApp } from '.';
 
 const { FRONT_END_URL } = configApp();
 
-const configServer = (app: Application) => {
+const configServer = (app: Application, corsConfig: CorsOptions) => {
   // NOTE: CORS
-  const corsConfig = {
-    origin: [FRONT_END_URL, 'http://localhost:1311'],
-    optionsSuccessStatus: 200,
-  };
   app.use(cors(corsConfig));
+
+  app.use(helmet());
 
   // NOTE: PARSE REQUEST BODY
   app.use(express.json()); // (JSON OBJECT)

@@ -63,9 +63,7 @@ class ProductService extends CRUDService<Product> {
       productBodyRequest.images = [fileUpload];
     }
 
-    if (!productBodyRequest?.productAttributeList) {
-      productBodyRequest.haveProductVariant = false;
-    }
+    if (!productBodyRequest?.productAttributeList) productBodyRequest.haveProductVariant = false;
 
     const newProduct = new this.model({
       ...productBodyRequest,
@@ -212,9 +210,12 @@ class ProductService extends CRUDService<Product> {
       );
     }
 
+    if (!productBodyRequest?.productAttributeList) productBodyRequest.haveProductVariant = false;
+    else productBodyRequest.haveProductVariant = true;
+
     const calculatePriceProductVariant = async (productVariant: ProductVariants) => {
       const priceAdjustment = productVariant.productItem!.productAttributeList![0]
-        .priceAdjustmentValues
+        ?.priceAdjustmentValues
         ? productVariant.productItem!.productAttributeList![0].priceAdjustmentValues.reduce(
             (acc, next) => acc + (next ?? 0),
             0,
@@ -313,6 +314,7 @@ class ProductService extends CRUDService<Product> {
             calculatePriceProductVariant(productVariant);
           }
         }
+        productBodyRequest.productAttributeList = [];
       }
     }
 

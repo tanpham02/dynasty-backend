@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
 
-import { FIELDS_NAME } from '@app/constants';
 import { BannerModel } from '@app/models';
 import { BannerService } from '@app/services';
 import { HttpStatusCode, Params } from '@app/types';

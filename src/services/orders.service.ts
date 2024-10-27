@@ -3,6 +3,8 @@
 import { Request } from 'express';
 import { Model } from 'mongoose';
 
+import { EVENT_KEYS } from '@app/constants';
+import { EventBus } from '@app/events';
 import Exception from '@app/exception';
 import { CartModel, OrderModel, ProductVariantModel, StoreConfigModel } from '@app/models';
 import { CRUDService, CartService } from '@app/services';
@@ -80,7 +82,9 @@ class OrderService extends CRUDService<Orders> {
     };
 
     const newOrderModel = new OrderModel(newOrder);
-    return await newOrderModel.save();
+    const order = await newOrderModel.save();
+    EventBus.emit(EVENT_KEYS.CREATE_ORDER, order);
+    return order;
   }
 
   //RE-ORDER
@@ -102,7 +106,7 @@ class OrderService extends CRUDService<Orders> {
     };
   }
 
-  //   UPDATE STATUS ORDER
+  // UPDATE STATUS ORDER
   async updateStatusOrder(status: string, orderId: string) {
     const orderDetail = await this.getById(orderId);
 

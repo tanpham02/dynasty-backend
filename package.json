@@ -23,7 +23,8 @@
     "@app/routes": "./src/routes",
     "@app/services": "./src/services",
     "@app/types": "./src/types",
-    "@app/utils": "./src/utils"
+    "@app/utils": "./src/utils",
+    "@app/events": "./src/events"
   },
   "license": "MIT",
   "dependencies": {
@@ -39,6 +40,7 @@
     "express": "^4.18.2",
     "follow-redirects": "^1.15.6",
     "google-auth-library": "^9.7.0",
+    "helmet": "^8.0.0",
     "https": "^1.0.0",
     "iter-ops": "^3.1.1",
     "jsonwebtoken": "^9.0.1",
@@ -50,6 +52,7 @@
     "mongoose": "^7.4.3",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.11",
+    "socket.io": "^4.8.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
   },
