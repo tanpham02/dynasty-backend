@@ -1,4 +1,5 @@
 import { StaffModel } from '@app/models';
+import { hashPassword } from '@app/utils';
 
 const seedData = [
   {
@@ -11,5 +12,14 @@ const seedData = [
 ];
 
 export const staffSeedData = async () => {
-  await StaffModel.insertMany(seedData);
+  const newSeedData = await Promise.all(
+    seedData.map(async (item) => {
+      if (Object.keys(item).some((item) => item === 'password')) {
+        item.password = await hashPassword(item.password);
+      }
+      return item;
+    }),
+  );
+
+  await StaffModel.insertMany(newSeedData);
 };
