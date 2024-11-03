@@ -6,6 +6,7 @@ const StaffSchema = new Schema<Staff>(
   {
     username: {
       type: String,
+      unique: true,
       required: true,
     },
     birthday: {
@@ -24,6 +25,7 @@ const StaffSchema = new Schema<Staff>(
     email: {
       type: String,
       required: true,
+      unique: true,
     },
     location: {
       type: String,

@@ -4,7 +4,7 @@ import 'module-alias/register';
 import { CorsOptions } from 'cors';
 
 import { configApp, configServer, configSwagger } from '@app/configs';
-import { connectDatabase, connectSocketIO } from '@app/connection';
+import { ConnectDatabase, SocketIO } from '@app/connection';
 import { routesMapping } from './routes';
 
 const app: Application = express();
@@ -17,10 +17,10 @@ const corsConfig: CorsOptions = {
   methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
 };
 const server = http.createServer(app);
+export const socketInstance = new SocketIO(server, corsConfig);
 
 // CONNECTION
-connectDatabase();
-connectSocketIO(server, corsConfig);
+new ConnectDatabase();
 
 // CONFIG SERVER
 configServer(app, corsConfig);

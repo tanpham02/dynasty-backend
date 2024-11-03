@@ -1,2 +1,2 @@
-export { default as connectDatabase } from './database';
-export { default as connectSocketIO } from './socketIO';
+export { default as ConnectDatabase } from './database';
+export { default as SocketIO } from './socketIO';

@@ -3,8 +3,6 @@
 import { Request } from 'express';
 import { Model } from 'mongoose';
 
-import { EVENT_KEYS } from '@app/constants';
-import { EventBus } from '@app/events';
 import Exception from '@app/exception';
 import { CartModel, OrderModel, ProductVariantModel, StoreConfigModel } from '@app/models';
 import { CRUDService, CartService } from '@app/services';
@@ -83,7 +81,6 @@ class OrderService extends CRUDService<Orders> {
 
     const newOrderModel = new OrderModel(newOrder);
     const order = await newOrderModel.save();
-    EventBus.emit(EVENT_KEYS.CREATE_ORDER, order);
     return order;
   }
 

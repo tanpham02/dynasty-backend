@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
 
+import { EVENT_KEYS } from '@app/constants';
 import { BannerModel } from '@app/models';
 import { BannerService } from '@app/services';
 import { HttpStatusCode, Params } from '@app/types';
+import { socketInstance } from '..';
 
 const bannerService = new BannerService(BannerModel, 'banner');
 
@@ -12,6 +14,7 @@ const bannerController = {
   searchAll: async (__req: Request, res: Response, next: NextFunction) => {
     try {
       const banner = await bannerService.findAll();
+      socketInstance.pushNotification(EVENT_KEYS.CREATE_ORDER, { name: 'Ryan' });
       res.status(HttpStatusCode.OK).json(banner);
     } catch (error: any) {
       next(error);
