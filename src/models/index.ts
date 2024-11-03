@@ -16,3 +16,4 @@ export { default as StaffModel } from './staff.model';
 export { default as VoucherModel } from './vouchers.model';
 export { default as StoreConfigModel } from './store-config.model';
 export { default as StoreSystemModel } from './store-system.model';
+export { default as NotificationsModel } from './notifications.model';
