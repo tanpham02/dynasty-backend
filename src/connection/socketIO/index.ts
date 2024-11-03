@@ -1,22 +1,37 @@
-import { Server } from 'socket.io';
 import { CorsOptions } from 'cors';
+import { Server } from 'socket.io';
 
 import { EVENT_KEYS } from '@app/constants';
-import { EventBus } from '@app/events';
+import { Server as HttpServer, IncomingMessage, ServerResponse } from 'http';
 
-const connectSocketIO = (server: any, corsConfig: CorsOptions) => {
-  const io = new Server(server, {
-    cors: corsConfig,
-  });
+type ServerCustomType = HttpServer<typeof IncomingMessage, typeof ServerResponse>;
 
-  io.on('connection', (socket) => {
-    console.log(`Socket server connected with id: ${socket.id}`);
-    io.on('disconnect', () => console.log('Socket server disconnected'));
-  });
+class SocketIO {
+  private readonly server: ServerCustomType;
+  private readonly corsConfig: CorsOptions;
+  private readonly io: Server;
 
-  EventBus.on(EVENT_KEYS.CREATE_ORDER, (data) => {
-    io.emit(EVENT_KEYS.CREATE_ORDER, data);
-  });
-};
+  constructor(server: ServerCustomType, corsConfig: CorsOptions) {
+    this.server = server;
+    this.corsConfig = corsConfig;
+    this.io = new Server(this.server, {
+      cors: this.corsConfig,
+    });
 
-export default connectSocketIO;
+    this.connection();
+  }
+
+  connection() {
+    this.io.on('connection', (socket) => {
+      console.log(`Socket server connected with id: ${socket.id}`);
+
+      socket.on('disconnect', () => console.log('Socket server disconnected'));
+    });
+  }
+
+  pushNotification(eventKey: EVENT_KEYS, data: any) {
+    this.io.emit(eventKey, data);
+  }
+}
+
+export default SocketIO;
