@@ -1,15 +1,15 @@
 version: '3.7'
 services:
-    dynasty_ws:
+    dynasty-svc:
         platform: linux/amd64
-        image: phamvantan/dynasty-ws:1.0.0
-        container_name: dynasty_ws
+        image: phamvantan/dynasty-svc:1.0.0
+        container_name: dynasty-svc
         restart: always
         build:
             context: .
             dockerfile: Dockerfile-production
         ports:
-            - 2000:2000
+            - 2002:2002
         env_file:
             - .env.production
         networks:
@@ -20,8 +20,3 @@ services:
 networks:
     dynasty_network:
         external: true
-
-# volumes:
-#     mongo-db-data:
-#         name: mongo-db-data
-#         driver: local
