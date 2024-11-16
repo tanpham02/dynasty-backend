@@ -20,6 +20,7 @@ interface Config {
   REDIRECT_URL: string;
   INFO_BIP_API_KEY: string;
   INFO_BIP_HOST: string;
+  SWAGGER_ENDPOINT: string;
 }
 
 const configApp = () => {
@@ -55,6 +56,7 @@ const configApp = () => {
     REDIRECT_URL: process.env.REDIRECT_URL || '',
     INFO_BIP_API_KEY: process.env.INFO_BIP_API_KEY || '',
     INFO_BIP_HOST: process.env.INFO_BIP_HOST || '',
+    SWAGGER_ENDPOINT: process.env.SWAGGER_ENDPOINT || '',
   };
 
   return resultConfig;

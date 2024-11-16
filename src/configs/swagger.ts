@@ -5,6 +5,8 @@ import swaggerUi from 'swagger-ui-express';
 import { configApp } from '@app/configs';
 import { MODE } from '@app/types';
 
+const { APP_URL, SWAGGER_ENDPOINT } = configApp();
+
 const configSwagger = (app: Application) => {
   let descServer = 'Development server';
   switch (process.env.NODE_ENV) {
@@ -38,7 +40,7 @@ const configSwagger = (app: Application) => {
       },
       servers: [
         {
-          url: configApp().APP_URL,
+          url: APP_URL,
           description: descServer,
         },
       ],
@@ -71,7 +73,7 @@ const configSwagger = (app: Application) => {
   };
 
   const specs = swaggerJsdoc(options);
-  app.use('/swagger/documentation', swaggerUi.serve, swaggerUi.setup(specs));
+  app.use(SWAGGER_ENDPOINT, swaggerUi.serve, swaggerUi.setup(specs));
 };
 
 export default configSwagger;

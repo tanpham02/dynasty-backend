@@ -9,7 +9,7 @@ import { routesMapping } from './routes';
 
 const app: Application = express();
 
-const { APP_URL, PORT, FRONT_END_URL } = configApp();
+const { APP_URL, PORT, FRONT_END_URL, SWAGGER_ENDPOINT } = configApp();
 
 const corsConfig: CorsOptions = {
   origin: [FRONT_END_URL, 'http://localhost:1311'],
@@ -33,5 +33,5 @@ routesMapping(app);
 
 server.listen(PORT, () => {
   console.log(`Server is running at ${APP_URL}`);
-  console.log(`Swagger's url: ${APP_URL}/dynasty-pizza/documentation`);
+  console.log(`Swagger's url: ${APP_URL}${SWAGGER_ENDPOINT}`);
 });
