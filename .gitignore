@@ -26,6 +26,7 @@ mongo-data
 public
 public/*
 file-upload/*
+data-volumes/*
 
 
 # Editor directories and files
