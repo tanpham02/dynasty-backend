@@ -270,11 +270,6 @@ class ProductService extends CRUDService<Product> {
 
         productBodyRequest.productAttributeList = groupedAttributes;
 
-        console.log(
-          'productBodyRequest.productAttributeList',
-          productBodyRequest.productAttributeList,
-        );
-
         const productVariants: any[] = groupedAttributes.map((groupedAttribute) => {
           const priceAdjustment =
             groupedAttribute?.priceAdjustmentValues?.length > 0
