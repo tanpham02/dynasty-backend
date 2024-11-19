@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { staffSeedData } from './staff.seed';
 
+import { staffSeeder, productsSeeder } from './handler';
 import { configApp } from '@app/configs';
 
 const runSeedData = async (cb: any) => {
@@ -8,12 +8,13 @@ const runSeedData = async (cb: any) => {
   try {
     await mongoose.connect(MONGO_URL);
     console.log('Seed data is creating...');
-    await staffSeedData();
+    // await staffSeedData();
+    await productsSeeder();
   } catch (error) {
     console.log('🚀 ~ Occur an error when create seed data:', error);
   } finally {
-    console.log('Seed data is created.');
-    await mongoose.connection.close();
+    console.log('Seed data is created');
+    // await mongoose.connection.close();
   }
 };
 

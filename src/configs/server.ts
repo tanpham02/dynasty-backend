@@ -1,19 +1,22 @@
 import cookieParser from 'cookie-parser';
 import cors, { CorsOptions } from 'cors';
 import express, { Application } from 'express';
-import morgan from 'morgan';
 import helmet from 'helmet';
+import morgan from 'morgan';
 
 import { errorHandler } from '@app/middlewares';
 import { configApp } from '.';
-
-const { FRONT_END_URL } = configApp();
 
 const configServer = (app: Application, corsConfig: CorsOptions) => {
   // NOTE: CORS
   app.use(cors(corsConfig));
 
-  app.use(helmet());
+  // NOTE: HELMET
+  app.use(
+    helmet({
+      crossOriginResourcePolicy: false,
+    }),
+  );
 
   // NOTE: PARSE REQUEST BODY
   app.use(express.json()); // (JSON OBJECT)

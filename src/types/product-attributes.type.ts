@@ -1,10 +1,12 @@
 import { BaseModel } from '@app/types';
+import { Schema } from 'mongoose';
 
 interface AttributeItem extends BaseModel {
   label?: string;
 }
+
 interface ProductAttribute extends BaseModel {
-  categoryId: string;
+  categoryId: Schema.Types.ObjectId;
   name: string;
   attributeList?: AttributeItem[];
 }

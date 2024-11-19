@@ -9,8 +9,8 @@ export const ProductAttributeSchema = new Schema<ProductAttribute>(
       required: true,
     },
     categoryId: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
     },
     attributeList: [
       {

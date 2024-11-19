@@ -241,7 +241,7 @@ class ProductService extends CRUDService<Product> {
 
         const mapExtendedIdsToExtendDisplayName = (extendedIds: string[]) => {
           const extendedName: string[] = [];
-          extendedIds.map((id) => {
+          extendedIds.forEach((id) => {
             for (const category of attributes) {
               for (const attribute of category.attributeList!) {
                 if (attribute._id?.toString() === id) {
@@ -251,7 +251,7 @@ class ProductService extends CRUDService<Product> {
             }
             return null;
           });
-          return extendedName.filter((item) => item !== null);
+          return extendedName.filter(Boolean);
         };
 
         const groupedAttributes = productBodyRequest.productAttributeList.map((attrList) => {
@@ -268,7 +268,14 @@ class ProductService extends CRUDService<Product> {
           };
         });
 
-        const productVariants: any[] = groupedAttributes.map((groupedAttribute, index) => {
+        productBodyRequest.productAttributeList = groupedAttributes;
+
+        console.log(
+          'productBodyRequest.productAttributeList',
+          productBodyRequest.productAttributeList,
+        );
+
+        const productVariants: any[] = groupedAttributes.map((groupedAttribute) => {
           const priceAdjustment =
             groupedAttribute?.priceAdjustmentValues?.length > 0
               ? groupedAttribute.priceAdjustmentValues.reduce(

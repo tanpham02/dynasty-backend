@@ -11,7 +11,7 @@ const seedData = [
   },
 ];
 
-export const staffSeedData = async () => {
+export const staffSeeder = async () => {
   const newSeedData = await Promise.all(
     seedData.map(async (item) => {
       if (Object.keys(item).some((item) => item === 'password')) {
