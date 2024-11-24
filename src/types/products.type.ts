@@ -13,6 +13,7 @@ enum ProductType {
 interface ProductAttributeItem {
   extendedIds?: string[];
   extendedNames?: string[];
+  extendedDisplayName?: string;
   priceAdjustmentValues?: number[];
 }
 
