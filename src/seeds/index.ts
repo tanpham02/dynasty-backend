@@ -8,7 +8,7 @@ const runSeedData = async (cb: any) => {
   try {
     await mongoose.connect(MONGO_URL);
     console.log('Seed data is creating...');
-    // await staffSeedData();
+    // await staffSeeder();
     await productsSeeder();
   } catch (error) {
     console.log('🚀 ~ Occur an error when create seed data:', error);

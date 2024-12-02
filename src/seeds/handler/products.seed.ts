@@ -8,13 +8,6 @@ const categories = [
     priority: 1,
     avatar: '/public/assets/images/category/pizza-category.png',
   },
-  {
-    index: 2,
-    name: 'Mỳ Ý',
-    visible: true,
-    priority: 2,
-    avatar: '/public/assets/images/category/pizza-category.png',
-  },
 ];
 
 const productAttributes = [
@@ -34,7 +27,16 @@ const productAttributes = [
     ],
   },
   {
-    name: '1111',
+    name: 'Đế',
+    categoryIndex: 1,
+    attributeList: [
+      {
+        label: 'Mỏng giòn',
+      },
+      {
+        label: 'Dày',
+      },
+    ],
   },
 ];
 
