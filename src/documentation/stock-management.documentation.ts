@@ -2,13 +2,18 @@
  * @swagger
  * components:
  *   schemas:
- *     Materials:
+ *     StockManagements:
  *       type: object
  *       properties:
- *         importDate:
+ *         date:
  *           type: string
  *           description: VD 2023-09-15
- *         materialInfo:
+ *         type:
+ *           type: string
+ *           enum:
+ *               - IMPORT
+ *               - EXPORT
+ *         stockManagementInfo:
  *             type: array
  *             items:
  *               type: object
@@ -23,4 +28,6 @@
  *                    type: string
  *         totalPrice:
  *           type: number
+ *         note:
+ *           type: string
  */

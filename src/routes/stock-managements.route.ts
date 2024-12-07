@@ -1,26 +1,28 @@
 import { Router } from 'express';
 
-import { materialController } from '@app/controllers';
+import { stockManagementController } from '@app/controllers';
 
 const router = Router();
 
 /**
  * @swagger
- * '/api/materials/search':
+ * '/api/stock-managements/search':
  *  get:
- *     tags: [Materials]
+ *     tags: [Stock Managements]
  *     summary: Search pagination
  *     parameters:
  *      - name: from
  *        in: query
  *        schema:
  *          type: string
- *        description: VD 2023-10-15 00:00:00
  *      - name: to
  *        in: query
  *        schema:
  *          type: string
- *        description: VD 2023-10-15 23:59:00
+ *      - name: stockType
+ *        in: query
+ *        schema:
+ *          type: string
  *      - $ref: '#/components/parameters/PageIndex'
  *      - $ref: '#/components/parameters/PageSize'
  *      - $ref: '#/components/parameters/SortBy'
@@ -30,41 +32,41 @@ const router = Router();
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Materials'
+ *                 $ref: '#/components/schemas/StockManagements'
  */
 
 // SEARCH PAGINATION
-router.get('/search', materialController.search);
+router.get('/search', stockManagementController.search);
 
 /**
  * @swagger
- * '/api/materials':
+ * '/api/stock-managements':
  *  post:
- *     tags: [Materials]
- *     summary: Create the material
+ *     tags: [Stock Managements]
+ *     summary: Create
  *     requestBody:
  *       required: true
  *       content:
  *          application/json:
  *             schema:
- *                  $ref: '#/components/schemas/Materials'
+ *                  $ref: '#/components/schemas/StockManagements'
  *     responses:
  *       200:
  *         description: OK
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Materials'
+ *                 $ref: '#/components/schemas/StockManagements'
  */
 
-// CREATE MATERIAL
-router.post('/', materialController.createMaterial);
+// CREATE
+router.post('/', stockManagementController.createStockManagement);
 
 /**
  * @swagger
- * '/api/materials/{id}':
+ * '/api/stock-managements/{id}':
  *  patch:
- *     tags: [Materials]
+ *     tags: [Stock Managements]
  *     summary: Update
  *     parameters:
  *       - in: path
@@ -77,7 +79,7 @@ router.post('/', materialController.createMaterial);
  *       content:
  *          application/json:
  *             schema:
- *                  $ref: '#/components/schemas/Materials'
+ *                  $ref: '#/components/schemas/StockManagements'
  *
  *     responses:
  *       200:
@@ -85,17 +87,17 @@ router.post('/', materialController.createMaterial);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Materials'
+ *                 $ref: '#/components/schemas/StockManagements'
  */
 
 // GET BY ID
-router.patch('/:id', materialController.updateMaterial);
+router.patch('/:id', stockManagementController.updateStockManagement);
 
 /**
  * @swagger
- * '/api/materials/{id}':
+ * '/api/stock-managements/{id}':
  *  get:
- *     tags: [Materials]
+ *     tags: [Stock Managements]
  *     summary: Find by id
  *     parameters:
  *       - in: path
@@ -110,17 +112,17 @@ router.patch('/:id', materialController.updateMaterial);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Materials'
+ *                 $ref: '#/components/schemas/StockManagements'
  */
 
 // GET BY ID
-router.get('/:id', materialController.getMaterialById);
+router.get('/:id', stockManagementController.getStockManagementById);
 
 /**
  * @swagger
- * '/api/materials/{id}':
+ * '/api/stock-managements/{id}':
  *  delete:
- *     tags: [Materials]
+ *     tags: [Stock Managements]
  *     summary: Delete
  *     parameters:
  *       - in: path
@@ -135,10 +137,33 @@ router.get('/:id', materialController.getMaterialById);
  *         content:
  *          application/json:
  *              schema:
- *                 $ref: '#/components/schemas/Materials'
+ *                 $ref: '#/components/schemas/StockManagements'
  */
 
-// DELETE MATERIAL
-router.delete('/:id', materialController.delete);
+// DELETE
+router.delete('/:id', stockManagementController.delete);
+
+/**
+ * @swagger
+ * '/api/stock-managements/invoice-export':
+ *  post:
+ *     tags: [Stock Managements]
+ *     summary: Invoice export
+ *     requestBody:
+ *       content:
+ *          application/json:
+ *              schema:
+ *                  $ref: '#/components/schemas/StockManagements'
+ *     responses:
+ *       200:
+ *         description: OK
+ *         content:
+ *          application/json:
+ *              schema:
+ *                 $ref: '#/components/schemas/StockManagements'
+ */
+
+// INVOICE
+router.post('/invoice-export', stockManagementController.invoice);
 
 export default router;

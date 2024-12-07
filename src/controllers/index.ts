@@ -7,7 +7,7 @@ export { default as customerAddressController } from './customer-address.control
 export { default as customerController } from './customers.controller';
 export { default as emailTemplateController } from './email-template.controller';
 export { default as mailerController } from './mailer.controller';
-export { default as materialController } from './materials.controller';
+export { default as stockManagementController } from './stock-managements.controller';
 export { default as orderController } from './orders.controller';
 export { default as productAttributeController } from './product-attributes.controller';
 export { default as productFavoriteController } from './product-favorite.controller';
@@ -18,3 +18,5 @@ export { default as storeConfigController } from './store-config.controller';
 export { default as storeSystemController } from './store-system.controller';
 export { default as staffController } from './staff.controller';
 export { default as voucherController } from './vouchers.controller';
+export { default as OverViewController } from './overview.controller';
+export { default as IngredientController } from './ingredients.controller';

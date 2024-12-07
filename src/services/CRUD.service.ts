@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request } from 'express';
-import { Document, Model } from 'mongoose';
+import { Document, Model, PopulateOption, PopulateOptions } from 'mongoose';
 
 import Exception from '@app/exception';
 import { Filter, HttpStatusCode, Params } from '@app/types';
@@ -22,7 +22,7 @@ class CRUDService<T extends Document> {
   }
 
   // SEARCH PAGINATION
-  async getPagination(params: Params) {
+  async getPagination(params: Params, populate?: PopulateOptions | (PopulateOptions | keyof T)[]) {
     const {
       pageIndex,
       pageSize,
@@ -44,6 +44,7 @@ class CRUDService<T extends Document> {
       statusOrder,
       customerType,
       isDefault,
+      stockType,
     } = params;
 
     const filter: Filter = {};
@@ -126,6 +127,10 @@ class CRUDService<T extends Document> {
       filter.isDefault = Boolean(Number(isDefault));
     }
 
+    if (stockType) {
+      filter.type = stockType;
+    }
+
     if (sortBy) {
       if (Array.isArray(sortBy) && sortBy.length > 0) {
         sortFieldName = sortBy.map((item) => {
@@ -141,6 +146,7 @@ class CRUDService<T extends Document> {
 
     const data = await this.model
       .find(filter)
+      .populate((populate ?? []) as any[])
       .limit(pageSize)
       .skip(pageSize * pageIndex)
       .sort(sortFieldName);
@@ -167,8 +173,8 @@ class CRUDService<T extends Document> {
   }
 
   // GET BY ID
-  async getById(id: string) {
-    const response = await this.model.findById(id);
+  async getById(id: string, populate?: PopulateOptions | (PopulateOptions | keyof T)[]) {
+    const response = await this.model.findById(id)?.populate((populate ?? []) as any[]);
     if (!response) {
       throw new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}`);
     }

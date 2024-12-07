@@ -40,8 +40,11 @@ export const CART_URL = combineApiUrl('carts');
 // ORDER
 export const ORDER_URL = combineApiUrl('orders');
 
-// MATERIAL
-export const MATERIAL_URL = combineApiUrl('materials');
+// STOCK MANAGEMENTS
+export const STOCK_MANAGEMENTS_URL = combineApiUrl('stock-managements');
+
+// INGREDIENT
+export const INGREDIENT_URL = combineApiUrl('ingredients');
 
 // MAILER
 export const MAILER_URL = combineApiUrl('mailer');

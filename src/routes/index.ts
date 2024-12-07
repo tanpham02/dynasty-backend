@@ -9,7 +9,7 @@ import customerAddressRouter from './customer-address.route';
 import customerRouter from './customers.route';
 import emailTemplateRoute from './email-template.route';
 import mailerRoute from './mailer.route';
-import materialRouter from './materials.route';
+import stockManagementRouter from './stock-managements.route';
 import orderRouter from './orders.route';
 import productAttributeRoute from './product-attributes.route';
 import productFavoriteRouter from './product-favorite.route';
@@ -20,6 +20,7 @@ import staffRouter from './staff.route';
 import storeConfigRoute from './store-config.route';
 import storeSystemRoute from './store-system.route';
 import voucherRouter from './vouchers.route';
+import ingredientRouter from './ingredients.route';
 
 import {
   AUTH_URL,
@@ -31,7 +32,7 @@ import {
   CUSTOMER_URL,
   EMAIL_TEMPLATE_URL,
   MAILER_URL,
-  MATERIAL_URL,
+  STOCK_MANAGEMENTS_URL,
   ORDER_URL,
   PRODUCT_ATTRIBUTE_URL,
   PRODUCT_FAVORITE_URL,
@@ -42,6 +43,7 @@ import {
   STORE_CONFIG_URL,
   STORE_SYSTEM_URL,
   VOUCHER_URL,
+  INGREDIENT_URL,
 } from '@app/constants/apiUrl';
 
 export const routesMapping = (app: Application) => {
@@ -107,8 +109,8 @@ export const routesMapping = (app: Application) => {
       route: orderRouter,
     },
     {
-      path: MATERIAL_URL,
-      route: materialRouter,
+      path: STOCK_MANAGEMENTS_URL,
+      route: stockManagementRouter,
     },
     {
       path: MAILER_URL,
@@ -125,6 +127,10 @@ export const routesMapping = (app: Application) => {
     {
       path: STORE_SYSTEM_URL,
       route: storeSystemRoute,
+    },
+    {
+      path: INGREDIENT_URL,
+      route: ingredientRouter,
     },
   ];
 

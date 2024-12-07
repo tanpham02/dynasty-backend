@@ -38,6 +38,7 @@ interface Params {
   parentId?: string;
   customerType?: CustomerType | string;
   isDefault?: string;
+  [key: string]: any;
 }
 
 interface Filter {
@@ -60,6 +61,7 @@ interface Filter {
   customerType?: CustomerType | string;
   isShowHomePage?: boolean;
   isDefault?: boolean;
+  [key: string]: any;
 }
 
 interface BaseModel extends Document {

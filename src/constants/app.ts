@@ -30,7 +30,7 @@ const FIELDS_NAME = {
   STORE_INFORMATION: 'storeInformationInfo',
   TERM_AND_POLICY: 'termAndPolicyInfo',
   ORDER: 'orderInfo',
-  MATERIAL: 'materialInfo',
+  STOCK_MANAGEMENT: 'stockManagementInfo',
   EMAIL_CONFIG: 'emailConfigInfo',
   EMAIL_TEMPLATE: 'emailTemplateInfo',
 };

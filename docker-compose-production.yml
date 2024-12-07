@@ -1,8 +1,8 @@
-version: '3.7'
+version: '4'
 services:
     dynasty-svc:
         platform: linux/amd64
-        image: phamvantan/dynasty-svc:1.0.3
+        image: phamvantan/dynasty-svc:1.0.4
         container_name: dynasty-svc
         restart: always
         build:

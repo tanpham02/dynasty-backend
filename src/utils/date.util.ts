@@ -59,3 +59,13 @@ export const timeByLocalTimeZone = (time?: string | Date) => {
     (time ? new Date(time).getTime() : new Date().getTime()) - timezoneOffset * 60 * 1000,
   );
 };
+
+export const currentMonthFirstDate = (current: Date, format?: string) => {
+  const instance = moment(current, format);
+  return instance.isValid() ? instance.startOf('month') : null;
+};
+
+export const currentMonthLastDate = (current: Date, format?: string) => {
+  const instance = moment(current, format);
+  return instance.isValid() ? instance.endOf('month').endOf('day') : null;
+};

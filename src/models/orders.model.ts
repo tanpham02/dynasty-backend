@@ -1,7 +1,6 @@
 import { Schema, model } from 'mongoose';
 
 import { OrderReceivingTime, OrderStatus, OrderType, Orders, PaymentMethods } from '@app/types';
-import { timeByLocalTimeZone } from '@app/utils';
 
 const OrderSchema = new Schema<Orders>(
   {
@@ -94,9 +93,7 @@ const OrderSchema = new Schema<Orders>(
     },
   },
   {
-    timestamps: {
-      currentTime: () => timeByLocalTimeZone(),
-    },
+    timestamps: true,
     versionKey: false,
   },
 );
