@@ -19,6 +19,7 @@ import {
   StoreSystemModel,
   NotificationsModel,
   IngredientModel,
+  IngredientSnapshotModel,
 } from '.';
 
 export const dbContext = {
@@ -42,4 +43,5 @@ export const dbContext = {
   StoreSystemModel,
   NotificationsModel,
   IngredientModel,
+  IngredientSnapshotModel,
 };

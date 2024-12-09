@@ -21,6 +21,7 @@ import storeConfigRoute from './store-config.route';
 import storeSystemRoute from './store-system.route';
 import voucherRouter from './vouchers.route';
 import ingredientRouter from './ingredients.route';
+import overviewsRouter from './overviews.route';
 
 import {
   AUTH_URL,
@@ -44,6 +45,7 @@ import {
   STORE_SYSTEM_URL,
   VOUCHER_URL,
   INGREDIENT_URL,
+  OVERVIEWS_URL,
 } from '@app/constants/apiUrl';
 
 export const routesMapping = (app: Application) => {
@@ -131,6 +133,10 @@ export const routesMapping = (app: Application) => {
     {
       path: INGREDIENT_URL,
       route: ingredientRouter,
+    },
+    {
+      path: OVERVIEWS_URL,
+      route: overviewsRouter,
     },
   ];
 

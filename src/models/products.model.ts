@@ -25,6 +25,9 @@ const ProductSchema = new Schema<Product>(
       type: Schema.Types.ObjectId,
       ref: 'Category',
     },
+    categoryIdSelected: {
+      type: String,
+    },
     image: {
       type: String,
     },
@@ -73,6 +76,10 @@ const ProductSchema = new Schema<Product>(
     haveProductVariant: {
       type: Boolean,
       default: true,
+    },
+    totalOrder: {
+      type: Number,
+      default: 0,
     },
   },
   {

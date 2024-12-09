@@ -57,3 +57,6 @@ export const EMAIL_TEMPLATE_URL = combineApiUrl('email-template');
 
 // STORE CONFIG
 export const STORE_CONFIG_URL = combineApiUrl('store-config');
+
+// OVERVIEWS
+export const OVERVIEWS_URL = combineApiUrl('overviews');

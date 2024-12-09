@@ -147,13 +147,13 @@ class CRUDService<T extends Document> {
     const data = await this.model
       .find(filter)
       .populate((populate ?? []) as any[])
-      .limit(pageSize)
-      .skip(pageSize * pageIndex)
+      .limit(pageSize!)
+      .skip(pageSize! * pageIndex!)
       .sort(sortFieldName);
 
     const totalElement = (await this.model.find(filter)).length;
-    const totalPages = Math.ceil(totalElement / pageSize);
-    const isLastPage = pageIndex + 1 >= totalPages;
+    const totalPages = Math.ceil(totalElement / pageSize!);
+    const isLastPage = pageIndex! + 1 >= totalPages;
     const result = {
       data,
       totalElement,

@@ -4,10 +4,17 @@ import { Request } from 'express';
 import { Model } from 'mongoose';
 
 import Exception from '@app/exception';
-import { CartModel, OrderModel, ProductVariantModel, StoreConfigModel } from '@app/models';
+import {
+  CartModel,
+  OrderModel,
+  ProductModel,
+  ProductVariantModel,
+  StoreConfigModel,
+} from '@app/models';
 import { CRUDService, CartService } from '@app/services';
 import { HttpStatusCode, OrderStatus, OrderType, Orders } from '@app/types';
 import { timeByLocalTimeZone } from '@app/utils';
+import { isEmpty, uniq } from 'lodash';
 
 class OrderService extends CRUDService<Orders> {
   constructor(model: Model<Orders>, serviceName: string) {
@@ -79,8 +86,32 @@ class OrderService extends CRUDService<Orders> {
       orderStatus: OrderStatus.PENDING,
     };
 
+    const productParentIds = uniq(productVariants?.map((item) => item?.parentId));
+
     const newOrderModel = new OrderModel(newOrder);
     const order = await newOrderModel.save();
+
+    if (!isEmpty(productParentIds)) {
+      const products = await ProductModel.find({
+        _id: {
+          $in: productParentIds,
+        },
+      });
+      await Promise.all(
+        products.map((item) => {
+          ProductModel.updateMany(
+            { _id: item!._id },
+            {
+              totalOrder: {
+                $set: (item?.totalOrder || 0) + 1,
+              },
+            },
+            { new: true },
+          );
+        }),
+      );
+    }
+
     return order;
   }
 

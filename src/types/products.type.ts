@@ -23,6 +23,7 @@ interface Product extends BaseModel {
   description?: string;
   information?: string;
   categoryId?: string;
+  categoryIdSelected?: string;
   price: number;
   oldPrice?: number; // Don't need to care
   image?: string;
@@ -33,6 +34,7 @@ interface Product extends BaseModel {
   productAttributeList?: ProductAttributeItem[];
   productsVariant?: string[];
   haveProductVariant?: boolean;
+  totalOrder?: number;
 }
 
 export { Product, ProductAttributeItem, ProductType };

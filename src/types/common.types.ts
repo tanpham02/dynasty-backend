@@ -17,8 +17,8 @@ enum Status {
 }
 
 interface Params {
-  pageIndex: number;
-  pageSize: number;
+  pageIndex?: number;
+  pageSize?: number;
   name?: string;
   categoryId?: string;
   cityId?: number;
@@ -94,4 +94,4 @@ enum HttpStatusCode {
 
 type SortOrderBy = -1 | 1;
 
-export { BaseModel, Filter, LocationBaseModel, MODE, Params, SortOrderBy, Status, HttpStatusCode };
+export { BaseModel, Filter, HttpStatusCode, LocationBaseModel, MODE, Params, SortOrderBy, Status };

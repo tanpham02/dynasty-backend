@@ -60,6 +60,12 @@ export const timeByLocalTimeZone = (time?: string | Date) => {
   );
 };
 
+export const getDateByRawOffset = (date: any, rawOffset: number) => {
+  return moment(date)
+    .utc()
+    .utcOffset(rawOffset * 60);
+};
+
 export const currentMonthFirstDate = (current: Date, format?: string) => {
   const instance = moment(current, format);
   return instance.isValid() ? instance.startOf('month') : null;

@@ -6,10 +6,12 @@ import { Model } from 'mongoose';
 import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { CategoryModel, ProductAttributeModel, ProductVariantModel } from '@app/models';
-import { CRUDService } from '@app/services';
+import { CategoryService, CRUDService } from '@app/services';
 import { HttpStatusCode, Product, ProductAttributeItem, ProductVariants } from '@app/types';
 import { comparingObjectId, generateUnsignedSlug, handleUploadFile } from '@app/utils';
-import { isEmpty } from 'lodash';
+import { isEmpty, uniq } from 'lodash';
+
+const categoryService = new CategoryService(CategoryModel, 'category');
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, serviceName: string) {
@@ -117,8 +119,6 @@ class ProductService extends CRUDService<Product> {
           };
         }),
       );
-
-      console.log('groupedAttributes', groupedAttributes);
 
       if (!isEmpty(groupedAttributes)) {
         productVariants = groupedAttributes.map((groupedAttribute, index) => {
@@ -244,42 +244,54 @@ class ProductService extends CRUDService<Product> {
       );
     };
 
+    let groupedAttributes: any[] = [];
+
     if (productBodyRequest?.price) {
       if (
         productBodyRequest?.productAttributeList &&
         productBodyRequest.productAttributeList.length > 0 &&
         productBodyRequest.haveProductVariant
       ) {
-        const attributes = await ProductAttributeModel.find();
-
-        const mapExtendedIdsToExtendDisplayName = (extendedIds: string[]) => {
+        const mapExtendedIdsToExtendDisplayName = async (extendedIds: string[]) => {
+          const attributes = await ProductAttributeModel.find();
+          if (isEmpty(attributes) && isEmpty(extendedIds)) return [];
           const extendedName: string[] = [];
-          extendedIds.forEach((id) => {
-            for (const category of attributes) {
-              for (const attribute of category.attributeList!) {
-                if (attribute._id?.toString() === id) {
-                  extendedName.push(attribute.label!);
-                }
+          extendedIds?.forEach((id) => {
+            attributes?.forEach((attribute) => {
+              const attributeChild = attribute?.attributeList?.find((item) =>
+                comparingObjectId(id, item._id!),
+              );
+              if (!isEmpty(attributeChild)) {
+                extendedName.push(attributeChild.label!);
               }
-            }
-            return null;
+            });
           });
-          return extendedName.filter(Boolean);
+          return extendedName.filter((item) => item !== null);
         };
 
-        const groupedAttributes = productBodyRequest.productAttributeList.map((attrList) => {
-          const { extendedIds = [], priceAdjustmentValues = [] } = attrList;
+        if (!isEmpty(productBodyRequest?.productAttributeList)) {
+          groupedAttributes = await Promise.all(
+            productBodyRequest.productAttributeList!.map(async (attrList) => {
+              const { extendedIds = [], priceAdjustmentValues = [] } = attrList;
 
-          return {
-            extendedDisplayName:
-              extendedIds && extendedIds.length > 0
-                ? mapExtendedIdsToExtendDisplayName(extendedIds).join(' - ')
-                : undefined,
-            extendedNames: mapExtendedIdsToExtendDisplayName(extendedIds),
-            extendedIds,
-            priceAdjustmentValues,
-          };
-        });
+              const extendedNames = await mapExtendedIdsToExtendDisplayName(uniq(extendedIds));
+              console.log(
+                '🚀 ~ ProductService ~ productBodyRequest.productAttributeList!.map ~ extendedNames:',
+                extendedNames,
+              );
+              const extendedDisplayName = !isEmpty(extendedNames)
+                ? extendedNames?.join(' - ')
+                : undefined;
+
+              return {
+                extendedDisplayName,
+                extendedNames,
+                extendedIds,
+                priceAdjustmentValues,
+              };
+            }),
+          );
+        }
 
         productBodyRequest.productAttributeList = groupedAttributes;
 
@@ -409,18 +421,39 @@ class ProductService extends CRUDService<Product> {
 
   // GET BY ID
   async getByIdProduct(id: string) {
-    const result = await this.getById(id);
-
-    return result.populate([
-      {
-        path: 'categoryId',
-        model: 'Category',
-      },
+    const result = await this.getById(id, [
       {
         path: 'productsVariant',
         model: 'ProductVariant',
       },
     ]);
+
+    // result.populate([
+    //   {
+    //     path: 'categoryId',
+    //     model: 'Category',
+    //   },
+    //   {
+    //     path: 'productsVariant',
+    //     model: 'ProductVariant',
+    //   },
+    // ]);
+
+    result.categoryIdSelected = result.categoryId;
+    const category = await CategoryModel.findOne({
+      $or: [
+        {
+          _id: result.categoryId,
+        },
+        {
+          'childrenCategory.category._id': result.categoryId,
+        },
+      ],
+    });
+
+    result.categoryId = category as any;
+
+    return result;
   }
 }
 
