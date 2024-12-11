@@ -1,17 +1,15 @@
 /* eslint-disable @typescript-eslint/no-extra-non-null-assertion */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request } from 'express';
+import { isEmpty, uniq } from 'lodash';
 import { Model } from 'mongoose';
 
 import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
 import { CategoryModel, ProductAttributeModel, ProductVariantModel } from '@app/models';
-import { CategoryService, CRUDService } from '@app/services';
+import { CRUDService } from '@app/services';
 import { HttpStatusCode, Product, ProductAttributeItem, ProductVariants } from '@app/types';
 import { comparingObjectId, generateUnsignedSlug, handleUploadFile } from '@app/utils';
-import { isEmpty, uniq } from 'lodash';
-
-const categoryService = new CategoryService(CategoryModel, 'category');
 
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, serviceName: string) {
@@ -131,8 +129,10 @@ class ProductService extends CRUDService<Product> {
           const productVariantName = groupedAttribute?.extendedDisplayName
             ? `${productBodyRequest.name} - ${groupedAttribute.extendedDisplayName}`
             : productBodyRequest.name;
+
           return {
             parentId: newProduct._id,
+            attributeUsing: groupedAttribute?.extendedIds,
             productItem: {
               name: productVariantName,
               description: productBodyRequest?.description,
@@ -275,10 +275,6 @@ class ProductService extends CRUDService<Product> {
               const { extendedIds = [], priceAdjustmentValues = [] } = attrList;
 
               const extendedNames = await mapExtendedIdsToExtendDisplayName(uniq(extendedIds));
-              console.log(
-                '🚀 ~ ProductService ~ productBodyRequest.productAttributeList!.map ~ extendedNames:',
-                extendedNames,
-              );
               const extendedDisplayName = !isEmpty(extendedNames)
                 ? extendedNames?.join(' - ')
                 : undefined;
@@ -309,6 +305,7 @@ class ProductService extends CRUDService<Product> {
 
           return {
             parentId: id,
+            attributeUsing: groupedAttribute?.extendedIds,
             productItem: {
               name: productVariantName,
               description: productBodyRequest.description,
@@ -427,17 +424,6 @@ class ProductService extends CRUDService<Product> {
         model: 'ProductVariant',
       },
     ]);
-
-    // result.populate([
-    //   {
-    //     path: 'categoryId',
-    //     model: 'Category',
-    //   },
-    //   {
-    //     path: 'productsVariant',
-    //     model: 'ProductVariant',
-    //   },
-    // ]);
 
     result.categoryIdSelected = result.categoryId;
     const category = await CategoryModel.findOne({

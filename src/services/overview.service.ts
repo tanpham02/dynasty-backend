@@ -27,7 +27,9 @@ class OverviewService {
     const ingredientsSnapshots = await dbContext.IngredientSnapshotModel.find(conditions);
 
     const totalOrders = orders?.length;
-    const totalRevenues = orders?.reduce((acc, next) => acc + (next?.total ?? 0), 0);
+    const totalRevenues = orders
+      ?.filter((item) => item.orderStatus === OrderStatus.SUCCESS)
+      ?.reduce((acc, next) => acc + (next?.total ?? 0), 0);
     const ingredientsSnapshotsTotal = ingredientsSnapshots?.reduce(
       (acc, next) => acc + (next?.quantity ?? 0) * (next?.price ?? 0),
       0,
@@ -79,6 +81,8 @@ class OverviewService {
         $sort: { _id: 1 }, // Sort results by date (ascending)
       },
     ]);
+
+    console.log('results', results);
 
     return results?.map((item) => {
       const date = [];

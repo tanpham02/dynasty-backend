@@ -197,7 +197,13 @@ class AuthService {
         });
 
         const response = await newCustomer.save();
-        await new CustomerAddressModel({ customerId: response._id }).save();
+        const newCustomerAddress = new CustomerAddressModel({ customerId: response._id });
+        await new CartModel({ customerId: response._id }).save();
+        await new ProductFavoriteModel({ customerId: response._id }).save();
+        await newCustomerAddress.save();
+
+        newCustomer.$set('customerAddressId', newCustomerAddress._id);
+
         const customerJwt = new JWT(response._id);
         const accessToken = customerJwt.generateAccessToken();
         const refreshToken = customerJwt.generateRefreshToken();

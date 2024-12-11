@@ -128,7 +128,7 @@ router.post('/re-order', orderController.reorder);
 
 /**
  * @swagger
- * '/api/orders/update-order-status':
+ * '/api/orders/update-status-order':
  *  patch:
  *     tags: [Orders]
  *     summary: Update status order
@@ -151,7 +151,7 @@ router.post('/re-order', orderController.reorder);
  */
 
 // UPDATE STATUS ORDER
-router.patch('/update-order-status', orderController.updateStatusOrder);
+router.patch('/update-status-order', orderController.updateStatusOrder);
 
 /**
  * @swagger

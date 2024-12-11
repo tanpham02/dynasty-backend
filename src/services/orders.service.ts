@@ -53,7 +53,7 @@ class OrderService extends CRUDService<Orders> {
     const storeConfig = await StoreConfigModel.find();
 
     if (orderRequestBody.orderType === OrderType.DELIVERY) {
-      const feeShip = Number(storeConfig?.[0].storeSetting?.feeShip) || 0;
+      const feeShip = Number(storeConfig?.[0]?.storeSetting?.feeShip) || 0;
       newOrder.shipFee = feeShip;
     }
 
@@ -136,11 +136,11 @@ class OrderService extends CRUDService<Orders> {
 
   // UPDATE STATUS ORDER
   async updateStatusOrder(status: string, orderId: string) {
-    const orderDetail = await this.getById(orderId);
+    const orderDetail = await OrderModel.findById(orderId).lean();
 
     if (!orderDetail) throw new Exception(HttpStatusCode.NOT_FOUND, 'Not found order');
 
-    await this.model.findOneAndUpdate({ _id: orderId }, { $set: { orderStatus: status } });
+    await OrderModel.findOneAndUpdate({ _id: orderId }, { $set: { orderStatus: status } });
     return {
       message: 'Update status order success',
     };

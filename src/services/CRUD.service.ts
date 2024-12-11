@@ -4,6 +4,7 @@ import { Document, Model, PopulateOption, PopulateOptions } from 'mongoose';
 
 import Exception from '@app/exception';
 import { Filter, HttpStatusCode, Params } from '@app/types';
+import { isArray, isEmpty } from 'lodash';
 
 class CRUDService<T extends Document> {
   protected model: Model<T>;
@@ -45,6 +46,7 @@ class CRUDService<T extends Document> {
       customerType,
       isDefault,
       stockType,
+      childrenCategoryIds,
     } = params;
 
     const filter: Filter = {};
@@ -63,8 +65,19 @@ class CRUDService<T extends Document> {
       filter.comboPromotionsId = comboPromotionsId;
     }
 
-    if (categoryId) {
-      filter.categoryId = categoryId;
+    if (categoryId || !isEmpty(childrenCategoryIds)) {
+      let ids = [];
+      if (categoryId) {
+        ids.push(categoryId);
+      }
+      if (isArray(childrenCategoryIds)) {
+        ids = [...ids, ...childrenCategoryIds];
+      } else {
+        ids.push(childrenCategoryIds);
+      }
+      filter.categoryId = {
+        $in: ids,
+      };
     }
 
     if (parentId) {

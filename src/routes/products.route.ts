@@ -19,6 +19,12 @@ const router = express.Router();
  *        in: query
  *        schema:
  *          type: string
+ *      - name: childrenCategoryIds
+ *        in: query
+ *        schema:
+ *          type: array
+ *          items:
+ *              type: string
  *      - name: types
  *        in: query
  *        schema:

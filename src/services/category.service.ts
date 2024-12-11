@@ -8,6 +8,7 @@ import { ProductModel } from '@app/models';
 import { CRUDService } from '@app/services';
 import { Category, HttpStatusCode } from '@app/types';
 import { generateUnsignedSlug, handleUploadFile } from '@app/utils';
+import { isEmpty } from 'lodash';
 
 class CategoryService extends CRUDService<Category> {
   constructor(model: Model<Category>, serviceName: string) {
@@ -43,6 +44,14 @@ class CategoryService extends CRUDService<Category> {
       ...requestFormData,
       slug: generateUnsignedSlug(requestFormData?.name),
     });
+
+    if (
+      requestFormData?.childrenCategory &&
+      !isEmpty(requestFormData?.childrenCategory) &&
+      !requestFormData?.childrenCategory?.parentId
+    ) {
+      newCategory.childrenCategory!.parentId = newCategory._id;
+    }
 
     const productIds = newCategory?.products;
     const childrenCategory = newCategory?.childrenCategory;

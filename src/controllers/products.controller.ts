@@ -10,11 +10,20 @@ const productService = new ProductService(ProductModel, 'product');
 const productController = {
   //SEARCH PAGINATION PRODUCT
   search: async (req: Request, res: Response, next: NextFunction) => {
-    const { pageIndex = 0, pageSize = 10, name, categoryId, types, sortBy } = req.query;
+    const {
+      pageIndex = 0,
+      pageSize = 10,
+      name,
+      categoryId,
+      childrenCategoryIds = [],
+      types,
+      sortBy,
+    } = req.query;
     try {
       const params: Params = {
         name: name?.toString(),
         categoryId: categoryId?.toString(),
+        childrenCategoryIds,
         types: types as ProductType,
         pageIndex: Number(pageIndex),
         pageSize: Number(pageSize),

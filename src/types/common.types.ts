@@ -4,8 +4,7 @@ import { CustomerType } from '@app/types/customers.type';
 import { ProductType } from '@app/types/products.type';
 import { Role } from '@app/types/staff.type';
 
-
-type Callback = () => void
+type Callback = () => any;
 
 enum MODE {
   DEVELOPMENT = 'development',
@@ -97,4 +96,14 @@ enum HttpStatusCode {
 
 type SortOrderBy = -1 | 1;
 
-export { BaseModel, Filter, HttpStatusCode, LocationBaseModel, MODE, Params, SortOrderBy, Status, Callback };
+export {
+  BaseModel,
+  Filter,
+  HttpStatusCode,
+  LocationBaseModel,
+  MODE,
+  Params,
+  SortOrderBy,
+  Status,
+  Callback,
+};
