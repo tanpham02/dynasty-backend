@@ -1,10 +1,12 @@
+import { CorsOptions } from 'cors';
+import { CronJob } from 'cron';
 import express, { Application } from 'express';
 import http from 'http';
 import 'module-alias/register';
-import { CorsOptions } from 'cors';
 
 import { configApp, configServer, configSwagger } from '@app/configs';
 import { ConnectDatabase, SocketIO } from '@app/connection';
+import { errorHandler } from './middlewares';
 import { routesMapping } from './routes';
 
 const app: Application = express();
@@ -22,6 +24,14 @@ export const socketInstance = new SocketIO(server, corsConfig);
 // CONNECTION
 new ConnectDatabase();
 
+const cronJob = new CronJob(
+  '*/1 * * * * *', // cronTime
+  function () {
+    console.log('🚀 ~ moment.tz.guess():', new Date().getSeconds());
+  }, // onTick
+);
+// cronJob.start();
+
 // CONFIG SERVER
 configServer(app, corsConfig);
 
@@ -30,6 +40,8 @@ configSwagger(app);
 
 // ROUTES
 routesMapping(app);
+
+app.use(errorHandler);
 
 server.listen(PORT, () => {
   console.log(`Server is running at ${APP_URL}`);

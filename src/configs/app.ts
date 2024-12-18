@@ -21,6 +21,9 @@ interface Config {
   INFO_BIP_API_KEY: string;
   INFO_BIP_HOST: string;
   SWAGGER_ENDPOINT: string;
+  TWILIO_ACCOUNT_SID: string;
+  TWILIO_AUTH_TOKEN: string;
+  TWILIO_PHONE_NUMBER: string;
 }
 
 const configApp = () => {
@@ -54,9 +57,12 @@ const configApp = () => {
     CLIENT_ID: process.env.CLIENT_ID || '',
     CLIENT_SECRET: process.env.CLIENT_SECRET || '',
     REDIRECT_URL: process.env.REDIRECT_URL || '',
-    INFO_BIP_API_KEY: process.env.INFO_BIP_API_KEY || '',
-    INFO_BIP_HOST: process.env.INFO_BIP_HOST || '',
+    INFO_BIP_API_KEY: process.env.INFOBIP_API_KEY || '',
+    INFO_BIP_HOST: process.env.INFOBIP_HOST || '',
     SWAGGER_ENDPOINT: process.env.SWAGGER_ENDPOINT || '',
+    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID || '',
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN || '',
+    TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER || '',
   };
 
   return resultConfig;

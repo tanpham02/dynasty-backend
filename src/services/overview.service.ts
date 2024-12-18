@@ -1,6 +1,5 @@
-import { dbContext } from '@app/models';
-import { OrderStatus, Params } from '@app/types';
-import { getDateByRawOffset, YYYY_MM_DDTHH_MM_SS } from '@app/utils';
+import { dbContext, OrderModel } from '@app/models';
+import { OrderStatus, Params, Role } from '@app/types';
 
 class OverviewService {
   HUMAN_RESOURCES_FEE = 0;
@@ -11,20 +10,30 @@ class OverviewService {
   async getOverViewByCriterial(params: Params) {
     const fromDate = params.from;
     const toDate = params.to;
-    const rawOffset = Number(params?.rawOffset ?? '+7');
-
-    const adjustedFromDate = getDateByRawOffset(fromDate, rawOffset).format(YYYY_MM_DDTHH_MM_SS);
-    const adjustedToDate = getDateByRawOffset(toDate, rawOffset).format(YYYY_MM_DDTHH_MM_SS);
 
     const conditions: Record<string, any> = {
       createdAt: {
-        $gte: adjustedFromDate,
-        $lt: adjustedToDate,
+        $gte: new Date(fromDate as any),
+        $lte: new Date(toDate as any),
       },
     };
 
     const orders = await dbContext.OrderModel.find(conditions);
     const ingredientsSnapshots = await dbContext.IngredientSnapshotModel.find(conditions);
+    const totalSalaries = (
+      await dbContext.StaffModel.find({
+        $and: [
+          {
+            ...conditions,
+          },
+          {
+            role: {
+              $ne: Role.ADMIN,
+            },
+          },
+        ],
+      }).select('salary')
+    )?.reduce((acc, next) => acc + (next?.salary ?? 0), 0);
 
     const totalOrders = orders?.length;
     const totalRevenues = orders
@@ -35,7 +44,7 @@ class OverviewService {
       0,
     );
     const netRevenueTotal =
-      totalRevenues - (this.HUMAN_RESOURCES_FEE + this.OPERATING_FEE + ingredientsSnapshotsTotal);
+      totalRevenues - (totalSalaries + this.OPERATING_FEE + ingredientsSnapshotsTotal);
 
     const totalOrderCancel = orders?.filter(
       (order) => order.orderStatus === OrderStatus.CANCELED,
@@ -52,62 +61,403 @@ class OverviewService {
   }
 
   async getRevenueChart(params: Params) {
+    // Ngắn (dưới 30 ngày): Hiển thị dữ liệu theo từng ngày.
+    // Vừa (1-3 tháng): Hiển thị dữ liệu theo tuần.
+    // Dài (hơn 3 tháng): Hiển thị dữ liệu theo tháng.
+    // Rất dài (hơn 1 năm): Hiển thị theo quý hoặc năm.
     const fromDate = params.from;
     const toDate = params.to;
-    const rawOffset = Number(params?.rawOffset ?? '+7');
+    const groupType = params.groupType;
 
-    const adjustedFromDate = getDateByRawOffset(fromDate, rawOffset).format(YYYY_MM_DDTHH_MM_SS);
-    const adjustedToDate = getDateByRawOffset(toDate, rawOffset).format(YYYY_MM_DDTHH_MM_SS);
+    // Số ngày trong tháng (Ví dụ: tháng 12 có 31 ngày)
+    const totalDaysInMonth = 31;
+
+    // Tạo mảng đầy đủ các ngày từ 1 đến 31
 
     const conditions: Record<string, any> = {
       createdAt: {
-        $gte: adjustedFromDate,
-        $lte: adjustedToDate,
+        $gte: new Date(fromDate as any),
+        $lte: new Date(toDate as any),
       },
+      orderStatus: 'SUCCESS',
     };
 
-    const results = await dbContext.OrderModel.aggregate([
+    let groupBy;
+    let groupByFormat = '%Y-%m-%d'; // Mặc định là nhóm theo ngày
+    if (groupType === 'TODAY') {
+      groupBy = {
+        _id: {
+          $dateToString: {
+            format: '%H', // Format to show hour in 24-hour format (0-23)
+            date: '$createdAt',
+            timezone: '+07:00', // Apply UTC+7 offset
+          },
+        }, // Group by hour (0-23)
+        totalRevenue: { $sum: '$total' },
+      };
+    } else if (['LAST_MONTH', 'THIS_MONTH'].includes(groupType)) {
+      groupBy = {
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt', timezone: '+07:00' } }, // Group by date (YYYY-MM-DD)
+        totalRevenue: { $sum: '$total' },
+      };
+    } else if (groupType === 'THIS_WEEK' || groupType === 'LAST_WEEK') {
+      groupBy = {
+        _id: {
+          $dateToString: {
+            format: '%Y-%m-%d', // Format to group by date (YYYY-MM-DD)
+            date: '$createdAt',
+            timezone: '+07:00',
+          },
+        },
+        totalRevenue: { $sum: '$total' }, // Sum total revenue per day
+      };
+    } else if (groupType === 'OTHER') {
+      const diffInDays = Math.ceil(
+        (new Date(toDate as any).getTime() - new Date(fromDate as any).getTime()) /
+          (1000 * 60 * 60 * 24),
+      ); // Số ngày giữa khoảng thời gian
+
+      if (diffInDays > 30 && diffInDays <= 90) {
+        groupByFormat = '%Y-%U'; // Nhóm theo tuần (năm và số tuần)
+      } else if (diffInDays > 90 && diffInDays <= 365) {
+        groupByFormat = '%Y-%m'; // Nhóm theo tháng (năm và tháng)
+      } else if (diffInDays > 365) {
+        groupByFormat = '%Y-Q%q'; // Nhóm theo quý (năm và quý)
+      }
+
+      groupBy = {
+        _id: {
+          $dateToString: {
+            format: groupByFormat, // Định dạng nhóm
+            date: '$createdAt',
+            timezone: '+07:00', // Điều chỉnh múi giờ
+          },
+        },
+        totalRevenue: { $sum: '$total' }, // Tổng doanh thu
+      };
+    }
+
+    const results = await OrderModel.aggregate([
       {
         $match: conditions,
       },
       {
-        $group: {
-          _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } }, // Group by date (YYYY-MM-DD)
-          count: { $sum: 1 }, // Count the number of documents per date
-          items: { $push: '$$ROOT' }, // Include all documents in the group
-        },
+        $group: groupBy as any,
       },
       {
         $sort: { _id: 1 }, // Sort results by date (ascending)
       },
     ]);
 
-    console.log('results', results);
+    // Tạo mảng date và data
+    const dateRange: any[] = [];
+    const dataRange = [];
 
-    return results?.map((item) => {
-      const date = [];
-      const data = [];
+    // Nếu `groupType` là 'LAST_MONTH' hoặc 'THIS_MONTH', ta sẽ tạo dữ liệu theo các ngày trong tháng
+    if (['LAST_MONTH', 'THIS_MONTH'].includes(groupType)) {
+      const now = new Date();
 
-      date.push(item._id);
-      data.push(item.count);
+      // Nếu là 'THIS_MONTH', lấy tháng hiện tại
+      const month = groupType === 'THIS_MONTH' ? now.getMonth() : now.getMonth() - 1; // Nếu là tháng trước, trừ 1
 
-      return { date, data };
-    });
+      // Tính số ngày trong tháng
+      const firstDayOfMonth = new Date(now.getFullYear(), month, 1);
+      const lastDayOfMonth = new Date(now.getFullYear(), month + 1, 0); // Lấy ngày cuối của tháng
+      const totalDaysInMonth = lastDayOfMonth.getDate(); // Lấy số ngày trong tháng
+
+      // Tạo một mảng với các ngày trong tháng
+      for (let day = 1; day <= totalDaysInMonth; day++) {
+        dateRange.push(day.toString()); // Thêm ngày vào mảng date
+        dataRange.push(0); // Gán giá trị ban đầu cho doanh thu (0)
+      }
+
+      // Cập nhật dữ liệu doanh thu cho các ngày trong tháng từ kết quả aggregation
+      results.forEach((item) => {
+        const day = item._id.split('-')[2]; // Lấy ngày từ _id (YYYY-MM-DD)
+        const dayIndex = parseInt(day, 10) - 1; // Chuyển đổi ngày thành chỉ số mảng (0-indexed)
+        const revenue = item.totalRevenue;
+
+        dataRange[dayIndex] = revenue; // Cập nhật doanh thu cho ngày tương ứng
+      });
+    } else if (groupType === 'THIS_WEEK' || groupType === 'LAST_WEEK') {
+      const fromDate = new Date(params?.from as any);
+      const toDate = new Date(params?.to as any);
+
+      // Tạo danh sách các ngày trong tuần
+      for (
+        let currentDate = new Date(fromDate);
+        currentDate <= toDate;
+        currentDate.setDate(currentDate.getDate() + 1)
+      ) {
+        const dayString = currentDate.toISOString().split('T')[0]; // Format YYYY-MM-DD
+        dateRange.push(dayString);
+        dataRange.push(0); // Khởi tạo doanh thu mặc định là 0
+      }
+
+      // Ánh xạ dữ liệu doanh thu từ kết quả aggregation
+      results.forEach((item) => {
+        const index = dateRange.findIndex((date) => date === item._id);
+        if (index !== -1) {
+          dataRange[index] = item.totalRevenue;
+        }
+      });
+
+      // Kết quả cuối cùng
+      return [
+        {
+          date: dateRange, // Từng ngày trong tuần
+          data: dataRange, // Doanh thu tương ứng từng ngày
+        },
+      ];
+    } else if (groupType === 'TODAY') {
+      // Xử lý cho trường hợp group theo giờ trong ngày
+      results.forEach((item) => {
+        const hour = `${item._id}h`; // Định dạng theo giờ
+        dateRange.push(hour);
+        dataRange.push(item.totalRevenue);
+      });
+    } else if (groupType === 'OTHER') {
+      if (groupByFormat === '%Y-%m-%d') {
+        // Xử lý nhóm theo ngày
+        for (
+          let currentDate = new Date(fromDate as any);
+          currentDate <= toDate!;
+          currentDate.setDate(currentDate.getDate() + 1)
+        ) {
+          const dayString = currentDate.toISOString().split('T')[0];
+          dateRange.push(dayString);
+          dataRange.push(0); // Doanh thu mặc định
+        }
+
+        results.forEach((item) => {
+          const index = dateRange.findIndex((date) => date === item._id);
+          if (index !== -1) {
+            dataRange[index] = item.totalRevenue;
+          }
+        });
+      } else if (groupByFormat === '%Y-%U') {
+        // Xử lý nhóm theo tuần
+        results.forEach((item) => {
+          dateRange.push(`Week ${item._id.split('-')[1]}, ${item._id.split('-')[0]}`);
+          dataRange.push(item.totalRevenue);
+        });
+      } else if (groupByFormat === '%Y-%m') {
+        // Xử lý nhóm theo tháng
+        results.forEach((item) => {
+          const [year, month] = item._id.split('-');
+          dateRange.push(`${year}-${month}`);
+          dataRange.push(item.totalRevenue);
+        });
+      } else if (groupByFormat === '%Y-Q%q') {
+        // Xử lý nhóm theo quý
+        results.forEach((item) => {
+          dateRange.push(item._id); // '2024-Q1', '2024-Q2'...
+          dataRange.push(item.totalRevenue);
+        });
+      }
+
+      return [
+        {
+          date: dateRange,
+          data: dataRange,
+        },
+      ];
+    }
+
+    return [{ date: dateRange, data: dataRange }];
+  }
+
+  async getProfitChart(params: Params) {
+    // Ngắn (dưới 30 ngày): Hiển thị dữ liệu theo từng ngày.
+    // Vừa (1-3 tháng): Hiển thị dữ liệu theo tuần.
+    // Dài (hơn 3 tháng): Hiển thị dữ liệu theo tháng.
+    // Rất dài (hơn 1 năm): Hiển thị theo quý hoặc năm.
+    const fromDate = params.from;
+    const toDate = params.to;
+    const groupType = params.groupType;
+
+    // Tạo mảng đầy đủ các ngày từ 1 đến 31
+
+    const conditions: Record<string, any> = {
+      createdAt: {
+        $gte: new Date(fromDate as any),
+        $lte: new Date(toDate as any),
+      },
+      orderStatus: 'SUCCESS',
+    };
+
+    let groupBy;
+    let groupByFormat = '%Y-%m-%d'; // Mặc định là nhóm theo ngày
+    if (['LAST_MONTH'].includes(groupType)) {
+      groupBy = {
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt', timezone: '+07:00' } }, // Group by date (YYYY-MM-DD)
+        totalRevenue: { $sum: '$total' },
+      };
+    } else if (groupType === 'LAST_WEEK') {
+      groupBy = {
+        _id: {
+          $dateToString: {
+            format: '%Y-%m-%d', // Format to group by date (YYYY-MM-DD)
+            date: '$createdAt',
+            timezone: '+07:00',
+          },
+        },
+        totalRevenue: { $sum: '$total' }, // Sum total revenue per day
+      };
+    } else if (groupType === 'OTHER') {
+      const diffInDays = Math.ceil(
+        (new Date(toDate as any).getTime() - new Date(fromDate as any).getTime()) /
+          (1000 * 60 * 60 * 24),
+      ); // Số ngày giữa khoảng thời gian
+
+      if (diffInDays > 30 && diffInDays <= 90) {
+        groupByFormat = '%Y-%U'; // Nhóm theo tuần (năm và số tuần)
+      } else if (diffInDays > 90 && diffInDays <= 365) {
+        groupByFormat = '%Y-%m'; // Nhóm theo tháng (năm và tháng)
+      } else if (diffInDays > 365) {
+        groupByFormat = '%Y-Q%q'; // Nhóm theo quý (năm và quý)
+      }
+
+      groupBy = {
+        _id: {
+          $dateToString: {
+            format: groupByFormat, // Định dạng nhóm
+            date: '$createdAt',
+            timezone: '+07:00', // Điều chỉnh múi giờ
+          },
+        },
+        totalRevenue: { $sum: '$total' }, // Tổng doanh thu
+      };
+    }
+
+    const results = await OrderModel.aggregate([
+      {
+        $match: conditions,
+      },
+      {
+        $group: groupBy as any,
+      },
+      {
+        $sort: { _id: 1 }, // Sort results by date (ascending)
+      },
+    ]);
+
+    // Tạo mảng date và data
+    const dateRange: any[] = [];
+    const dataRange = [];
+
+    // Nếu `groupType` là 'LAST_MONTH' hoặc 'THIS_MONTH', ta sẽ tạo dữ liệu theo các ngày trong tháng
+    if (['LAST_MONTH'].includes(groupType)) {
+      const now = new Date();
+
+      // Nếu là 'THIS_MONTH', lấy tháng hiện tại
+      const month = groupType === 'THIS_MONTH' ? now.getMonth() : now.getMonth() - 1; // Nếu là tháng trước, trừ 1
+
+      // Tính số ngày trong tháng
+      const firstDayOfMonth = new Date(now.getFullYear(), month, 1);
+      const lastDayOfMonth = new Date(now.getFullYear(), month + 1, 0); // Lấy ngày cuối của tháng
+      const totalDaysInMonth = lastDayOfMonth.getDate(); // Lấy số ngày trong tháng
+
+      // Tạo một mảng với các ngày trong tháng
+      for (let day = 1; day <= totalDaysInMonth; day++) {
+        dateRange.push(day.toString()); // Thêm ngày vào mảng date
+        dataRange.push(0); // Gán giá trị ban đầu cho doanh thu (0)
+      }
+
+      // Cập nhật dữ liệu doanh thu cho các ngày trong tháng từ kết quả aggregation
+      results.forEach((item) => {
+        const day = item._id.split('-')[2]; // Lấy ngày từ _id (YYYY-MM-DD)
+        const dayIndex = parseInt(day, 10) - 1; // Chuyển đổi ngày thành chỉ số mảng (0-indexed)
+        const revenue = item.totalRevenue;
+
+        dataRange[dayIndex] = revenue; // Cập nhật doanh thu cho ngày tương ứng
+      });
+    } else if (groupType === 'LAST_WEEK') {
+      const fromDate = new Date(params?.from as any);
+      const toDate = new Date(params?.to as any);
+
+      // Tạo danh sách các ngày trong tuần
+      for (
+        let currentDate = new Date(fromDate);
+        currentDate <= toDate;
+        currentDate.setDate(currentDate.getDate() + 1)
+      ) {
+        const dayString = currentDate.toISOString().split('T')[0]; // Format YYYY-MM-DD
+        dateRange.push(dayString);
+        dataRange.push(0); // Khởi tạo doanh thu mặc định là 0
+      }
+
+      // Ánh xạ dữ liệu doanh thu từ kết quả aggregation
+      results.forEach((item) => {
+        const index = dateRange.findIndex((date) => date === item._id);
+        if (index !== -1) {
+          dataRange[index] = item.totalRevenue;
+        }
+      });
+
+      // Kết quả cuối cùng
+      return [
+        {
+          date: dateRange, // Từng ngày trong tuần
+          data: dataRange, // Doanh thu tương ứng từng ngày
+        },
+      ];
+    } else if (groupType === 'OTHER') {
+      if (groupByFormat === '%Y-%m-%d') {
+        // Xử lý nhóm theo ngày
+        for (
+          let currentDate = new Date(fromDate as any);
+          currentDate <= toDate!;
+          currentDate.setDate(currentDate.getDate() + 1)
+        ) {
+          const dayString = currentDate.toISOString().split('T')[0];
+          dateRange.push(dayString);
+          dataRange.push(0); // Doanh thu mặc định
+        }
+
+        results.forEach((item) => {
+          const index = dateRange.findIndex((date) => date === item._id);
+          if (index !== -1) {
+            dataRange[index] = item.totalRevenue;
+          }
+        });
+      } else if (groupByFormat === '%Y-%U') {
+        // Xử lý nhóm theo tuần
+        results.forEach((item) => {
+          dateRange.push(`Week ${item._id.split('-')[1]}, ${item._id.split('-')[0]}`);
+          dataRange.push(item.totalRevenue);
+        });
+      } else if (groupByFormat === '%Y-%m') {
+        // Xử lý nhóm theo tháng
+        results.forEach((item) => {
+          const [year, month] = item._id.split('-');
+          dateRange.push(`${year}-${month}`);
+          dataRange.push(item.totalRevenue);
+        });
+      } else if (groupByFormat === '%Y-Q%q') {
+        // Xử lý nhóm theo quý
+        results.forEach((item) => {
+          dateRange.push(item._id); // '2024-Q1', '2024-Q2'...
+          dataRange.push(item.totalRevenue);
+        });
+      }
+
+      return [
+        {
+          date: dateRange,
+          data: dataRange,
+        },
+      ];
+    }
+
+    return [{ date: dateRange, data: dataRange }];
   }
 
   async getFiveProductsBestSelling(params: Params) {
     const fromDate = params.from;
     const toDate = params.to;
-    const rawOffset = Number(params?.rawOffset ?? '+7');
-
-    const adjustedFromDate = getDateByRawOffset(fromDate, rawOffset).format(YYYY_MM_DDTHH_MM_SS);
-    const adjustedToDate = getDateByRawOffset(toDate, rawOffset).format(YYYY_MM_DDTHH_MM_SS);
 
     const conditions: Record<string, any> = {
-      createdAt: {
-        $gte: adjustedFromDate,
-        $lte: adjustedToDate,
-      },
       status: 'ACTIVE',
     };
 
@@ -119,12 +469,12 @@ class OverviewService {
         $project: {
           _id: 1,
           name: 1, // Include the product name
-          orderQuantity: 1, // Include the order quantity
+          totalOrder: 1, // Include the order quantity
           image: 1, // Include the product image (optional)
         },
       },
       {
-        $sort: { orderQuantity: -1 }, // Sort by orderQuantity in descending order
+        $sort: { totalOrder: -1 }, // Sort by totalOrder in descending order
       },
       {
         $limit: 5, // Limit to the top 5
@@ -133,6 +483,8 @@ class OverviewService {
 
     return results;
   }
+
+  async calculateProfitByCriteria(params: Params) {}
 }
 
 export default OverviewService;

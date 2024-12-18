@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { https } from 'follow-redirects';
+import twilioClient from 'twilio';
 
 import { configApp } from '@app/configs';
 import Exception from '@app/exception';
 import CustomerModel from '@app/models/customers.model';
 import { HttpStatusCode } from '@app/types';
 
-const { INFO_BIP_API_KEY, INFO_BIP_HOST } = configApp();
+const { TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE_NUMBER } = configApp();
 
 class SMSService {
   private phoneNumber: string;
@@ -18,66 +18,44 @@ class SMSService {
   }
 
   async sendSms() {
-    const options = {
-      method: 'POST',
-      hostname: `${INFO_BIP_HOST}`,
-      path: '/sms/2/text/advanced',
-      headers: {
-        Authorization: `App ${INFO_BIP_API_KEY}`,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      maxRedirects: 20,
-    };
+    const formatPhoneNumber = `+84${
+      this.phoneNumber?.startsWith('0') ? this.phoneNumber?.slice(1) : this.phoneNumber
+    }`;
+    const body = `Cảm ơn bạn đã tin tưởng lựa chọn Dynasty Pizza. Sử dụng mã OTP dưới đây để xác minh số điện thoại của bạn. OTP có hiệu lục trong vòng 5 phút. Mã OTP là ${this.otp}. Vui lòng không chia sẻ mã này cho bất kì ai khác kể cả nhân viên cửa hàng.`;
 
-    const formatPhoneNumber = `84${this.phoneNumber.slice(1)}`;
-
-    const req = https.request(options, function (res) {
-      const chunks: Uint8Array[] = [];
-
-      res.on('data', function (chunk) {
-        chunks.push(chunk);
+    twilioClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+      .messages.create({
+        body,
+        from: TWILIO_PHONE_NUMBER,
+        to: formatPhoneNumber,
+      })
+      .then((message) => ({ messageId: message.sid, message: 'Send messages successfully' }))
+      .catch((err) => {
+        throw new Exception(err?.status, err?.message);
       });
-
-      res.on('end', function () {
-        const body = Buffer.concat(chunks);
-        console.log(body.toString());
-      });
-
-      res.on('error', function (error) {
-        console.error(error);
-      });
-    });
-
-    const postData = JSON.stringify({
-      messages: [
-        {
-          destinations: [
-            {
-              to: formatPhoneNumber,
-            },
-          ],
-          from: 'Dynasty Pizza',
-          text: `Cảm ơn bạn đã tin tưởng lựa chọn Dynasty Pizza. Sử dụng mã OTP dưới đây để xác minh số điện thoại của bạn. OTP có hiệu lục trong vòng 5 phút. Mã OTP là ${this.otp}. Vui lòng không chia sẻ mã này cho bất kì ai khác kể cả nhân viên của hàng.`,
-        },
-      ],
-    });
-
-    req.write(postData);
-    req.end();
   }
 
   async verifyOtpAndGetCustomer() {
     const customer = await CustomerModel.findOne({
-      otp: this.otp,
-      phoneNumber: this.phoneNumber,
-    });
+      $and: [
+        { otp: this.otp },
+        {
+          phoneNumber: this.phoneNumber,
+        },
+      ],
+    }).lean();
 
     if (!customer) {
       throw new Exception(HttpStatusCode.BAD_REQUEST, 'OTP is wrong or invalid!');
     }
-
-    await customer.updateOne({
+    await CustomerModel.findOne({
+      $and: [
+        { otp: this.otp },
+        {
+          phoneNumber: this.phoneNumber,
+        },
+      ],
+    }).updateOne({
       $set: {
         otp: null,
       },

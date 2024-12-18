@@ -5,6 +5,7 @@ interface ProductVariants extends BaseModel {
   parentId?: string;
   productItem?: Product;
   attributeUsing?: string[];
+  variantNames?: string[];
 }
 
 export { ProductVariants };

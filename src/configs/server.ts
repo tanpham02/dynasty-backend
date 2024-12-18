@@ -4,8 +4,6 @@ import express, { Application } from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 
-import { errorHandler } from '@app/middlewares';
-
 const configServer = (app: Application, corsConfig: CorsOptions) => {
   app.use(cors(corsConfig));
 
@@ -25,8 +23,6 @@ const configServer = (app: Application, corsConfig: CorsOptions) => {
   app.use(cookieParser()); // retries value from cookie
 
   app.use('/public', express.static('public'));
-
-  app.use(errorHandler);
 };
 
 export default configServer;

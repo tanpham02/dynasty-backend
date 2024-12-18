@@ -61,7 +61,7 @@ class AuthService {
     await newProductFavorite.save();
     await newCustomerAddress.save();
     await newCart.save();
-    newCustomer.$set('customerAddressId', newCustomerAddress._id);
+    newCustomer.set('customerAddressId', newCustomerAddress._id);
     const { password, ...remainingCustomer } = (await newCustomer.save()).toObject();
     return remainingCustomer;
   }
@@ -106,19 +106,27 @@ class AuthService {
     const phoneNumber = request?.phoneNumber;
     const otp = generateOtp();
 
+    if (!phoneNumber) throw new Exception(HttpStatusCode.BAD_REQUEST, 'Phone number is required');
+
     if (phoneNumber) {
       const smsService = new SMSService(phoneNumber, otp);
 
       const pwAfterHash = await hashPassword(phoneNumber);
 
       const newCustomer = new CustomerModel({
-        phoneNumber: phoneNumber,
+        phoneNumber: String(phoneNumber)?.startsWith('0') ? phoneNumber : `0${phoneNumber}`,
         password: pwAfterHash,
         otp: otp,
       });
 
+      const smsResponse = await smsService.sendSms();
+      new CartModel({ customerId: newCustomer._id }).save();
+      const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
+      new ProductFavoriteModel({ customerId: newCustomer._id }).save();
+      await newCustomerAddress.save();
+      newCustomer.set('customerAddressId', newCustomerAddress._id);
       await newCustomer.save();
-      await smsService.sendSms();
+      return smsResponse;
     }
   }
 
@@ -130,7 +138,7 @@ class AuthService {
       const smsService = new SMSService(phoneNumber, otp);
       const customer = await smsService.verifyOtpAndGetCustomer();
 
-      const { password, ...customerRemaining }: any = customer?.toObject();
+      const { password, ...customerRemaining }: any = customer;
 
       const jwt = new JWT(customer?._id);
 
@@ -240,7 +248,7 @@ class AuthService {
 
     verify(refreshToken, STAFF_JWT_REFRESH_KEY || '', (err: any, _staff: any) => {
       if (err) {
-        throw new Exception(req?.statusCode || HttpStatusCode.BAD_REQUEST, err?.message);
+        throw new Exception(req?.statusCode || HttpStatusCode.UN_AUTHORIZED, err?.message);
       }
       const staffJwt = new JWT(_staff._id, _staff.role);
       newAccessToken = staffJwt.generateAccessToken();
@@ -251,6 +259,7 @@ class AuthService {
         secure: process.env.NODE_ENV === MODE.PRODUCTION,
         sameSite: true,
       });
+      res.setHeader('Authorization', 'Bearer ' + newAccessToken);
     });
     return {
       accessToken: newAccessToken,

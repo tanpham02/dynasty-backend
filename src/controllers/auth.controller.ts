@@ -74,7 +74,7 @@ const authController = {
     try {
       const newToken = await new AuthService().requestRefreshTokenForStaff(req, res);
       res.status(HttpStatusCode.OK).json(newToken);
-    } catch (error) {
+    } catch (error: any) {
       console.log('🚀 ~ file: auth.ts:55 ~ requestRefreshTokenForUser: ~ error:', error);
       next(error);
     }

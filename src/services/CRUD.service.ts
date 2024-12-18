@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Request } from 'express';
-import { Document, Model, PopulateOption, PopulateOptions } from 'mongoose';
+import { Document, Model, PopulateOptions } from 'mongoose';
 
 import Exception from '@app/exception';
 import { Filter, HttpStatusCode, Params } from '@app/types';
 import { isArray, isEmpty } from 'lodash';
+import 'moment-timezone';
 
 class CRUDService<T extends Document> {
   protected model: Model<T>;
@@ -53,7 +54,9 @@ class CRUDService<T extends Document> {
     let sortFieldName: { [key: string]: any } = {};
 
     if (name) {
-      const patternWithName = { $regex: new RegExp(name, 'gi') };
+      const patternWithName = {
+        $regex: new RegExp(name?.toLowerCase(), 'gi'),
+      };
       filter.name = patternWithName;
     }
 
@@ -109,19 +112,25 @@ class CRUDService<T extends Document> {
       filter.role = role;
     }
 
-    if (from) {
-      filter.importDate = { $gte: from };
-      filter.createdAt = { $gte: from };
-    }
+    // if (from) {
+    //   filter.importDate = { $gte: from };
+    //   filter.createdAt = { $gte: from };
+    // }
 
-    if (to) {
-      filter.importDate = { $lte: to };
-      filter.createdAt = { $lte: to };
-    }
+    // if (to) {
+    //   filter.importDate = { $lte: to };
+    //   filter.createdAt = { $lte: to };
+    // }
+
+    // if (from && to) {
+    //   filter.importDate = { $gte: from, $lte: to };
+    // }
 
     if (from && to) {
-      filter.importDate = { $gte: from, $lte: to };
-      filter.createdAt = { $gte: from, $lte: to };
+      filter.createdAt = {
+        $gte: from,
+        $lte: to,
+      };
     }
 
     if (customerId) {
@@ -187,7 +196,10 @@ class CRUDService<T extends Document> {
 
   // GET BY ID
   async getById(id: string, populate?: PopulateOptions | (PopulateOptions | keyof T)[]) {
-    const response = await this.model.findById(id)?.populate((populate ?? []) as any[]);
+    const response = await this.model
+      .findById(id)
+      ?.lean()
+      ?.populate((populate ?? []) as any[]);
     if (!response) {
       throw new Exception(HttpStatusCode.NOT_FOUND, `Not found ${this.serviceName}`);
     }

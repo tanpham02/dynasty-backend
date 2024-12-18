@@ -24,7 +24,6 @@ const StaffSchema = new Schema<Staff>(
     },
     email: {
       type: String,
-      required: true,
       unique: true,
     },
     location: {
@@ -62,6 +61,11 @@ const StaffSchema = new Schema<Staff>(
       type: String,
       enum: Status,
       default: Status.ACTIVE,
+    },
+    salary: {
+      type: Schema.Types.ObjectId,
+      ref: 'Salary',
+      unique: true,
     },
   },
   { timestamps: true, versionKey: false },

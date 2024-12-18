@@ -20,3 +20,4 @@ export * from './vouchers.type';
 export * from './store-system';
 export * from './notifications.type';
 export * from './ingredients.type';
+export * from './salary.type';

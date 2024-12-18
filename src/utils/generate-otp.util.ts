@@ -1,4 +1,3 @@
 export const generateOtp = () => {
-  const otp = Math.floor(Math.random() * 1000000 + 1);
-  return otp.toString();
+  return String(Math.floor(Math.random() * 1000000)).padStart(6, '0');
 };

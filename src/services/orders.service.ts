@@ -96,20 +96,23 @@ class OrderService extends CRUDService<Orders> {
         _id: {
           $in: productParentIds,
         },
-      });
-      await Promise.all(
-        products.map((item) => {
-          ProductModel.updateMany(
-            { _id: item!._id },
-            {
-              totalOrder: {
-                $set: (item?.totalOrder || 0) + 1,
+      })?.lean();
+
+      if (!isEmpty(products)) {
+        await Promise.all(
+          products.map(async (item) => {
+            await ProductModel.updateOne(
+              { _id: item!._id.toString() },
+              {
+                $set: {
+                  totalOrder: item.totalOrder! + 1,
+                },
               },
-            },
-            { new: true },
-          );
-        }),
-      );
+              { new: true },
+            );
+          }),
+        );
+      }
     }
 
     return order;

@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { NextFunction, Request, Response } from 'express';
-import { verify } from 'jsonwebtoken';
+import { verify, decode } from 'jsonwebtoken';
 
 import { configApp } from '@app/configs';
 import { HttpStatusCode, Role, Staff } from '@app/types';
+import { FIELDS_NAME } from '@app/constants';
 
 interface StaffRequest extends Request {
   staff?: Staff;
@@ -29,7 +30,9 @@ const verifyToken = (req: StaffRequest, res: Response, next: NextFunction) => {
 
 const verifyTokenAndRolePermission = (req: StaffRequest, res: Response, next: NextFunction) => {
   verifyToken(req, res, () => {
-    if (req.staff?.role !== Role.ADMIN) {
+    const token = req?.headers?.authorization?.split(' ')[1] ?? '';
+    const decodeData = decode(token) as { role: Role; id: string };
+    if (decodeData?.role !== Role.ADMIN && req.params?.id !== decodeData?.id) {
       res
         .status(HttpStatusCode.FORBIDDEN)
         .json({ message: "You're not allow edit or delete this staff" });

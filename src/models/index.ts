@@ -20,3 +20,4 @@ export { default as NotificationsModel } from './notifications.model';
 export { default as IngredientModel } from './ingredients.model';
 export { default as IngredientSnapshotModel } from './ingredients-snapshot.model';
 export * from './dbContext';
+export { default as SalaryModel } from './salary.model';

@@ -11,6 +11,9 @@ export const ProductVariantSchema = new Schema<ProductVariants>(
     productItem: {
       type: ProductSchema,
     },
+    variantNames: {
+      type: [String],
+    },
     attributeUsing: {
       type: [String],
     },

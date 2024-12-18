@@ -20,14 +20,29 @@ const OverViewController = {
     }
   },
   getRevenueChart: async (req: Request, res: Response, next: NextFunction) => {
-    const { from, to } = req.query;
+    const { from, to, groupType } = req.query;
     const params: Params = {
       from: from?.toString(),
       to: to?.toString(),
+      groupType,
     };
     try {
       const response = await overviewService.getRevenueChart(params);
-      res.status(HttpStatusCode.OK).json(response);
+      res.status(HttpStatusCode.OK).json(response?.[0]);
+    } catch (error) {
+      next(error);
+    }
+  },
+  getProfitChart: async (req: Request, res: Response, next: NextFunction) => {
+    const { from, to, groupType } = req.query;
+    const params: Params = {
+      from: from?.toString(),
+      to: to?.toString(),
+      groupType,
+    };
+    try {
+      const response = await overviewService.getProfitChart(params);
+      res.status(HttpStatusCode.OK).json(response?.[0]);
     } catch (error) {
       next(error);
     }

@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { compare } from 'bcrypt';
 import { Request } from 'express';
 import { Model } from 'mongoose';
-import { compare } from 'bcrypt';
 
 import { FIELDS_NAME } from '@app/constants';
 import Exception from '@app/exception';
-import { StaffModel } from '@app/models';
+import { SalaryModel, StaffModel } from '@app/models';
 import { CRUDService } from '@app/services';
 import { HttpStatusCode, Params, Staff } from '@app/types';
 import { comparingObjectId, handleUploadFile, hashPassword } from '@app/utils';
@@ -87,7 +87,10 @@ class StaffService extends CRUDService<Staff> {
       newStaff.$set('password', passwordAfterHash);
     }
 
+    const newSalary = new SalaryModel({ value: staffRequestBody.salary, staffId: newStaff._id });
     await newStaff.save();
+    newStaff.set('salary', newSalary._id);
+    await newSalary.save();
 
     const { password: pw, ...remainingStaff } = newStaff.toObject();
     return remainingStaff;
@@ -146,12 +149,20 @@ class StaffService extends CRUDService<Staff> {
       staffAlreadyExist.password = await hashPassword(dataUpdate.password);
     }
 
+    if (dataUpdate?.salary) {
+      await SalaryModel.updateOne(
+        { _id: dataUpdate?.salaryId },
+        { $set: { value: dataUpdate?.salary } },
+        { new: true },
+      );
+    }
+
     return await staffAlreadyExist.updateOne(staffAlreadyExist, { new: true });
   }
 
   // GET BY ID
   async getByIdOverriding(id: string) {
-    const staff = await this.model.findById(id);
+    const staff = await this.model.findById(id)?.populate(['salary']);
     if (!staff) {
       const exception = new Exception(HttpStatusCode.NOT_FOUND, 'Staff not found!');
       throw exception;

@@ -91,12 +91,18 @@ const OrderSchema = new Schema<Orders>(
     total: {
       type: Number,
     },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
-    timestamps: true,
+    timestamps: false,
     versionKey: false,
   },
 );
+
+OrderSchema.index({ createdAt: 1 });
 
 const OrderModel = model('Order', OrderSchema);
 

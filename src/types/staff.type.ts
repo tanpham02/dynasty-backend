@@ -15,6 +15,7 @@ interface Staff extends LocationBaseModel, BaseModel {
   password?: string;
   role?: Role;
   image?: string;
+  salary: any;
 }
 
 export { Staff };

@@ -42,7 +42,7 @@ class CartService extends CRUDService<Carts> {
         {
           $set: {
             'products.$.note': cartRequestBody?.note ?? cartItemMatching.note,
-            'products.$.quantity': (cartRequestBody?.quantity || 1) + cartItemMatching.quantity!,
+            'products.$.quantity': cartRequestBody?.quantity ?? 1,
           },
         },
         {
@@ -80,7 +80,8 @@ class CartService extends CRUDService<Carts> {
   async getCartByCustomerId(customerId: string) {
     const carts = await this.model
       .findOne({ customerId: customerId })
-      .populate(['products.product']);
+      .populate(['products.product'])
+      .lean();
     if (!carts) throw new Exception(HttpStatusCode.NOT_FOUND, 'Cart not found');
 
     if (carts?.products && carts.products.length) {

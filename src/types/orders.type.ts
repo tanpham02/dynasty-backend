@@ -49,6 +49,7 @@ interface Orders extends BaseModel, LocationBaseModel {
   note?: string;
   subTotal?: number;
   total?: number;
+  createdAt?: any;
 }
 
 export { OrderReceivingTime, OrderStatus, OrderType, Orders, PaymentMethods };

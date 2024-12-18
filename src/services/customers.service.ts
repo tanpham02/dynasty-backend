@@ -40,19 +40,24 @@ class CustomerService extends CRUDService<Customers> {
 
     const isCustomerAlreadyExist = await this.getById(id);
 
+    if (!isCustomerAlreadyExist)
+      throw new Exception(HttpStatusCode.NOT_FOUND, `${this.serviceName} not found`);
+
     const existCustomer = await CustomerModel.findOne({
-      $or: [{ phoneNumber: dataUpdate?.phoneNumber }, { email: dataUpdate?.email }],
-    });
+      $and: [
+        {
+          $or: [{ phoneNumber: dataUpdate?.phoneNumber }, { email: dataUpdate?.email }],
+        },
+        {
+          _id: {
+            $ne: id,
+          },
+        },
+      ],
+    }).lean();
 
-    if (!isCustomerAlreadyExist) {
-      const exception = new Exception(HttpStatusCode.NOT_FOUND, `${this.serviceName} not found`);
-      throw exception;
-    }
-
-    if (existCustomer && !comparingObjectId(existCustomer._id, id)) {
-      const exception = new Exception(HttpStatusCode.CONFLICT, `${this.serviceName} already exist`);
-      throw exception;
-    }
+    if (existCustomer)
+      throw new Exception(HttpStatusCode.CONFLICT, `The ${this.serviceName} already exist`);
 
     if (dataUpdate?.password) {
       const passwordAfterHash = await hashPassword(dataUpdate.password);
@@ -68,12 +73,9 @@ class CustomerService extends CRUDService<Customers> {
 
   // GET BY ID
   async getByIdCustomer(id: string) {
-    const customer = (await this.getById(id)).populate({
-      path: 'customerAddressId',
-      model: 'CustomerAddress',
-    });
+    const customer = await this.getById(id, ['customerAddressId']);
 
-    const { password, ...remaining } = (await customer).toObject();
+    const { password, ...remaining } = customer;
 
     return remaining;
   }
