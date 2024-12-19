@@ -10,7 +10,6 @@ import { CategoryModel, ProductAttributeModel, ProductVariantModel } from '@app/
 import { CRUDService, ProductVariantService } from '@app/services';
 import { HttpStatusCode, Product, ProductAttributeItem, ProductVariants } from '@app/types';
 import { comparingObjectId, generateUnsignedSlug, handleUploadFile } from '@app/utils';
-import { ObjectId } from 'mongodb';
 class ProductService extends CRUDService<Product> {
   constructor(model: Model<Product>, serviceName: string) {
     super(model, serviceName);
@@ -279,10 +278,7 @@ class ProductService extends CRUDService<Product> {
       productBodyRequest.productAttributeList = groupedAttributes;
 
       const normalizeToString = (value: any) => {
-        if (value instanceof ObjectId) {
-          return value.toString();
-        }
-        return value.toString();
+        return value?.toString();
       };
 
       const areArraysEqual = (arr1: any, arr2: any) => {
