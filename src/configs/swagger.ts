@@ -73,7 +73,7 @@ const configSwagger = (app: Application) => {
   };
 
   const specs = swaggerJsdoc(options);
-  app.use(SWAGGER_ENDPOINT, swaggerUi.serve, swaggerUi.setup(specs));
+  app.use(SWAGGER_ENDPOINT, swaggerUi.serve as any, (swaggerUi as any).setup(specs));
 };
 
 export default configSwagger;

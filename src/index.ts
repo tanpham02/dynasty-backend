@@ -41,7 +41,7 @@ configSwagger(app);
 // ROUTES
 routesMapping(app);
 
-app.use(errorHandler);
+app.use(errorHandler as any);
 
 server.listen(PORT, () => {
   console.log(`Server is running at ${APP_URL}`);

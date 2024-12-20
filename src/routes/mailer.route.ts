@@ -22,6 +22,6 @@ const routes = Router();
  */
 
 // SEND MAIL
-routes.post('/send-mail', mailerController.sendMail);
+routes.post('/send-mail', mailerController.sendMail as any);
 
 export default routes;

@@ -74,7 +74,7 @@ router.get('/search', orderController.searchPagination);
  */
 
 // GET BY ID
-router.get('/:id', orderController.getById);
+router.get('/:id', orderController.getById as any);
 
 /**
  * @swagger

@@ -105,7 +105,7 @@ router.post('/customer/login', authController.loginCustomer);
  *                $ref: '#/components/schemas/Customers'
  */
 // CUSTOMER LOGIN APP WITH PHONE NUMBER (OTP)
-router.post('/customer/login/phone-number', authController.sendOtpToCustomer);
+router.post('/customer/login/phone-number', authController.sendOtpToCustomer as any);
 
 /**
  * @swagger
@@ -133,7 +133,10 @@ router.post('/customer/login/phone-number', authController.sendOtpToCustomer);
  *                $ref: '#/components/schemas/Customers'
  */
 // VERIFY OTP AND COMPLETE LOGIN WITH PHONE NUMBER
-router.post('/customer/login/phone-number/verify-otp', authController.verifyOtpAndGetCustomer);
+router.post(
+  '/customer/login/phone-number/verify-otp',
+  authController.verifyOtpAndGetCustomer as any,
+);
 
 /**
  * @swagger

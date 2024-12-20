@@ -20,7 +20,7 @@ const configServer = (app: Application, corsConfig: CorsOptions) => {
 
   app.use(morgan('dev'));
 
-  app.use(cookieParser()); // retries value from cookie
+  //   app.use(cookieParser()); // retries value from cookie
 
   app.use('/public', express.static('public'));
 };
