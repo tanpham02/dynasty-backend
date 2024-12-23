@@ -41,20 +41,15 @@ const OverViewController = {
       groupType,
     };
     try {
-      const response = await overviewService.getProfitChart(params);
-      res.status(HttpStatusCode.OK).json(response?.[0]);
+      const response = await overviewService.calculateProfitByCriteria(params);
+      res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);
     }
   },
-  getFiveProductsBestSelling: async (req: Request, res: Response, next: NextFunction) => {
-    const { from, to } = req.query;
-    const params: Params = {
-      from: from?.toString(),
-      to: to?.toString(),
-    };
+  getFiveProductsBestSelling: async (_req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await overviewService.getFiveProductsBestSelling(params);
+      const response = await overviewService.getFiveProductsBestSelling();
       res.status(HttpStatusCode.OK).json(response);
     } catch (error) {
       next(error);

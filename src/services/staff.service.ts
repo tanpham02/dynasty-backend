@@ -72,7 +72,9 @@ class StaffService extends CRUDService<Staff> {
       );
     }
 
-    const newStaff = new StaffModel(staffRequestBody);
+    const { salary, ...staffRequestBodyRemaining } = staffRequestBody;
+
+    const newStaff = new StaffModel(staffRequestBodyRemaining);
 
     if (avatar) {
       newStaff.$set('image', avatar);
@@ -87,9 +89,13 @@ class StaffService extends CRUDService<Staff> {
       newStaff.$set('password', passwordAfterHash);
     }
 
-    const newSalary = new SalaryModel({ value: staffRequestBody.salary, staffId: newStaff._id });
+    const newSalary = new SalaryModel({
+      value: Number(salary),
+      staffId: newStaff._id,
+    });
+
+    newStaff.salary = newSalary._id;
     await newStaff.save();
-    newStaff.set('salary', newSalary._id);
     await newSalary.save();
 
     const { password: pw, ...remainingStaff } = newStaff.toObject();

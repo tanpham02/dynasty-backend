@@ -6,6 +6,7 @@ import { Model } from 'mongoose';
 import Exception from '@app/exception';
 import {
   CartModel,
+  dbContext,
   OrderModel,
   ProductModel,
   ProductVariantModel,
@@ -23,21 +24,22 @@ class OrderService extends CRUDService<Orders> {
 
   // GET ORDER BY ID
   async getOrderById(orderId: string) {
-    const order = await this.model.findById(orderId).then((res) =>
-      res?.populate([
-        {
-          path: 'products.product',
-          model: 'ProductVariant',
-        },
-        {
-          path: 'customerId',
-          model: 'Customer',
-        },
-        {
-          path: 'storeId',
-          model: 'StoreSystem',
-        },
-      ]),
+    const order = await this.model.findById(orderId).then(
+      (res) =>
+        res?.populate([
+          {
+            path: 'products.product',
+            model: 'ProductVariant',
+          },
+          {
+            path: 'customerId',
+            model: 'Customer',
+          },
+          {
+            path: 'storeId',
+            model: 'StoreSystem',
+          },
+        ]),
     );
 
     return order;
@@ -90,6 +92,7 @@ class OrderService extends CRUDService<Orders> {
 
     const newOrderModel = new OrderModel(newOrder);
     const order = await newOrderModel.save();
+    await new CartService(CartModel, 'carts').clearCart(orderRequestBody.customerId!);
 
     if (!isEmpty(productParentIds)) {
       const products = await ProductModel.find({

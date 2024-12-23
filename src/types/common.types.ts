@@ -31,8 +31,8 @@ interface Params {
   productId?: string;
   fullName?: string;
   sortByField?: string;
-  from?: Date | string;
-  to?: Date | string;
+  from?: Date | string | any;
+  to?: Date | string | any;
   role?: Role | string;
   customerId?: string;
   statusOrder?: string;

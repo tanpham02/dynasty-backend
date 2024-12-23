@@ -20,6 +20,7 @@ import {
   NotificationsModel,
   IngredientModel,
   IngredientSnapshotModel,
+  SalaryModel,
 } from '.';
 
 export const dbContext = {
@@ -44,4 +45,5 @@ export const dbContext = {
   NotificationsModel,
   IngredientModel,
   IngredientSnapshotModel,
+  SalaryModel,
 };

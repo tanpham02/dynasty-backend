@@ -121,9 +121,9 @@ class CategoryService extends CRUDService<Category> {
 
   // GET BY ID
   async getCategoryById(id: string) {
-    const category = (await this.getById(id)).populate([
+    const category = await this.getById(id, [
       'products',
-      `childrenCategory.category.products`,
+      'childrenCategory.category.products' as any,
     ]);
 
     if (!category)

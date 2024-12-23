@@ -65,7 +65,6 @@ const StaffSchema = new Schema<Staff>(
     salary: {
       type: Schema.Types.ObjectId,
       ref: 'Salary',
-      unique: true,
     },
   },
   { timestamps: true, versionKey: false },

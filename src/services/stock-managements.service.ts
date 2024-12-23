@@ -34,11 +34,15 @@ class StockManagementService extends CRUDService<StockManagements> {
 
       await Promise.all(
         updates!.map(async (item) => {
-          return await IngredientModel.updateOne(
-            { _id: item._id },
-            { $set: { ...item } },
-            { new: true },
-          );
+          if (item?.quantity === 0) {
+            await IngredientModel.deleteOne({ _id: item._id }, { new: true });
+          } else {
+            await IngredientModel.updateOne(
+              { _id: item._id },
+              { $set: { ...item } },
+              { new: true },
+            );
+          }
         }),
       );
 

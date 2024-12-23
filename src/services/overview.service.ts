@@ -1,9 +1,22 @@
+/* eslint-disable no-case-declarations */
 import { dbContext, OrderModel } from '@app/models';
 import { OrderStatus, Params, Role } from '@app/types';
 
+import {
+  startOfWeek,
+  endOfWeek,
+  format,
+  parseISO,
+  startOfMonth,
+  endOfMonth,
+  startOfQuarter,
+  differenceInDays,
+  getWeek,
+  getYear,
+} from 'date-fns';
+
 class OverviewService {
-  HUMAN_RESOURCES_FEE = 0;
-  OPERATING_FEE = 0;
+  OPERATING_FEE = 10_000_000;
 
   constructor() {}
 
@@ -16,46 +29,22 @@ class OverviewService {
         $gte: new Date(fromDate as any),
         $lte: new Date(toDate as any),
       },
+      orderStatus: OrderStatus.SUCCESS,
     };
 
     const orders = await dbContext.OrderModel.find(conditions);
-    const ingredientsSnapshots = await dbContext.IngredientSnapshotModel.find(conditions);
-    const totalSalaries = (
-      await dbContext.StaffModel.find({
-        $and: [
-          {
-            ...conditions,
-          },
-          {
-            role: {
-              $ne: Role.ADMIN,
-            },
-          },
-        ],
-      }).select('salary')
-    )?.reduce((acc, next) => acc + (next?.salary ?? 0), 0);
 
+    const totalRevenues = orders?.reduce((acc, next) => acc + (next?.total ?? 0), 0);
     const totalOrders = orders?.length;
-    const totalRevenues = orders
-      ?.filter((item) => item.orderStatus === OrderStatus.SUCCESS)
-      ?.reduce((acc, next) => acc + (next?.total ?? 0), 0);
-    const ingredientsSnapshotsTotal = ingredientsSnapshots?.reduce(
-      (acc, next) => acc + (next?.quantity ?? 0) * (next?.price ?? 0),
-      0,
-    );
-    const netRevenueTotal =
-      totalRevenues - (totalSalaries + this.OPERATING_FEE + ingredientsSnapshotsTotal);
 
-    const totalOrderCancel = orders?.filter(
-      (order) => order.orderStatus === OrderStatus.CANCELED,
-    )?.length;
+    const totalOrderCancel = orders?.filter((order) => order.orderStatus === OrderStatus.CANCELED)
+      ?.length;
 
     const percentCancelOrder = Number(totalOrderCancel / totalOrders).toFixed(2);
 
     return {
       totalOrders,
       totalRevenues,
-      netRevenueTotal,
       percentCancelOrder: Number(percentCancelOrder) || 0,
     };
   }
@@ -453,12 +442,12 @@ class OverviewService {
     return [{ date: dateRange, data: dataRange }];
   }
 
-  async getFiveProductsBestSelling(params: Params) {
-    const fromDate = params.from;
-    const toDate = params.to;
-
+  async getFiveProductsBestSelling() {
     const conditions: Record<string, any> = {
       status: 'ACTIVE',
+      totalOrder: {
+        $gt: 0,
+      },
     };
 
     const results = await dbContext.ProductModel.aggregate([
@@ -484,7 +473,71 @@ class OverviewService {
     return results;
   }
 
-  async calculateProfitByCriteria(params: Params) {}
+  async calculateProfitByCriteria(params: Params) {
+    const { from: fromDate, to: toDate } = params;
+
+    const conditions: Record<string, any> = {
+      createdAt: {
+        $gte: new Date(fromDate),
+        $lte: new Date(toDate),
+      },
+    };
+
+    const [ordersResult, ingredientsResult] = await Promise.all([
+      dbContext.OrderModel.aggregate([
+        { $match: conditions },
+        {
+          $group: {
+            _id: {
+              $dateToString: {
+                format: '%Y-%m-%d', // Format to group by date (YYYY-MM-DD)
+                date: '$createdAt',
+                timezone: '+07:00',
+              },
+            },
+            totalRevenue: { $sum: '$total' },
+          },
+        },
+      ]),
+      dbContext.IngredientSnapshotModel.aggregate([
+        {
+          $match: conditions, // Điều kiện filter dữ liệu
+        },
+        {
+          $project: {
+            totalCost: { $multiply: ['$price', '$quantity'] }, // Tính tổng chi phí cho từng document
+            createdAt: 1,
+          },
+        },
+        {
+          $group: {
+            _id: {
+              $dateToString: {
+                format: '%Y-%m-%d',
+                date: '$createdAt',
+                timezone: '+07:00',
+              },
+            },
+            totalIngredientsCost: { $sum: '$totalCost' }, // Tính tổng chi phí nguyên liệu
+          },
+        },
+      ]),
+    ]);
+
+    const staffs = await dbContext.StaffModel?.find({
+      role: { $ne: Role.ADMIN },
+    })
+      ?.populate(['salary'])
+      ?.lean();
+
+    const staffSalaries = staffs?.reduce((acc, next) => acc + next?.salary?.value, 0);
+
+    return {
+      ordersResult,
+      ingredientsResult,
+      staffSalaries,
+    };
+  }
 }
 
 export default OverviewService;
