@@ -103,31 +103,36 @@ class AuthService {
   // SEND OTP
   async sendOtpToCustomer(req: Request, res: Response) {
     const request = req.body;
-    const phoneNumber = request?.phoneNumber;
+    const phoneNumber = String(request?.phoneNumber)?.startsWith('0')
+      ? request?.phoneNumber
+      : `0${request?.phoneNumber}`;
     const otp = generateOtp();
 
     if (!phoneNumber) throw new Exception(HttpStatusCode.BAD_REQUEST, 'Phone number is required');
+    const customer = await CustomerModel.findOne({ phoneNumber });
 
-    if (phoneNumber) {
-      const smsService = new SMSService(phoneNumber, otp);
+    const smsService = new SMSService(phoneNumber, otp);
 
-      const pwAfterHash = await hashPassword(phoneNumber);
+    const pwAfterHash = await hashPassword(phoneNumber);
+    const smsResponse = await smsService.sendSms();
 
+    if (!customer) {
       const newCustomer = new CustomerModel({
         phoneNumber: String(phoneNumber)?.startsWith('0') ? phoneNumber : `0${phoneNumber}`,
         password: pwAfterHash,
         otp: otp,
       });
-
-      const smsResponse = await smsService.sendSms();
       new CartModel({ customerId: newCustomer._id }).save();
       const newCustomerAddress = new CustomerAddressModel({ customerId: newCustomer._id });
       new ProductFavoriteModel({ customerId: newCustomer._id }).save();
       await newCustomerAddress.save();
       newCustomer.set('customerAddressId', newCustomerAddress._id);
       await newCustomer.save();
-      return smsResponse;
+    } else {
+      await customer.updateOne({ $set: { otp } }, { new: true });
     }
+
+    return smsResponse;
   }
 
   // VERIFY OTP AND COMPLETE LOGIN WITH PHONE NUMBER

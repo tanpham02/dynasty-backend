@@ -21,7 +21,7 @@ const orderController = {
       sortBy: sortBy?.toString(),
     };
     try {
-      const order = await orderService.getPagination(params);
+      const order = await orderService.getPagination(params, ['products.product' as any]);
       res.status(HttpStatusCode.OK).json(order);
     } catch (error) {
       next(error);

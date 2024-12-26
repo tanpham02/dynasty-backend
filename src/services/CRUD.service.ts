@@ -138,7 +138,7 @@ class CRUDService<T extends Document> {
     }
 
     if (statusOrder) {
-      filter.statusOrder = statusOrder;
+      filter.orderStatus = statusOrder;
     }
 
     if (customerType) {
